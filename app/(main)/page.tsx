@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import infinilyticsLogo from '@/public/infinilyticslogo.svg'
 import { IoStatsChartSharp } from "react-icons/io5";
 import { LuHistory } from "react-icons/lu";
+import { SearchUserButton } from "@/components/searchuser-btn";
 
 
 export default function Home() {
@@ -52,7 +53,7 @@ export default function Home() {
                 <input type="text" name="name" className="bg-gray-700 pl-10 pr-4 py-2 font-medium rounded-lg outline-none w-full" placeholder="Enter your IFC Username" required/>
                 <TbSearch className="absolute left-[10px] top-[12px] font-bold text-lg"/>
               </div>
-              <button type="submit" className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-bold">View My Stats</button>
+              <SearchUserButton className="bg-blue-600 hover:bg-blue-700 font-bold" />
               <span className="text-gray-300 text-xs text-center font-medium">Don't have an account? Join the <a href="https://community.infiniteflight.com/" className="text-blue-400">Infinite Flight Community</a> today!</span>
             </div>
           </form>
