@@ -7,14 +7,16 @@ import FlightEntryCard from '@/components/flight-entry'
 import PaginationBtn from '@/components/pagination-btn'
 import UserNavigation from '@/components/user-navigation'
 
+type PageProps = {
+    params: Promise<{name: string | string[] | undefined}>,
+    searchParams: Promise<{page?: string}>
+}
+
 const FlightsPage = async ({
   params,
   searchParams
-}: {
-  params: Promise<{name: string}>,
-  searchParams: { page?: string }
-}) => {
-    const { name } = await params
+}: PageProps) => {
+    const { name } = await params as {name: string}
     const { page } = await searchParams
 
     const userFlights = await getUserFlights(name, page ? Number(page) : 1)
