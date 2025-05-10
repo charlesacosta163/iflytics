@@ -1,36 +1,48 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Infinilytics
 
-## Getting Started
+Infinilytics is a web application for tracking user statistics in Infinite Flight. Users can search by their Infinite Flight Community (IFC) username to view general statistics and flight history, powered by the Infinite Flight Live API.
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### Search
+- Input an IFC username to look up a user's Infinite Flight stats.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### General Stats
+Displays key metrics for a user:
+- Total Flights
+- Total XP
+- Total Landings
+- Total Flight Time
+- Average Flight Time (in minutes)
+- Average XP per Flight
+- Grade
+- ATC Rank
+- ATC Operations
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Flights
+- Paginated list of recent flights
+- Displays date, callsign, aircraft, airline, server, XP, flight time, and violation count
+- Expandable cards with additional flight details
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Technology Stack
 
-## Learn More
+- Next.js (App Router)
+- Tailwind CSS
+- Shadcn UI
+- TypeScript
+- Infinite Flight Live API
 
-To learn more about Next.js, take a look at the following resources:
+## Future Plans
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Implement a dashboard style native application where users can log in and track their statistics on given time frames
+- Display Charts for advanced data visualization (Premium Tiers)
+- Enable filtering by specific data types within time frames (e.g., flight time, flight count, XP earned, etc...)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Terms of Use
 
-## Deploy on Vercel
+- No permanent data is stored from the API. Caching is temporary and used only to optimize requests.
+- Sessions are subject to a 15-minute timeout to comply with Infinite Flight's usage policy.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Disclaimer
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Infinilytics is not affiliated with or endorsed by Infinite Flight or Flying Development Studio. All data is provided via the official Infinite Flight API under its public usage terms.
