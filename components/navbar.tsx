@@ -9,7 +9,7 @@ const Navbar = () => {
         <nav className="flex justify-between items-center w-full rounded-full">
             <Link href="/" className="text-2xl font-bold tracking-tighter flex gap-2 items-center">
                <Image src={infinilyticsLogo} alt="Infinilytics Logo" width={32} height={32} />
-               Infinilytics
+               IFlytics
             </Link>
 
             <div className="flex gap-2">

@@ -1,6 +1,5 @@
 import Image from "next/image";
 import { TbSearch } from "react-icons/tb";
-import { PiAirplaneTilt } from "react-icons/pi";
 import { redirect } from "next/navigation";
 import infinilyticsLogo from '@/public/infinilyticslogo.svg'
 import { IoStatsChartSharp } from "react-icons/io5";
@@ -16,7 +15,7 @@ export default function Home() {
         <div className="flex-1 flex flex-col gap-8">
           <header className="flex flex-col items-center sm:items-start gap-2 sm:gap-4">
             <Image src={infinilyticsLogo} alt="Infinilytics Logo sm:w-[150px] sm:h-[150px] w-[100px] h-[100px]" width={150} height={150} />
-            <h1 className="text-5xl sm:text-6xl font-bold tracking-tight bg-gradient-to-r from-gray-600 to-dark py-0.5 bg-clip-text text-transparent flex gap-2 items-center"> Infinilytics</h1>
+            <h1 className="text-5xl sm:text-6xl font-bold tracking-tight bg-gradient-to-r from-gray-600 to-dark py-0.5 bg-clip-text text-transparent flex gap-2 items-center"> IFlytics</h1>
             <p className="text-gray-500 sm:text-lg font-semibold">Your home to your stats of Infinite Flight!</p>
           </header>
 
@@ -57,7 +56,7 @@ export default function Home() {
               <span className="text-gray-300 text-xs text-center font-medium">Don't have an account? Join the <a href="https://community.infiniteflight.com/" className="text-blue-400">Infinite Flight Community</a> today!</span>
             </div>
           </form>
-          <p className="text-xs font-medium text-gray-400">© 2025 Infinilytics | Not affiliated with Infinite Flight</p>
+          <p className="text-xs font-medium text-gray-400">© 2025 IFlytics | Not affiliated with Infinite Flight</p>
         </div>
 
       </div>

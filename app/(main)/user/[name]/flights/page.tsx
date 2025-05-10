@@ -22,8 +22,6 @@ const FlightsPage = async ({
     const userFlights = await getUserFlights(name, page ? Number(page) : 1)
     const { data: { result: {data: flights, pageIndex, totalPages, totalCount, hasPreviousPage, hasNextPage}}} : any = userFlights
 
-    await new Promise(resolve => setTimeout(resolve, 1000));
-
     return (
         <div className='p-4 flex flex-col gap-4'>
             <ProfileHeader name={userFlights?.name} grade={userFlights?.grade} organization={userFlights?.organization}/>

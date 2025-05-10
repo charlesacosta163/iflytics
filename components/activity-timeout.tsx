@@ -17,11 +17,10 @@ const THROTTLE_DELAY = 1000; // 1 second throttle
 
 export default function ActivityTimeout() {
     const [showPrompt, setShowPrompt] = useState(false);
-    const [shouldClose, setShouldClose] = useState(false);
     const router = useRouter();
 
     useEffect(() => {
-        console.log('ActivityTimeout component mounted');
+        // console.log('ActivityTimeout component mounted');
         let timeoutId: NodeJS.Timeout;
         let lastResetTime = Date.now();
 
@@ -32,17 +31,17 @@ export default function ActivityTimeout() {
                 return;
             }
             
-            console.log('Timer reset');
+           // console.log('Timer reset');
             if (timeoutId) {
-                console.log('Clearing existing timeout');
+                // console.log('Clearing existing timeout');
                 clearTimeout(timeoutId);
             }
             if (showPrompt) setShowPrompt(false);
             
             lastResetTime = now;
-            console.log('Setting new timeout');
+            // console.log('Setting new timeout');
             timeoutId = setTimeout(() => {
-                console.log('Timeout triggered - showing prompt');
+                // console.log('Timeout triggered - showing prompt');
                 setShowPrompt(true);
             }, TIMEOUT_DURATION);
         };
@@ -53,7 +52,7 @@ export default function ActivityTimeout() {
         // Add event listeners
         events.forEach(event => {
             document.addEventListener(event, resetTimer);
-            console.log(`Added listener for ${event}`);
+            // console.log(`Added listener for ${event}`);
         });
 
         // Initial timer
@@ -65,19 +64,12 @@ export default function ActivityTimeout() {
             events.forEach(event => {
                 document.removeEventListener(event, resetTimer);
             });
-            console.log('Cleanup performed');
+            // console.log('Cleanup performed');
         };
     }, [showPrompt]);
 
-    useEffect(() => {
-        console.log('shouldClose', shouldClose);
-        if (shouldClose) {
-            window.close();
-        }
-    }, [shouldClose]);
-
     const handleContinue = () => {
-        console.log('Continue clicked');
+        // console.log('Continue clicked');
         setShowPrompt(false);
         router.refresh();
     };
@@ -94,7 +86,6 @@ export default function ActivityTimeout() {
                 <DialogFooter className="flex justify-end gap-2">
                     <Button
                         variant="outline"
-                        onClick={() => setShouldClose(true)}
                     >
                         Exit
                     </Button>

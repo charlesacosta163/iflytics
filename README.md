@@ -1,6 +1,6 @@
-# Infinilytics
+# IFlytics
 
-Infinilytics is a web application for tracking user statistics in Infinite Flight. Users can search by their Infinite Flight Community (IFC) username to view general statistics and flight history, powered by the Infinite Flight Live API.
+IFlytics is a web application for tracking user statistics in Infinite Flight. Users can search by their Infinite Flight Community (IFC) username to view general statistics and flight history, powered by the Infinite Flight Live API.
 
 ## Features
 
@@ -45,4 +45,4 @@ Displays key metrics for a user:
 
 ## Disclaimer
 
-Infinilytics is not affiliated with or endorsed by Infinite Flight or Flying Development Studio. All data is provided via the official Infinite Flight API under its public usage terms.
+IFlytics is not affiliated with or endorsed by Infinite Flight or Flying Development Studio. All data is provided via the official Infinite Flight API under its public usage terms.
