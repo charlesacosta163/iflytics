@@ -17,9 +17,14 @@ import { FaPlaneDeparture } from "react-icons/fa";
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 
+// Update the component parameter types to match Next.js App Router standards
+type PageProps = {
+  params: { name: string };
+  searchParams: { [key: string]: string | string[] | undefined };
+}
 
-const UserPage = async ({params}: {params: Promise<{name: string}>}) => {
-    const { name } = await params
+const UserPage = async ({ params }: PageProps) => {
+    const { name } = params
 
     // User Statistics
     let data: any = null;

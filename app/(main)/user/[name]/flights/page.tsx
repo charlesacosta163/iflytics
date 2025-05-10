@@ -7,15 +7,15 @@ import FlightEntryCard from '@/components/flight-entry'
 import PaginationBtn from '@/components/pagination-btn'
 import UserNavigation from '@/components/user-navigation'
 
-const FlightsPage = async ({
-  params,
-  searchParams
-}: {
-  params: Promise<{name: string}>,
-  searchParams: { page?: string }
-}) => {
-    const { name } = await params
-    const page = Number(searchParams.page) || 1
+// Define proper types according to Next.js App Router standards
+type PageProps = {
+  params: { name: string };
+  searchParams: { [key: string]: string | string[] | undefined };
+}
+
+const FlightsPage = async ({ params, searchParams }: PageProps) => {
+    const { name } = params
+    const page = Number(searchParams.page || '1')
 
     const userFlights = await getUserFlights(name, page)
     const { data: { result: {data: flights, pageIndex, totalPages, totalCount, hasPreviousPage, hasNextPage}}} : any = userFlights
