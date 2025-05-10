@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Infinite Flight User Stats",
-  description: "A small app made by me.",
+  title: "Infinilytics - Your home to your stats of Infinite Flight!",
+  description: "A small app made by me, to track your Infinite Flight stats and more.",
 };
 
 export default function RootLayout({
