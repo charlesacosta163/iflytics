@@ -41,7 +41,7 @@ const UserNavigation = ({ username }: UserNavigationProps) => {
             "rounded-md transition-all", 
             "data-[state=active]:bg-gray",
             "data-[state=active]:font-bold",
-            "hover:bg-gray-600"
+            "hover:bg-gray-600",
           )}
         >
           General
