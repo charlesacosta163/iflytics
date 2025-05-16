@@ -12,7 +12,7 @@ interface InfoCardProps {
 
 const InfoCard = ({ value, label, icon: Icon, caption, className = '' }: InfoCardProps) => {
     return (
-        <Card className={`flex flex-col justify-between gap-2 h-[150px] p-4 rounded-lg border border-black relative tracking-tighter text-light bg-dark ${className}`}>
+        <Card className={`flex flex-col justify-between gap-2 h-[150px] p-4 rounded-[25px] duration-200 hover:scale-105 relative tracking-tighter text-light bg-dark ${className}`}>
             <div className='flex flex-col'>
                 <span id='value' className='font-black text-2xl sm:text-3xl'>{value}</span>
                 {caption && <span className='text-xl font-semibold text-center self-start'>{caption}</span>}

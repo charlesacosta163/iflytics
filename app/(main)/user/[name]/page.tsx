@@ -66,18 +66,28 @@ const UserPage = async ({ params }: { params: Promise<{ name: string }> }) => {
       <h2 className="text-5xl font-black bg-gradient-to-r from-gray-600 to-dark py-0.5 bg-clip-text text-transparent">
         General
       </h2>
-      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4 overflow-hidden">
+      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4">
+        <InfoCard
+          value={result.grade}
+          label="Grade"
+          icon={FaStar}
+          className={
+            result.grade === 5
+              ? "bg-yellow-500"
+              : result.grade === 4
+              ? "bg-green-500"
+              : result.grade === 3
+              ? "bg-purple-500"
+              : result.grade === 2
+              ? "bg-blue-500"
+              : ""
+          }
+        />
+
         <InfoCard
           value={numberWithCommas(result.onlineFlights)}
           label="Flights"
           icon={FaPlaneDeparture}
-        />
-
-        <InfoCard
-          value={numberWithCommas(result.xp)}
-          caption="Points"
-          label="XP"
-          icon={PiArrowFatLineUpBold}
         />
 
         <InfoCard
@@ -108,7 +118,12 @@ const UserPage = async ({ params }: { params: Promise<{ name: string }> }) => {
           className="col-span-2 sm:flex-row sm:items-center sm:[&>#label]:self-center sm:[&>#value]:text-5xl"
         />
 
-        <InfoCard value={result.grade} label="Grade" icon={FaStar} />
+        <InfoCard
+          value={numberWithCommas(result.xp)}
+          caption="Points"
+          label="XP"
+          icon={PiArrowFatLineUpBold}
+        />
 
         <InfoCard
           value={result.atcRank}
@@ -123,9 +138,12 @@ const UserPage = async ({ params }: { params: Promise<{ name: string }> }) => {
         />
 
         {/* Powered by Infinite Flight Live API Card*/}
-        <Card className="flex flex-col gap-2 h-[150px] p-4 rounded-lg relative tracking-tighter text-light bg-gradient-to-r from-[#09203F] to-[#537895]">
+        <Card className="flex flex-col gap-2 h-[150px] p-4 rounded-[25px] relative tracking-tighter text-light bg-gradient-to-r from-[#09203F] to-[#537895]">
           <div className="flex flex-col">
-            <span id="value" className="font-semibold text-xl text-gray-300 flex gap-2 items-center">
+            <span
+              id="value"
+              className="font-semibold text-xl text-gray-300 flex gap-2 items-center"
+            >
               <BiCoinStack /> Powered by
             </span>
           </div>
@@ -138,7 +156,6 @@ const UserPage = async ({ params }: { params: Promise<{ name: string }> }) => {
 
           <BiCoinStack className="absolute top-4 right-[-2rem] text-white text-[12rem] opacity-10" />
         </Card>
-
       </div>
     </div>
   );
