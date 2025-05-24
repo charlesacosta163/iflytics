@@ -18,7 +18,7 @@ import { formatDate, convertMinutesToHours } from "@/lib/utils";
 const FlightEntryCard = ({ flight, aircraft }: { flight: any, aircraft: any }) => {
   return (
     <div className="flex flex-col">
-    <Card className="p-4 rounded-t-lg rounded-b-none bg-dark text-light flex flex-col gap-2 relative overflow-hidden">
+    <Card className="p-4 rounded-t-[25px] rounded-b-none bg-dark text-light flex flex-col gap-2 relative overflow-hidden">
         <MdFlight className="absolute -top-20 right-0 text-light opacity-10 text-[24rem] z-0 rotate-45" />
         <IoInfinite className="hidden md:block absolute -top-30 left-10 text-light opacity-10 text-[24rem] z-0 -rotate-315" />
       <div className="flex justify-between gap-2">
@@ -55,13 +55,13 @@ const FlightEntryCard = ({ flight, aircraft }: { flight: any, aircraft: any }) =
         </div>
       </div>
     </Card>
-      <Accordion type="single" collapsible className="bg-gray-900 rounded-t-none rounded-b-lg rounded-lg z-10 border-none outline-none">
+      <Accordion type="single" collapsible className="bg-gray-900 rounded-t-none rounded-b-[25px] rounded-lg z-10 border-none outline-none">
         <AccordionItem value="flight-details">
-          <AccordionTrigger className="text-light font-semibold cursor-pointer text-lg hover:bg-gray-800 px-4" ><span className="w-full">More Details</span></AccordionTrigger>
+          <AccordionTrigger className="text-light font-semibold cursor-pointer text-lg hover:bg-gray-800 rounded-[25px] px-4" ><span className="w-full">More Details</span></AccordionTrigger>
           <AccordionContent className="text-light px-4">
           <hr className="my-2 opacity-10" />
             
-            <section className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
+            <section className="grid grid-cols-1 gap-4 mt-2">
                 <div className="flex flex-col gap-2">
                     <h3 className="font-semibold text-gray-300">Aircraft Information</h3>
 

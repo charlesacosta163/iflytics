@@ -75,7 +75,7 @@ const PaginationBtn = ({
 
   return (
     <Pagination>
-      <PaginationContent className="bg-gray-700 text-white rounded-lg p-1">
+      <PaginationContent className="bg-gray-700 text-white rounded-[25px] p-1">
         <PaginationItem>
           <PaginationPrevious 
             onClick={() => handlePageChange(currentPage - 1)}

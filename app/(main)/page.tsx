@@ -46,7 +46,7 @@ export default function Home() {
             <form action={async (formData: FormData) => {
               'use server'
               redirect(`/user/${formData.get("name") as string}`)
-            }} className="px-4 py-8 sm:p-8 rounded-lg bg-gray max-w-[600px] w-full shadow-gray-400 shadow-md">
+            }} className="px-4 py-8 sm:p-8 rounded-[25px] bg-gray max-w-[600px] w-full shadow-gray-400 shadow-md">
               <h2 className="text-light text-center text-2xl tracking-tight font-bold mb-4 text-balance">Find your Infinite Flight Stats</h2>
               <div className="flex flex-col gap-4">
                 <div className="text-white relative">

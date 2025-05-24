@@ -8,7 +8,13 @@
   --color-light: #F5F5F7;
 
   --color-gray: #2C2C2E
+  
 }
+
+@theme {
+  --rounded-smooth: 25px;
+}
+
 
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);

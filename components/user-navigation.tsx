@@ -33,12 +33,12 @@ const UserNavigation = ({ username }: UserNavigationProps) => {
 
   return (
     <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
-      <TabsList className="grid w-full max-w-xs grid-cols-2 bg-gray-700 rounded-lg p-1">
+      <TabsList className="grid w-full max-w-xs grid-cols-2 bg-gray-700 p-1">
         <TabsTrigger 
           value="general" 
           className={cn(
             "text-white data-[state=active]:text-white",
-            "rounded-md transition-all", 
+            "rounded-[25px] transition-all", 
             "data-[state=active]:bg-gray",
             "data-[state=active]:font-bold",
             "hover:bg-gray-600",
@@ -50,7 +50,7 @@ const UserNavigation = ({ username }: UserNavigationProps) => {
           value="flights" 
           className={cn(
             "text-white data-[state=active]:text-white",
-            "rounded-md transition-all", 
+            "rounded-[25px] transition-all", 
             "data-[state=active]:bg-gray",
             "data-[state=active]:font-bold",
             "hover:bg-gray-600"
