@@ -16,11 +16,17 @@ export async function getUserId(username: string) {
 
     const data = await response.json()
 
-    return {
+    if (data.result.length > 0) return {
+        success: true,
         userId: data.result[0].userId,
         name: data.result[0].discourseUsername,
         grade: data.result[0].grade,
         organization: data.result[0].virtualOrganization,
+    }
+
+    return {
+        success: false,
+        error: "User not found"
     }
 }
 

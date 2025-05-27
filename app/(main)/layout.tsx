@@ -9,7 +9,7 @@ export default function RootLayout({
         <div className="min-h-screen flex justify-center overflow-x-hidden">
             <main className="flex flex-col max-w-[1000px] w-full">
                 <Navbar />
-
+        
                 <main className="flex-1">
                   {children}
                 </main>

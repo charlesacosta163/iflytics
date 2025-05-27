@@ -18,7 +18,7 @@ const Navbar = () => {
 
             <div className="flex gap-4 items-center text-sm font-semibold">
                 <Link href="/" className=" flex gap-2 items-center px-4 py-1 bg-gray-700 text-light hover:bg-dark rounded-full"> <FaSearch/> Search</Link>
-                <div className='text-gray-700 border-b-2 border-gray font-bold'>Login</div>
+                <Link href='/auth/login' className='text-gray-700 border-b-2 border-gray font-bold'>Login</Link>
             </div>
         </nav>
     </header>

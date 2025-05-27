@@ -32,7 +32,7 @@ const UserNavigation = ({ username }: UserNavigationProps) => {
   }
 
   return (
-    <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
+    <Tabs value={activeTab} onValueChange={handleTabChange} className="w-[225px]">
       <TabsList className="grid w-full max-w-xs grid-cols-2 bg-gray-700 p-1">
         <TabsTrigger 
           value="general" 

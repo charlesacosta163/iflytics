@@ -54,14 +54,6 @@ const UserPage = async ({ params }: { params: Promise<{ name: string }> }) => {
 
   return (
     <div className="p-4 flex flex-col gap-4">
-      <ProfileHeader
-        name={result.discourseUsername}
-        grade={result.grade}
-        organization={result.virtualOrganization}
-      />
-
-      {/* User Navigation Tabs */}
-      <UserNavigation username={name} />
 
       <h2 className="text-5xl font-black bg-gradient-to-r from-gray-600 to-dark py-0.5 bg-clip-text text-transparent">
         General

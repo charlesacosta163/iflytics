@@ -24,11 +24,7 @@ const FlightsPage = async ({
 
     return (
         <div className='p-4 flex flex-col gap-4'>
-            <ProfileHeader name={userFlights?.name} grade={userFlights?.grade} organization={userFlights?.organization}/>
             
-            {/* User Navigation Tabs */}
-            <UserNavigation username={name} />
-
             <div className="flex items-center justify-between gap-2">
                 <h2 className='text-5xl font-black bg-gradient-to-r from-gray-600 to-dark bg-clip-text text-transparent py-0.5'>Flights</h2>
                 <div className="text-sm text-muted-foreground">
