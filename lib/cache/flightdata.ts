@@ -1,12 +1,7 @@
-import { unstable_cache as cache, revalidateTag } from "next/cache";
-import { getUser } from "../supabase/user-actions";
-import { getAircraft } from "../actions";
 
-const user = await getUser()
 
-// Create a cached version of the fetcher function
-export const getAggregatedFlights = cache(async (ifcUserId: string) => {
-    console.log("Cache miss - fetching all flights");
+// Convert to use Next.js built-in fetch caching
+export const getAggregatedFlights = async (ifcUserId: string) => {
     let allFlights = [];
     let page = 1;
     let hasMore = true;
@@ -20,7 +15,10 @@ export const getAggregatedFlights = cache(async (ifcUserId: string) => {
             "Content-Type": "application/json", 
             "Authorization": `Bearer ${process.env.API_KEY}`
           },
-          // No caching options here - we're caching the final result
+          next: { 
+            revalidate: 10800, // 3 hours in seconds
+            tags: [`user-flights-${ifcUserId}`] // User-specific cache tag
+          }
         }
       );
   
@@ -39,34 +37,35 @@ export const getAggregatedFlights = cache(async (ifcUserId: string) => {
     }
 
     return allFlights;
-  },
-  // The key generator function - correct syntax
-  [`flights-${user.id}`],
-  // Options
-  { 
-    revalidate: 10800, // 3 hours in seconds
-    tags: ['flights'] // Optional tag for manual revalidation
-  }
-);
+};
 
-// 1. Cache aircraft data separately
-export const getAircraftCached = cache(
-  async (aircraftId: string) => {
-    try {
-      console.log(`Fetching aircraft ${aircraftId}`);
-      const response = await getAircraft(aircraftId);
-      return response.result;
-    } catch (error) {
-      console.error(`Error fetching aircraft ${aircraftId}:`, error);
-      return null;
-    }
-  },
-  [`aircraft-${user.id}`],
-  { 
-    revalidate: 86400, // 24 hours - aircraft data rarely changes
-    tags: ['aircraft']
+// Convert aircraft caching to use Next.js built-in fetch caching
+export const getAircraftCached = async (aircraftId: string) => {
+  try {
+    
+    // Use Next.js fetch caching instead of unstable_cache
+    const response = await fetch(
+      `https://api.infiniteflight.com/public/v2/aircraft/${aircraftId}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${process.env.API_KEY}`
+        },
+        next: {
+          revalidate: 86400, // 24 hours - aircraft data rarely changes
+          tags: [`aircraft-${aircraftId}`] // Aircraft-specific cache tag
+        }
+      }
+    );
+
+    const data = await response.json();
+    return data.result;
+  } catch (error) {
+    console.error(`Error fetching aircraft ${aircraftId}:`, error);
+    return null;
   }
-);
+};
 
 export async function getFlightsTimeFrame(ifcUserId: string, days: number) {
     const flights = await getAggregatedFlights(ifcUserId)
