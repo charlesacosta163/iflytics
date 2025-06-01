@@ -37,7 +37,7 @@ export const getAggregatedFlights = cache(async (ifcUserId: string) => {
     return allFlights;
   },
   // The key generator function - correct syntax
-  [ifcUserId => `flights-${ifcUserId}`],
+  [(ifcUserId: string) => `flights-${ifcUserId}`],
   // Options
   { 
     revalidate: 10800, // 3 hours in seconds
