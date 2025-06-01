@@ -1,5 +1,6 @@
 import { unstable_cache as cache, revalidateTag } from "next/cache";
 import { getUser } from "../supabase/user-actions";
+import { getAircraft } from "../actions";
 
 const user = await getUser()
 
@@ -48,6 +49,24 @@ export const getAggregatedFlights = cache(async (ifcUserId: string) => {
   }
 );
 
+// 1. Cache aircraft data separately
+export const getAircraftCached = cache(
+  async (aircraftId: string) => {
+    try {
+      console.log(`Fetching aircraft ${aircraftId}`);
+      const response = await getAircraft(aircraftId);
+      return response.result;
+    } catch (error) {
+      console.error(`Error fetching aircraft ${aircraftId}:`, error);
+      return null;
+    }
+  },
+  [`aircraft-${user.id}`],
+  { 
+    revalidate: 86400, // 24 hours - aircraft data rarely changes
+    tags: ['aircraft']
+  }
+);
 
 export async function getFlightsTimeFrame(ifcUserId: string, days: number) {
     const flights = await getAggregatedFlights(ifcUserId)

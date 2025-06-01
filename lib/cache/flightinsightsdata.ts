@@ -2,6 +2,7 @@ import { Flight } from "../types";
 import { getAircraft } from "../actions";
 import { aircraftImages } from "../data";
 import { unstable_cache as cache } from "next/cache";
+import { getAircraftCached } from "./flightdata";
 /*
 getAircraftAndLivery(aircraftId: string, liveryId: string)
 sample response:
@@ -126,24 +127,6 @@ export function getFlightAveragesPerTimeFrame(flights: Flight[]) {
   };
 }
 
-// 1. Cache aircraft data separately
-export const getAircraftCached = cache(
-  async (aircraftId: string) => {
-    try {
-      console.log(`Fetching aircraft ${aircraftId}`);
-      const response = await getAircraft(aircraftId);
-      return response.result;
-    } catch (error) {
-      console.error(`Error fetching aircraft ${aircraftId}:`, error);
-      return null;
-    }
-  },
-  [aircraftId => `aircraft-${aircraftId}`],
-  { 
-    revalidate: 86400, // 24 hours - aircraft data rarely changes
-    tags: ['aircraft']
-  }
-);
 
 export async function getAllPlayerAircraftUsageData(flights: Flight[]) {
   try {
