@@ -104,3 +104,19 @@ export async function getAircraftAndLivery(aircraftId: string, liveryId: string)
         };
     }
 }
+
+export async function getAircraft(aircraftId: string) {
+    const response = await fetch(`https://api.infiniteflight.com/public/v2/aircraft/${aircraftId}`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${API_KEY}`
+        }
+    })
+
+    const data = await response.json()
+
+    // console.log(data)
+
+    return data || null
+}

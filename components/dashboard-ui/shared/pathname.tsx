@@ -1,20 +1,19 @@
 'use client'
 
 import React from 'react'
-import { usePathname } from 'next/navigation';
+import Image from 'next/image'
 const Pathname = () => {
-  let pathname = usePathname();
-
-  if (pathname === '/dashboard') {
-    pathname = 'Dashboard'
-  }
-  else {
-    pathname = pathname.slice(11)
-    pathname = pathname.charAt(0).toUpperCase() + pathname.slice(1)
-  }
 
   return (
-    <div className="text-2xl font-bold tracking-tighter text-dark">{pathname}</div>
+    <div className="flex gap-1 items-center">
+      <Image 
+        src="/infinilyticslogo.svg"
+        width={30}
+        height={30}
+        alt="Logo"
+      />
+      <span className='font-bold tracking-tight text-dark text-xl'>IFlytics</span>
+    </div>
   )
 }
 

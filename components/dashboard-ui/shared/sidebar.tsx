@@ -9,13 +9,16 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 
 import { TiPlaneOutline } from "react-icons/ti";
-
+import { FaUser } from "react-icons/fa";
 
 import { FaHome } from "react-icons/fa";
+import { TbDeviceGamepad2 } from "react-icons/tb";
+
+import { LogoutButton } from "@/components/logout-button";
 const Sidebar = () => {
   const pathname = usePathname();
   return (
-    <section className="max-w-[250px] w-full bg-dark text-light p-4">
+    <section className="hidden lg:block max-w-[250px] w-full bg-dark text-light p-4">
       <div className="flex flex-col h-full">
 
         <header className="">
@@ -49,11 +52,23 @@ const Sidebar = () => {
                 <TiPlaneOutline />
                 Flights
             </Link>
+
+            <Link href="/dashboard/profile" className={cn("flex gap-4 text-gray-200 text-lg font-medium items-center hover:bg-gray-700 rounded-lg px-3 py-1", pathname === "/dashboard/profile" && "bg-light text-dark font-bold")}>
+                <FaUser />
+                Profile
+            </Link>
+
+            <Link href="/dashboard" className={cn("p-0.5 bg-gradient-to-br from-red-400 to-purple-400 rounded-lg", pathname === "/dashboard/ifgamified" && "bg-light text-dark font-bold")}>
+                <span className="flex gap-4 text-gray-200 text-lg font-medium items-center hover:bg-gray-700 rounded-md px-3 py-1 bg-dark">
+                  <TbDeviceGamepad2 />
+                  The Flight Cave
+                </span>
+            </Link>
             
         </section>
 
-        <div className="">
-          Logout
+        <div className="mt-auto">
+          <LogoutButton className="w-full font-medium hover:bg-gray-800 cursor-pointer"/>
         </div>
 
       </div>

@@ -18,6 +18,22 @@ export async function getUser() {
   return data.user
 }
 
+export async function getUserProfile() {
+   const user = await getUser()
+
+   if (!user) {
+    redirect('/auth/login')
+   }
+
+   const { data, error } = await supabase.from('user_profiles').select('*').eq('ifc_user_id', user.id).single()
+   
+   return {
+    ...data,
+    ifc_username: user.user_metadata.ifcUsername
+   }
+   
+}
+
 export async function userHasIFCUsername() {
     const user = await getUser()
 
@@ -32,7 +48,7 @@ export async function userHasIFCUsername() {
     return {success: false, error: 'User does not have an IFC username'}
 }
 
-export async function updateIFCUsername(ifcUsername: string) {
+export async function updateIFCUsernameAndCreateProfile(ifcUsername: string, displayName: string, bio: string) {
     const user = await getUser()
 
 
@@ -61,6 +77,18 @@ export async function updateIFCUsername(ifcUsername: string) {
     if (error) {
         // You could log the error here
         console.error("Error updating IFC username:", error)
+        redirect('/setup/error')
+    }
+
+    // Create the user profile
+    const { data: profileData, error: profileError } = await supabase.from('user_profiles').insert({
+        display_name: displayName,
+        bio: bio,
+        ifc_user_id: user.id,
+    })
+
+    if (profileError) {
+        console.error("Error creating user profile:", profileError)
         redirect('/setup/error')
     }
     

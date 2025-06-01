@@ -36,3 +36,4 @@ export function calculateFlightTimeXP(minutes: number): number {
     // Every minute of flight accumulates 10 XP
     return minutes * 10;
 }
+
