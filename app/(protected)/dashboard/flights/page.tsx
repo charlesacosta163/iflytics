@@ -60,7 +60,11 @@ const InfoCard = ({
   );
 };
 
-const FlightsPage = async ({ searchParams }: { searchParams: { timeframe: string } }) => {
+
+  
+const FlightsPage = async ({searchParams}: { searchParams: Promise < {
+  [key: string]: string | string[] | undefined
+}>}) => {
   const { user_metadata: data } = await getUser();
 
   
