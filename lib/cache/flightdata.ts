@@ -1,4 +1,7 @@
 import { unstable_cache as cache, revalidateTag } from "next/cache";
+import { getUser } from "../supabase/user-actions";
+
+const user = await getUser()
 
 // Create a cached version of the fetcher function
 export const getAggregatedFlights = cache(async (ifcUserId: string) => {
@@ -37,7 +40,7 @@ export const getAggregatedFlights = cache(async (ifcUserId: string) => {
     return allFlights;
   },
   // The key generator function - correct syntax
-  [(ifcUserId: string) => `flights-${ifcUserId}`],
+  [`flights-${user.id}`],
   // Options
   { 
     revalidate: 10800, // 3 hours in seconds
