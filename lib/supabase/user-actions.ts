@@ -6,9 +6,8 @@ import { createClient } from "./server"
 // Infinite Flight Info Actions
 import { getUserId } from "../actions"
 
-const supabase = await createClient()
-
 export async function getUser() {
+  const supabase = await createClient()
   const { data, error } = await supabase.auth.getUser()
   
   if (error || !data?.user) {
@@ -25,6 +24,7 @@ export async function getUserProfile() {
     redirect('/auth/login')
    }
 
+   const supabase = await createClient()
    const { data, error } = await supabase.from('user_profiles').select('*').eq('ifc_user_id', user.id).single()
    
    return {
@@ -51,7 +51,6 @@ export async function userHasIFCUsername() {
 export async function updateIFCUsernameAndCreateProfile(ifcUsername: string, displayName: string, bio: string) {
     const user = await getUser()
 
-
     if (!user) {
         redirect('/auth/login')
     }
@@ -66,6 +65,9 @@ export async function updateIFCUsernameAndCreateProfile(ifcUsername: string, dis
         redirect('/setup/error')
     }
 
+    // Create client inside the function
+    const supabase = await createClient()
+    
     // This is the correct way to update user metadata
     const { data, error } = await supabase.auth.updateUser({
         data: {

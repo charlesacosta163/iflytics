@@ -20,13 +20,7 @@ import FlightRouteMapRenderer from "@/components/dashboard-ui/misc/flightroute-m
 import FlightActivityAreaChart from "@/components/dashboard-ui/charts/flight-activity-area-chart";
 import { AircraftUsageDonutChart } from "@/components/dashboard-ui/charts/aircraft-usage-donut-chart";
 import { getFlightsTimeFrame } from "@/lib/cache/flightdata";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+
 import {
   Card,
   CardContent,
