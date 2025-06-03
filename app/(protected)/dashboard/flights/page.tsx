@@ -146,7 +146,7 @@ const FlightsPage = async ({searchParams}: { searchParams: Promise < {
           value={convertMinutesToHours(recentFlightInsights.totalTime)}
           icon={<FaRegClock />}
           color="purple"
-          subtitle="Total airtime"
+          subtitle="Total flight time"
         />
         <InfoCard
           title="XP Earned"
@@ -308,50 +308,56 @@ const FlightsPage = async ({searchParams}: { searchParams: Promise < {
 
         {/* Top 3 Aircraft */}
         <Card className="lg:col-span-1 col-span-2 bg-dark">
-          <CardHeader>
-            <CardTitle className="text-2xl font-bold text-white">
+          <CardHeader>  
+            <CardTitle className="text-2xl font-bold text-white flex items-center gap-3">
+              <div className="p-2 bg-amber-500 rounded-lg">
+                <FaStar className="text-white text-lg" />
+              </div>
               Your Top 3 Aircraft
             </CardTitle>
-            <CardDescription className="text-gray-200">
+            <CardDescription className="text-gray-300">
               Your top 3 most used aircraft in the last {timeframe} days
             </CardDescription>
           </CardHeader>
 
-          <div className="px-4 flex flex-col gap-4">
-            {
-              aircraftUsageData.length > 0 ? (
-                aircraftUsageData
-                  .sort((a, b) => b.count - a.count)
-                  .slice(0,3)
-            .map((aircraft, index) => (
-              <CardContent
-                key={index}
-                className="flex md:flex-row flex-col-reverse justify-between items-center gap-2 bg-gray text-light rounded-lg relative"
-              >
-                <div className="flex flex-col gap-1 py-4 text-center md:text-left">
-                  <p className={`${index === 0 && "text-amber-400"} ${index === 1 && "text-amber-200"} ${index === 2 && "text-amber-50"} text-4xl font-black`}>{aircraft.name}</p>
-                  <span className="text-sm text-gray-400 font-medium">
-                    Flights: {aircraft.count}
-                  </span>
-                </div>
+          <div className="px-4 flex flex-col gap-4 pb-4">
+            {aircraftUsageData.length > 0 ? (
+              aircraftUsageData
+                .sort((a, b) => b.count - a.count)
+                .slice(0, 3)
+                .map((aircraft, index) => (
+                  <div
+                    key={index}
+                    className="flex md:flex-row flex-col-reverse justify-between items-center gap-2 bg-gray-800 text-white p-4 rounded-lg relative"
+                  >
+                    <div className="flex flex-col gap-1 text-center md:text-left">
+                      <p className={`${index === 0 && "text-amber-400"} ${index === 1 && "text-amber-200"} ${index === 2 && "text-amber-50"} text-2xl font-black`}>
+                        {aircraft.name}
+                      </p>
+                      <span className="text-sm text-gray-400 font-medium">
+                        Flights: {aircraft.count}
+                      </span>
+                    </div>
 
-                <span className="text-sm text-white font-bold bg-gray-500 w-8 h-8 rounded-md self-start absolute top-0 right-0 flex items-center justify-center">
-                  {index + 1}
-                </span>
+                    <span className="text-sm text-white font-bold bg-gray-500 w-8 h-8 rounded-md absolute top-2 right-2 flex items-center justify-center">
+                      {index + 1}
+                    </span>
 
-                <Image
-                  src={`/images/aircraft/${matchAircraftNameToImage(
-                    aircraft.name
-                  )}`}
-                  alt="A220"
-                  width={300}
-                  height={200}
-                />
-              </CardContent>
-            )) ): (
-              <CardContent className="flex justify-center items-center h-full">
-                <p className="text-gray-100 font-bold text-4xl tracking-tight mt-10">No Data Available</p>
-              </CardContent>
+                    <Image
+                      src={`/images/aircraft/${matchAircraftNameToImage(aircraft.name)}`}
+                      alt={aircraft.name}
+                      width={200}
+                      height={120}
+                      className="rounded-lg"
+                    />
+                  </div>
+                ))
+            ) : (
+              <div className="flex flex-col items-center justify-center py-16">
+                <div className="text-4xl text-gray-600 mb-4">🛩️</div>
+                <p className="text-gray-300 font-semibold">No Aircraft Data</p>
+                <p className="text-gray-500 text-sm">Fly some aircraft to see your top 3!</p>
+              </div>
             )}
           </div>
         </Card>

@@ -11,6 +11,8 @@ import { FaHome, FaUser } from "react-icons/fa";
 import { LuGoal } from "react-icons/lu";
 
 import Link from 'next/link'
+import Image from 'next/image'
+import iflyticsLogo from '@/public/infinilyticslogo.svg'
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -40,7 +42,14 @@ const Navbar = () => {
               />
             </div>
           </button>
-          <Pathname />
+          <div className='relative'>
+            <Link href="/dashboard" className="text-2xl font-bold tracking-tighter flex gap-2 items-center">
+               <Image src={iflyticsLogo} alt="Infinilytics Logo" width={32} height={32} />
+               IFlytics
+            </Link>
+
+            <span className='text-[10px] font-semibold text-white bg-red-400 rounded-full absolute -bottom-4 left-5 px-2 py-0.10 shadow-lg z-100'>Early Alpha</span>
+          </div>
         </div>
         
         <LogoutButton className="text-sm !px-4 !py-2 font-semibold rounded-full hover:scale-105 transition-transform duration-200"/>

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { LogoutButton } from './logout-button';
 import {
     Dialog,
     DialogContent,
@@ -46,8 +47,8 @@ export default function ActivityTimeout() {
             }, TIMEOUT_DURATION);
         };
 
-        // Events to track user activity - removed mousemove as it's too sensitive
-        const events = ['mousedown', 'keypress', 'scroll', 'touchstart'];
+        // Events to track user activity
+        const events = ['mousedown', 'keypress', 'scroll', 'touchstart', 'click'];
         
         // Add event listeners
         events.forEach(event => {
@@ -74,21 +75,28 @@ export default function ActivityTimeout() {
         router.refresh();
     };
 
+    const handleCancel = () => {
+        setShowPrompt(false);
+    };
+
     return (
         <Dialog open={showPrompt} onOpenChange={setShowPrompt}>
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle>Session Timeout</DialogTitle>
                     <DialogDescription>
-                        Your session has been inactive. Would you like to continue browsing?
+                        You've been inactive for 15 minutes due to Infinite Flight API guidelines. 
+                        Would you like to continue browsing or sign out?
                     </DialogDescription>
                 </DialogHeader>
                 <DialogFooter className="flex justify-end gap-2">
                     <Button
                         variant="outline"
+                        onClick={handleCancel}
                     >
-                        Exit
+                        Cancel
                     </Button>
+                    <LogoutButton />
                     <Button
                         onClick={handleContinue}
                     >

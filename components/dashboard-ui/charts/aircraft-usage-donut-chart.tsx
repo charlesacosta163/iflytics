@@ -16,6 +16,7 @@ import {
   ChartContainer,
   ChartTooltip,
 } from "@/components/ui/chart"
+import { FaPlane } from "react-icons/fa"
 
 // Chart colors - using actual color values, not Tailwind classes 
 
@@ -63,10 +64,15 @@ export function AircraftUsageDonutChart({ aircraftUsageData, timeframe, classNam
 
   return (
     <Card className={cn("flex flex-col bg-dark", className)}>
-      <CardHeader className="items-center pb-0">
-        <CardTitle className=" text-white text-2xl font-bold">Aircraft Usage</CardTitle>
-        <CardDescription className="text-gray-200">Last {timeframe} days</CardDescription>
-      </CardHeader>
+      <CardHeader>
+              <CardTitle className="text-2xl font-bold text-white flex items-center gap-3">
+                <FaPlane className="text-purple-400" />
+                Aircraft Usage
+              </CardTitle>
+              <CardDescription className="text-gray-300">
+                Your most used aircraft in the last {timeframe} days
+              </CardDescription>
+            </CardHeader>
       <CardContent className="flex-1 pb-0">
         <ChartContainer
           config={{}}

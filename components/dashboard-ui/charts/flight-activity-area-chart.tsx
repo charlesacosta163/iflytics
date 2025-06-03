@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/chart"
 import { convertMinutesToHours } from "@/lib/utils"
 import { cn } from "@/lib/utils"
+import { FaPlane } from "react-icons/fa"
 
 const chartConfig = {
   totalTime: {
@@ -32,11 +33,14 @@ export default function FlightActivityAreaChart({flightActivityData, timeframe, 
   return (
     <Card className={cn("w-full bg-gray", className)}>
       <CardHeader>
-        <CardTitle className="text-white text-2xl font-bold">Flight Time Per Day</CardTitle>
-        <CardDescription className="text-gray-200">
-          Your flight time day by day for the last {timeframe} days
-        </CardDescription>
-      </CardHeader>
+              <CardTitle className="text-2xl font-bold text-white flex items-center gap-3">
+                <FaPlane className="text-blue-400" />
+                Flight Time Per Day
+              </CardTitle>
+              <CardDescription className="text-gray-300">
+                Your flight time day by day for the last {timeframe} days
+              </CardDescription>
+            </CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" height={250}>
           <AreaChart
