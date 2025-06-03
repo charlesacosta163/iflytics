@@ -71,7 +71,7 @@ const InfoCard = ({
   };
 
   return (
-    <div className="bg-[#FFD6BA] rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+    <div className="bg-[#FFD6BA] rounded-xl p-6 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
       <div className="flex items-center justify-between">
         <div className="flex-1">
           <div className={`inline-flex p-3 rounded-lg bg-gradient-to-r ${colorClasses[color].split(' ').slice(0, 2).join(' ')} mb-4`}>
@@ -197,7 +197,7 @@ const FlightsPage = async ({searchParams}: { searchParams: Promise < {
 
         {/* Airport Stats */}
         <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
-          <Card className="bg-gradient-to-br bg-[#FFDCDC]">
+          <Card className="bg-gradient-to-br bg-[#FFDCDC] !shadow-none">
             <CardHeader className="pb-4">
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-red-500 rounded-lg">
@@ -226,7 +226,7 @@ const FlightsPage = async ({searchParams}: { searchParams: Promise < {
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br bg-[#FFE8CD]">
+          <Card className="bg-gradient-to-br bg-[#FFE8CD] !shadow-none">
             <CardHeader className="pb-4">
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-orange-500 rounded-lg">

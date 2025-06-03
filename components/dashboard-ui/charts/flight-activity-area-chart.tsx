@@ -49,7 +49,7 @@ export default function FlightActivityAreaChart({flightActivityData, timeframe, 
             width={1000}
             data={flightActivityData}
             margin={{
-              left: 4,
+              left: -8,
               right: 12,
               top: 20,
               bottom: 20

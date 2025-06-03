@@ -44,7 +44,7 @@ const Navbar = () => {
 
   return (
     <header className="p-4 w-full flex justify-center">
-      <nav className="flex justify-between items-center w-full max-w-6xl rounded-full bg-white/10 backdrop-blur-sm border border-white/20">
+      <nav className="flex justify-between items-center w-full max-w-6xl rounded-full bg-white/10 backdrop-blur-sm ">
         {/* Logo Section */}
         <Pathname />
 

@@ -16,6 +16,8 @@ import { FaHome } from "react-icons/fa";
 import { LogoutButton } from "@/components/logout-button";
 import { GoCopilot } from "react-icons/go";
 import { LuGoal } from "react-icons/lu";
+import { BsIncognito } from "react-icons/bs";
+
 
 const Sidebar = () => {
   const pathname = usePathname();
@@ -86,7 +88,11 @@ const Sidebar = () => {
             
         </section>
 
-        <div className="mt-auto">
+        <div className="mt-auto flex flex-col gap-2">
+          <Link href="/" className="flex gap-4 text-gray-200 font-medium items-center hover:bg-gray-700 rounded-lg px-3 py-2 transition-colors duration-200 justify-center text-sm">
+            <BsIncognito />
+            Guest Mode
+          </Link>
           <LogoutButton className="w-full font-medium hover:bg-gray-800 cursor-pointer transition-colors duration-200"/>
         </div>
 
