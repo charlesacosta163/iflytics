@@ -55,6 +55,8 @@ export default function Home() {
                 </div>
                 <SearchUserButton className="bg-blue-600 hover:bg-blue-700 font-bold" />
                 <span className="text-gray-300 text-xs text-center font-medium">Don't have an account? Join the <a href="https://community.infiniteflight.com/" className="text-blue-400">Infinite Flight Community</a> today!</span>
+
+                <span className="text-gray-300 text-xs text-center font-medium">Currently on <b>Guest Mode</b></span>
               </div>
             </form>
             <p className="text-xs font-medium text-gray-400">© 2025 IFlytics | Not affiliated with Infinite Flight</p>

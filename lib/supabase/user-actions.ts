@@ -34,6 +34,36 @@ export async function getUserProfile() {
    
 }
 
+export async function getUserProfileById(id: string) {
+    const supabase = await createClient()
+    const { data, error } = await supabase.from('user_profiles').select('*').eq('ifc_user_id', id).single()
+
+    return data
+}
+
+export async function updateUserProfile(id: string, displayName: string, bio: string) {
+    const supabase = await createClient()
+    const { data, error } = await supabase.from('user_profiles').update({
+        display_name: displayName,
+        bio: bio
+    }).eq('ifc_user_id', id).select().single()
+
+    if (error) {
+        console.error("Error updating user profile:", error)
+        return { error: 'Error updating user profile' }
+    }
+
+    redirect('/dashboard/profile')
+}
+
+export async function getAllIFlyticsUsers() {
+    const supabase = await createClient()
+    const { data, error } = await supabase.from('user_profiles').select('*')
+
+    return data
+}
+
+
 export async function userHasIFCUsername() {
     const user = await getUser()
 
@@ -57,43 +87,53 @@ export async function updateIFCUsernameAndCreateProfile(ifcUsername: string, dis
 
     // Get the user's ID from IFC
     const response = await getUserId(ifcUsername)
-    let userId: string
+    let ifcGameUserId: string
 
     if (response.success) {
-        userId = response.userId
+        ifcGameUserId = response.userId
     } else {
+        console.error("Failed to get user ID from IFC:", response.error)
         redirect('/setup/error')
     }
 
+    console.log(ifcGameUserId, ifcUsername, displayName, bio)
     // Create client inside the function
     const supabase = await createClient()
     
-    // This is the correct way to update user metadata
+    // Update the user metadata
     const { data, error } = await supabase.auth.updateUser({
         data: {
             ifcUsername: ifcUsername,
-            ifcUserId: userId
+            ifcUserId: ifcGameUserId
         }
     })
 
     if (error) {
-        // You could log the error here
         console.error("Error updating IFC username:", error)
         redirect('/setup/error')
     }
 
-    // Create the user profile
+    // Create the user profile - ADD MORE DETAILED ERROR LOGGING
     const { data: profileData, error: profileError } = await supabase.from('user_profiles').insert({
         display_name: displayName,
         bio: bio,
         ifc_user_id: user.id,
+        ifc_username: ifcUsername,
+        ifc_game_id: ifcGameUserId
     })
 
     if (profileError) {
         console.error("Error creating user profile:", profileError)
-        redirect('/setup/error')
+        console.error("Profile data attempted:", {
+            display_name: displayName,
+            bio: bio,
+            ifc_user_id: user.id,
+            ifc_username: ifcUsername,
+            ifc_game_id: ifcGameUserId
+        })
+        // Don't redirect immediately - let's see the error
+        throw new Error(`Profile creation failed: ${profileError.message}`)
     }
     
-    // If we get here, the update was successful
     redirect('/setup/success')
 }

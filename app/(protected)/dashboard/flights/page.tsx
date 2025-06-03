@@ -11,8 +11,24 @@ import {
   getFlightAveragesPerTimeFrame,
 } from "@/lib/cache/flightinsightsdata";
 
-import { FaPlane } from "react-icons/fa";
-import { convertMinutesToHours } from "@/lib/utils";
+import { 
+  FaPlane, 
+  FaPlaneDeparture, 
+  FaRegClock, 
+  FaStar,
+  FaMapMarkerAlt 
+} from "react-icons/fa";
+import { ImStatsDots } from "react-icons/im";
+import { MdOutlinePinDrop } from "react-icons/md";
+import { 
+  BiSolidPlaneLand, 
+  BiTrendingUp 
+} from "react-icons/bi";
+import { 
+  PiArrowFatLineUpBold,
+  PiSparkle 
+} from "react-icons/pi";
+import { convertMinutesToHours, numberWithCommas } from "@/lib/utils";
 
 import Image from "next/image";
 
@@ -31,36 +47,51 @@ import {
 
 import SelectTimeframeButton from "@/components/dashboard-ui/select-timeframe-button";
 import { redirect } from "next/navigation";
-// Move InfoCard outside the main component
+
+// Enhanced InfoCard with modern styling
 const InfoCard = ({
   title,
   value,
   icon,
+  color = "blue",
+  subtitle,
 }: {
   title: string;
-  value: number;
+  value: string | number;
   icon: React.ReactNode;
+  color?: "blue" | "green" | "purple" | "orange" | "red";
+  subtitle?: string;
 }) => {
+  const colorClasses = {
+    blue: "from-blue-500 to-blue-600 text-blue-600",
+    green: "from-green-500 to-green-600 text-green-600", 
+    purple: "from-purple-500 to-purple-600 text-purple-600",
+    orange: "from-orange-500 to-orange-600 text-orange-600",
+    red: "from-red-500 to-red-600 text-red-600",
+  };
+
   return (
-    <div className="bg-white p-4">
-      <div className="flex items-center justify-between gap-2">
-        <div className="flex flex-col justify-between gap-2">
-          <h3 className="text-lg font-bold">{title}</h3>
-          <span className="text-sm text-gray-500">{value}</span>
+    <div className="bg-[#FFD6BA] rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+      <div className="flex items-center justify-between">
+        <div className="flex-1">
+          <div className={`inline-flex p-3 rounded-lg bg-gradient-to-r ${colorClasses[color].split(' ').slice(0, 2).join(' ')} mb-4`}>
+            <div className="text-white text-xl">
+              {icon}
+            </div>
+          </div>
+          <h3 className="text-sm font-semibold text-gray-600 uppercase tracking-wide">{title}</h3>
+          <p className="text-3xl font-bold text-gray-800 mt-1">{value}</p>
+          {subtitle && <p className="text-xs text-gray-500 mt-1">{subtitle}</p>}
         </div>
-        {icon}
       </div>
     </div>
   );
 };
 
-
-  
 const FlightsPage = async ({searchParams}: { searchParams: Promise < {
   [key: string]: string | string[] | undefined
 }>}) => {
   const { user_metadata: data } = await getUser();
-
   
   const {timeframe} = await searchParams || "30"
   
@@ -75,203 +106,207 @@ const FlightsPage = async ({searchParams}: { searchParams: Promise < {
   const flightActivity = getFlightTimePerTimeFrame(allFlights);
   const recentFlightInsights = getRecentFlightInsights(allFlights);
   const mostVisitedOriginAndDestinationAirports =
-    getMostVisitedOriginAndDestinationAirports(allFlights);
+    await getMostVisitedOriginAndDestinationAirports(allFlights);
   const aircraftUsageData = await getAllPlayerAircraftUsageData(allFlights);
 
   return (
-    <div className="flex flex-col gap-4">
-      {/* <section
-        className="grid grid-cols-2 md:grid-cols-4 gap-4 h-[150px] 
-      [&>div]:rounded-lg
-      [&>div]:border
-      [&>div]:border-gray-200
-      [&>div]:shadow-sm
-      [&>div]:p-4
-      [&>div]:bg-white
-      "
-      >
-        <InfoCard
-          title="Flights"
-          value={flightOverviewStats.totalFlights}
-          icon={<FaPlane />}
-        />
-        <InfoCard
-          title="Landings"
-          value={flightOverviewStats.totalLandings}
-          icon={<FaPlane />}
-        />
-        <InfoCard
-          title="Flight Time"
-          value={flightOverviewStats.totalTime}
-          icon={<FaPlane />}
-        />
-        <InfoCard
-          title="XP"
-          value={flightOverviewStats.totalXp}
-          icon={<FaPlane />}
-        />
-      </section> */}
-
-      <div className="flex flex-col gap-2">
-        <h2 className="text-4xl font-bold bg-gradient-to-r from-gray-600 to-dark py-0.5 bg-clip-text text-transparent tracking-tight">
-          Your Flight Activity
-        </h2>
+    <div className="space-y-8 pb-8">
+      {/* Header Section */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+        <h1 className="text-4xl font-bold bg-gradient-to-r from-gray-600 to-dark bg-clip-text text-transparent tracking-tight">
+            Your Flight Activity
+          </h1>
+          <p className="text-gray-600 mt-2 flex items-center gap-2">
+            <ImStatsDots className="text-gray-500" />
+            Your flight statistics and insights
+          </p>
+        </div>
         <SelectTimeframeButton />
       </div>
 
-      <section className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:col-span-1 col-span-2 [&>section]:bg-[#FFE8CD]">
-          <section className="flex-1 flex flex-col gap-4 p-4 bg-white rounded-lg">
-            <header>
-              <h3 className="text-lg font-bold">Recent Flight Activity</h3>
-              <p className="text-xs text-gray-500 font-medium">Last {timeframe} days</p>
-            </header>
+      {/* Quick Stats Grid */}
+      <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <InfoCard
+          title="Total Flights"
+          value={numberWithCommas(flightOverviewStats.totalFlights)}
+          icon={<FaPlaneDeparture />}
+          color="blue"
+          subtitle={`Last ${timeframe} days`}
+        />
+        <InfoCard
+          title="Landings"
+          value={numberWithCommas(recentFlightInsights.totalLandings)}
+          icon={<BiSolidPlaneLand />}
+          color="green"
+          subtitle="Successful touchdowns"
+        />
+        <InfoCard
+          title="Flight Time"
+          value={convertMinutesToHours(recentFlightInsights.totalTime)}
+          icon={<FaRegClock />}
+          color="purple"
+          subtitle="Total airtime"
+        />
+        <InfoCard
+          title="XP Earned"
+          value={numberWithCommas(recentFlightInsights.totalXp)}
+          icon={<PiSparkle />}
+          color="orange"
+          subtitle="Experience points"
+        />
+      </section>
 
-            <div
-              className="flex flex-col gap-2
-                      [&>div>#label]:text-sm
-                      [&>div>#label]:font-medium
-                      [&>div>#value]:text-xs
-                      [&>div>#value]:px-2
-                      [&>div>#value]:py-1
-                      [&>div>#value]:font-bold
-                      [&>div>#value]:rounded-full
-                      [&>div>#value]:bg-[#FFD6BA]
-                    "
-            >
-              <div className="flex justify-between gap-2 items-center">
-                <div id="label">Flights</div>
-                <div id="value">{flightOverviewStats.totalFlights}</div>
+      {/* Main Analytics Grid */}
+      <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        {/* Flight Averages */}
+        <Card className="lg:col-span-1 bg-blue-100 !shadow-none">
+          <CardHeader className="pb-4">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-blue-500 rounded-lg">
+                <BiTrendingUp className="text-white text-xl" />
               </div>
-
-              <div className="flex justify-between gap-2 items-center">
-                <div id="label">Landings</div>
-                <div id="value">{recentFlightInsights.totalLandings}</div>
+              <div>
+                <CardTitle className="text-blue-900">Flight Averages</CardTitle>
+                <CardDescription className="text-blue-700">Performance metrics for last {timeframe} days</CardDescription>
               </div>
-
-              <div className="flex justify-between gap-2 items-center">
-                <div id="label">XP Earned</div>
-                <div id="value">{recentFlightInsights.totalXp}</div>
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="bg-white p-4 rounded-lg ">
+                <p className="text-sm font-medium text-gray-600">Avg Flight Time</p>
+                <p className="text-2xl font-bold text-blue-600">{convertMinutesToHours(flightAverages.avgFlightTime)}</p>
               </div>
+              <div className="bg-white p-4 rounded-lg ">
+                <p className="text-sm font-medium text-gray-600">Landings/Flight</p>
+                <p className="text-2xl font-bold text-green-600">{Math.round(flightAverages.avgLandingsPerFlight)}</p>
+              </div>
+              <div className="bg-white p-4 rounded-lg ">
+                <p className="text-sm font-medium text-gray-600">Avg XP/Flight</p>
+                <p className="text-2xl font-bold text-purple-600">{flightAverages.avgXpPerFlight}</p>
+              </div>
+              <div className="bg-white p-4 rounded-lg ">
+                <p className="text-sm font-medium text-gray-600">XP/Landing</p>
+                <p className="text-2xl font-bold text-orange-600">{flightAverages.avgXpPerLanding}</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
-              <div className="flex justify-between gap-2 items-center">
-                <div id="label">Flight Time</div>
-                <div id="value">
-                  {convertMinutesToHours(recentFlightInsights.totalTime)}
+        {/* Airport Stats */}
+        <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
+          <Card className="bg-gradient-to-br bg-[#FFDCDC]">
+            <CardHeader className="pb-4">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-red-500 rounded-lg">
+                  <FaMapMarkerAlt className="text-white text-lg" />
+                </div>
+                <div>
+                  <CardTitle className="text-red-900">Top Origin</CardTitle>
+                  <CardDescription className="text-red-700">Most departed from</CardDescription>
                 </div>
               </div>
-            </div>
-          </section>
+            </CardHeader>
 
-          <section className="flex-1 flex flex-col gap-4 p-4 bg-white rounded-lg">
-            <header>
-              <h3 className="text-lg font-bold">Flight Averages</h3>
-              <p className="text-xs text-gray-500 font-medium">Last {timeframe} days</p>
-            </header>
+            {/* Bottom right */}
+            <CardContent className="h-full flex items-end justify-start">
 
-            <div
-              className="grid grid-cols-2 gap-4 
-                    [&>div]:h-full
-                    [&>div]:flex
-                    [&>div]:flex-col
-                    [&>div]:items-center
-                    [&>div>h3]:text-center
-                    [&>div]:bg-[#FFD6BA]
-                    [&>div]:py-1
-                    [&>div]:rounded-lg
-                  "
-            >
-              <div className="">
-                <h3 className="text-sm font-medium">Flight Time</h3>
-                <p className="text-xl font-bold">{convertMinutesToHours(flightAverages.avgFlightTime)}</p>
+              <div className="flex flex-col gap-2">
+                <p className="text-7xl font-black text-red-800">
+                  {mostVisitedOriginAndDestinationAirports.topOrigin || "N/A"}
+                </p>
+                <span className="text-sm text-red-700 font-medium flex items-center gap-2">
+                  {mostVisitedOriginAndDestinationAirports.originAirportInfo?.name}, {mostVisitedOriginAndDestinationAirports.originAirportInfo?.city} {mostVisitedOriginAndDestinationAirports.originAirportInfo?.state && `${mostVisitedOriginAndDestinationAirports.originAirportInfo?.state}, `} {mostVisitedOriginAndDestinationAirports.originAirportInfo?.country.name}
+                </span>
+
+                <span className="text-sm text-white font-medium bg-red-500 px-2 py-1 rounded-md self-start">Departed <b>{mostVisitedOriginAndDestinationAirports.originCount}</b> times</span>
               </div>
-              <div className="">
-                <h3 className="text-sm font-medium">Landings/Day</h3>
-                <p className="text-xl font-bold">{Math.round(flightAverages.avgLandingsPerFlight)}</p>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-gradient-to-br bg-[#FFE8CD]">
+            <CardHeader className="pb-4">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-orange-500 rounded-lg">
+                  <FaMapMarkerAlt className="text-white text-lg" />
+                </div>
+                <div>
+                  <CardTitle className="text-orange-900">Top Destination</CardTitle>
+                  <CardDescription className="text-orange-700">Most arrived at</CardDescription>
+                </div>
               </div>
-              <div className="">
-                <h3 className="text-sm font-medium">Avg XP Earned</h3>
-                <p className="text-xl font-bold">{flightAverages.avgXpPerFlight}</p>
+            </CardHeader>
+            <CardContent className="h-full flex items-end justify-start">
+              <div className="flex flex-col gap-2">
+                <p className="text-7xl font-black text-orange-800">
+                  <b>{mostVisitedOriginAndDestinationAirports.topDestination || "N/A"}</b>
+                </p>
+                <span className="text-sm text-orange-700 font-medium flex items-center gap-2">
+                  {mostVisitedOriginAndDestinationAirports.destinationAirportInfo?.name}, {mostVisitedOriginAndDestinationAirports.destinationAirportInfo?.city} {mostVisitedOriginAndDestinationAirports.destinationAirportInfo?.state && `${mostVisitedOriginAndDestinationAirports.destinationAirportInfo?.state}, `} {mostVisitedOriginAndDestinationAirports.destinationAirportInfo?.country.name}
+                </span>
+                <span className="text-sm text-white font-medium bg-orange-500 px-2 py-1 rounded-md self-start">Arrived <b>{mostVisitedOriginAndDestinationAirports.destinationCount}</b> times</span>
               </div>
-              <div className="">
-                <h3 className="text-sm font-medium">XP per Landing</h3>
-                <p className="text-xl font-bold">{flightAverages.avgXpPerLanding}</p>
-              </div>
-            </div>
-          </section>
+            </CardContent>
+          </Card>
         </div>
+      </section>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:col-span-1 col-span-2 [&>section]:bg-[#FFE8CD]">
-          <section className="flex-1 flex flex-col justify-between gap-4 p-4 bg-white rounded-lg ">
-            <header>
-              <h3 className="text-lg font-bold">Most Visited Origin Airport</h3>
-              <p className="text-xs text-gray-500 font-medium">Last {timeframe} days</p>
-            </header>
-
-            <h3 className="text-4xl md:text-6xl font-black">
-              {mostVisitedOriginAndDestinationAirports.topOrigin}
-            </h3>
-          </section>
-
-          <section className="flex-1 flex flex-col justify-between gap-4 p-4 bg-white rounded-lg ">
-            <header>
-              <h3 className="text-lg font-bold">
-                Most Visited Destination Airport
-              </h3>
-              <p className="text-xs text-gray-500 font-medium">Last {timeframe} days</p>
-            </header>
-
-            <h3 className="text-4xl md:text-6xl font-black">
-              {mostVisitedOriginAndDestinationAirports.topDestination}
-            </h3>
-          </section>
-        </div>
-
-        {/* Display Flight Activity Data for a specific time frame */}
+      {/* Charts Section */}
+      <section className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Flight Activity Chart */}
         {flightActivity.length > 0 ? (
-        <FlightActivityAreaChart
-          flightActivityData={flightActivity}
-          timeframe={timeframe}
-          className="col-span-2"
-        />
+          <FlightActivityAreaChart
+            flightActivityData={flightActivity}
+            timeframe={timeframe}
+            className="col-span-2"
+          />
         ) : (
-          <Card className="col-span-2 bg-gray">
+          <Card className="lg:col-span-2 bg-gradient-to-br from-gray-900 to-gray-800 border-gray-700">
             <CardHeader>
-              <CardTitle className="text-2xl font-bold text-white">Flight Time Per Day</CardTitle>
-              <CardDescription className="text-gray-100">
+              <CardTitle className="text-2xl font-bold text-white flex items-center gap-3">
+                <FaPlane className="text-blue-400" />
+                Flight Time Per Day
+              </CardTitle>
+              <CardDescription className="text-gray-300">
                 Your flight time day by day for the last {timeframe} days
               </CardDescription>
-
-              <CardContent className="flex justify-center items-center h-full">
-                <p className="text-gray-100 font-bold text-4xl tracking-tight mt-10">No Data Available</p>
-              </CardContent>
             </CardHeader>
+            <CardContent className="flex flex-col items-center justify-center py-16">
+              <div className="text-6xl text-gray-600 mb-4">✈️</div>
+              <p className="text-gray-300 font-semibold text-xl">No Flight Data Available</p>
+              <p className="text-gray-500 text-sm mt-2">Start flying to see your activity here!</p>
+            </CardContent>
           </Card>
         )}
 
+        {/* Aircraft Usage Chart */}
         {aircraftUsageData.length > 0 ? (
           <AircraftUsageDonutChart
             aircraftUsageData={aircraftUsageData}
             timeframe={timeframe}
-            className="lg:col-span-1 col-span-2"  
+            className="lg:col-span-1"  
           />
         ) : (
-          <Card className="lg:col-span-1 col-span-2 bg-dark">
+          <Card className="lg:col-span-1 bg-gradient-to-br from-gray-900 to-gray-800 border-gray-700">
             <CardHeader>
-              <CardTitle className="text-2xl font-bold text-white">
-                Most Used Aircraft
+              <CardTitle className="text-2xl font-bold text-white flex items-center gap-3">
+                <FaPlane className="text-purple-400" />
+                Aircraft Usage
               </CardTitle>
-              <CardDescription className="text-gray-200">
+              <CardDescription className="text-gray-300">
                 Your most used aircraft in the last {timeframe} days
               </CardDescription>
-
-              <CardContent className="flex justify-center items-center h-full">
-                <p className="text-gray-100 font-bold text-4xl tracking-tight mt-10">No Data Available</p>
-              </CardContent>
             </CardHeader>
+            <CardContent className="flex flex-col items-center justify-center py-16">
+              <div className="text-4xl text-gray-600 mb-4">🛩️</div>
+              <p className="text-gray-300 font-semibold">No Aircraft Data</p>
+            </CardContent>
           </Card>
         )}
 
+        {/* Top 3 Aircraft */}
         <Card className="lg:col-span-1 col-span-2 bg-dark">
           <CardHeader>
             <CardTitle className="text-2xl font-bold text-white">
@@ -291,7 +326,7 @@ const FlightsPage = async ({searchParams}: { searchParams: Promise < {
             .map((aircraft, index) => (
               <CardContent
                 key={index}
-                className="flex md:flex-row flex-col-reverse justify-between items-center gap-2 bg-gray text-light rounded-lg"
+                className="flex md:flex-row flex-col-reverse justify-between items-center gap-2 bg-gray text-light rounded-lg relative"
               >
                 <div className="flex flex-col gap-1 py-4 text-center md:text-left">
                   <p className={`${index === 0 && "text-amber-400"} ${index === 1 && "text-amber-200"} ${index === 2 && "text-amber-50"} text-4xl font-black`}>{aircraft.name}</p>
@@ -299,6 +334,10 @@ const FlightsPage = async ({searchParams}: { searchParams: Promise < {
                     Flights: {aircraft.count}
                   </span>
                 </div>
+
+                <span className="text-sm text-white font-bold bg-gray-500 w-8 h-8 rounded-md self-start absolute top-0 right-0 flex items-center justify-center">
+                  {index + 1}
+                </span>
 
                 <Image
                   src={`/images/aircraft/${matchAircraftNameToImage(
@@ -316,12 +355,7 @@ const FlightsPage = async ({searchParams}: { searchParams: Promise < {
             )}
           </div>
         </Card>
-
-        {/* <Card>Hello AnotherCard</Card> */}
       </section>
-      {/* <Card className="col-span-2">
-        <FlightRouteMapRenderer />
-      </Card> */}
     </div>
   );
 };

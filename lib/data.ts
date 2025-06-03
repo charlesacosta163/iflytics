@@ -30,3 +30,7 @@ export const aircraftImages = [
     { key: "boeing 787-10", image: "b787-10.png" },
     { key: "md11f", image: "md11f.png" },
   ]
+
+export const emojiCharacterRandomizer = [
+  "🤫", "🙃", "🤔", "🤨", "🤯", "🤠", "😲", "🙂‍↕️", "🙂‍↔️", "🥳"
+]

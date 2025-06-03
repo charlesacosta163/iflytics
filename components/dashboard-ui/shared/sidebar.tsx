@@ -9,12 +9,14 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 
 import { TiPlaneOutline } from "react-icons/ti";
-import { FaUser } from "react-icons/fa";
+import { FaUser, FaUsers } from "react-icons/fa";
 
 import { FaHome } from "react-icons/fa";
-import { TbDeviceGamepad2 } from "react-icons/tb";
 
 import { LogoutButton } from "@/components/logout-button";
+import { GoCopilot } from "react-icons/go";
+import { LuGoal } from "react-icons/lu";
+
 const Sidebar = () => {
   const pathname = usePathname();
   return (
@@ -43,32 +45,49 @@ const Sidebar = () => {
         
 
         <section id="menus" className="flex-1 flex flex-col gap-2 py-4">
-            <Link href="/dashboard" className={cn("flex gap-4 text-gray-200 text-lg font-medium items-center hover:bg-gray-700 rounded-lg px-3 py-1", pathname === "/dashboard" && "bg-light text-dark font-bold")}>
+            <Link href="/dashboard" className={cn("flex gap-4 text-gray-200 font-medium items-center hover:bg-gray-700 rounded-lg px-3 py-2 transition-colors duration-200", pathname === "/dashboard" && "bg-light text-dark font-bold")}>
                 <FaHome />
                 Dashboard
             </Link>
 
-            <Link href="/dashboard/flights" className={cn("flex gap-4 text-gray-200 text-lg font-medium items-center hover:bg-gray-700 rounded-lg px-3 py-1", pathname === "/dashboard/flights" && "bg-light text-dark font-bold")}>
+            <Link href="/dashboard/flights" className={cn("flex gap-4 text-gray-200 font-medium items-center hover:bg-gray-700 rounded-lg px-3 py-2 transition-colors duration-200", pathname === "/dashboard/flights" && "bg-light text-dark font-bold")}>
                 <TiPlaneOutline />
                 Flights
             </Link>
 
-            <Link href="/dashboard/profile" className={cn("flex gap-4 text-gray-200 text-lg font-medium items-center hover:bg-gray-700 rounded-lg px-3 py-1", pathname === "/dashboard/profile" && "bg-light text-dark font-bold")}>
+            <Link href="/dashboard/profile" className={cn("flex gap-4 text-gray-200  font-medium items-center hover:bg-gray-700 rounded-lg px-3 py-2 transition-colors duration-200", pathname === "/dashboard/profile" && "bg-light text-dark font-bold")}>
                 <FaUser />
                 Profile
             </Link>
 
-            <Link href="/dashboard" className={cn("p-0.5 bg-gradient-to-br from-red-400 to-purple-400 rounded-lg", pathname === "/dashboard/ifgamified" && "bg-light text-dark font-bold")}>
-                <span className="flex gap-4 text-gray-200 text-lg font-medium items-center hover:bg-gray-700 rounded-md px-3 py-1 bg-dark">
-                  <TbDeviceGamepad2 />
-                  The Flight Cave
-                </span>
+            <Link href="/dashboard/users" className={cn("flex gap-4 text-gray-200 font-medium items-center hover:bg-gray-700 rounded-lg px-3 py-2 transition-colors duration-200", pathname === "/dashboard/users" && "bg-light text-dark font-bold")}>
+                <GoCopilot />
+                Community Pilots
             </Link>
+
+            {/* Horizontal Divider */}
+            <div className="my-4 border-t border-gray-600"></div>
+
+            {/* Special Section - Flight Arena (Coming Soon) */}
+            <div className="p-0.5 bg-gradient-to-br from-red-400 to-purple-400 rounded-lg">
+              <div 
+                className="flex gap-4 text-gray-400 font-medium items-center px-3 py-2 bg-dark rounded-md cursor-not-allowed opacity-75"
+                title="Coming Soon!"
+              >
+                <LuGoal />
+                <div className="flex items-center gap-2">
+                  <span className="font-medium text-white">The Flight Arena</span>
+                  <span className="text-xs bg-gray-600 text-gray-300 px-2 py-1 rounded-full w-fit mt-1">
+                    Premium
+                  </span>
+                </div>
+              </div>
+            </div>
             
         </section>
 
         <div className="mt-auto">
-          <LogoutButton className="w-full font-medium hover:bg-gray-800 cursor-pointer"/>
+          <LogoutButton className="w-full font-medium hover:bg-gray-800 cursor-pointer transition-colors duration-200"/>
         </div>
 
       </div>

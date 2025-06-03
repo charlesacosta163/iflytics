@@ -3,7 +3,7 @@
 const API_KEY = process.env.API_KEY as string
 
 export async function getUserId(username: string) {
-    const response = await fetch("https://api.infiniteflight.com/public/v2/users", {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -30,9 +30,26 @@ export async function getUserId(username: string) {
     }
 }
 
-export async function getUserStats(username: string) {
+export async function getUserStats(username: string, userId?: string) {
 
-    const response = await fetch("https://api.infiniteflight.com/public/v2/users", {
+    if (userId) {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${API_KEY}`
+            }, 
+            body: JSON.stringify({
+                userIds: [userId]
+            })
+        })
+
+        const data = await response.json()
+
+        return data || null
+    }
+
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -51,7 +68,7 @@ export async function getUserStats(username: string) {
 export async function getUserFlights(username: string, page: number = 1) {
     const userInfo = await getUserId(username)
 
-    const response = await fetch(`https://api.infiniteflight.com/public/v2/users/${userInfo.userId}/flights?page=${page}`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/${userInfo.userId}/flights?page=${page}`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
@@ -69,7 +86,7 @@ export async function getUserFlights(username: string, page: number = 1) {
 export async function getAircraftAndLivery(aircraftId: string, liveryId: string) {
 
     try {
-        const response = await fetch(`https://api.infiniteflight.com/public/v2/aircraft/liveries`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/aircraft/liveries`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -106,7 +123,7 @@ export async function getAircraftAndLivery(aircraftId: string, liveryId: string)
 }
 
 export async function getAircraft(aircraftId: string) {
-    const response = await fetch(`https://api.infiniteflight.com/public/v2/aircraft/${aircraftId}`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/aircraft/${aircraftId}`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
@@ -119,4 +136,30 @@ export async function getAircraft(aircraftId: string) {
     // console.log(data)
 
     return data || null
+}
+
+export async function getAirport(airportIcao: string) {
+    try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/airport/${airportIcao}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${process.env.API_KEY}`
+            },
+            next: { revalidate: 3600 } // Cache for 1 hour since airport data is relatively static
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to fetch airport data: ${response.status}`);
+        }
+
+        const data = await response.json();
+        
+        // Return the result attribute
+        return data.result;
+        
+    } catch (error) {
+        console.error("Error fetching airport data:", error);
+        return null;
+    }
 }

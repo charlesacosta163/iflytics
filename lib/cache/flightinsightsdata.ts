@@ -1,5 +1,5 @@
 import { Flight } from "../types";
-import { getAircraft } from "../actions";
+import { getAircraft, getAirport } from "../actions";
 import { aircraftImages } from "../data";
 import { unstable_cache as cache } from "next/cache";
 import { getAircraftCached } from "./flightdata";
@@ -182,7 +182,7 @@ export async function getAllPlayerAircraftUsageData(flights: Flight[]) {
   }
 }
 
-export function getMostVisitedOriginAndDestinationAirports(flights: Flight[]) {
+export async function getMostVisitedOriginAndDestinationAirports(flights: Flight[]) {
   // Filter out flights with null/undefined airports
   const validFlights = flights.filter(flight => 
     flight.originAirport && flight.destinationAirport
@@ -219,9 +219,16 @@ export function getMostVisitedOriginAndDestinationAirports(flights: Flight[]) {
   const topOrigin = sortedOrigins[0];
   const topDestination = sortedDestinations[0];
 
+  const originAirportInfo = await getAirport(topOrigin[0]);
+  const destinationAirportInfo = await getAirport(topDestination[0]);
+
   return {
     topOrigin: topOrigin[0],
-    topDestination: topDestination[0]
+    originAirportInfo: originAirportInfo,
+    originCount: topOrigin[1],
+    topDestination: topDestination[0],
+    destinationAirportInfo: destinationAirportInfo,
+    destinationCount: topDestination[1]
   };
 }
 

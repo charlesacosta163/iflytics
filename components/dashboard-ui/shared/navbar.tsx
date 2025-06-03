@@ -6,54 +6,133 @@ import { LogoutButton } from '@/components/logout-button'
 import { Menu, X } from 'lucide-react'
 
 import { TiPlaneOutline } from "react-icons/ti";
-import { FaUser } from "react-icons/fa";
-import { FaHome } from "react-icons/fa";
-import { TbDeviceGamepad2 } from "react-icons/tb";
+import { GoCopilot } from "react-icons/go";
+import { FaHome, FaUser } from "react-icons/fa";
+import { LuGoal } from "react-icons/lu";
 
 import Link from 'next/link'
+
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   return (
-    <div className="flex justify-between items-center p-4 sticky top-0 bg-[#FAF0E6] z-50">
-      <div className="flex items-center gap-2">
-        <button 
-          className="lg:hidden p-1 rounded-md hover:bg-gray-700 hover:text-white text-gray-700"
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-        >
-          {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
-        <Pathname />
+    <div className="relative">
+      {/* Main Navbar */}
+      <div className="flex justify-between items-center px-4 py-2 sticky top-0 bg-[#FAF0E6] z-50 shadow-lg rounded-b-lg border-b border-gray-200">
+        <div className="flex items-center gap-3">
+          {/* Animated Hamburger Button */}
+          <button 
+            className="lg:hidden p-2 rounded-lg hover:bg-gray-100 text-gray-700 transition-all duration-200 hover:scale-105 active:scale-95"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+          >
+            <div className="relative w-6 h-6">
+              <Menu 
+                size={24} 
+                className={`absolute inset-0 transition-all duration-300 ${
+                  isMenuOpen ? 'opacity-0 rotate-180 scale-50' : 'opacity-100 rotate-0 scale-100'
+                }`} 
+              />
+              <X 
+                size={24} 
+                className={`absolute inset-0 transition-all duration-300 ${
+                  isMenuOpen ? 'opacity-100 rotate-0 scale-100' : 'opacity-0 -rotate-180 scale-50'
+                }`} 
+              />
+            </div>
+          </button>
+          <Pathname />
+        </div>
+        
+        <LogoutButton className="text-sm !px-4 !py-2 font-semibold rounded-full hover:scale-105 transition-transform duration-200"/>
       </div>
       
-      <LogoutButton />
-      
-      {/* Mobile menu that appears below navbar */}
-      {isMenuOpen && (
-        <div className="lg:hidden absolute top-full left-0 w-full bg-dark text-white p-4 z-50 shadow-lg rounded-lg">
-          <nav className="flex flex-col gap-3 [&>a]:font-semibold">
+      {/* Animated Mobile Menu Overlay */}
+      <div className={`lg:hidden fixed inset-0 z-40 transition-all duration-300 ${
+        isMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
+      }`}>
+        {/* Backdrop */}
+        <div 
+          className={`absolute inset-0 bg-black transition-opacity duration-300 ${
+            isMenuOpen ? 'opacity-50' : 'opacity-0'
+          }`}
+          onClick={() => setIsMenuOpen(false)}
+        />
+        
+        {/* Sliding Menu */}
+        <div className={`absolute top-[73px] left-0 w-full bg-dark text-white shadow-2xl transition-all duration-300 ease-out ${
+          isMenuOpen ? 'translate-y-0 opacity-100' : '-translate-y-4 opacity-0'
+        }`}>
+          <div className="p-6">
+            {/* Menu Header */}
+            <div className="mb-6 pb-4 border-b border-gray-600">
+              <h3 className="text-lg font-bold text-white">Where would you like to go?</h3>
+            </div>
 
-            <Link href="/dashboard" className="flex items-center gap-2 hover:bg-gray-700 rounded-lg px-4">
-              <FaHome className="w-4 h-4"/>
-              <span className="flex items-center gap-2 py-2 px-3 hover:bg-gray-700 rounded-lg">Dashboard</span>
-            </Link>
-            <Link href="/dashboard/flights" className="flex items-center gap-2 hover:bg-gray-700 rounded-lg px-4">
-              <TiPlaneOutline className="w-4 h-4"/>
-              <span className="flex items-center gap-2 py-2 px-3 hover:bg-gray-700 rounded-lg">Flights</span>
-            </Link>
-            <Link href="/dashboard/profile" className="flex items-center gap-2 hover:bg-gray-700 rounded-lg px-4">
-              <FaUser className="w-4 h-4"/>
-              <span className="flex items-center gap-2 py-2 px-3 hover:bg-gray-700 rounded-lg">Profile</span>
-            </Link>
-            <Link href="/dashboard" className="p-0.5 bg-gradient-to-br from-red-400 to-purple-400 rounded-lg">
-                <span className="flex gap-4 text-gray-200 text-lg font-medium items-center hover:bg-gray-700 rounded-md px-3 py-1 bg-dark">
-                  <TbDeviceGamepad2 />
-                  The Flight Cave
-                </span>
-            </Link>
-          </nav>
+            {/* Navigation Links */}
+            <nav className="space-y-2">
+              <Link 
+                href="/dashboard" 
+                className="group flex items-center gap-4 p-4 rounded-lg hover:bg-gray-700 transition-all duration-200 hover:translate-x-2"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <div className="p-2 bg-gray-700 rounded-lg group-hover:bg-gray-600 transition-colors duration-200">
+                  <FaHome className="w-4 h-4 text-light"/>
+                </div>
+                <span className="font-medium">Dashboard</span>
+              </Link>
+
+              <Link 
+                href="/dashboard/flights" 
+                className="group flex items-center gap-4 p-4 rounded-lg hover:bg-gray-700 transition-all duration-200 hover:translate-x-2"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <div className="p-2 bg-gray-700 rounded-lg group-hover:bg-gray-600 transition-colors duration-200">
+                  <TiPlaneOutline className="w-4 h-4 text-light"/>
+                </div>
+                <span className="font-medium">Flights</span>
+              </Link>
+
+              <Link 
+                href="/dashboard/profile" 
+                className="group flex items-center gap-4 p-4 rounded-lg hover:bg-gray-700 transition-all duration-200 hover:translate-x-2"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <div className="p-2 bg-gray-700 rounded-lg group-hover:bg-gray-600 transition-colors duration-200">
+                  <FaUser className="w-4 h-4 text-light"/>
+                </div>
+                <span className="font-medium">Profile</span>
+              </Link>
+
+              <Link 
+                href="/dashboard/users" 
+                className="group flex items-center gap-4 p-4 rounded-lg hover:bg-gray-700 transition-all duration-200 hover:translate-x-2"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <div className="p-2 bg-gray-700 rounded-lg group-hover:bg-gray-600 transition-colors duration-200">
+                  <GoCopilot className="w-4 h-4 text-light"/>
+                </div>
+                <span className="font-medium">Community Pilots</span>
+              </Link>
+
+              {/* Special Featured Item */}
+              <div className="pt-4 mt-4 border-t border-gray-600">
+                <div 
+                  className="flex items-center gap-4 bg-dark rounded-md px-4 py-3 cursor-not-allowed opacity-75"
+                  title="Coming Soon!"
+                >
+                  <div className="p-2 bg-gradient-to-r from-red-400 to-purple-400 rounded-lg">
+                    <LuGoal className="w-4 h-4 text-white"/>
+                  </div>
+                  <div>
+                    <span className="font-medium text-gray-400">The Flight Arena</span>
+                    <p className="text-xs text-gray-500">Premium</p>
+                  </div>
+                </div>
+              </div>
+            </nav>
+          </div>
         </div>
-      )}
+      </div>
     </div>
   )
 }
