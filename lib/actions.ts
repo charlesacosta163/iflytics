@@ -122,6 +122,21 @@ export async function getAircraftAndLivery(aircraftId: string, liveryId: string)
     }
 }
 
+export async function getAllAircraft() {
+     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/aircraft`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${API_KEY}`
+        },
+        next: { revalidate: 86400 } // Revalidate 24 hours
+     })
+
+     const data = await response.json()
+
+     return data || null
+}
+
 export async function getAircraft(aircraftId: string) {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/aircraft/${aircraftId}`, {
         method: "GET",
@@ -163,3 +178,23 @@ export async function getAirport(airportIcao: string) {
         return null;
     }
 }
+
+export async function getFullAirportInfo(airportIcao: string) {
+    
+    const response = await fetch(`${process.env.NEXT_PUBLIC_AIRPORT_DB_API_URL}/${airportIcao}?apiToken=${process.env.AIRPORT_DB_API_KEY}`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    })
+
+    if (!response.ok) {
+        console.error('API Error:', response.status, response.statusText);
+        return { statusCode: response.status };
+    }
+
+    const data = await response.json()
+
+    return data || null
+}
+

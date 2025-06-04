@@ -12,11 +12,11 @@ L.Icon.Default.mergeOptions({
   shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
 });
 
-export default function FlightRouteMap() {
+export default function FlightRouteMap({lat, lng}: {lat: number, lng: number}) {
     return (
         <div style={{ height: '400px', width: '100%' }}>
             <MapContainer 
-                center={[51.505, -0.09]} 
+                center={[lat, lng]} 
                 zoom={13} 
                 scrollWheelZoom={false}
                 style={{ height: '100%', width: '100%' }}

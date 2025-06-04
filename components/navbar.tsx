@@ -2,12 +2,11 @@
 
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { FaSearch, FaSignInAlt } from 'react-icons/fa'
-import infinilyticsLogo from '@/public/infinilyticslogo.svg'
-import Image from 'next/image'
+import { FaBook, FaSearch, FaSignInAlt } from 'react-icons/fa'
 import Pathname from './dashboard-ui/shared/pathname'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
+import MobileNav from './mobile-nav'
 
 const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -49,8 +48,16 @@ const Navbar = () => {
         <Pathname />
 
         {/* Navigation Buttons */}
-        <div className="flex gap-3 items-center">
+        <div className="hidden md:flex gap-3 items-center">
           {/* Search Button */}
+
+          <Link 
+            href="/directory" 
+            className="flex group gap-2 items-center px-3 py-2 bg-transparent text-gray rounded-full font-semibold transition-all duration-200 hover:scale-105"
+          >
+            <FaBook className="group-hover:rotate-12 transition-transform duration-200"/> 
+            <span>Directory</span>
+          </Link>
           <Link 
             href="/" 
             className="hidden md:flex group gap-2 items-center px-3 py-2 text-sm bg-gray-700 hover:bg-gray-800 text-white rounded-full font-semibold transition-all duration-200 hover:scale-105 shadow-md hover:shadow-lg"
@@ -74,6 +81,14 @@ const Navbar = () => {
               <span>...</span>
             </div>
           )}
+        </div>
+        
+        <div className='md:hidden'>
+          <MobileNav 
+            isLoggedIn={isLoggedIn}
+            isLoading={isLoading}
+            onAuthClick={handleAuthClick}
+          />
         </div>
       </nav>
     </header>

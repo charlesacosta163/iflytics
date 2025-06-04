@@ -28,7 +28,7 @@ export const aircraftImages = [
     { key: "boeing 787-8", image: "b787-8.png" },
     { key: "boeing 787-9", image: "b787-9.png" },
     { key: "boeing 787-10", image: "b787-10.png" },
-    { key: "md11f", image: "md11f.png" },
+    { key: "md-11f", image: "md11f.png" },
   ]
 
 export const emojiCharacterRandomizer = [
