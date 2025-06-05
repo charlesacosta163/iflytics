@@ -179,29 +179,6 @@ export async function getAirport(airportIcao: string) {
     }
 }
 
-export async function matchATCRank(atcRank: string) {
-    switch (atcRank) {
-        case "0":
-            return "Observer"
-        case "1":
-            return "Apprentice"
-        case "2":
-            return "Specialist"
-        case "3":
-            return "Officer"
-        case "4":
-            return "Recruiter"
-        case "5":
-            return "Supervisor"
-        case "6":
-            return "Moderator"
-        case "7":
-            return "Staff"
-        default:
-            return "Unknown"
-    }
-}
-
 export async function getFullAirportInfo(airportIcao: string) {
     try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_AIRPORT_DB_API_URL}/${airportIcao}?apiToken=${process.env.AIRPORT_DB_API_KEY}`, {

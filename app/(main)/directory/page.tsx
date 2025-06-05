@@ -1,7 +1,7 @@
 import React from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import { getAirportATIS, getAirportStatus, getAllAircraft, getFullAirportInfo } from "@/lib/actions";
+import { getAllAircraft, getFullAirportInfo } from "@/lib/actions";
 import { matchAircraftNameToImage } from "@/lib/cache/flightinsightsdata";
 import Image from "next/image";
 import { Card } from "@/components/ui/card";
@@ -200,8 +200,6 @@ const DirectoryPage = async ({
                   name="airport"
                   placeholder="Enter ICAO code (e.g., KSFO)"
                   autoComplete="off"
-                  maxLength={4}
-                  minLength={4}
                   className="flex-1 px-4 py-2 bg-gray-700 outline-none rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent border-none text-sm font-medium"
                   defaultValue={(airport as string) || ""}
                 />

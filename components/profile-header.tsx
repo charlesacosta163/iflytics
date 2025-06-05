@@ -3,7 +3,7 @@ import { GoCopilot } from "react-icons/go";
 import MostRecentFlightCard from "./most-recent-flight-card";
 import UserNavigation from "./user-navigation";
 
-import { getUserFlights, getPilotServerSessions } from "@/lib/actions";
+import { getUserFlights } from "@/lib/actions";
 
 const ProfileHeader = async ({
   id,
@@ -17,7 +17,6 @@ const ProfileHeader = async ({
   organization: string;
 }) => {
   const flights = await getUserFlights(name);
-   const pilotServerSession = await getPilotServerSessions("", name)
 
   let airportFlightLog // Callsign, Date, Departure airport, Arrival airport
   let flightHistory = flights?.data.result.data
@@ -41,8 +40,6 @@ const ProfileHeader = async ({
     arrival: mostRecentFlight.destinationAirport
   }
 
-  mostRecentFlight = { ...mostRecentFlight, session: pilotServerSession }
-
   const gradeColor: string =
     grade === 5
       ? "bg-yellow-500"
@@ -54,7 +51,7 @@ const ProfileHeader = async ({
       ? "bg-blue-500"
       : "bg-dark";
   return (
-    <div className="flex flex-col md:flex-row items-center justify-between gap-4 mt-4 px-4">
+    <div className="flex items-center justify-between gap-4 mt-4 px-4">
       <div className="flex flex-col justify-end gap-4 sm:gap-8 h-full">
         <div className="flex gap-4 sm:gap-8 items-center">
           <GoCopilot className="text-[4rem]" />
