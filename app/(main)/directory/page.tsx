@@ -25,19 +25,71 @@ const DirectoryPage = async ({
   const airport = params.airport;
 
   let airportData = null;
-  let airportStatus = null;
-  let airportATIS = null;
 
   if (airport) {
-    airportData = await getFullAirportInfo(airport);
-
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    airportStatus = await getAirportStatus(airport);
-
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    airportATIS = await getAirportATIS(airport);
-
-    airportData = {...airportData, ...airportStatus, atis: airportATIS || ""}
+    try {
+      console.log(`🔍 Fetching data for airport: ${airport.toUpperCase()}`);
+      
+      // Step 1: Get basic airport info first (this is critical)
+      // console.log('1️⃣ Fetching airport info...');
+      airportData = await getFullAirportInfo(airport);
+      // console.log('✅ Airport info result:', airportData);
+      
+      // If airport info fails, stop here
+      if (!airportData || airportData.statusCode) {
+        //console.error('❌ Airport info failed, stopping here');
+        // airportData already contains the error info
+      } else {
+        // Step 2: Get airport status (ATC info) - continue even if this fails
+        //console.log('2️⃣ Fetching airport status...');
+        let airportStatus = null;
+        try {
+          airportStatus = await getAirportStatus(airport);
+          // console.log('✅ Airport status result:', airportStatus);
+        } catch (statusError) {
+          // console.error('❌ Airport status failed:', statusError);
+          airportStatus = {
+            inboundFlightsCount: 0,
+            outboundFlightsCount: 0,
+            atcFacilities: []
+          };
+        }
+        
+        // Step 3: Get ATIS - continue even if this fails
+        // console.log('3️⃣ Fetching ATIS...');
+        let airportATIS = "No ATIS available";
+        try {
+          airportATIS = await getAirportATIS(airport);
+          // console.log('✅ ATIS result:', airportATIS);
+        } catch (atisError) {
+          // console.error('❌ ATIS failed:', atisError);
+          airportATIS = "No ATIS available";
+        }
+        
+        // Step 4: Merge all data safely
+        // console.log('4️⃣ Merging data...');
+        airportData = {
+          ...airportData,
+          ...airportStatus,
+          atis: airportATIS || "No ATIS available"
+        };
+        
+          // console.log('🎉 Final merged data:', {
+          //   hasBasicInfo: !!airportData.name,
+          //   atcFacilitiesCount: airportData.atcFacilities?.length || 0,
+          //   inboundFlights: airportData.inboundFlightsCount,
+          //   outboundFlights: airportData.outboundFlightsCount,
+          //   hasATIS: !!airportData.atis
+          // });
+      }
+      
+    } catch (error) {
+      console.error('💥 Unexpected error:', error);
+      airportData = { 
+        statusCode: 500, 
+        error: 'Failed to fetch airport data' 
+      };
+    }
   }
 
   const Component = () => {
@@ -148,6 +200,7 @@ const DirectoryPage = async ({
                   autoComplete="off"
                   className="flex-1 px-4 py-2 bg-gray-700 outline-none rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent border-none text-sm font-medium"
                   defaultValue={(airport as string) || ""}
+                  required
                 />
                 <button
                   type="submit"

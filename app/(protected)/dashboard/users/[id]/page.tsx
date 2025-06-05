@@ -86,7 +86,7 @@ const ViewUserPage = async ({
                     <span className="text-xs text-gray-500">Expert Server</span>
                   </div>
 
-                  {/* Key Flight Info */}
+                  {/* Infinite Flight Flight Info */}
                   <div className="grid grid-cols-2 gap-4">
                     <div className="text-center p-3 bg-blue-50 rounded-lg">
                       <p className="text-xs text-gray-600">Callsign</p>
@@ -123,7 +123,7 @@ const ViewUserPage = async ({
                         </div>
                       ) : (
                         <div className="col-span-2 bg-blue-400 text-white p-3 rounded-lg flex items-center justify-center gap-2 text-sm font-medium">
-                          Powered with Autopilot Plus <FaPlus className="text-white"/>
+                          Powered with<b>Autopilot Plus</b> <FaPlus className="text-white"/>
                         </div>
                       )
                     }
