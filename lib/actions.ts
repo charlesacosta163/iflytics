@@ -179,6 +179,29 @@ export async function getAirport(airportIcao: string) {
     }
 }
 
+export async function matchATCRank(atcRank: string) {
+    switch (atcRank) {
+        case "0":
+            return "Observer"
+        case "1":
+            return "Apprentice"
+        case "2":
+            return "Specialist"
+        case "3":
+            return "Officer"
+        case "4":
+            return "Recruiter"
+        case "5":
+            return "Supervisor"
+        case "6":
+            return "Moderator"
+        case "7":
+            return "Staff"
+        default:
+            return "Unknown"
+    }
+}
+
 export async function getFullAirportInfo(airportIcao: string) {
     
     const response = await fetch(`${process.env.NEXT_PUBLIC_AIRPORT_DB_API_URL}/${airportIcao}?apiToken=${process.env.AIRPORT_DB_API_KEY}`, {
@@ -198,3 +221,72 @@ export async function getFullAirportInfo(airportIcao: string) {
     return data || null
 }
 
+
+export async function getPilotServerSessions(id?: string, username?: string) {
+
+    // Expert server for now
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/sessions/${process.env.NEXT_PUBLIC_IF_EXPERT_SERVER_ID}/flights`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${API_KEY}`
+        },
+        next: { revalidate: 3600 } // Cache for 1 hour
+    })
+
+    if (!response.ok) {
+        console.error('API Error:', response.status, response.statusText);
+        return { statusCode: response.status };
+    }
+
+    const data = await response.json()
+
+    if (id) {
+        const currentUserSession = data.result.find((session: any) => session.userId === id)
+        return currentUserSession || null
+    }
+
+    const currentUserSession = data.result.find((session: any) => session.username === username)
+
+    console.log(currentUserSession)
+
+    return currentUserSession || null
+}
+
+export async function getAirportStatus(airportIcao: string) {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/sessions/${process.env.NEXT_PUBLIC_IF_EXPERT_SERVER_ID}/airport/${airportIcao}/status`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${API_KEY}`
+        },
+    })
+
+    if (!response.ok) {
+        console.error('API Error:', response.status, response.statusText);
+        return { statusCode: response.status };
+    }
+
+    const data = await response.json()
+
+    return data.result || null
+}
+
+export async function getAirportATIS(airportIcao: string) {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/sessions/${process.env.NEXT_PUBLIC_IF_EXPERT_SERVER_ID}/airport/${airportIcao}/atis`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${API_KEY}`
+        },
+    })
+
+    if (!response.ok) {
+        console.error('API Error:', response.status, response.statusText);
+        return "No ATIS available"
+    }
+
+    const data = await response.json()
+
+    return data.result || "No ATIS available"
+}

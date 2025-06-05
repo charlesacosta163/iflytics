@@ -97,6 +97,120 @@ const AirportDetails = ({ airportData }: { airportData: any }) => {
         </CardContent>
       </Card>
 
+       {/* Infinite Flight Airport Status */}
+       <Card className="bg-gray-800 border-gray-600">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 text-light">
+            <FaPlane className="text-green-400" />
+            Infinite Flight Status
+          </CardTitle>
+          <CardDescription className="text-gray-300">
+            Current activity on Expert Server
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {/* Placeholder data - replace with actual airportStatus prop */}
+          {(() => {
+        
+            const inboundCount = airportData.inboundFlightsCount;
+            const outboundCount = airportData.outboundFlightsCount;
+            
+            const isActive = airportData.atcFacilities.length > 0;
+            
+            return (
+              <div className="space-y-4">
+                {/* Active Status */}
+                <div className="flex items-center justify-between p-4 bg-gradient-to-r from-gray-700 to-gray-800 rounded-lg">
+                  <div className="flex items-center gap-3">
+                    <div className={`w-3 h-3 rounded-full ${isActive ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`}></div>
+                    <div>
+                      <h3 className="text-lg font-semibold text-light">
+                        {isActive ? 'Active Airport' : 'Inactive Airport'}
+                      </h3>
+                      <p className="text-sm text-gray-400">
+                        {isActive ? 'ATC services are currently available' : 'No ATC services active'}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-2xl font-bold text-light">{airportData.atcFacilities.length}</p>
+                    <p className="text-xs text-gray-400">ATC Online</p>
+                  </div>
+                </div>
+
+                
+                <div className="grid grid-cols-2 gap-4">
+                    <div className="text-center p-4 bg-gradient-to-r from-blue-600 to-blue-700 rounded-lg">
+                        <p className="text-2xl font-bold text-light">{inboundCount}</p>
+                        <p className="text-sm text-blue-200">Inbound Flights</p>
+                    </div>
+                    <div className="text-center p-4 bg-gradient-to-r from-green-600 to-green-700 rounded-lg">
+                        <p className="text-2xl font-bold text-light">{outboundCount}</p>
+                        <p className="text-sm text-green-200">Outbound Flights</p>
+                    </div>
+                </div>
+
+                {/* ATC Controllers (if active) - deduplicated */}
+                {isActive && (
+                  <div className="space-y-2">
+                    <h4 className="text-sm font-semibold text-gray-400 uppercase tracking-wide">
+                      Active Controllers
+                    </h4>
+                    {(() => {
+                      // Create a Map to store unique controllers by username (keeps first occurrence)
+                      const uniqueControllers = airportData.atcFacilities.reduce((acc: any[], controller: any) => {
+                        if (!acc.find(c => c.username === controller.username)) {
+                          acc.push(controller);
+                        }
+                        return acc;
+                      }, []);
+
+                      return uniqueControllers.map((controller: any, index: number) => (
+                        <div key={index} className="flex items-center justify-between p-3 bg-gradient-to-r from-gray-700 to-gray-800 rounded-lg border border-gray-600">
+                          <div className="flex items-center gap-3">
+                            <div className="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center">
+                              <span className="text-xs font-bold text-light">
+                                {controller.type === 4 ? 'TWR' : 'ATC'}
+                              </span>
+                            </div>
+                            <div>
+                              <p className="font-medium text-light">{controller.username}</p>
+                              <p className="text-xs text-gray-400">
+                                Online since {new Date(controller.startTime).toLocaleTimeString()}
+                              </p>
+                            </div>
+                          </div>
+                          <span className="text-xs bg-green-900 text-green-300 px-2 py-1 rounded">
+                            Active
+                          </span>
+                        </div>
+                      ));
+                    })()}
+                  </div>
+                )}
+
+                {/* Inactive State */}
+                {!isActive && (
+                  <div className="text-center py-6 text-gray-400">
+                    <div className="text-4xl mb-2">🏗️</div>
+                    <p className="font-medium">No ATC Coverage</p>
+                    <p className="text-sm">This airport is currently uncontrolled</p>
+                  </div>
+                )}
+
+                { /* ATIS info */}
+                {airportData.atis && (
+                <div className="flex flex-col gap-2">
+                    <p className="text-sm text-gray-400 font-bold">ATIS</p>
+                    <p className="text-sm text-light font-mono bg-gray-700 p-4 rounded-lg">{airportData.atis}</p>
+                </div>
+                )}
+              </div>
+            );
+          })()}
+        </CardContent>
+      </Card>
+
       {/* Airport Location Map */}
       <Card className="bg-gray-800 border-gray-600">
         <CardHeader>
