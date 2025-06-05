@@ -247,8 +247,6 @@ export async function getPilotServerSessions(id?: string, username?: string) {
 
     const currentUserSession = data.result.find((session: any) => session.username === username)
 
-    console.log(currentUserSession)
-
     return currentUserSession || null
 }
 
@@ -333,5 +331,28 @@ export async function getAirportATIS(airportIcao: string) {
     } catch (error) {
         console.error('Airport ATIS fetch error:', error);
         return "No ATIS available";
+    }
+}
+
+export async function matchATCRankToTitle(atcRank: string) {
+    switch (atcRank) {
+        case "0":
+            return "Observer"
+        case "1":
+            return "Apprentice"
+        case "2":
+            return "Specialist"
+        case "3":
+            return "Officer"
+        case "4":
+            return "Recruiter"
+        case "5":
+            return "Supervisor"
+        case "6":
+            return "Moderator"
+        case "7":
+            return "Staff"
+        default:
+            return "Unknown"
     }
 }

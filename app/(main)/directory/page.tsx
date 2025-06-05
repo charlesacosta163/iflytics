@@ -31,11 +31,11 @@ const DirectoryPage = async ({
   if (airport) {
     airportData = await getFullAirportInfo(airport);
 
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise(resolve => setTimeout(resolve, 2000));
     airportStatus = await getAirportStatus(airport);
-    await new Promise(resolve => setTimeout(resolve, 1000));
+
+    await new Promise(resolve => setTimeout(resolve, 2000));
     airportATIS = await getAirportATIS(airport);
-    await new Promise(resolve => setTimeout(resolve, 1000));
 
     airportData = {...airportData, ...airportStatus, atis: airportATIS || ""}
   }

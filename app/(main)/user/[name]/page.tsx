@@ -1,5 +1,5 @@
 import React from "react";
-import { getUserFlights, getUserStats } from "@/lib/actions";
+import { getUserFlights, getUserStats, matchATCRankToTitle } from "@/lib/actions";
 import { convertMinutesToHours, numberWithCommas } from "@/lib/utils";
 import InfoCard from "@/components/info-card";
 import ProfileHeader from "@/components/profile-header";
@@ -120,6 +120,7 @@ const UserPage = async ({ params }: { params: Promise<{ name: string }> }) => {
         <InfoCard
           value={result.atcRank}
           label="ATC Rank"
+          caption={await matchATCRankToTitle(result.atcRank.toString())}
           icon={GiCaptainHatProfile}
         />
 
