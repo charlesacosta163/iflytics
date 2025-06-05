@@ -299,6 +299,8 @@ export async function getAirportStatus(airportIcao: string) {
 
         const data = await response.json()
         
+        // console.log('🛩️ Raw Airport Status API Response:', JSON.stringify(data, null, 2));
+        
         // Validate response structure
         if (!data || !data.result) {
             console.error('Invalid airport status response structure');
@@ -310,6 +312,8 @@ export async function getAirportStatus(airportIcao: string) {
             };
         }
 
+        // console.log('🛩️ Airport Status Result:', JSON.stringify(data.result, null, 2));
+        
         return data.result;
 
     } catch (error) {

@@ -39,7 +39,7 @@ const DirectoryPage = async ({
       if (airportResult.status === 'fulfilled') {
         airportData = airportResult.value;
       } else {
-        console.error('Airport info failed:', airportResult.reason);
+        // console.error('Airport info failed:', airportResult.reason);
         airportData = { statusCode: 500, error: 'Failed to fetch airport info' };
       }
 
@@ -49,8 +49,9 @@ const DirectoryPage = async ({
         let airportStatus = null;
         if (statusResult.status === 'fulfilled') {
           airportStatus = statusResult.value;
+          // console.log('✅ Airport Status Success:', airportStatus);
         } else {
-          console.error('Airport status failed:', statusResult.reason);
+          // console.error('❌ Airport status failed:', statusResult.reason);
           // Provide fallback data for airport status
           airportStatus = {
             inboundFlightsCount: 0,
@@ -63,8 +64,9 @@ const DirectoryPage = async ({
         let airportATIS = "No ATIS available";
         if (atisResult.status === 'fulfilled') {
           airportATIS = atisResult.value || "No ATIS available";
+          // console.log('✅ ATIS Success:', airportATIS);
         } else {
-          console.error('Airport ATIS failed:', atisResult.reason);
+          // console.error('❌ Airport ATIS failed:', atisResult.reason);
         }
 
         // Safely merge all data
@@ -74,6 +76,12 @@ const DirectoryPage = async ({
             ...airportStatus,
             atis: airportATIS
           };
+          // console.log('✅ Final merged airportData:', {
+          //   atcFacilities: airportData.atcFacilities,
+          //   inboundFlightsCount: airportData.inboundFlightsCount,
+          //   outboundFlightsCount: airportData.outboundFlightsCount,
+          //   atis: airportData.atis
+          // });
         } catch (mergeError) {
           console.error('Failed to merge airport data:', mergeError);
           // Keep original airportData if merge fails
