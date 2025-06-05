@@ -203,22 +203,44 @@ export async function matchATCRank(atcRank: string) {
 }
 
 export async function getFullAirportInfo(airportIcao: string) {
-    
-    const response = await fetch(`${process.env.NEXT_PUBLIC_AIRPORT_DB_API_URL}/${airportIcao}?apiToken=${process.env.AIRPORT_DB_API_KEY}`, {
-        method: "GET",
-        headers: {
-            "Content-Type": "application/json"
+    try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_AIRPORT_DB_API_URL}/${airportIcao}?apiToken=${process.env.AIRPORT_DB_API_KEY}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            // Add timeout to prevent hanging requests
+            signal: AbortSignal.timeout(10000) // 10 second timeout
+        })
+
+        if (!response.ok) {
+            console.error('Airport DB API Error:', response.status, response.statusText);
+            return { 
+                statusCode: response.status,
+                error: response.status === 404 ? 'Airport not found' : 'Failed to fetch airport info'
+            };
         }
-    })
 
-    if (!response.ok) {
-        console.error('API Error:', response.status, response.statusText);
-        return { statusCode: response.status };
+        const data = await response.json()
+        
+        // Validate response structure
+        if (!data) {
+            console.error('Invalid airport info response - no data');
+            return { 
+                statusCode: 500,
+                error: 'Invalid response from airport database'
+            };
+        }
+
+        return data;
+
+    } catch (error) {
+        console.error('Airport info fetch error:', error);
+        return { 
+            statusCode: 500,
+            error: 'Failed to fetch airport information'
+        };
     }
-
-    const data = await response.json()
-
-    return data || null
 }
 
 
@@ -254,39 +276,82 @@ export async function getPilotServerSessions(id?: string, username?: string) {
 }
 
 export async function getAirportStatus(airportIcao: string) {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/sessions/${process.env.NEXT_PUBLIC_IF_EXPERT_SERVER_ID}/airport/${airportIcao}/status`, {
-        method: "GET",
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${API_KEY}`
-        },
-    })
+    try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/sessions/${process.env.NEXT_PUBLIC_IF_EXPERT_SERVER_ID}/airport/${airportIcao}/status`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${API_KEY}`
+            },
+            // Add timeout to prevent hanging requests
+            signal: AbortSignal.timeout(10000) // 10 second timeout
+        })
 
-    if (!response.ok) {
-        console.error('API Error:', response.status, response.statusText);
-        return { statusCode: response.status };
+        if (!response.ok) {
+            console.error('Airport Status API Error:', response.status, response.statusText);
+            return { 
+                statusCode: response.status,
+                inboundFlightsCount: 0,
+                outboundFlightsCount: 0,
+                atcFacilities: []
+            };
+        }
+
+        const data = await response.json()
+        
+        // Validate response structure
+        if (!data || !data.result) {
+            console.error('Invalid airport status response structure');
+            return {
+                statusCode: 500,
+                inboundFlightsCount: 0,
+                outboundFlightsCount: 0,
+                atcFacilities: []
+            };
+        }
+
+        return data.result;
+
+    } catch (error) {
+        console.error('Airport Status fetch error:', error);
+        return {
+            statusCode: 500,
+            error: 'Failed to fetch airport status',
+            inboundFlightsCount: 0,
+            outboundFlightsCount: 0,
+            atcFacilities: []
+        };
     }
-
-    const data = await response.json()
-
-    return data.result || null
 }
 
 export async function getAirportATIS(airportIcao: string) {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/sessions/${process.env.NEXT_PUBLIC_IF_EXPERT_SERVER_ID}/airport/${airportIcao}/atis`, {
-        method: "GET",
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${API_KEY}`
-        },
-    })
+    try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/sessions/${process.env.NEXT_PUBLIC_IF_EXPERT_SERVER_ID}/airport/${airportIcao}/atis`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${API_KEY}`
+            },
+            // Add timeout to prevent hanging requests
+            signal: AbortSignal.timeout(10000) // 10 second timeout
+        })
 
-    if (!response.ok) {
-        console.error('API Error:', response.status, response.statusText);
-        return "No ATIS available"
+        if (!response.ok) {
+            console.error('Airport ATIS API Error:', response.status, response.statusText);
+            return "No ATIS available";
+        }
+
+        const data = await response.json()
+        
+        // Validate response and return ATIS text
+        if (data && data.result) {
+            return data.result || "No ATIS available";
+        }
+        
+        return "No ATIS available";
+
+    } catch (error) {
+        console.error('Airport ATIS fetch error:', error);
+        return "No ATIS available";
     }
-
-    const data = await response.json()
-
-    return data.result || "No ATIS available"
 }

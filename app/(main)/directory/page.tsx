@@ -12,22 +12,79 @@ const DirectoryPage = async ({
 }: {
   searchParams: Promise<{ airport?: string }>;
 }) => {
-  const aircraft = await getAllAircraft();
+  // Safe aircraft fetching with error handling
+  let aircraft = null;
+  try {
+    aircraft = await getAllAircraft();
+  } catch (error) {
+    console.error('Failed to fetch aircraft:', error);
+    aircraft = { result: [] }; // Fallback to empty array
+  }
 
   const params = await searchParams;
   const airport = params.airport;
 
   let airportData = null;
-  let airportStatus = null;
-  let airportATIS = null;
 
   if (airport) {
-    airportData = await getFullAirportInfo(airport);
-    airportStatus = await getAirportStatus(airport || "")
-    airportATIS = await getAirportATIS(airport || "")
-  }
+    try {
+      // Fetch all airport data with individual error handling
+      const [airportResult, statusResult, atisResult] = await Promise.allSettled([
+        getFullAirportInfo(airport),
+        getAirportStatus(airport),
+        getAirportATIS(airport)
+      ]);
 
-  airportData = {...airportData, ...airportStatus, atis: airportATIS || ""}
+      // Handle airport info result
+      if (airportResult.status === 'fulfilled') {
+        airportData = airportResult.value;
+      } else {
+        console.error('Airport info failed:', airportResult.reason);
+        airportData = { statusCode: 500, error: 'Failed to fetch airport info' };
+      }
+
+      // Only proceed if we have valid airport data
+      if (airportData && !airportData.statusCode) {
+        // Handle airport status result
+        let airportStatus = null;
+        if (statusResult.status === 'fulfilled') {
+          airportStatus = statusResult.value;
+        } else {
+          console.error('Airport status failed:', statusResult.reason);
+          // Provide fallback data for airport status
+          airportStatus = {
+            inboundFlightsCount: 0,
+            outboundFlightsCount: 0,
+            atcFacilities: []
+          };
+        }
+
+        // Handle ATIS result
+        let airportATIS = "No ATIS available";
+        if (atisResult.status === 'fulfilled') {
+          airportATIS = atisResult.value || "No ATIS available";
+        } else {
+          console.error('Airport ATIS failed:', atisResult.reason);
+        }
+
+        // Safely merge all data
+        try {
+          airportData = {
+            ...airportData,
+            ...airportStatus,
+            atis: airportATIS
+          };
+        } catch (mergeError) {
+          console.error('Failed to merge airport data:', mergeError);
+          // Keep original airportData if merge fails
+        }
+      }
+
+    } catch (error) {
+      console.error('Unexpected error fetching airport data:', error);
+      airportData = { statusCode: 500, error: 'Unexpected server error' };
+    }
+  }
 
   const Component = () => {
     if (!airport) {
@@ -38,11 +95,40 @@ const DirectoryPage = async ({
       );
     }
 
+    if (!airportData) {
+      return (
+        <div className="text-center py-8">
+          <p className="text-red-400 font-bold text-2xl">
+            Failed to load airport data
+          </p>
+          <p className="text-gray-500 text-sm mt-2">
+            Please try again later
+          </p>
+        </div>
+      );
+    }
+
     if (airportData.statusCode === 404) {
       return (
         <div className="text-center py-8">
           <p className="text-red-400 font-bold text-2xl">
-            Airport "{airport}" not found
+            Airport "{airport.toUpperCase()}" not found
+          </p>
+          <p className="text-gray-500 text-sm mt-2">
+            Please check the ICAO code and try again
+          </p>
+        </div>
+      );
+    }
+
+    if (airportData.statusCode === 500 || airportData.error) {
+      return (
+        <div className="text-center py-8">
+          <p className="text-red-400 font-bold text-2xl">
+            Server Error
+          </p>
+          <p className="text-gray-500 text-sm mt-2">
+            {airportData.error || 'Unable to fetch airport data at this time'}
           </p>
         </div>
       );
@@ -68,26 +154,32 @@ const DirectoryPage = async ({
             <h2 className="text-gray text-xl font-bold pb-4">All Aircraft</h2>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
-            {aircraft.result.map((aircraft: any) => (
-              <div
-                key={aircraft.id}
-                className="flex md:flex-row flex-col gap-4 justify-between items-center bg-gradient-to-br from-gray to-dark p-4 rounded-lg"
-              >
-                <Image
-                  src={`/images/aircraft/${matchAircraftNameToImage(
-                    aircraft.name
-                  )}`}
-                  alt={aircraft.name}
-                  width={200}
-                  height={200}
-                />
-                <span className="md:text-2xl text-xl font-black tracking-tight text-white text-center md:text-right">
-                  {aircraft.name}
-                </span>
-              </div>
-            ))}
-          </div>
+          {aircraft && aircraft.result && aircraft.result.length > 0 ? (
+            <div className="grid grid-cols-2 gap-4">
+              {aircraft.result.map((aircraft: any) => (
+                <div
+                  key={aircraft.id}
+                  className="flex md:flex-row flex-col gap-4 justify-between items-center bg-gradient-to-br from-gray to-dark p-4 rounded-lg"
+                >
+                  <Image
+                    src={`/images/aircraft/${matchAircraftNameToImage(
+                      aircraft.name
+                    )}`}
+                    alt={aircraft.name}
+                    width={200}
+                    height={200}
+                  />
+                  <span className="md:text-2xl text-xl font-black tracking-tight text-white text-center md:text-right">
+                    {aircraft.name}
+                  </span>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-8">
+              <p className="text-gray-500">Unable to load aircraft data</p>
+            </div>
+          )}
         </TabsContent>
 
         <TabsContent value="airport">
@@ -113,7 +205,7 @@ const DirectoryPage = async ({
                 </button>
               </form>
 
-              { airport && <span className="text-sm font-medium text-gray-300">You Searched for: <b className="text-white">{airport.toUpperCase()}</b></span> }
+              {airport && <span className="text-sm font-medium text-gray-300">You Searched for: <b className="text-white">{airport.toUpperCase()}</b></span>}
             </Card>
 
             <Component />
