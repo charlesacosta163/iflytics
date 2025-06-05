@@ -54,7 +54,7 @@ const ProfileHeader = async ({
       ? "bg-blue-500"
       : "bg-dark";
   return (
-    <div className="flex items-center justify-between gap-4 mt-4 px-4">
+    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mt-4 px-4">
       <div className="flex flex-col justify-end gap-4 sm:gap-8 h-full">
         <div className="flex gap-4 sm:gap-8 items-center">
           <GoCopilot className="text-[4rem]" />
