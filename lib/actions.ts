@@ -318,7 +318,6 @@ export async function getAirportATIS(airportIcao: string) {
         })
 
         if (!response.ok) {
-            console.error('Airport ATIS API Error:', response.status, response.statusText);
             return "No ATIS available";
         }
 

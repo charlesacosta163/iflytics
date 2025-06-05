@@ -3,7 +3,7 @@ import { GoCopilot } from "react-icons/go";
 import MostRecentFlightCard from "./most-recent-flight-card";
 import UserNavigation from "./user-navigation";
 
-import { getUserFlights } from "@/lib/actions";
+import { getPilotServerSessions, getUserFlights } from "@/lib/actions";
 
 const ProfileHeader = async ({
   id,
@@ -17,6 +17,7 @@ const ProfileHeader = async ({
   organization: string;
 }) => {
   const flights = await getUserFlights(name);
+  const pilotServerSession = await getPilotServerSessions("", name)
 
   let airportFlightLog // Callsign, Date, Departure airport, Arrival airport
   let flightHistory = flights?.data.result.data
@@ -39,6 +40,8 @@ const ProfileHeader = async ({
     departure: mostRecentFlight.originAirport,
     arrival: mostRecentFlight.destinationAirport
   }
+
+  mostRecentFlight = { ...mostRecentFlight, session: pilotServerSession }
 
   const gradeColor: string =
     grade === 5

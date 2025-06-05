@@ -1,7 +1,7 @@
 import React from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import { getAllAircraft, getFullAirportInfo } from "@/lib/actions";
+import { getAllAircraft, getFullAirportInfo, getAirportStatus, getAirportATIS } from "@/lib/actions";
 import { matchAircraftNameToImage } from "@/lib/cache/flightinsightsdata";
 import Image from "next/image";
 import { Card } from "@/components/ui/card";
@@ -25,73 +25,19 @@ const DirectoryPage = async ({
   const airport = params.airport;
 
   let airportData = null;
+  let airportStatus = null;
+  let airportATIS = null;
 
   if (airport) {
-    try {
-      // Fetch all airport data with individual error handling
-      const [airportResult, statusResult, atisResult] = await Promise.allSettled([
-        getFullAirportInfo(airport),
-        getAirportStatus(airport),
-        getAirportATIS(airport)
-      ]);
+    airportData = await getFullAirportInfo(airport);
 
-      // Handle airport info result
-      if (airportResult.status === 'fulfilled') {
-        airportData = airportResult.value;
-      } else {
-        // console.error('Airport info failed:', airportResult.reason);
-        airportData = { statusCode: 500, error: 'Failed to fetch airport info' };
-      }
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    airportStatus = await getAirportStatus(airport);
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    airportATIS = await getAirportATIS(airport);
+    await new Promise(resolve => setTimeout(resolve, 1000));
 
-      // Only proceed if we have valid airport data
-      if (airportData && !airportData.statusCode) {
-        // Handle airport status result
-        let airportStatus = null;
-        if (statusResult.status === 'fulfilled') {
-          airportStatus = statusResult.value;
-          // console.log('✅ Airport Status Success:', airportStatus);
-        } else {
-          // console.error('❌ Airport status failed:', statusResult.reason);
-          // Provide fallback data for airport status
-          airportStatus = {
-            inboundFlightsCount: 0,
-            outboundFlightsCount: 0,
-            atcFacilities: []
-          };
-        }
-
-        // Handle ATIS result
-        let airportATIS = "No ATIS available";
-        if (atisResult.status === 'fulfilled') {
-          airportATIS = atisResult.value || "No ATIS available";
-          // console.log('✅ ATIS Success:', airportATIS);
-        } else {
-          // console.error('❌ Airport ATIS failed:', atisResult.reason);
-        }
-
-        // Safely merge all data
-        try {
-          airportData = {
-            ...airportData,
-            ...airportStatus,
-            atis: airportATIS
-          };
-          // console.log('✅ Final merged airportData:', {
-          //   atcFacilities: airportData.atcFacilities,
-          //   inboundFlightsCount: airportData.inboundFlightsCount,
-          //   outboundFlightsCount: airportData.outboundFlightsCount,
-          //   atis: airportData.atis
-          // });
-        } catch (mergeError) {
-          console.error('Failed to merge airport data:', mergeError);
-          // Keep original airportData if merge fails
-        }
-      }
-
-    } catch (error) {
-      console.error('Unexpected error fetching airport data:', error);
-      airportData = { statusCode: 500, error: 'Unexpected server error' };
-    }
+    airportData = {...airportData, ...airportStatus, atis: airportATIS || ""}
   }
 
   const Component = () => {
