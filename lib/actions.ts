@@ -339,20 +339,26 @@ export async function matchATCRankToTitle(atcRank: string) {
         case "0":
             return "Observer"
         case "1":
-            return "Apprentice"
+            return "Trainee"
         case "2":
-            return "Specialist"
+            return "Apprentice"
         case "3":
+            return "Specialist"
+        case "4":
             return "Officer"
         case "4":
             return "Recruiter"
         case "5":
             return "Supervisor"
         case "6":
-            return "Moderator"
+            return "Recruiter"
         case "7":
-            return "Staff"
+            return "Manager"
         default:
             return "Unknown"
     }
+}
+
+export async function matchATCTypeToTitle(atcType: string) {
+    
 }

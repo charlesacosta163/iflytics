@@ -43,7 +43,7 @@ export default async function RootLayout({
   }
 
     return (
-        <div className="min-h-screen flex flex-col">
+        <div className="min-h-screen flex flex-col max-w-[1000px] w-full mx-auto">
             {/* <ProfileHeader
         name={result.discourseUsername}
         grade={result.grade}

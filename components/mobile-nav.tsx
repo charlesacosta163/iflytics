@@ -23,7 +23,7 @@ const MobileNav = ({ isLoggedIn, isLoading, onAuthClick }: MobileNavProps) => {
       {/* Hamburger Button */}
       <button
         onClick={toggleMenu}
-        className="md:hidden p-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-all duration-200 hover:scale-105 active:scale-95"
+        className="md:hidden p-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-all duration-200 hover:scale-105 active:scale-95 border-2 border-gray-600"
         aria-label="Toggle menu"
       >
         <div className="relative w-6 h-6">

@@ -396,7 +396,7 @@ const AirportDetails = ({ airportData }: { airportData: any }) => {
             rel="noopener noreferrer"
             className="text-blue-400 hover:text-blue-300 underline transition-colors duration-200"
           >
-            airportdb.io
+            airportdb.io & Infinite Flight Live API
           </a>
         </p>
       </div>

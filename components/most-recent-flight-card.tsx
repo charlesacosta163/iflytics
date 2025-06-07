@@ -32,9 +32,9 @@ const MostRecentFlightCard = ({flight}: {flight: any}) => {
         </div>
 
         <div className="flex items-center justify-between gap-2">
-            <span className="text-5xl font-black">{flight.originAirport}</span>
+            <span className="text-4xl sm:text-5xl font-black">{flight.originAirport}</span>
             <span className="text-2xl font-black text-gray-300">to</span>
-            <span className="text-5xl font-black">{flight.destinationAirport}</span>
+            <span className="text-4xl sm:text-5xl font-black">{flight.destinationAirport}</span>
         </div>
     </CardContent>
 </Card>
