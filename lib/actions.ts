@@ -179,6 +179,7 @@ export async function getAirport(airportIcao: string) {
     }
 }
 
+// Uses airportdb.io
 export async function getFullAirportInfo(airportIcao: string) {
     try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_AIRPORT_DB_API_URL}/${airportIcao}?apiToken=${process.env.AIRPORT_DB_API_KEY}`, {
@@ -220,6 +221,24 @@ export async function getFullAirportInfo(airportIcao: string) {
     }
 }
 
+export async function getAllAirportsWithActiveATC() {
+    try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/sessions/${process.env.NEXT_PUBLIC_IF_EXPERT_SERVER_ID}/atc`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${API_KEY}`
+            },
+            next: { revalidate: 3600 } // Cache for 1 hour
+        })
+
+        const data = await response.json()
+
+        return data.result
+    } catch (error) {
+        console.error('Active ATC fetch error:', error);
+    }
+}
 
 export async function getPilotServerSessions(id?: string, username?: string) {
 
@@ -360,5 +379,32 @@ export async function matchATCRankToTitle(atcRank: string) {
 }
 
 export async function matchATCTypeToTitle(atcType: string) {
-    
+
+    // Turn to 3 letter code
+    switch (atcType) {
+        case "0": 
+            return "GND" // Ground
+        case "1":
+            return "TWR" // Tower
+        case "2":
+            return "UNI" // Unicom
+        case "3":
+            return "CLR" // Clearance
+        case "4":
+            return "APP" // Approach
+        case "5":
+            return "DEP" // Departure
+        case "6": 
+            return "CTR" // Center
+        case "7":
+            return "ATS" // ATIS
+        case "8":
+            return "AFT" // Aircraft
+        case "9":
+            return "REC" // Recorded
+        case "10":
+            return "UNK" // Unknown
+        default:
+            return "UNU" // Unused
+    }
 }

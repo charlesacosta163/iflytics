@@ -1,11 +1,12 @@
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { FaPlane, FaGlobe, FaMapMarkerAlt, FaRuler, FaWikipediaW, FaExternalLinkAlt } from 'react-icons/fa';
-import { FaRadio } from 'react-icons/fa6';
-import { MdLocationOn } from 'react-icons/md';
+import { FaPlane, FaGlobe, FaMapMarkerAlt, FaRuler, FaWikipediaW, FaExternalLinkAlt, FaRoad, FaBuilding } from 'react-icons/fa';
+import { FaRadio, FaX, FaCheck, FaTowerBroadcast } from 'react-icons/fa6';
+import { MdLocationOn, MdGrass } from 'react-icons/md';
 import { GiRadarDish } from 'react-icons/gi';
 import { BiWorld } from 'react-icons/bi';
 import FlightRouteMapRenderer from './dashboard-ui/misc/flightroute-maprenderer';
+import { matchATCTypeToTitle } from '@/lib/actions';
 
 const AirportDetails = ({ airportData }: { airportData: any }) => {
   const formatCoordinates = (lat: number, lng: number) => {
@@ -31,13 +32,13 @@ const AirportDetails = ({ airportData }: { airportData: any }) => {
     switch (surface.toUpperCase()) {
       case 'ASP':
       case 'ASPH':
-        return '🛤️';
+        return <FaRoad className="text-yellow-400 text-lg" />;
       case 'CON':
       case 'CONC':
-        return '🏗️';
+        return <FaBuilding className="text-yellow-400 text-lg" />;
       case 'GRS':
       case 'GRASS':
-        return '🌱';
+        return <MdGrass className="text-green-400 text-lg" />;
       default:
         return '🛤️';
     }
@@ -101,7 +102,7 @@ const AirportDetails = ({ airportData }: { airportData: any }) => {
       <Card className="bg-gray-800 border-gray-600">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-light">
-            <FaPlane className="text-green-400" />
+            <FaTowerBroadcast className="text-green-400" />
             Infinite Flight Status
           </CardTitle>
           <CardDescription className="text-gray-300">
@@ -109,7 +110,6 @@ const AirportDetails = ({ airportData }: { airportData: any }) => {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          {/* Placeholder data - replace with actual airportStatus prop */}
           {(() => {
         
             const inboundCount = airportData.inboundFlightsCount;
@@ -158,19 +158,14 @@ const AirportDetails = ({ airportData }: { airportData: any }) => {
                     </h4>
                     {(() => {
                       // Create a Map to store unique controllers by username (keeps first occurrence)
-                      const uniqueControllers = airportData.atcFacilities.reduce((acc: any[], controller: any) => {
-                        if (!acc.find(c => c.username === controller.username)) {
-                          acc.push(controller);
-                        }
-                        return acc;
-                      }, []);
+                      const { atcFacilities } = airportData;
 
-                      return uniqueControllers.map((controller: any, index: number) => (
+                      return atcFacilities.map((controller: any, index: number) => (
                         <div key={index} className="flex items-center justify-between p-3 bg-gradient-to-r from-gray-700 to-gray-800 rounded-lg border border-gray-600">
                           <div className="flex items-center gap-3">
                             <div className="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center">
                               <span className="text-xs font-bold text-light">
-                                {controller.type === 4 ? 'TWR' : 'ATC'}
+                                {matchATCTypeToTitle(controller.type.toString())}
                               </span>
                             </div>
                             <div>
@@ -303,7 +298,7 @@ const AirportDetails = ({ airportData }: { airportData: any }) => {
                   </div>
                   <div>
                     <p className="font-medium text-gray-400">Lighting</p>
-                    <p className="text-light">{runway.lighted === '1' ? '✅ Yes' : '❌ No'}</p>
+                    <p className="text-light flex items-center gap-2">{runway.lighted === '1' ? <><FaCheck className="text-green-400 text-lg" /> Yes</> : <><FaX className="text-red-400 text-lg" /> No</>}</p>
                   </div>
                   {runway.he_ils && (
                     <div>

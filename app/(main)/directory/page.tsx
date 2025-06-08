@@ -1,11 +1,22 @@
 import React from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-
-import { getAllAircraft, getFullAirportInfo, getAirportStatus, getAirportATIS } from "@/lib/actions";
+import {
+  getAllAircraft,
+  getFullAirportInfo,
+  getAirportStatus,
+  getAirportATIS,
+  getAllAirportsWithActiveATC,
+  matchATCTypeToTitle,
+} from "@/lib/actions";
 import { matchAircraftNameToImage } from "@/lib/cache/flightinsightsdata";
 import Image from "next/image";
 import { Card } from "@/components/ui/card";
 import AirportDetails from "@/components/airport-details";
+import AirportWithATCCard from "@/components/airport-with-atc-card";
+import { FaPlane } from "react-icons/fa";
+
+import { TbBuildingAirport, TbBuildingBroadcastTower } from "react-icons/tb";
+
 
 const DirectoryPage = async ({
   searchParams,
@@ -17,7 +28,7 @@ const DirectoryPage = async ({
   try {
     aircraft = await getAllAircraft();
   } catch (error) {
-    console.error('Failed to fetch aircraft:', error);
+    console.error("Failed to fetch aircraft:", error);
     aircraft = { result: [] }; // Fallback to empty array
   }
 
@@ -28,70 +39,83 @@ const DirectoryPage = async ({
 
   if (airport) {
     try {
-      console.log(`🔍 Fetching data for airport: ${airport.toUpperCase()}`);
-      
-      // Step 1: Get basic airport info first (this is critical)
-      // console.log('1️⃣ Fetching airport info...');
       airportData = await getFullAirportInfo(airport);
-      // console.log('✅ Airport info result:', airportData);
-      
+
       // If airport info fails, stop here
       if (!airportData || airportData.statusCode) {
-        //console.error('❌ Airport info failed, stopping here');
-        // airportData already contains the error info
       } else {
-        // Step 2: Get airport status (ATC info) - continue even if this fails
-        //console.log('2️⃣ Fetching airport status...');
         let airportStatus = null;
         try {
           airportStatus = await getAirportStatus(airport);
-          // console.log('✅ Airport status result:', airportStatus);
         } catch (statusError) {
-          // console.error('❌ Airport status failed:', statusError);
           airportStatus = {
             inboundFlightsCount: 0,
             outboundFlightsCount: 0,
-            atcFacilities: []
+            atcFacilities: [],
           };
         }
-        
-        // Step 3: Get ATIS - continue even if this fails
-        // console.log('3️⃣ Fetching ATIS...');
+
         let airportATIS = "No ATIS available";
         try {
           airportATIS = await getAirportATIS(airport);
-          // console.log('✅ ATIS result:', airportATIS);
         } catch (atisError) {
-          // console.error('❌ ATIS failed:', atisError);
           airportATIS = "No ATIS available";
         }
-        
-        // Step 4: Merge all data safely
-        // console.log('4️⃣ Merging data...');
+
         airportData = {
           ...airportData,
           ...airportStatus,
-          atis: airportATIS || "No ATIS available"
+          atis: airportATIS || "No ATIS available",
         };
-        
-          // console.log('🎉 Final merged data:', {
-          //   hasBasicInfo: !!airportData.name,
-          //   atcFacilitiesCount: airportData.atcFacilities?.length || 0,
-          //   inboundFlights: airportData.inboundFlightsCount,
-          //   outboundFlights: airportData.outboundFlightsCount,
-          //   hasATIS: !!airportData.atis
-          // });
       }
-      
     } catch (error) {
-      console.error('💥 Unexpected error:', error);
-      airportData = { 
-        statusCode: 500, 
-        error: 'Failed to fetch airport data' 
+      console.error("💥 Unexpected error:", error);
+      airportData = {
+        statusCode: 500,
+        error: "Failed to fetch airport data",
       };
     }
   }
 
+  const activeAtc = await getAllAirportsWithActiveATC();
+
+  function groupATCByAirport(atcData: any[]) {
+    // Get unique airport names (ICAO codes)
+    const uniqueAirports = [
+      ...new Set(atcData.map((item) => item.airportName)),
+    ];
+
+    // Group data by airport with your specified structure
+    const groupedAirports = uniqueAirports.map((airportName) => {
+      // Find all ATC entries for this airport
+      const frequencyData = atcData.filter(
+        (item) => item.airportName === airportName
+      );
+
+      return {
+        name: airportName,
+        frequencyData: frequencyData,
+      };
+    });
+
+    return groupedAirports;
+  }
+
+  const groupedAirports = groupATCByAirport(activeAtc);
+
+  const activeAtcWithATIS = await Promise.all(
+    activeAtc.map(async (airport: any) => {
+      const atis = await getAirportATIS(airport.airportName);
+      return { ...airport, atis };
+    })
+  );
+  
+  // Convert to key-value structure
+  const atisDataByAirport = activeAtcWithATIS.reduce((acc, airport) => {
+    acc[airport.airportName] = airport.atis;
+    return acc;
+  }, {});
+  
   const Component = () => {
     if (!airport) {
       return (
@@ -107,9 +131,7 @@ const DirectoryPage = async ({
           <p className="text-red-400 font-bold text-2xl">
             Failed to load airport data
           </p>
-          <p className="text-gray-500 text-sm mt-2">
-            Please try again later
-          </p>
+          <p className="text-gray-500 text-sm mt-2">Please try again later</p>
         </div>
       );
     }
@@ -130,11 +152,9 @@ const DirectoryPage = async ({
     if (airportData.statusCode === 500 || airportData.error) {
       return (
         <div className="text-center py-8">
-          <p className="text-red-400 font-bold text-2xl">
-            Server Error
-          </p>
+          <p className="text-red-400 font-bold text-2xl">Server Error</p>
           <p className="text-gray-500 text-sm mt-2">
-            {airportData.error || 'Unable to fetch airport data at this time'}
+            {airportData.error || "Unable to fetch airport data at this time"}
           </p>
         </div>
       );
@@ -150,14 +170,34 @@ const DirectoryPage = async ({
       </h1>
 
       <Tabs defaultValue="airport" className="!w-full">
-        <TabsList className="mt-4">
-          <TabsTrigger value="airport">Airport</TabsTrigger>
-          <TabsTrigger value="aircraft">Aircraft</TabsTrigger>
+        <TabsList className="mt-4 w-full bg-gray-500 p-1 rounded-full">
+          <TabsTrigger
+            value="airport"
+            className="data-[state=active]:bg-gray-700 data-[state=active]:text-white data-[state=inactive]:bg-transparent data-[state=inactive]:text-gray-300 transition-all duration-200 rounded-full flex gap-2 items-center"
+          >
+            <TbBuildingAirport className="w-6 h-6 text-light" />
+            Airport
+          </TabsTrigger>
+          <TabsTrigger
+            value="aircraft"
+            className="data-[state=active]:bg-gray-700 data-[state=active]:text-white data-[state=inactive]:bg-transparent data-[state=inactive]:text-gray-300 transition-all duration-200 rounded-full flex gap-2 items-center"
+          >
+            <FaPlane className="w-6 h-6 text-light" />
+            Aircraft
+          </TabsTrigger>
+          <TabsTrigger
+            value="airport-list"
+            className="data-[state=active]:bg-gray-700 data-[state=active]:text-white data-[state=inactive]:bg-transparent data-[state=inactive]:text-gray-300 transition-all duration-200 rounded-full flex gap-2 items-center"
+          >
+            <TbBuildingBroadcastTower className="w-6 h-6 text-light" />
+            Active ATC
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="aircraft">
-          <div className="flex flex-col gap-4">
-            <h2 className="text-gray text-xl font-bold pb-4">All Aircraft</h2>
+          <div className="flex gap-2 items-center mt-4 mb-6">
+            <FaPlane className="w-6 h-6 text-gray-700" />
+            <h2 className="text-gray-700 text-xl font-bold">All Aircraft ({aircraft.result.length})</h2>
           </div>
 
           {aircraft && aircraft.result && aircraft.result.length > 0 ? (
@@ -191,7 +231,10 @@ const DirectoryPage = async ({
         <TabsContent value="airport">
           <div className="flex flex-col gap-6">
             <Card className="p-6 bg-gradient-to-br from-gray to-dark text-white">
-              <h2 className="text-2xl tracking-tight font-bold mb-2">Enter an airport ICAO code</h2>
+              <h2 className="text-2xl tracking-tight font-bold mb-2 flex gap-2 items-center">
+                <TbBuildingAirport className="w-6 h-6 text-light" />
+                Enter an airport ICAO code
+              </h2>
               <form action="/directory" className="flex gap-3">
                 <input
                   type="text"
@@ -212,11 +255,20 @@ const DirectoryPage = async ({
                 </button>
               </form>
 
-              {airport && <span className="text-sm font-medium text-gray-300">You Searched for: <b className="text-white">{airport.toUpperCase()}</b></span>}
+              {airport && (
+                <span className="text-sm font-medium text-gray-300">
+                  You Searched for:{" "}
+                  <b className="text-white">{airport.toUpperCase()}</b>
+                </span>
+              )}
             </Card>
 
             <Component />
           </div>
+        </TabsContent>
+
+        <TabsContent value="airport-list">
+          <AirportWithATCCard groupedAirports={groupedAirports} atisDataByAirport={atisDataByAirport} />
         </TabsContent>
       </Tabs>
     </div>
