@@ -29,7 +29,7 @@ const AirportWithATCCard = ({groupedAirports, atisDataByAirport}: {groupedAirpor
                   {/* Header */}
                   <div className="flex items-center justify-between mb-3">
                     <h4 className="font-bold text-2xl text-white">
-                      {airport.name}
+                      {airport.name || "Unknown"}
                     </h4>
                     <span className="text-xs bg-green-300 text-green-800 px-2 py-1 rounded-full font-bold">
                       {airport.frequencyData.length} Active
