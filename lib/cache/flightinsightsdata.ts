@@ -1,7 +1,7 @@
 import { Flight } from "../types";
 import { getAircraft, getAirport, getAirportCoordinates } from "../actions";
 import { aircraftImages } from "../data";
-import { unstable_cache as cache } from "next/cache";
+import { unstable_cache as cache, unstable_cache } from "next/cache";
 import { getAircraftCached } from "./flightdata";
 /*
 getAircraftAndLivery(aircraftId: string, liveryId: string)
@@ -274,30 +274,123 @@ export function matchAircraftNameToImage(aircraftName: string) {
   return image?.image || "placeholder.png";
 }
 
-export async function getAllUniqueFlightRoutes(flights: Flight[]) {
-  // First, get unique route combinations
-  const uniqueRoutePairs = [
-    ...new Set(
-      flights.map(flight => `${flight.originAirport}-${flight.destinationAirport}`)
-    )
-  ].map(routeString => {
-    const [origin, destination] = routeString.split('-');
-    return { origin, destination };
-  });
+// Cache the Flight Route Data
+function createUserFlightRoutesCache(userId: string) {
+  return unstable_cache(
+    async (flights: Flight[]) => {
+      // console.log(`⏳ Calculating routes for user ${userId} - ${flights.length} flights...`); --> Debugging
+      
+      const routePairs = flights.map(flight => ({
+        flightId: flight.id,
+        created: flight.created,
+        origin: flight.originAirport,
+        destination: flight.destinationAirport,
+        aircraftId: flight.aircraftId,
+        server: flight.server,
+        totalTime: flight.totalTime,
+      }));
 
-  // Then calculate distances for each unique route
-  const uniqueRoutes = await Promise.all(
-    uniqueRoutePairs.map(async (route) => {
-      const distance = await calculateDistanceBetweenAirports(route.origin, route.destination);
-      return {
-        origin: route.origin,
-        destination: route.destination,
-        distance: distance,
-      };
-    })
+      const routesWithDistances = await Promise.all(
+        routePairs.map(async (route) => {
+          const { distance, originCoordinates, destinationCoordinates } = await calculateDistanceBetweenAirports(route.origin, route.destination);
+          return {
+            flightId: route.flightId,
+            created: route.created,
+            origin: route.origin,
+            originCoordinates: originCoordinates,
+            destination: route.destination,
+            destinationCoordinates: destinationCoordinates,
+            distance: distance,
+            totalTime: route.totalTime,
+            aircraftId: route.aircraftId,
+            server: route.server,
+          };
+        })
+      );
+
+      // console.log(`✅ Calculated ${routesWithDistances.length} routes for user ${userId}`); --> Debugging
+      return routesWithDistances;
+    },
+    [`flight-routes-${userId}`], // Now userId is in scope!
+    {
+      revalidate: 3 * 60 * 60, // 3 hours
+      tags: [`flight-routes`, `user-${userId}`],
+    }
   );
+}
 
-  return uniqueRoutes.filter(route => route.origin !== route.destination);
+// Usage:
+export async function getAllFlightRoutes(flights: Flight[], userId: string) {
+  const cachedFunction = createUserFlightRoutesCache(userId);
+  return cachedFunction(flights);
+}
+
+// export async function getAllFlightRoutes(flights: Flight[]) {
+//   // First, get unique route combinations
+//   const routePairs = flights.map(flight => ({
+//     flightId: flight.id,
+//     created: flight.created,
+//     origin: flight.originAirport,
+//     destination: flight.destinationAirport,
+//     aircraftId: flight.aircraftId,
+//     server: flight.server,
+//     totalTime: flight.totalTime,
+//   }));
+
+//   // Then calculate distances for each unique route
+//   const routesWithDistances = await Promise.all(
+//     routePairs.map(async (route) => {
+//       const { distance, originCoordinates, destinationCoordinates } = await calculateDistanceBetweenAirports(route.origin, route.destination);
+//       return {
+//         flightId: route.flightId,
+//         created: route.created,
+//         origin: route.origin,
+//         originCoordinates: originCoordinates,
+//         destination: route.destination,
+//         destinationCoordinates: destinationCoordinates,
+//         distance: distance,
+//         totalTime: route.totalTime,
+//         aircraftId: route.aircraftId,
+//         server: route.server,
+//       };
+//     })
+//   );
+
+//   return routesWithDistances;
+// }
+
+export function getUniqueRoutes(routesWithDistances: {
+  flightId: string;
+  created: string;
+  origin: string;
+  originCoordinates: {
+    latitude: number;
+    longitude: number;
+  };
+  destination: string;
+  destinationCoordinates: {
+    latitude: number;
+    longitude: number;
+  };
+  distance: number;
+  totalTime: number;
+  aircraftId: string;
+  server: string;
+}[]) {
+  return [...new Set(routesWithDistances.map(route => {
+    return {
+      flightId: route.flightId,
+      created: route.created,
+      aircraftId: route.aircraftId,
+      server: route.server,
+      origin: route.origin,
+      originCoordinates: route.originCoordinates,
+      destination: route.destination,
+      destinationCoordinates: route.destinationCoordinates,
+      distance: route.distance,
+      totalTime: route.totalTime,
+    }
+  }))].filter(route => route.origin !== route.destination);
 }
 
 export async function calculateTotalDistance(validFlights: Flight[]) {
@@ -309,7 +402,7 @@ export async function calculateTotalDistance(validFlights: Flight[]) {
   };
 
   for (const flight of validFlights) {
-    const distance = await calculateDistanceBetweenAirports(
+    const { distance } = await calculateDistanceBetweenAirports(
       flight.originAirport,
       flight.destinationAirport
     );
@@ -329,17 +422,37 @@ export async function calculateTotalDistance(validFlights: Flight[]) {
 };
 
 /*
-    Route object: {
-      origin: KJFK,
+    Route Data Object: {
+            flightId: route.flightId,
+            created: route.created,
+            origin: route.origin,
+            originCoordinates: originCoordinates,
+            destination: route.destination,
+            destinationCoordinates: destinationCoordinates,
+            distance: distance,
+            totalTime: route.totalTime,
+            aircraftId: route.aircraftId,
+            server: route.server,
+          };
+
+    Sample Route Data Object:
+     {
+      flightId: '43cd3c61-96ef-468a-98ae-b8e7900e49ca',
+      created: '2025-05-28T03:52:22.674607Z',
+      origin: 'KJFK',
       originCoordinates: {
-        latitude: number,
-        longitude: number
+        latitude: 40.639722,
+        longitude: -73.778889
       },
-      destination: EGLL,
+      destination: 'EGLL',
       destinationCoordinates: {
-        latitude: number,
-        longitude: number
-      }
+        latitude: 51.4775,
+        longitude: -0.461389
+      },
+      distance: 3480,
+      totalTime: 142.74648,
+      aircraftId: '958486b0-1ef4-4efd-bee0-ea94e96f6c96',
+      server: 'Expert'
     }
   */
 
@@ -372,5 +485,15 @@ export async function calculateDistanceBetweenAirports(
 
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
-  return Math.floor(R * c * 0.868976);
+  return {
+    distance: Math.floor(R * c * 0.868976),
+    originCoordinates: {
+      latitude: originLatitude,
+      longitude: originLongitude,
+    },
+    destinationCoordinates: {
+      latitude: destinationLatitude,
+      longitude: destinationLongitude,
+    }
+  };
 }

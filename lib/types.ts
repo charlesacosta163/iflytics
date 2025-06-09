@@ -37,3 +37,20 @@ export type Flight = {
     worldType: number;
     violations: any[];
 }
+
+export interface FlightRoute {
+  data: Array<{
+    flightId: string;
+    created: string;
+    origin: string;
+    originCoordinates: { latitude: number; longitude: number };
+    destination: string;
+    destinationCoordinates: { latitude: number; longitude: number };
+    distance: number;
+    totalTime: number;
+    aircraftId: string;
+    server: string;
+  }>;
+  timestamp: number;
+  expiresAt: number;
+}

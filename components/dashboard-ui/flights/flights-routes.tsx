@@ -2,14 +2,15 @@ import React from "react";
 import { VscCopilotWarning } from "react-icons/vsc";
 import { Flight } from "@/lib/types";
 import {
-  calculateDistanceBetweenAirports,
   calculateTotalDistance,
-  getAllUniqueFlightRoutes,
+  getAllFlightRoutes,
+  getUniqueRoutes,
 } from "@/lib/cache/flightinsightsdata";
 import { FaRoute } from "react-icons/fa";
 import { RiPinDistanceLine } from "react-icons/ri";
 
-import { Button } from "@/components/ui/button";
+import { getUser } from "@/lib/supabase/user-actions";
+
 import {
   Dialog,
   DialogContent,
@@ -28,13 +29,19 @@ import {
   TableBody,
   TableCell,
 } from "@/components/ui/table";
+import { convertMinutesToHours } from "@/lib/utils";
 
 const FlightsRoutes = async ({ flights }: { flights: Flight[] }) => {
+    // console.log(`🔄 FlightsRoutes called at ${new Date().toISOString()}`); --> Debugging
+
   const validFlights = flights.filter((flight) => {
     return (
       flight.totalTime > 10 && flight.originAirport && flight.destinationAirport
     );
   });
+
+  // Get the user ID for the cache key
+  const user = await getUser();
 
   const shortenNumber = (number: number) => {
     // 71200 -> 71.2k
@@ -48,10 +55,21 @@ const FlightsRoutes = async ({ flights }: { flights: Flight[] }) => {
       return (number / 1000000000).toLocaleString() + "b";
     }
   }
-  const uniqueRoutes = await getAllUniqueFlightRoutes(validFlights);
+
+  // Get the flight routes with distances with the user ID for the cache key
+  
+  // const startTime = Date.now(); --> Debugging
+  const routesWithDistances = await getAllFlightRoutes(validFlights, user.id);
+  // const endTime = Date.now(); --> Debugging
+  
+  // console.log(`⏱️ Route calculation took ${endTime - startTime}ms`); --> Debugging
+  
+  const uniqueRoutes = getUniqueRoutes(routesWithDistances);
 
   const { totalDistanceTraveled, longestRouteInfo } =
     await calculateTotalDistance(validFlights);
+
+
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -82,7 +100,7 @@ const FlightsRoutes = async ({ flights }: { flights: Flight[] }) => {
               View All
             </DialogTrigger>
 
-            <DialogContent className="min-h-[500px] max-h-[700px] max-w-3xl overflow-y-auto">
+            <DialogContent className="min-h-[500px] max-h-[700px] max-w-3xl overflow-y-auto bg-[#FFD6BA] !border-none">
               <DialogHeader>
                 <DialogTitle className="text-xl font-bold">
                   All Flight Routes
@@ -90,6 +108,27 @@ const FlightsRoutes = async ({ flights }: { flights: Flight[] }) => {
                 <p className="text-gray-500 text-sm">
                   Complete overview of your unique flight routes and distances
                 </p>
+                
+                {/* Legend */}
+                <div className="flex flex-col items-center gap-2 mt-4 p-3 bg-[#fbe4d4] rounded-lg">
+                    <h3 className="text-lg font-bold tracking-tight text-orange-700 flex gap-2 items-center"><FaRoute className="w-4 h-4" /> Route Types (IATA)</h3>
+                    <div className="flex justify-center items-center gap-6 font-medium">
+                        <div className="flex items-center gap-4">
+                            <div className="flex items-center gap-2">
+                            <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                            <span className="text-xs text-gray-600">Short (≤3h)</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                            <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                            <span className="text-xs text-gray-600">Medium (3-6h)</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                            <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                            <span className="text-xs text-gray-600">Long (>6h)</span>
+                            </div>
+                    </div>
+                  </div>
+                </div>
               </DialogHeader>
 
               <div className="mt-4">
@@ -98,70 +137,80 @@ const FlightsRoutes = async ({ flights }: { flights: Flight[] }) => {
                     Total of {uniqueRoutes.length} unique routes flown
                   </TableCaption>
                   <TableHeader>
-                    <TableRow>
+                    <TableRow className="!rounded-lg border-b border-orange-300/50">
                       <TableHead className="w-[120px]">Origin</TableHead>
                       <TableHead className="w-[120px]">Destination</TableHead>
+                      <TableHead className="text-center">Time</TableHead>
                       <TableHead className="text-right">Distance</TableHead>
-                      <TableHead className="text-center">Route Type</TableHead>
+                      <TableHead className="text-center w-[80px]">Type</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {uniqueRoutes.map((route, index) => {
-                      // Calculate route type based on distance
-                      const getRouteType = (distance: number) => {
-                        if (distance < 500)
+                      // Calculate route type based on time
+                      const getRouteType = (totalTime: number) => {
+                        if (totalTime <= 180)
                           return {
                             label: "Short Haul",
-                            color: "bg-green-100 text-green-800",
+                            color: "bg-green-500",
+                            dotColor: "bg-green-500"
                           };
-                        if (distance < 1500)
+                        if (totalTime <= 360 && totalTime > 180)
                           return {
-                            label: "Medium Haul",
-                            color: "bg-yellow-100 text-yellow-800",
+                            label: "Medium Haul", 
+                            color: "bg-yellow-500",
+                            dotColor: "bg-yellow-500"
                           };
                         return {
                           label: "Long Haul",
-                          color: "bg-red-100 text-red-800",
+                          color: "bg-red-500", 
+                          dotColor: "bg-red-500"
                         };
                       };
 
-                      const routeType = getRouteType(route.distance || 0);
+                      const routeType = getRouteType(route.totalTime || 0);
 
                       return (
-                        <TableRow key={index} className="hover:bg-gray-50">
+                        <TableRow key={index} className="hover:bg-[#fbe4d4] !rounded-lg border-b border-orange-300/50">
                           <TableCell className="font-mono font-medium text-blue-600">
                             {route.origin}
                           </TableCell>
                           <TableCell className="font-mono font-medium text-blue-600">
                             {route.destination}
                           </TableCell>
+                          <TableCell className="text-center">
+                            {route.totalTime ? (
+                              <div className="flex flex-col">
+                                <span className="font-medium">
+                                  {convertMinutesToHours(route.totalTime)}
+                                </span>
+                              </div>
+                            ) : (
+                              <span className="text-gray-400 italic">Calculating...</span>
+                            )}
+                          </TableCell>
                           <TableCell className="text-right">
                             {route.distance ? (
                               <div className="flex flex-col">
                                 <span className="font-medium">
-                                  {Math.round(route.distance).toLocaleString()}{" "}
-                                  nm
+                                  {Math.round(route.distance).toLocaleString()} nm
                                 </span>
                                 <span className="text-xs text-gray-500">
-                                  {Math.round(
-                                    route.distance * 1.852
-                                  ).toLocaleString()}{" "}
-                                  km
+                                  {Math.round(route.distance * 1.852).toLocaleString()} km
                                 </span>
                               </div>
                             ) : (
-                                <span className="text-gray-400 italic">Calculating...</span> 
-                            )
-                        
-                        
-                        }
+                              <span className="text-gray-400 italic">Calculating...</span>
+                            )}
                           </TableCell>
                           <TableCell className="text-center">
-                            <span
-                              className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${routeType.color}`}
-                            >
-                              {routeType.label}
-                            </span>
+                            {/* Colored Circle instead of text badge */}
+                            <div className="flex justify-center">
+                              <div 
+                                className={`w-4 h-4 ${routeType.dotColor} rounded-full`}
+                                title={routeType.label} // Tooltip on hover
+                              ></div>
+                            </div>
                           </TableCell>
                         </TableRow>
                       );
@@ -169,11 +218,9 @@ const FlightsRoutes = async ({ flights }: { flights: Flight[] }) => {
                   </TableBody>
                 </Table>
 
-                {/* Summary Stats at Bottom */}
-                <div className="mt-6 p-4 bg-gray-50 rounded-lg">
-                  <h4 className="font-semibold text-gray-900 mb-3">
-                    Route Summary
-                  </h4>
+                {/* Updated Summary Stats - using circles too */}
+                <div className="mt-6 p-4 bg-[#fbe4d4] rounded-lg">
+                  <h4 className="font-semibold text-gray-900 mb-3">Route Summary</h4>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                     <div className="text-center">
                       <div className="text-xl font-bold text-blue-600">
@@ -182,32 +229,29 @@ const FlightsRoutes = async ({ flights }: { flights: Flight[] }) => {
                       <div className="text-gray-600">Total Routes</div>
                     </div>
                     <div className="text-center">
-                      <div className="text-xl font-bold text-green-600">
-                        {
-                          uniqueRoutes.filter((r) => (r.distance || 0) < 500)
-                            .length
-                        }
+                      <div className="flex items-center justify-center gap-2 mb-1">
+                        <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                        <div className="text-xl font-bold text-green-600">
+                          {uniqueRoutes.filter((r) => (r.totalTime || 0) <= 180).length}
+                        </div>
                       </div>
                       <div className="text-gray-600">Short Haul</div>
                     </div>
                     <div className="text-center">
-                      <div className="text-xl font-bold text-yellow-600">
-                        {
-                          uniqueRoutes.filter(
-                            (r) =>
-                              (r.distance || 0) >= 500 &&
-                              (r.distance || 0) < 1500
-                          ).length
-                        }
+                      <div className="flex items-center justify-center gap-2 mb-1">
+                        <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                        <div className="text-xl font-bold text-yellow-600">
+                          {uniqueRoutes.filter((r) => (r.totalTime || 0) > 180 && (r.totalTime || 0) <= 360).length}
+                        </div>
                       </div>
                       <div className="text-gray-600">Medium Haul</div>
                     </div>
                     <div className="text-center">
-                      <div className="text-xl font-bold text-red-600">
-                        {
-                          uniqueRoutes.filter((r) => (r.distance || 0) >= 1500)
-                            .length
-                        }
+                      <div className="flex items-center justify-center gap-2 mb-1">
+                        <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                        <div className="text-xl font-bold text-red-600">
+                          {uniqueRoutes.filter((r) => (r.totalTime || 0) > 360).length}
+                        </div>
                       </div>
                       <div className="text-gray-600">Long Haul</div>
                     </div>
@@ -218,22 +262,14 @@ const FlightsRoutes = async ({ flights }: { flights: Flight[] }) => {
                     <div className="text-center">
                       <div className="text-2xl font-bold text-purple-600">
                         {uniqueRoutes
-                          .reduce(
-                            (total, route) => total + (route.distance || 0),
-                            0
-                          )
+                          .reduce((total, route) => total + (route.distance || 0), 0)
                           .toLocaleString()}{" "}
                         nm
                       </div>
-                      <div className="text-gray-600">
-                        Total Distance Covered
-                      </div>
+                      <div className="text-gray-600">Total Distance Covered</div>
                       <div className="text-xs text-gray-500 mt-1">
                         {Math.round(
-                          uniqueRoutes.reduce(
-                            (total, route) => total + (route.distance || 0),
-                            0
-                          ) * 1.852
+                          uniqueRoutes.reduce((total, route) => total + (route.distance || 0), 0) * 1.852
                         ).toLocaleString()}{" "}
                         km
                       </div>
