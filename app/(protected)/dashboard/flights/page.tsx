@@ -11,14 +11,19 @@ import {
   getFlightAveragesPerTimeFrame,
 } from "@/lib/cache/flightinsightsdata";
 
-
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import { VscCopilotWarning } from "react-icons/vsc";
 import { ImStatsDots } from "react-icons/im";
 import { getFlightsTimeFrame } from "@/lib/cache/flightdata";
 
 import SelectTimeframeButton from "@/components/dashboard-ui/select-timeframe-button";
-import FlightsTabsWrapper from "@/components/dashboard-ui/flights/flights-tabs-wrapper";
 import { redirect } from "next/navigation";
 import FlightsOverview from "@/components/dashboard-ui/flights/flights-overview";
+import { getAirportCoordinates } from "@/lib/actions";
+import FlightsDisplay from "@/components/dashboard-ui/flights/flights-display";
+import FlightsRoutes from "@/components/dashboard-ui/flights/flights-routes";
+import { FaPlane } from "react-icons/fa";
+import { FaChartLine } from "react-icons/fa";
 
 const FlightsPage = async ({searchParams}: { searchParams: Promise < {
   [key: string]: string | string[] | undefined
@@ -32,7 +37,6 @@ const FlightsPage = async ({searchParams}: { searchParams: Promise < {
   }
 
   const allFlights = await getFlightsTimeFrame(data.ifcUserId, parseInt(timeframe));
-
   const flightOverviewStats = getFlightOverviewStatsPerTimeFrame(allFlights);
   const flightAverages = getFlightAveragesPerTimeFrame(allFlights);
   const flightActivity = getFlightTimePerTimeFrame(allFlights);
@@ -58,8 +62,19 @@ const FlightsPage = async ({searchParams}: { searchParams: Promise < {
       </div>
 
       {/* Tabs */}
-      <FlightsTabsWrapper>
-        <FlightsOverview
+      <Tabs defaultValue="overview" className="w-full">
+      <TabsList className="w-full bg-gray-500 p-1 rounded-full mb-2">
+        <TabsTrigger value="overview" className="data-[state=active]:bg-gray-700 data-[state=active]:text-white data-[state=inactive]:bg-transparent data-[state=inactive]:text-gray-300 transition-all duration-200 rounded-full flex gap-2 items-center">
+          <FaChartLine className="w-6 h-6 text-light" />
+          Overview</TabsTrigger>
+        <TabsTrigger value="flights" className="data-[state=active]:bg-gray-700 data-[state=active]:text-white data-[state=inactive]:bg-transparent data-[state=inactive]:text-gray-300 transition-all duration-200 rounded-full flex gap-2 items-center">
+          <FaPlane className="w-6 h-6 text-light" />
+          Flights</TabsTrigger>
+        {/* <TabsTrigger value="routes">Routes</TabsTrigger> */}
+      </TabsList>
+      
+      <TabsContent value="overview" className="space-y-8">
+        <FlightsOverview 
           flightOverviewStats={flightOverviewStats}
           recentFlightInsights={recentFlightInsights}
           flightAverages={flightAverages}
@@ -68,7 +83,17 @@ const FlightsPage = async ({searchParams}: { searchParams: Promise < {
           aircraftUsageData={aircraftUsageData}
           timeframe={timeframe}
         />
-      </FlightsTabsWrapper>
+      </TabsContent>
+
+      {/* Flights Display */}
+      <TabsContent value="flights" className="space-y-6">
+        <FlightsDisplay flights={allFlights} />
+      </TabsContent>
+      
+      {/* <TabsContent value="routes" className="space-y-6">
+        <FlightsRoutes flights={allFlights} />
+      </TabsContent> */}
+    </Tabs>
     </div>
   );
 };

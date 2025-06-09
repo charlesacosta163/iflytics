@@ -221,6 +221,31 @@ export async function getFullAirportInfo(airportIcao: string) {
     }
 }
 
+ export async function getAirportCoordinates(airportIcao: string) {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_AIRPORT_DB_API_URL}/${airportIcao}?apiToken=${process.env.AIRPORT_DB_API_KEY}`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${API_KEY}`
+        },
+        next: { revalidate: 3600 } // Cache for 1 hour
+    })
+
+    const data = await response.json()
+
+    type Route = {
+        latitude_deg: number,
+        longitude_deg: number
+    }
+
+    const route: Route = {
+        latitude_deg: data.latitude_deg,
+        longitude_deg: data.longitude_deg
+    }
+
+    return route
+ }
+ 
 export async function getAllAirportsWithActiveATC() {
     try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/sessions/${process.env.NEXT_PUBLIC_IF_EXPERT_SERVER_ID}/atc`, {
