@@ -1,5 +1,5 @@
 import { Flight } from "../types";
-import { getAircraft, getAirport } from "../actions";
+import { getAircraft, getAirport, getAirportCoordinates } from "../actions";
 import { aircraftImages } from "../data";
 import { unstable_cache as cache } from "next/cache";
 import { getAircraftCached } from "./flightdata";
@@ -36,24 +36,29 @@ Sample flight object:
 */
 
 export function getFlightOverviewStatsPerTimeFrame(flights: Flight[]) {
-    const totalFlights = flights.length
-    const totalTime = Math.round(flights.reduce((acc, flight) => acc + flight.totalTime, 0))
-    const totalLandings = flights.reduce((acc, flight) => acc + flight.landingCount, 0)
-    const totalXp = flights.reduce((acc, flight) => acc + flight.xp, 0)
+  const totalFlights = flights.length;
+  const totalTime = Math.round(
+    flights.reduce((acc, flight) => acc + flight.totalTime, 0)
+  );
+  const totalLandings = flights.reduce(
+    (acc, flight) => acc + flight.landingCount,
+    0
+  );
+  const totalXp = flights.reduce((acc, flight) => acc + flight.xp, 0);
 
-    return {
-        totalFlights,
-        totalTime,
-        totalLandings,
-        totalXp
-    }
+  return {
+    totalFlights,
+    totalTime,
+    totalLandings,
+    totalXp,
+  };
 }
 
 export function getFlightTimePerTimeFrame(flights: Flight[]) {
-    // Get the flight activity in a specific time frame
-    // Adhere to shadcn/ui Area Chart requirements
+  // Get the flight activity in a specific time frame
+  // Adhere to shadcn/ui Area Chart requirements
 
-    const dailyTotals = new Map();
+  const dailyTotals = new Map();
 
   flights.forEach((flight) => {
     // Extract date (without time) from the flight's created timestamp
@@ -66,13 +71,16 @@ export function getFlightTimePerTimeFrame(flights: Flight[]) {
     dailyTotals.set(flightDate, currentTotal + flight.totalTime);
   });
 
-
   // Convert to array of objects for easier use
-  return Array.from(dailyTotals.entries()).map(([date, totalTime]) => ({
-    date: new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-    totalTime,
-  })).reverse();
-
+  return Array.from(dailyTotals.entries())
+    .map(([date, totalTime]) => ({
+      date: new Date(date).toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+      }),
+      totalTime,
+    }))
+    .reverse();
 
   /* SOME IMPORTANT NOTES:
     - If timeframe is last 30 days, return the last 30 days of data
@@ -80,20 +88,25 @@ export function getFlightTimePerTimeFrame(flights: Flight[]) {
     - If timeframe is 2025, return the months of 2025 total flight time
     - If timeframe is 2024, return the months of 2024 total flight time
   */
-
 }
 
 export function getRecentFlightInsights(flights: Flight[]) {
+  // Goal: Get the total landing count, total xp, total flight time in the specified time frame
 
-    // Goal: Get the total landing count, total xp, total flight time in the specified time frame
+  const totalLandings = flights.reduce(
+    (acc, flight) => acc + flight.landingCount,
+    0
+  );
+  const totalXp = flights.reduce((acc, flight) => acc + flight.xp, 0);
+  const totalTime = Math.round(
+    flights.reduce((acc, flight) => acc + flight.totalTime, 0)
+  );
 
-    const totalLandings = flights.reduce((acc, flight) => acc + flight.landingCount, 0)
-    const totalXp = flights.reduce((acc, flight) => acc + flight.xp, 0)
-    const totalTime = Math.round(flights.reduce((acc, flight) => acc + flight.totalTime, 0))
-
-    return {
-        totalLandings, totalXp, totalTime
-    }
+  return {
+    totalLandings,
+    totalXp,
+    totalTime,
+  };
 }
 
 export function getFlightAveragesPerTimeFrame(flights: Flight[]) {
@@ -103,37 +116,43 @@ export function getFlightAveragesPerTimeFrame(flights: Flight[]) {
       avgFlightTime: 0,
       avgLandingsPerFlight: 0,
       avgXpPerFlight: 0,
-      avgXpPerLanding: 0
+      avgXpPerLanding: 0,
     };
   }
 
   // Calculate totals first
   const totalFlights = flights.length;
-  const totalTime = Math.round(flights.reduce((acc, flight) => acc + flight.totalTime, 0));
-  const totalLandings = flights.reduce((acc, flight) => acc + flight.landingCount, 0);
+  const totalTime = Math.round(
+    flights.reduce((acc, flight) => acc + flight.totalTime, 0)
+  );
+  const totalLandings = flights.reduce(
+    (acc, flight) => acc + flight.landingCount,
+    0
+  );
   const totalXp = flights.reduce((acc, flight) => acc + flight.xp, 0);
 
   // Calculate averages with proper fallbacks to avoid division by zero
   const avgFlightTime = Math.round(totalTime / totalFlights) || 0;
   const avgLandingsPerFlight = totalLandings / totalFlights || 0;
   const avgXpPerFlight = Math.round(totalXp / totalFlights) || 0;
-  const avgXpPerLanding = totalLandings ? Math.round(totalXp / totalLandings) : 0;
+  const avgXpPerLanding = totalLandings
+    ? Math.round(totalXp / totalLandings)
+    : 0;
 
   return {
     avgFlightTime,
     avgLandingsPerFlight,
     avgXpPerFlight,
-    avgXpPerLanding
+    avgXpPerLanding,
   };
 }
-
 
 export async function getAllPlayerAircraftUsageData(flights: Flight[]) {
   try {
     // Steps 1 & 2 are correct
     const allAircraftIds = flights.map((flight) => flight.aircraftId);
     const uniqueAircraftIds = [...new Set(allAircraftIds)];
-    
+
     const aircraftUsageCount = allAircraftIds.reduce((acc, aircraftId) => {
       acc[aircraftId] = (acc[aircraftId] || 0) + 1;
       return acc;
@@ -144,26 +163,32 @@ export async function getAllPlayerAircraftUsageData(flights: Flight[]) {
       const results = [];
       for (let i = 0; i < ids.length; i += batchSize) {
         const batch = ids.slice(i, i + batchSize);
-        const batchResults = await Promise.all(batch.map(async (aircraftId) => {
-          try {
-            // Use cached aircraft data
-            const aircraft = await getAircraftCached(aircraftId);
-            
-            return {
-              name: aircraft?.name || `Aircraft ${aircraftId.substring(0, 6)}...`,
-              count: aircraftUsageCount[aircraftId],
-              id: aircraftId // Store the ID for debugging
-            };
-          } catch (innerError) {
-            console.error(`Error processing aircraft ${aircraftId}:`, innerError);
-            return {
-              name: `Aircraft ${aircraftId.substring(0, 6)}...`,
-              count: aircraftUsageCount[aircraftId],
-              id: aircraftId,
-              error: true
-            };
-          }
-        }));
+        const batchResults = await Promise.all(
+          batch.map(async (aircraftId) => {
+            try {
+              // Use cached aircraft data
+              const aircraft = await getAircraftCached(aircraftId);
+
+              return {
+                name:
+                  aircraft?.name || `Aircraft ${aircraftId.substring(0, 6)}...`,
+                count: aircraftUsageCount[aircraftId],
+                id: aircraftId, // Store the ID for debugging
+              };
+            } catch (innerError) {
+              console.error(
+                `Error processing aircraft ${aircraftId}:`,
+                innerError
+              );
+              return {
+                name: `Aircraft ${aircraftId.substring(0, 6)}...`,
+                count: aircraftUsageCount[aircraftId],
+                id: aircraftId,
+                error: true,
+              };
+            }
+          })
+        );
         results.push(...batchResults);
       }
       return results;
@@ -176,21 +201,23 @@ export async function getAllPlayerAircraftUsageData(flights: Flight[]) {
   } catch (error) {
     console.error("Error in getAllPlayerAircraftUsageData:", error);
     // Return a sensible fallback
-    return [
-      { name: "Data unavailable", count: 0, error: true }
-    ];
+    return [{ name: "Data unavailable", count: 0, error: true }];
   }
 }
 
-export async function getMostVisitedOriginAndDestinationAirports(flights: Flight[]) {
+export async function getMostVisitedOriginAndDestinationAirports(
+  flights: Flight[]
+) {
   // Filter out flights with null/undefined airports
-  const validFlights = flights.filter(flight => 
-    flight.originAirport && flight.destinationAirport
+  const validFlights = flights.filter(
+    (flight) => flight.originAirport && flight.destinationAirport
   );
 
   // Get all valid origin and destination airports
   const allOrigins = validFlights.map((flight) => flight.originAirport);
-  const allDestinations = validFlights.map((flight) => flight.destinationAirport);
+  const allDestinations = validFlights.map(
+    (flight) => flight.destinationAirport
+  );
 
   // Create a frequency map of origin and destination airports
   const originAirportCount = allOrigins.reduce((acc, airport) => {
@@ -204,14 +231,18 @@ export async function getMostVisitedOriginAndDestinationAirports(flights: Flight
   }, {} as Record<string, number>);
 
   // Sort by usage count (most visited first)
-  const sortedOrigins = Object.entries(originAirportCount).sort((a, b) => b[1] - a[1]);
-  const sortedDestinations = Object.entries(destinationAirportCount).sort((a, b) => b[1] - a[1]);
+  const sortedOrigins = Object.entries(originAirportCount).sort(
+    (a, b) => b[1] - a[1]
+  );
+  const sortedDestinations = Object.entries(destinationAirportCount).sort(
+    (a, b) => b[1] - a[1]
+  );
 
   // Handle case where there might be no valid airports
   if (sortedOrigins.length === 0 || sortedDestinations.length === 0) {
     return {
       topOrigin: "N/A",
-      topDestination: "N/A"
+      topDestination: "N/A",
     };
   }
 
@@ -228,17 +259,118 @@ export async function getMostVisitedOriginAndDestinationAirports(flights: Flight
     originCount: topOrigin[1],
     topDestination: topDestination[0],
     destinationAirportInfo: destinationAirportInfo,
-    destinationCount: topDestination[1]
+    destinationCount: topDestination[1],
   };
 }
 
 export function matchAircraftNameToImage(aircraftName: string) {
   // Image name sample: a220.png
   // Aircraft name sample: Airbus A319
-  
-  const image = aircraftImages.find((image) => aircraftName.toLowerCase().includes(image.key.toLowerCase()));
+
+  const image = aircraftImages.find((image) =>
+    aircraftName.toLowerCase().includes(image.key.toLowerCase())
+  );
 
   return image?.image || "placeholder.png";
-  
 }
 
+export async function getAllUniqueFlightRoutes(flights: Flight[]) {
+  // First, get unique route combinations
+  const uniqueRoutePairs = [
+    ...new Set(
+      flights.map(flight => `${flight.originAirport}-${flight.destinationAirport}`)
+    )
+  ].map(routeString => {
+    const [origin, destination] = routeString.split('-');
+    return { origin, destination };
+  });
+
+  // Then calculate distances for each unique route
+  const uniqueRoutes = await Promise.all(
+    uniqueRoutePairs.map(async (route) => {
+      const distance = await calculateDistanceBetweenAirports(route.origin, route.destination);
+      return {
+        origin: route.origin,
+        destination: route.destination,
+        distance: distance,
+      };
+    })
+  );
+
+  return uniqueRoutes.filter(route => route.origin !== route.destination);
+}
+
+export async function calculateTotalDistance(validFlights: Flight[]) {
+  let totalDistanceTraveled = 0;
+  let longestRouteInfo = {
+    origin: "",
+    destination: "",
+    distance: 0,
+  };
+
+  for (const flight of validFlights) {
+    const distance = await calculateDistanceBetweenAirports(
+      flight.originAirport,
+      flight.destinationAirport
+    );
+
+    if (distance > longestRouteInfo.distance) {
+      longestRouteInfo.origin = flight.originAirport;
+      longestRouteInfo.destination = flight.destinationAirport;
+      longestRouteInfo.distance = distance;
+    }
+
+    totalDistanceTraveled += distance;
+  }
+  return {
+    totalDistanceTraveled,
+    longestRouteInfo,
+  };
+};
+
+/*
+    Route object: {
+      origin: KJFK,
+      originCoordinates: {
+        latitude: number,
+        longitude: number
+      },
+      destination: EGLL,
+      destinationCoordinates: {
+        latitude: number,
+        longitude: number
+      }
+    }
+  */
+
+// Functions Needed: getAirportCoordinates
+
+export async function calculateDistanceBetweenAirports(
+  originAirport: string,
+  destinationAirport: string
+) {
+  const { latitude_deg: originLatitude, longitude_deg: originLongitude } =
+    await getAirportCoordinates(originAirport);
+  const {
+    latitude_deg: destinationLatitude,
+    longitude_deg: destinationLongitude,
+  } = await getAirportCoordinates(destinationAirport);
+
+  // In Nautical Miles
+  const R = 3959; // Miles
+
+  const toRadians = (degrees: number) => degrees * (Math.PI / 180);
+
+  const dLat = toRadians(destinationLatitude - originLatitude);
+  const dLon = toRadians(destinationLongitude - originLongitude);
+
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(toRadians(originLatitude)) *
+      Math.cos(toRadians(destinationLatitude)) *
+      Math.sin(dLon / 2) ** 2;
+
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+  return Math.floor(R * c * 0.868976);
+}

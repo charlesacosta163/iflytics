@@ -9,6 +9,7 @@ import {
   getMostVisitedOriginAndDestinationAirports,
   matchAircraftNameToImage,
   getFlightAveragesPerTimeFrame,
+  calculateDistanceBetweenAirports,
 } from "@/lib/cache/flightinsightsdata";
 
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
@@ -22,7 +23,7 @@ import FlightsOverview from "@/components/dashboard-ui/flights/flights-overview"
 import { getAirportCoordinates } from "@/lib/actions";
 import FlightsDisplay from "@/components/dashboard-ui/flights/flights-display";
 import FlightsRoutes from "@/components/dashboard-ui/flights/flights-routes";
-import { FaPlane } from "react-icons/fa";
+import { FaPlane, FaRoute } from "react-icons/fa";
 import { FaChartLine } from "react-icons/fa";
 
 const FlightsPage = async ({searchParams}: { searchParams: Promise < {
@@ -70,7 +71,9 @@ const FlightsPage = async ({searchParams}: { searchParams: Promise < {
         <TabsTrigger value="flights" className="data-[state=active]:bg-gray-700 data-[state=active]:text-white data-[state=inactive]:bg-transparent data-[state=inactive]:text-gray-300 transition-all duration-200 rounded-full flex gap-2 items-center">
           <FaPlane className="w-6 h-6 text-light" />
           Flights</TabsTrigger>
-        {/* <TabsTrigger value="routes">Routes</TabsTrigger> */}
+        <TabsTrigger value="routes" className='data-[state=active]:bg-gray-700 data-[state=active]:text-white data-[state=inactive]:bg-transparent data-[state=inactive]:text-gray-300 transition-all duration-200 rounded-full flex gap-2 items-center'>
+          <FaRoute className="w-6 h-6 text-light" />
+          Routes</TabsTrigger>
       </TabsList>
       
       <TabsContent value="overview" className="space-y-8">
@@ -90,9 +93,9 @@ const FlightsPage = async ({searchParams}: { searchParams: Promise < {
         <FlightsDisplay flights={allFlights} />
       </TabsContent>
       
-      {/* <TabsContent value="routes" className="space-y-6">
+      <TabsContent value="routes" className="space-y-6">
         <FlightsRoutes flights={allFlights} />
-      </TabsContent> */}
+      </TabsContent>
     </Tabs>
     </div>
   );

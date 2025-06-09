@@ -254,7 +254,7 @@ export async function getAllAirportsWithActiveATC() {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${API_KEY}`
             },
-            next: { revalidate: 3600 } // Cache for 1 hour
+            next: { revalidate: 900 } // Cache for 15 minutes
         })
 
         const data = await response.json()
