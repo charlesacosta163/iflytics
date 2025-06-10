@@ -30,6 +30,8 @@ import {
   TableCell,
 } from "@/components/ui/table";
 import { convertMinutesToHours } from "@/lib/utils";
+import {RouteMap} from "./maps/route-map";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 const FlightsRoutes = async ({ flights }: { flights: Flight[] }) => {
     // console.log(`🔄 FlightsRoutes called at ${new Date().toISOString()}`); --> Debugging
@@ -338,10 +340,12 @@ const FlightsRoutes = async ({ flights }: { flights: Flight[] }) => {
       </div>
 
       {/* Route Map */}
-      {/* <div className="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-200">
-            <div className="p-6 border-b border-gray-200">
+      <div className="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-200 h-[500px]">
+        <RouteMap routes={uniqueRoutes} />
+      </div>
+            {/* <div className="p-6 border-b border-gray-200">
               <div className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold text-gray-900">Route Map</h3>
+                <h3 className="text-lg font-semibold text-gray-900">Placeholder Map</h3>
                 <div className="flex items-center gap-2">
                   <select className="text-sm border border-gray-300 rounded-lg px-3 py-1">
                     <option>All Routes</option>
@@ -362,13 +366,12 @@ const FlightsRoutes = async ({ flights }: { flights: Flight[] }) => {
                       <path d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"/>
                     </svg>
                   </div>
-                  <h4 className="text-lg font-medium text-gray-700 mb-2">Interactive Route Map</h4>
+                  <h4 className="text-lg font-medium text-gray-700 mb-2">Route Map</h4>
                   <p className="text-gray-500 text-sm">
-                    Visual representation of your flight routes<br />
-                    with interactive markers and flight paths
+                    Visual representation of your flight routes
                   </p>
-                </div>
-                 */}
+                </div> */}
+                
       {/* Simulated route lines */}
       {/* <div className="absolute inset-0">
                   <svg className="w-full h-full">
@@ -408,47 +411,21 @@ const FlightsRoutes = async ({ flights }: { flights: Flight[] }) => {
           </div> */}
 
       {/* Top Routes List */}
-      {/* <div className="bg-white rounded-xl shadow-sm border border-gray-200">
-            <div className="p-6 border-b border-gray-200">
-              <h3 className="text-lg font-semibold text-gray-900">Most Frequent Routes</h3>
-            </div>
-            <div className="p-6">
+      <Card className="bg-white rounded-xl shadow-sm border border-gray-200">
+            <CardHeader className="">
+              <CardTitle className="text-lg font-semibold text-gray-900">Most Frequent Countries</CardTitle>
+              <CardDescription className="text-sm text-gray-500">
+                Countries with the most flights
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="p-6">
               <div className="space-y-4">
-                {[
-                  { from: 'KJFK', to: 'EGLL', flights: 12, distance: '3,459 nm', popular: true },
-                  { from: 'KLAX', to: 'KSFO', flights: 8, distance: '347 nm', popular: false },
-                  { from: 'KORD', to: 'KATL', flights: 6, distance: '606 nm', popular: false },
-                  { from: 'KDEN', to: 'KPHX', flights: 5, distance: '602 nm', popular: false },
-                  { from: 'KBOS', to: 'KDCA', flights: 4, distance: '399 nm', popular: false }
-                ].map((route, index) => (
-                  <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-                    <div className="flex items-center space-x-3">
-                      <div className="flex items-center space-x-2">
-                        <span className="font-mono text-sm font-medium text-gray-900">{route.from}</span>
-                        <svg className="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd"/>
-                        </svg>
-                        <span className="font-mono text-sm font-medium text-gray-900">{route.to}</span>
-                      </div>
-                      {route.popular && (
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                          Popular
-                        </span>
-                      )}
-                    </div>
-                    <div className="text-right">
-                      <div className="text-sm font-medium text-gray-900">{route.flights} flights</div>
-                      <div className="text-xs text-gray-500">{route.distance}</div>
-                    </div>
-                  </div>
-                ))}
+                Coming soon...
               </div>
               
-              <button className="w-full mt-4 text-sm text-blue-600 hover:text-blue-700 font-medium py-2">
-                View All Routes →
-              </button>
-            </div>
-          </div> */}
+            
+            </CardContent>
+          </Card>
 
       {/* Route Analytics */}
       {/* <div className="lg:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-6"> */}
