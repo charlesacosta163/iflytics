@@ -23,7 +23,7 @@ export const RouteMap = ({ routes }: { routes: any[] }) => {
     map.on("load", () => {
       const arcFeatures: any[] = [];
 
-      routes.forEach((route: any) => {
+      routes.forEach((route: any, index: number) => {
         const {
           originCoordinates: { latitude: lat1, longitude: lng1 },
           destinationCoordinates: { latitude: lat2, longitude: lng2 },
@@ -44,6 +44,8 @@ export const RouteMap = ({ routes }: { routes: any[] }) => {
           },
         });
       
+        arc.id = index;
+        
         arcFeatures.push(arc);
       });
 
@@ -70,7 +72,7 @@ export const RouteMap = ({ routes }: { routes: any[] }) => {
       });
 
       map.on("click", (e) => {
-        if (!map.queryRenderedFeatures(e.point, { layers: ["route-arcs-layer"] }).length) {
+        if (!map.queryRenderedFeatures(e.point, { layers: ["route-arcs-clickable"] }).length) {
           setPopupInfo(null);
           setAircraftData(null);
         }
@@ -83,6 +85,7 @@ export const RouteMap = ({ routes }: { routes: any[] }) => {
         data: featureCollection,
       });
 
+      // Visible route layer with conditional styling
       map.addLayer({
         id: "route-arcs-layer",
         type: "line",
@@ -93,8 +96,90 @@ export const RouteMap = ({ routes }: { routes: any[] }) => {
         },
         paint: {
           "line-color": "#FF5733",
-          "line-width": 2,
+          "line-width": [
+            "case",
+            ["boolean", ["feature-state", "hover"], false],
+            5, // Width when hovered
+            3  // Default width
+          ],
+          "line-opacity": [
+            "case", 
+            ["boolean", ["feature-state", "hover"], false],
+            1,   // Opacity when hovered
+            0.8  // Default opacity
+          ]
         },
+      });
+
+      // Invisible wider clickable layer (no styling changes needed)
+      map.addLayer({
+        id: "route-arcs-clickable",
+        type: "line",
+        source: "route-arcs",
+        layout: {
+          "line-join": "round", 
+          "line-cap": "round",
+        },
+        paint: {
+          "line-color": "rgba(0,0,0,0)",
+          "line-width": 15,
+        },
+      });
+
+      // Updated hover effects using feature-state
+      let hoveredRouteId: string | number | undefined | null = null;
+
+      map.on("mouseenter", "route-arcs-clickable", (e) => {
+        map.getCanvas().style.cursor = "pointer";
+        
+        if (e.features && e.features.length > 0) {
+          if (hoveredRouteId !== null) {
+            map.setFeatureState(
+              { source: "route-arcs", id: hoveredRouteId },
+              { hover: false }
+            );
+          }
+          
+          hoveredRouteId = e.features[0].id;
+          map.setFeatureState(
+            { source: "route-arcs", id: hoveredRouteId },
+            { hover: true }
+          );
+        }
+      });
+
+      map.on("mouseleave", "route-arcs-clickable", (e) => {
+        map.getCanvas().style.cursor = "";
+        
+        if (hoveredRouteId !== null) {
+          map.setFeatureState(
+            { source: "route-arcs", id: hoveredRouteId },
+            { hover: false }
+          );
+          hoveredRouteId = null;
+        }
+      });
+
+      map.on("click", "route-arcs-clickable", (e) => {
+        const feature = e.features?.[0];
+        const props = feature?.properties;
+      
+        if (props) {
+          const routeData = routes.find((r: any) => 
+            r.origin === props.origin && r.destination === props.destination
+          );
+          
+          setPopupInfo({
+            origin: props.origin,
+            destination: props.destination,
+            distance: props.distance,
+            aircraftId: routeData?.aircraftId,
+            totalTime: routeData?.totalTime,
+            server: routeData?.server,
+            created: routeData?.created,
+            flightId: routeData?.flightId
+          });
+        }
       });
     });
 
