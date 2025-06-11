@@ -32,12 +32,12 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
             img.onload = () => map.addImage('plane', img);
             img.src = `data:image/svg+xml;base64,${btoa(planeSVG)}`;
 
-            // Convert flights to points
+            // Convert flights to points with proper typing
             const flightFeatures = flights.map((flight) => ({
-                type: 'Feature',
+                type: 'Feature' as const,
                 geometry: {
-                    type: 'Point',
-                    coordinates: [flight.longitude, flight.latitude]
+                    type: 'Point' as const,
+                    coordinates: [flight.longitude, flight.latitude] as [number, number]
                 },
                 properties: {
                     callsign: flight.callsign,
@@ -72,10 +72,10 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
                 if (e.features && e.features[0]) {
                     const flight = e.features[0].properties;
                     setPopupInfo({
-                        username: flight.username,
-                        callsign: flight.callsign,
-                        altitude: flight.altitude,
-                        speed: flight.speed
+                        username: flight?.username,
+                        callsign: flight?.callsign,
+                        altitude: flight?.altitude,
+                        speed: flight?.speed
                     });
                 }
             });
