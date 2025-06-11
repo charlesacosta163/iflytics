@@ -343,7 +343,7 @@ const FlightsRoutes = async ({ flights }: { flights: Flight[] }) => {
       </div>
 
       {/* Route Map */}
-      <div className="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-200 h-auto">
+      <div className="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-200 h-[500px] lg:h-auto">
         <RouteMap routes={uniqueRoutes} />
       </div>
 
