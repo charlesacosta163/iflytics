@@ -458,7 +458,7 @@ export async function getFlightsFromServer() {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${API_KEY}`
         },
-        next: { revalidate: 60 } // Cache for 1 minute
+        next: { revalidate: 30 } // Cache for 30 seconds
     })
 
     const data = await response.json()

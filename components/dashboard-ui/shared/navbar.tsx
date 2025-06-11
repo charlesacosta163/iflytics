@@ -14,6 +14,7 @@ import Link from "next/link";
 import Image from "next/image";
 import iflyticsLogo from "@/public/infinilyticslogo.svg";
 import { BsIncognito } from "react-icons/bs";
+import { LiaGlobeAmericasSolid } from "react-icons/lia";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -66,7 +67,8 @@ const Navbar = () => {
             </span>
           </div>
         </div>
-
+        
+  
         <LogoutButton className="text-sm !px-4 !py-2 font-semibold rounded-full hover:scale-105 transition-transform duration-200" />
       </div>
 
@@ -101,7 +103,7 @@ const Navbar = () => {
             </div>
 
             {/* Navigation Links */}
-            <nav className="space-y-2">
+            <nav className="space-y-2 grid grid-cols-2 gap-2">
               <Link
                 href="/dashboard"
                 className="group flex items-center gap-4 p-4 rounded-lg hover:bg-gray-700 transition-all duration-200 hover:translate-x-2"
@@ -143,7 +145,18 @@ const Navbar = () => {
                 <div className="p-2 bg-gray-700 rounded-lg group-hover:bg-gray-600 transition-colors duration-200">
                   <GoCopilot className="w-4 h-4 text-light" />
                 </div>
-                <span className="font-medium">Community Pilots</span>
+                <span className="font-medium">Community</span>
+              </Link>
+
+              <Link
+                href="/map"
+                className="group flex items-center gap-4 p-4 rounded-lg transition-all duration-200 hover:translate-x-2 bg-blue-500/[.2] hover:bg-blue-500/[0.3]"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <div className="p-2 bg-gray-700 rounded-lg group-hover:bg-gray-600 transition-colors duration-200">
+                  <LiaGlobeAmericasSolid className="w-4 h-4 text-blue-400" />
+                </div>
+                <span className="font-medium text-blue-400">Map</span>
               </Link>
 
               <Link
@@ -154,11 +167,11 @@ const Navbar = () => {
                 <div className="p-2 bg-gray-700 rounded-lg group-hover:bg-gray-600 transition-colors duration-200">
                   <BsIncognito className="w-4 h-4 text-orange-400" />
                 </div>
-                <span className="font-medium text-orange-400">Guest Mode</span>
+                <span className="font-medium text-orange-400">Guest</span>
               </Link>
 
               {/* Special Featured Item */}
-              <div className="pt-4 mt-4 border-t border-gray-600">
+              <div className="pt-4 mt-4 border-t border-gray-600 col-span-2">
                 <div
                   className="flex items-center gap-4 bg-dark rounded-md px-4 py-3 cursor-not-allowed opacity-75"
                   title="Coming Soon!"

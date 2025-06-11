@@ -17,7 +17,7 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
         })
 
         map.on('load', () => {
-            console.log('Map loaded')
+            // console.log('Map loaded')
 
             // Convert SVG to base64 data URL
             const planeSVG = `
@@ -94,6 +94,29 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
             map.on('mouseleave', 'flight-points', () => {
                 map.getCanvas().style.cursor = '';
             });
+
+            // Update flight data when props change
+            if (map.getSource('flights')) {
+                const flightFeatures = flights.map((flight) => ({
+                    type: 'Feature' as const,
+                    geometry: {
+                        type: 'Point' as const,
+                        coordinates: [flight.longitude, flight.latitude] as [number, number]
+                    },
+                    properties: {
+                        callsign: flight.callsign,
+                        username: flight.username,
+                        altitude: flight.altitude,
+                        speed: flight.speed
+                    }
+                }));
+
+                // Update the existing source with new data
+                (map.getSource('flights') as any).setData({
+                    type: 'FeatureCollection',
+                    features: flightFeatures
+                });
+            }
         })
 
         return () => map.remove()
@@ -137,7 +160,7 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
                                         Pilot
                                     </div>
                                     <div className="text-gray-900 font-semibold">
-                                        {popupInfo.username}
+                                        {popupInfo.username || "Unknown"}
                                     </div>
                                 </div>
                                 

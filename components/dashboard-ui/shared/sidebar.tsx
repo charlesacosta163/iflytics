@@ -17,6 +17,7 @@ import { LogoutButton } from "@/components/logout-button";
 import { GoCopilot } from "react-icons/go";
 import { LuGoal } from "react-icons/lu";
 import { BsIncognito } from "react-icons/bs";
+import { LiaGlobeAmericasSolid } from "react-icons/lia";
 
 
 const Sidebar = () => {
@@ -64,7 +65,7 @@ const Sidebar = () => {
 
             <Link href="/dashboard/users" className={cn("flex gap-4 text-gray-200 font-medium items-center hover:bg-gray-700 rounded-lg px-3 py-2 transition-colors duration-200", pathname === "/dashboard/users" && "bg-light text-dark font-bold")}>
                 <GoCopilot />
-                Community Pilots
+                Community
             </Link>
 
             {/* Horizontal Divider */}
@@ -89,9 +90,13 @@ const Sidebar = () => {
         </section>
 
         <div className="mt-auto flex flex-col gap-2">
+        <Link href="/map" className="flex gap-4 text-blue-400 bg-blue-500/15 hover:bg-blue-500/30 font-medium items-center rounded-lg px-3 py-2 transition-colors duration-200 justify-center text-sm">
+            <LiaGlobeAmericasSolid />
+            Map
+          </Link>
           <Link href="/" className="flex gap-4 text-orange-400 bg-orange-500/15 hover:bg-orange-500/30 font-medium items-center rounded-lg px-3 py-2 transition-colors duration-200 justify-center text-sm">
             <BsIncognito />
-            Guest Mode
+            Guest
           </Link>
           <LogoutButton className="w-full font-medium hover:bg-gray-800 cursor-pointer transition-colors duration-200"/>
         </div>
