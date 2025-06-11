@@ -528,7 +528,7 @@ export default function Home() {
                 <div className={`text-4xl font-black bg-gradient-to-r ${stat.gradient} bg-clip-text text-transparent mb-3 group-hover:scale-110 transition-transform duration-300`}>
                   {stat.number}
                 </div>
-                
+
                 {/* Label */}
                 <p className="text-gray-300 font-semibold text-lg group-hover:text-white transition-colors duration-300">
                   {stat.label}

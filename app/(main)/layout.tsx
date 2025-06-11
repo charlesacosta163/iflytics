@@ -7,7 +7,7 @@ export default function RootLayout({
   }>) {
     return (
         <div className="min-h-screen flex flex-col overflow-x-hidden">
-            <div className="max-w-[1000px] w-full mx-auto sticky top-0 z-50">
+            <div className="max-w-[1000px] w-full mx-auto z-50">
               <Navbar />
             </div>
       

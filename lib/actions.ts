@@ -449,3 +449,19 @@ export async function matchATCTypeToTitle(atcType: string) {
             return "UNU" // Unused
     }
 }
+
+export async function getFlightsFromServer() {
+    // Support only from Expert Server for now
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/sessions/${process.env.NEXT_PUBLIC_IF_EXPERT_SERVER_ID}/flights`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${API_KEY}`
+        },
+        next: { revalidate: 60 } // Cache for 1 minute
+    })
+
+    const data = await response.json()
+
+    return data.result || []
+}
