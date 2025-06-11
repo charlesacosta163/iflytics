@@ -148,13 +148,13 @@ const Navbar = () => {
 
               <Link
                 href="/"
-                className="group flex items-center gap-4 p-4 rounded-lg hover:bg-gray-700 transition-all duration-200 hover:translate-x-2"
+                className="group flex items-center gap-4 p-4 rounded-lg transition-all duration-200 hover:translate-x-2 bg-orange-500/[.2] hover:bg-orange-500/[0.3]"
                 onClick={() => setIsMenuOpen(false)}
               >
                 <div className="p-2 bg-gray-700 rounded-lg group-hover:bg-gray-600 transition-colors duration-200">
-                  <BsIncognito className="w-4 h-4 text-light" />
+                  <BsIncognito className="w-4 h-4 text-orange-400" />
                 </div>
-                <span className="font-medium">Guest Mode</span>
+                <span className="font-medium text-orange-400">Guest Mode</span>
               </Link>
 
               {/* Special Featured Item */}

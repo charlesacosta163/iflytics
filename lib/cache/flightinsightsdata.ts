@@ -1,8 +1,9 @@
-import { Flight } from "../types";
+import { Flight, FlightRoute } from "../types";
 import { getAircraft, getAirport, getAirportCoordinates } from "../actions";
 import { aircraftImages } from "../data";
 import { unstable_cache as cache, unstable_cache } from "next/cache";
 import { getAircraftCached } from "./flightdata";
+import { isoCountryCodes } from "../data";
 /*
 getAircraftAndLivery(aircraftId: string, liveryId: string)
 sample response:
@@ -292,13 +293,15 @@ function createUserFlightRoutesCache(userId: string) {
 
       const routesWithDistances = await Promise.all(
         routePairs.map(async (route) => {
-          const { distance, originCoordinates, destinationCoordinates } = await calculateDistanceBetweenAirports(route.origin, route.destination);
+          const { distance, originCoordinates, destinationCoordinates, originIsoCountry, destinationIsoCountry } = await calculateDistanceBetweenAirports(route.origin, route.destination);
           return {
             flightId: route.flightId,
             created: route.created,
             origin: route.origin,
+            originIsoCountry: originIsoCountry,
             originCoordinates: originCoordinates,
             destination: route.destination,
+            destinationIsoCountry: destinationIsoCountry,
             destinationCoordinates: destinationCoordinates,
             distance: distance,
             totalTime: route.totalTime,
@@ -363,11 +366,13 @@ export function getUniqueRoutes(routesWithDistances: {
   flightId: string;
   created: string;
   origin: string;
+  originIsoCountry: string;
   originCoordinates: {
     latitude: number;
     longitude: number;
   };
   destination: string;
+  destinationIsoCountry: string;
   destinationCoordinates: {
     latitude: number;
     longitude: number;
@@ -384,8 +389,10 @@ export function getUniqueRoutes(routesWithDistances: {
       aircraftId: route.aircraftId,
       server: route.server,
       origin: route.origin,
+      originIsoCountry: route.originIsoCountry,
       originCoordinates: route.originCoordinates,
       destination: route.destination,
+      destinationIsoCountry: route.destinationIsoCountry,
       destinationCoordinates: route.destinationCoordinates,
       distance: route.distance,
       totalTime: route.totalTime,
@@ -462,11 +469,12 @@ export async function calculateDistanceBetweenAirports(
   originAirport: string,
   destinationAirport: string
 ) {
-  const { latitude_deg: originLatitude, longitude_deg: originLongitude } =
+  const { latitude_deg: originLatitude, longitude_deg: originLongitude, iso_country: originIsoCountry } =
     await getAirportCoordinates(originAirport);
   const {
     latitude_deg: destinationLatitude,
     longitude_deg: destinationLongitude,
+    iso_country: destinationIsoCountry,
   } = await getAirportCoordinates(destinationAirport);
 
   // In Nautical Miles
@@ -487,6 +495,8 @@ export async function calculateDistanceBetweenAirports(
 
   return {
     distance: Math.floor(R * c * 0.868976),
+    originIsoCountry: originIsoCountry,
+    destinationIsoCountry: destinationIsoCountry,
     originCoordinates: {
       latitude: originLatitude,
       longitude: originLongitude,
@@ -497,3 +507,25 @@ export async function calculateDistanceBetweenAirports(
     }
   };
 }
+// Utilize the 
+export function getTop5Countries(routes: FlightRoute[]) {
+   // Count destinations by country
+
+   const isoCodeToCountry = (isoCode: string) => {
+    const country = isoCountryCodes.find(c => c.isoCode === isoCode);
+    return country?.key || "Unknown";
+   }
+   
+
+   const countryCounts = routes.reduce((acc: { [key: string]: number }, route) => {
+    const country = isoCodeToCountry(route.destinationIsoCountry);
+    acc[country] = (acc[country] || 0) + 1;
+    return acc;
+   }, {});
+
+   const sortedCountries = Object.entries(countryCounts).sort((a, b) => b[1] - a[1]);
+
+   return sortedCountries.slice(0, 5);
+
+}
+

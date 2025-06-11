@@ -89,7 +89,7 @@ const Sidebar = () => {
         </section>
 
         <div className="mt-auto flex flex-col gap-2">
-          <Link href="/" className="flex gap-4 text-orange-400 font-medium items-center hover:bg-gray-800 rounded-lg px-3 py-2 transition-colors duration-200 justify-center text-sm">
+          <Link href="/" className="flex gap-4 text-orange-400 bg-orange-500/15 hover:bg-orange-500/30 font-medium items-center rounded-lg px-3 py-2 transition-colors duration-200 justify-center text-sm">
             <BsIncognito />
             Guest Mode
           </Link>

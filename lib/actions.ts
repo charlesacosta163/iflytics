@@ -252,7 +252,8 @@ export async function getAirportCoordinates(airportIcao: string) {
 
         return {
             latitude_deg: data.latitude_deg,
-            longitude_deg: data.longitude_deg
+            longitude_deg: data.longitude_deg,
+            iso_country: data.iso_country,
         };
         
     } catch (error) {

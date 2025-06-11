@@ -512,7 +512,7 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               { number: "1K+", label: "Flights Tracked", gradient: "from-blue-400 to-blue-600", icon: <TbPlaneInflight className="text-blue-400"/>, delay: "delay-100" },
-              { number: "40+", label: "Active Pilots", gradient: "from-green-400 to-green-600", icon: <RiCopilotFill className="text-green-400"/>, delay: "delay-200" },
+              { number: "45+", label: "Active Pilots", gradient: "from-green-400 to-green-600", icon: <RiCopilotFill className="text-green-400"/>, delay: "delay-200" },
               { number: "24/7", label: "Live Updates", gradient: "from-orange-400 to-orange-600", icon: <LuCalendarClock className="text-orange-400"/>, delay: "delay-400" }
             ].map((stat, index) => (
               <div key={index} className={`group text-center p-8 bg-gradient-to-br from-gray/30 to-gray/50 backdrop-blur-xl rounded-2xl border border-gray-600/30 hover:border-gray-400/50 transition-all duration-500 hover:scale-105 animate-slide-in-up ${stat.delay} relative overflow-hidden flex flex-col items-center justify-center`}>
@@ -561,7 +561,7 @@ export default function Home() {
             {/* Glowing Border Animation */}
             <div className="absolute -inset-1 bg-gradient-to-r from-gray-400 via-dark to-gray-400 rounded-3xl blur opacity-20 group-hover:opacity-40 transition-all duration-1000 animate-gradient-x bg-[length:200%_auto]"></div>
             
-            <div className="relative bg-gradient-to-br from-gray via-dark to-gray px-8 py-16 rounded-3xl shadow-2xl border border-gray-600/30 backdrop-blur-sm">
+            <div className="relative bg-gradient-to-br from-gray via-dark to-gray px-4 sm:px-8 py-16 rounded-3xl shadow-2xl border border-gray-600/30 backdrop-blur-sm">
               {/* Floating Animation Elements */}
               <div className="absolute top-6 right-6 w-6 h-6 bg-gradient-to-r from-blue-400/30 to-purple-400/30 rounded-full animate-float"></div>
               <div className="absolute bottom-6 left-6 w-4 h-4 bg-gradient-to-r from-gray-400/30 to-blue-400/30 rounded-full animate-float delay-1000"></div>
@@ -580,34 +580,64 @@ export default function Home() {
                 
                 {/* Enhanced Search Form */}
                 <div className="mb-10 animate-slide-in-up delay-300">
-                  <form action={async (formData: FormData) => {
-                    'use server'
-                    redirect(`/user/${formData.get("name") as string}`)
-                  }} className="flex flex-col sm:flex-row gap-4 justify-center items-center max-w-md mx-auto">
+                  <div className="flex flex-col lg:flex-row gap-8 justify-center items-center max-w-4xl mx-auto">
                     
-                    {/* Enhanced Input */}
-                    <div className="relative group/input flex-1 w-full">
-                      <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-400/50 to-purple-400/50 rounded-xl blur opacity-0 group-hover/input:opacity-50 transition-all duration-500"></div>
-                      <input 
-                        type="text" 
-                        name="name" 
-                        className="relative bg-dark/90 backdrop-blur-sm text-white px-6 py-3 rounded-xl outline-none border border-gray-600/50 focus:border-blue-400 transition-all duration-300 w-full placeholder:text-gray-400 font-medium" 
-                        placeholder="Your IFC Username" 
-                        required
-                      />
+                    {/* Search Form */}
+                    <div className="flex-1 max-w-md w-full">
+                      <form action={async (formData: FormData) => {
+                        'use server'
+                        redirect(`/user/${formData.get("name") as string}`)
+                      }} className="flex flex-col sm:flex-row gap-4">
+                        
+                        {/* Enhanced Input */}
+                        <div className="relative group/input flex-1 w-full">
+                          <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-400/50 to-purple-400/50 rounded-xl blur opacity-0 group-hover/input:opacity-50 transition-all duration-500"></div>
+                          <input 
+                            type="text" 
+                            name="name" 
+                            className="relative bg-dark/90 backdrop-blur-sm text-white px-6 py-3 rounded-xl outline-none border border-gray-600/50 focus:border-blue-400 transition-all duration-300 w-full placeholder:text-gray-400 font-medium" 
+                            placeholder="Your IFC Username" 
+                            required
+                          />
+                        </div>
+                        
+                        {/* Enhanced Button */}
+                        <div className="relative group/button">
+                          <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl blur opacity-50 group-hover/button:opacity-100 transition-all duration-500 self-start"></div>
+                          <button 
+                            type="submit"
+                            className="relative bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-6 py-3 rounded-xl font-bold transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-blue-500/25 whitespace-nowrap"
+                          >
+                            Go!
+                          </button>
+                        </div>
+                      </form>
                     </div>
                     
-                    {/* Enhanced Button */}
-                    <div className="relative group/button">
-                      <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl blur opacity-50 group-hover/button:opacity-100 transition-all duration-500"></div>
-                      <button 
-                        type="submit"
-                        className="relative bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-6 py-3 rounded-xl font-bold transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-blue-500/25 whitespace-nowrap"
-                      >
-                        Get Started
-                      </button>
+                    {/* Divider */}
+                    <div className="flex lg:flex-col items-center gap-4">
+                      <div className="hidden lg:block w-px h-16 bg-gradient-to-b from-transparent via-gray-600 to-transparent"></div>
+                      <div className="lg:hidden h-px w-16 bg-gradient-to-r from-transparent via-gray-600 to-transparent"></div>
+                      <span className="text-gray-400 text-sm font-medium px-4 py-2 bg-gray/20 rounded-full">
+                        or
+                      </span>
+                      <div className="hidden lg:block w-px h-16 bg-gradient-to-b from-transparent via-gray-600 to-transparent"></div>
+                      <div className="lg:hidden h-px w-16 bg-gradient-to-r from-transparent via-gray-600 to-transparent"></div>
                     </div>
-                  </form>
+                    
+                    {/* Sign In Section */}
+                    <div className="flex flex-col items-center gap-4">
+                      <h3 className="text-gray-300 text-lg font-semibold">
+                        Don't have an account?
+                      </h3>
+                      <Link href="/auth/login" className="group/signin relative">
+                        <div className="absolute -inset-0.5 bg-gradient-to-r from-gray-500/50 to-gray-600/50 rounded-xl blur opacity-0 group-hover/signin:opacity-50 transition-all duration-500"></div>
+                        <button className="relative bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-600 hover:to-gray-700 text-white px-8 py-3 rounded-xl font-bold transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-gray-500/25">
+                          Sign Up
+                        </button>
+                      </Link>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Feature Points */}

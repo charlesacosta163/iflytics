@@ -53,13 +53,13 @@ const MobileNav = ({ isLoggedIn, isLoading, onAuthClick }: MobileNavProps) => {
         
         {/* Navigation Header */}
         <div className="p-4">
-          <h3 className="text-sm font-semibold text-gray-600 uppercase tracking-wide">
-            IFlytics - Early Alpha
+          <h3 className="font-bold tracking-tight text-gray-600 text-lg">
+            Where we going?
           </h3>
         </div>
 
         {/* Menu Content */}
-        <div className="p-4">
+        <div className="px-4 pb-4">
 
           {/* Navigation Links */}
           <nav className="space-y-2">

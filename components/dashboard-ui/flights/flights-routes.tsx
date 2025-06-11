@@ -4,6 +4,7 @@ import { Flight } from "@/lib/types";
 import {
   calculateTotalDistance,
   getAllFlightRoutes,
+  getTop5Countries,
   getUniqueRoutes,
 } from "@/lib/cache/flightinsightsdata";
 import { FaRoute } from "react-icons/fa";
@@ -32,6 +33,7 @@ import {
 import { convertMinutesToHours } from "@/lib/utils";
 import {RouteMap} from "./maps/route-map";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
 
 const FlightsRoutes = async ({ flights }: { flights: Flight[] }) => {
     // console.log(`🔄 FlightsRoutes called at ${new Date().toISOString()}`); --> Debugging
@@ -71,6 +73,7 @@ const FlightsRoutes = async ({ flights }: { flights: Flight[] }) => {
   const { totalDistanceTraveled, longestRouteInfo } =
     await calculateTotalDistance(validFlights);
 
+  const top5Countries = getTop5Countries(uniqueRoutes);
 
 
   return (
@@ -340,92 +343,75 @@ const FlightsRoutes = async ({ flights }: { flights: Flight[] }) => {
       </div>
 
       {/* Route Map */}
-      <div className="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-200 h-[500px]">
+      <div className="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-200 h-auto">
         <RouteMap routes={uniqueRoutes} />
       </div>
-            {/* <div className="p-6 border-b border-gray-200">
-              <div className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold text-gray-900">Placeholder Map</h3>
-                <div className="flex items-center gap-2">
-                  <select className="text-sm border border-gray-300 rounded-lg px-3 py-1">
-                    <option>All Routes</option>
-                    <option>Most Frequent</option>
-                    <option>Longest Distance</option>
-                    <option>Recent Routes</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-            <div className="p-6"> */}
-      {/* Placeholder for the map */}
-      {/* <div className="bg-gray-100 rounded-lg h-96 flex items-center justify-center relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-green-50"></div>
-                <div className="relative z-10 text-center">
-                  <div className="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse">
-                    <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"/>
-                    </svg>
-                  </div>
-                  <h4 className="text-lg font-medium text-gray-700 mb-2">Route Map</h4>
-                  <p className="text-gray-500 text-sm">
-                    Visual representation of your flight routes
-                  </p>
-                </div> */}
+
+      {/* Top 5 Countries List */}
+      <Card className="bg-gradient-to-br from-gray-700 to-gray-800 rounded-xl shadow-sm border border-gray-200">
+        <CardHeader>
+          <CardTitle className="text-xl font-bold text-light">
+            Top 5 Countries
+          </CardTitle>
+          <CardDescription className="text-sm text-gray-200">
+            Countries you flew to the most
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="pb-4">
+          <div className="space-y-6">
+            {top5Countries.length > 0 ? (
+              top5Countries.map((country: [string, number], index) => {
+                // Calculate percentage based on the highest value for better visual distribution
+                const [countryName, count] = country;
+
+                const maxCount = Math.max(...top5Countries.map(c => c[1]));
+                const percentage = Math.round((count / maxCount) * 100);
                 
-      {/* Simulated route lines */}
-      {/* <div className="absolute inset-0">
-                  <svg className="w-full h-full">
-                    <defs>
-                      <linearGradient id="routeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stopColor="#3B82F6" stopOpacity="0.6"/>
-                        <stop offset="100%" stopColor="#10B981" stopOpacity="0.6"/>
-                      </linearGradient>
-                    </defs>
-                    <path 
-                      d="M50,100 Q200,50 350,150" 
-                      stroke="url(#routeGradient)" 
-                      strokeWidth="3" 
-                      fill="none"
-                      className="animate-pulse"
+                return (
+                  <div key={countryName} className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className="flex items-center justify-center w-8 h-8 rounded-full bg-gray text-white text-sm font-bold">
+                          {index + 1}
+                        </div>
+                        <div>
+                          <p className="font-semibold text-light">{countryName}</p>
+                          <p className="text-sm text-gray-200">
+                            {count} flight{count !== 1 ? 's' : ''}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-lg font-bold text-light">
+                          {count}
+                        </p>
+                        <p className="text-xs text-gray-200">
+                          {((count / top5Countries.reduce((sum, c) => sum + c[1], 0)) * 100).toFixed(1)}%
+                        </p>
+                      </div>
+                    </div>
+                    <Progress 
+                    // change progress bar color
+                      value={percentage} 
+                      className="h-3 bg-gray-600"
                     />
-                    <path 
-                      d="M100,250 Q250,150 400,200" 
-                      stroke="url(#routeGradient)" 
-                      strokeWidth="3" 
-                      fill="none"
-                      className="animate-pulse"
-                      style={{animationDelay: '1s'}}
-                    />
-                    <path 
-                      d="M150,320 Q300,200 450,280" 
-                      stroke="url(#routeGradient)" 
-                      strokeWidth="3" 
-                      fill="none"
-                      className="animate-pulse"
-                      style={{animationDelay: '2s'}}
-                    />
+                  </div>
+                );
+              })
+            ) : (
+              <div className="text-center py-8">
+                <div className="text-gray-400 mb-2">
+                  <svg className="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                 </div>
+                <p className="text-gray-500 font-medium">No flight data available</p>
+                <p className="text-sm text-gray-400 mt-1">Start flying to see your top destinations!</p>
               </div>
-            </div>
-          </div> */}
-
-      {/* Top Routes List */}
-      <Card className="bg-white rounded-xl shadow-sm border border-gray-200">
-            <CardHeader className="">
-              <CardTitle className="text-lg font-semibold text-gray-900">Most Frequent Countries</CardTitle>
-              <CardDescription className="text-sm text-gray-500">
-                Countries with the most flights
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="p-6">
-              <div className="space-y-4">
-                Coming soon...
-              </div>
-              
-            
-            </CardContent>
-          </Card>
+            )}
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Route Analytics */}
       {/* <div className="lg:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-6"> */}

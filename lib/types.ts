@@ -38,19 +38,17 @@ export type Flight = {
     violations: any[];
 }
 
-export interface FlightRoute {
-  data: Array<{
+export type FlightRoute = {
     flightId: string;
     created: string;
     origin: string;
+    originIsoCountry: string;
     originCoordinates: { latitude: number; longitude: number };
     destination: string;
+    destinationIsoCountry: string;
     destinationCoordinates: { latitude: number; longitude: number };
     distance: number;
     totalTime: number;
     aircraftId: string;
     server: string;
-  }>;
-  timestamp: number;
-  expiresAt: number;
 }
