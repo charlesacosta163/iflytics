@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { Analytics } from "@vercel/analytics/next"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -13,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "IFlytics - Your home to your stats of Infinite Flight!",
-  description: "A small app made by me, to track your Infinite Flight stats and more.",
+  title: "IFlytics - Your Data Visualizer for Infinite Flight!",
+  description: "A web application made by me, to track your Infinite Flight stats and more.",
 };
 
 export default function RootLayout({
@@ -28,6 +29,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#FAF0E6]`}
       >
         {children}
+        <Analytics />
       </body>
     </html>
   );
