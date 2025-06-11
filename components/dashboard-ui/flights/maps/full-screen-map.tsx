@@ -14,7 +14,6 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
             center: [0, 0],
             zoom: 1,
             attributionControl: false,
-            touchZoomRotate: false,
         })
 
         map.on('load', () => {
