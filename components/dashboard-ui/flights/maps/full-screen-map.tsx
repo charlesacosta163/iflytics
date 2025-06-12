@@ -1,24 +1,29 @@
 "use client"
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { Map } from 'maplibre-gl'
 import { X } from "lucide-react";
 
 const FullScreenMap = ({ flights }: { flights: any[] }) => {
     const [popupInfo, setPopupInfo] = useState<any>(null);
+    const mapRef = useRef<Map | null>(null);
+    const mapContainerRef = useRef<HTMLDivElement>(null);
     
+    // Initialize map only once
     useEffect(() => {
+        if (!mapContainerRef.current || mapRef.current) return;
+
         const map = new Map({
-            container: 'map',
+            container: mapContainerRef.current,
             style: 'https://demotiles.maplibre.org/style.json',
             center: [0, 0],
             zoom: 1,
             attributionControl: false,
-        })
+        });
+
+        mapRef.current = map;
 
         map.on('load', () => {
-            // console.log('Map loaded')
-
             // Convert SVG to base64 data URL
             const planeSVG = `
                 <svg height="20px" width="20px" viewBox="0 0 230.084 230.084" xmlns="http://www.w3.org/2000/svg">
@@ -31,7 +36,75 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
             img.onload = () => map.addImage('plane', img);
             img.src = `data:image/svg+xml;base64,${btoa(planeSVG)}`;
 
-            // Convert flights to points with proper typing
+            // Add initial empty source
+            map.addSource('flights', {
+                type: 'geojson',
+                data: {
+                    type: 'FeatureCollection',
+                    features: []
+                }
+            });
+
+            // Add plane icons layer
+            map.addLayer({
+                id: 'flight-points',
+                type: 'symbol',
+                source: 'flights',
+                layout: {
+                    'icon-image': 'plane',
+                    'icon-size': 1,
+                    'icon-allow-overlap': true
+                }
+            });
+
+            // Add click handlers
+            map.on('click', 'flight-points', (e) => {
+                if (e.features && e.features[0]) {
+                    const flight = e.features[0].properties;
+                    setPopupInfo({
+                        username: flight?.username,
+                        callsign: flight?.callsign,
+                        altitude: flight?.altitude,
+                        speed: flight?.speed
+                    });
+                }
+            });
+
+            map.on('click', (e) => {
+                if (!map.queryRenderedFeatures(e.point, { layers: ['flight-points'] }).length) {
+                    setPopupInfo(null);
+                }
+            });
+
+            map.on('mouseenter', 'flight-points', () => {
+                map.getCanvas().style.cursor = 'pointer';
+            });
+
+            map.on('mouseleave', 'flight-points', () => {
+                map.getCanvas().style.cursor = '';
+            });
+        });
+
+        return () => {
+            map.remove();
+            mapRef.current = null;
+        };
+    }, []); // Empty dependency array - only run once
+
+    // Update flight data when flights prop changes
+    useEffect(() => {
+        if (!mapRef.current || !flights) return;
+
+        const map = mapRef.current;
+        
+        // Wait for map to be loaded
+        if (!map.isStyleLoaded()) {
+            map.on('load', () => updateFlightData());
+        } else {
+            updateFlightData();
+        }
+
+        function updateFlightData() {
             const flightFeatures = flights.map((flight) => ({
                 type: 'Feature' as const,
                 geometry: {
@@ -46,87 +119,20 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
                 }
             }));
 
-            map.addSource('flights', {
-                type: 'geojson',
-                data: {
-                    type: 'FeatureCollection',
-                    features: flightFeatures
-                }
-            })
-
-            // Add plane icons
-            map.addLayer({
-                id: 'flight-points',
-                type: 'symbol',
-                source: 'flights',
-                layout: {
-                    'icon-image': 'plane',
-                    'icon-size': 1,
-                    'icon-allow-overlap': true
-                }
-            });
-
-            // Add click handler - use React state instead of MapLibre popup
-            map.on('click', 'flight-points', (e) => {
-                if (e.features && e.features[0]) {
-                    const flight = e.features[0].properties;
-                    setPopupInfo({
-                        username: flight?.username,
-                        callsign: flight?.callsign,
-                        altitude: flight?.altitude,
-                        speed: flight?.speed
-                    });
-                }
-            });
-
-            // Close popup when clicking elsewhere
-            map.on('click', (e) => {
-                if (!map.queryRenderedFeatures(e.point, { layers: ['flight-points'] }).length) {
-                    setPopupInfo(null);
-                }
-            });
-
-            // Change cursor on hover
-            map.on('mouseenter', 'flight-points', () => {
-                map.getCanvas().style.cursor = 'pointer';
-            });
-
-            map.on('mouseleave', 'flight-points', () => {
-                map.getCanvas().style.cursor = '';
-            });
-
-            // Update flight data when props change
-            if (map.getSource('flights')) {
-                const flightFeatures = flights.map((flight) => ({
-                    type: 'Feature' as const,
-                    geometry: {
-                        type: 'Point' as const,
-                        coordinates: [flight.longitude, flight.latitude] as [number, number]
-                    },
-                    properties: {
-                        callsign: flight.callsign,
-                        username: flight.username,
-                        altitude: flight.altitude,
-                        speed: flight.speed
-                    }
-                }));
-
-                // Update the existing source with new data
-                (map.getSource('flights') as any).setData({
+            const source = map.getSource('flights') as any;
+            if (source) {
+                source.setData({
                     type: 'FeatureCollection',
                     features: flightFeatures
                 });
             }
-        })
-
-        return () => map.remove()
-    }, [flights])
+        }
+    }, [flights]); // Only run when flights change
 
     return (
         <div style={{ position: "relative", width: "100%", height: "100%" }}>
-            <div id='map' className='w-full h-full'>
-            </div>
-
+            <div ref={mapContainerRef} className='w-full h-full' />
+            
             {/* Flight Information Popup */}
             {popupInfo && (
                 <>
