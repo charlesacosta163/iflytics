@@ -1,0 +1,18 @@
+import NavbarMap from "@/components/navbar-map";
+export default function MapLayout({
+    children,
+  }: Readonly<{
+    children: React.ReactNode;
+  }>) {
+    return (
+        <div className="min-h-screen flex flex-col overflow-x-hidden">
+
+            <main className="flex-1 relative">
+              <NavbarMap />
+              {children}
+
+            </main>
+        </div>
+    );
+  }
+  

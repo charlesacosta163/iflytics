@@ -35,9 +35,7 @@ const MapPage = () => {
   }
 
   return (
-    <div className='flex flex-col gap-2'>
-        <span className='text-center text-sm text-light bg-orange-500 rounded-full px-3 py-0.5 font-semibold self-center mt-4'>⚠️ The Map is currently an experimental feature.</span>
-    <div className="h-[calc(100vh-120px)] w-full relative">
+    <div className="h-screen w-full relative">
       {/* Loading overlay */}
       {isLoading && flights.length === 0 && (
         <div className="absolute inset-0 bg-black/20 flex items-center justify-center z-50">
@@ -48,8 +46,8 @@ const MapPage = () => {
       )}
 
       {/* Live indicator */}
-      <div className="absolute top-4 right-4 z-40 bg-white/90 backdrop-blur-sm px-3 py-2 rounded-lg shadow-lg">
-        <div className="flex items-center gap-2">
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-40 bg-white/50 backdrop-blur-sm px-3 py-2 rounded-lg ">
+        <div className="flex items-center gap-2 w-[200px]">
           <div className={`w-2 h-2 rounded-full ${isLoading ? 'bg-yellow-400' : 'bg-green-400'} animate-pulse`}></div>
           <span className="text-sm font-medium">
             {isLoading ? 'Updating...' : 'Expert Server'} • {flights.length} flights
@@ -58,7 +56,6 @@ const MapPage = () => {
       </div>
 
       <FullScreenMap flights={flights} />
-    </div>
     </div>
   )
 }
