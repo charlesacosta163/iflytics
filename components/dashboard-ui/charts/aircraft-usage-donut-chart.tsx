@@ -63,7 +63,7 @@ export function AircraftUsageDonutChart({ aircraftUsageData, timeframe, classNam
   }, [aircraftUsageData]);
 
   return (
-    <Card className={cn("flex flex-col bg-dark w-full", className)}>
+    <Card className={cn("lg:col-span-1 col-span-2 flex flex-col bg-dark w-full", className)}>
       <CardHeader>
               <CardTitle className="text-2xl font-bold text-white flex items-center gap-3">
                 <FaPlane className="text-purple-400" />

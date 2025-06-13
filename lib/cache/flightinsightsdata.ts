@@ -469,43 +469,55 @@ export async function calculateDistanceBetweenAirports(
   originAirport: string,
   destinationAirport: string
 ) {
-  const { latitude_deg: originLatitude, longitude_deg: originLongitude, iso_country: originIsoCountry } =
-    await getAirportCoordinates(originAirport);
-  const {
-    latitude_deg: destinationLatitude,
-    longitude_deg: destinationLongitude,
-    iso_country: destinationIsoCountry,
-  } = await getAirportCoordinates(destinationAirport);
+  try {
+    const { latitude_deg: originLatitude, longitude_deg: originLongitude, iso_country: originIsoCountry } =
+      await getAirportCoordinates(originAirport);
+    const {
+      latitude_deg: destinationLatitude,
+      longitude_deg: destinationLongitude,
+      iso_country: destinationIsoCountry,
+    } = await getAirportCoordinates(destinationAirport);
 
-  // In Nautical Miles
-  const R = 3959; // Miles
+    // In Nautical Miles
+    const R = 3959; // Miles
 
-  const toRadians = (degrees: number) => degrees * (Math.PI / 180);
+    const toRadians = (degrees: number) => degrees * (Math.PI / 180);
 
-  const dLat = toRadians(destinationLatitude - originLatitude);
-  const dLon = toRadians(destinationLongitude - originLongitude);
+    const dLat = toRadians(destinationLatitude - originLatitude);
+    const dLon = toRadians(destinationLongitude - originLongitude);
 
-  const a =
-    Math.sin(dLat / 2) ** 2 +
-    Math.cos(toRadians(originLatitude)) *
-      Math.cos(toRadians(destinationLatitude)) *
-      Math.sin(dLon / 2) ** 2;
+    const a =
+      Math.sin(dLat / 2) ** 2 +
+      Math.cos(toRadians(originLatitude)) *
+        Math.cos(toRadians(destinationLatitude)) *
+        Math.sin(dLon / 2) ** 2;
 
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const distance = Math.floor(R * c * 0.868976);
 
-  return {
-    distance: Math.floor(R * c * 0.868976),
-    originIsoCountry: originIsoCountry,
-    destinationIsoCountry: destinationIsoCountry,
-    originCoordinates: {
-      latitude: originLatitude,
-      longitude: originLongitude,
-    },
-    destinationCoordinates: {
-      latitude: destinationLatitude,
-      longitude: destinationLongitude,
-    }
-  };
+    return {
+      distance,
+      originCoordinates: {
+        latitude: originLatitude,
+        longitude: originLongitude,
+      },
+      destinationCoordinates: {
+        latitude: destinationLatitude,
+        longitude: destinationLongitude,
+      },
+      originIsoCountry: originIsoCountry,
+      destinationIsoCountry: destinationIsoCountry,
+    };
+  } catch (error) {
+    // Ensure we always return the expected structure
+    return {
+      distance: 0,
+      originCoordinates: { latitude: 0, longitude: 0 },
+      destinationCoordinates: { latitude: 0, longitude: 0 },
+      originIsoCountry: 'US',
+      destinationIsoCountry: 'US'
+    };
+  }
 }
 // Utilize the 
 export function getTop5Countries(routes: FlightRoute[]) {

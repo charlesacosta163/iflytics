@@ -89,15 +89,17 @@ const Sidebar = () => {
             
         </section>
 
-        <div className="mt-auto flex flex-col gap-2">
-        <Link href="/map" className="flex gap-4 text-blue-400 bg-blue-500/15 hover:bg-blue-500/30 font-medium items-center rounded-lg px-3 py-2 transition-colors duration-200 justify-center text-sm">
-            <LiaGlobeAmericasSolid />
-            Map
-          </Link>
-          <Link href="/" className="flex gap-4 text-orange-400 bg-orange-500/15 hover:bg-orange-500/30 font-medium items-center rounded-lg px-3 py-2 transition-colors duration-200 justify-center text-sm">
-            <BsIncognito />
-            Guest
-          </Link>
+        <div className="mt-auto flex flex-col gap-4">
+          <div className="flex gap-4">
+            <Link href="/map" className="flex gap-4 text-blue-400 bg-blue-500/15 hover:bg-blue-500/30 font-medium items-center rounded-lg px-3 py-2 transition-colors duration-200 justify-center text-sm w-full">
+              <LiaGlobeAmericasSolid />
+              Map
+            </Link>
+            <Link href="/" className="flex gap-4 text-orange-400 bg-orange-500/15 hover:bg-orange-500/30 font-medium items-center rounded-lg px-3 py-2 transition-colors duration-200 justify-center text-sm w-full">
+              <BsIncognito />
+              Guest
+            </Link>
+          </div>
           <LogoutButton className="w-full font-medium hover:bg-gray-800 cursor-pointer transition-colors duration-200"/>
         </div>
 

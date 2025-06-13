@@ -223,37 +223,37 @@ export async function getFullAirportInfo(airportIcao: string) {
 
 export async function getAirportCoordinates(airportIcao: string) {
     try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_AIRPORT_DB_API_URL}/${airportIcao}?apiToken=${process.env.AIRPORT_DB_API_KEY}`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${API_KEY}`
-            },
-            next: { revalidate: 3600 },
-            signal: AbortSignal.timeout(10000) // 10 second timeout
-        });
+        // const response = await fetch(`${process.env.NEXT_PUBLIC_AIRPORT_DB_API_URL}/${airportIcao}?apiToken=${process.env.AIRPORT_DB_API_KEY}`, {
+        //     method: "GET",
+        //     headers: {
+        //         "Content-Type": "application/json",
+        //         "Authorization": `Bearer ${API_KEY}`
+        //     },
+        //     next: { revalidate: 3600 },
+        //     signal: AbortSignal.timeout(10000) // 10 second timeout
+        // });
 
-        if (!response.ok) {
-            console.error(`Airport coordinates API error for ${airportIcao}:`, response.status);
-            return { latitude_deg: 0, longitude_deg: 0 }; // Fallback coordinates
-        }
+        // if (!response.ok) {
+        //     console.error(`Airport coordinates API error for ${airportIcao}:`, response.status);
+        //     return { latitude_deg: 0, longitude_deg: 0 }; // Fallback coordinates
+        // }
 
-        const data = await response.json();
+        // const data = await response.json();
         
-        // Validate the data exists and is numeric
-        if (!data || 
-            typeof data.latitude_deg !== 'number' || 
-            typeof data.longitude_deg !== 'number' ||
-            isNaN(data.latitude_deg) || 
-            isNaN(data.longitude_deg)) {
-            console.error(`Invalid coordinates for ${airportIcao}:`, data);
-            return { latitude_deg: 0, longitude_deg: 0 }; // Fallback coordinates
-        }
+        // // Validate the data exists and is numeric
+        // if (!data || 
+        //     typeof data.latitude_deg !== 'number' || 
+        //     typeof data.longitude_deg !== 'number' ||
+        //     isNaN(data.latitude_deg) || 
+        //     isNaN(data.longitude_deg)) {
+        //     console.error(`Invalid coordinates for ${airportIcao}:`, data);
+        //     return { latitude_deg: 0, longitude_deg: 0 }; // Fallback coordinates
+        // }
 
         return {
-            latitude_deg: data.latitude_deg,
-            longitude_deg: data.longitude_deg,
-            iso_country: data.iso_country,
+            latitude_deg: 0,
+            longitude_deg: 0,
+            iso_country: "AAAA",
         };
         
     } catch (error) {

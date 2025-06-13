@@ -34,6 +34,10 @@ import { convertMinutesToHours } from "@/lib/utils";
 import {RouteMap} from "./maps/route-map";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
+import { DistancePerDayLineChart } from "../charts/distance-per-day-line-chart";
+
+
+let maintenanceMode = true;
 
 const FlightsRoutes = async ({ flights }: { flights: Flight[] }) => {
     // console.log(`🔄 FlightsRoutes called at ${new Date().toISOString()}`); --> Debugging
@@ -68,7 +72,13 @@ const FlightsRoutes = async ({ flights }: { flights: Flight[] }) => {
   
   // console.log(`⏱️ Route calculation took ${endTime - startTime}ms`); --> Debugging
   
-  const uniqueRoutes = getUniqueRoutes(routesWithDistances);
+  const uniqueRoutes = getUniqueRoutes(
+    routesWithDistances.map(route => ({
+      ...route,
+      originIsoCountry: route.originIsoCountry || 'US',
+      destinationIsoCountry: route.destinationIsoCountry || 'US'
+    }))
+  );
 
   const { totalDistanceTraveled, longestRouteInfo } =
     await calculateTotalDistance(validFlights);
@@ -191,7 +201,7 @@ const FlightsRoutes = async ({ flights }: { flights: Flight[] }) => {
                                 </span>
                               </div>
                             ) : (
-                              <span className="text-gray-400 italic">Calculating...</span>
+                              <span className="text-gray-400 italic">N/A...</span>
                             )}
                           </TableCell>
                           <TableCell className="text-right">
@@ -205,7 +215,7 @@ const FlightsRoutes = async ({ flights }: { flights: Flight[] }) => {
                                 </span>
                               </div>
                             ) : (
-                              <span className="text-gray-400 italic">Calculating...</span>
+                              <span className="text-gray-400 italic">N/A</span>
                             )}
                           </TableCell>
                           <TableCell className="text-center">
@@ -292,7 +302,7 @@ const FlightsRoutes = async ({ flights }: { flights: Flight[] }) => {
               <p className="text-green-100 text-sm font-medium">
                 Total Distance
               </p>
-              <p className="text-3xl font-bold">{shortenNumber(totalDistanceTraveled)}</p>
+              <p className="text-2xl font-bold">{maintenanceMode ? "Under Maintenance" : shortenNumber(totalDistanceTraveled)}</p>
               <p className="text-green-100 text-xs">nautical miles</p>
             </div>
             <div className="bg-green-400/30 p-3 rounded-full">
@@ -307,8 +317,8 @@ const FlightsRoutes = async ({ flights }: { flights: Flight[] }) => {
               <p className="text-purple-100 text-sm font-medium">
                 Avg Route Length
               </p>
-              <p className="text-3xl font-bold">
-                {shortenNumber(Math.round(totalDistanceTraveled / validFlights.length))}
+              <p className="text-2xl font-bold">
+                {maintenanceMode ? "Under Maintenance" : shortenNumber(Math.round(totalDistanceTraveled / validFlights.length))}
               </p>
               <p className="text-purple-100 text-xs">nautical miles</p>
             </div>
@@ -327,10 +337,10 @@ const FlightsRoutes = async ({ flights }: { flights: Flight[] }) => {
                 Longest Route
               </p>
               <p className="text-2xl font-bold">
-                {longestRouteInfo.origin}-{longestRouteInfo.destination}
+                {maintenanceMode ? "Under Maintenance" : `${longestRouteInfo.origin}-${longestRouteInfo.destination}`}
               </p>
               <p className="text-orange-100 text-xs">
-                {longestRouteInfo.distance} nm
+                {maintenanceMode ? "Under Maintenance" : `${longestRouteInfo.distance} nm`}
               </p>
             </div>
             <div className="bg-orange-400/30 p-3 rounded-full">
@@ -359,7 +369,17 @@ const FlightsRoutes = async ({ flights }: { flights: Flight[] }) => {
         </CardHeader>
         <CardContent className="pb-4">
           <div className="space-y-6">
-            {top5Countries.length > 0 ? (
+            {maintenanceMode ? (
+              <div className="text-center py-8">
+                <div className="text-gray-400 mb-2">
+                  <svg className="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg> 
+                </div>
+                <p className="text-gray-500 font-medium">Under Maintenance</p>
+                <p className="text-sm text-gray-400 mt-1">We're working on it!</p>
+              </div>
+            ) : (
               top5Countries.map((country: [string, number], index) => {
                 // Calculate percentage based on the highest value for better visual distribution
                 const [countryName, count] = country;
@@ -398,20 +418,14 @@ const FlightsRoutes = async ({ flights }: { flights: Flight[] }) => {
                   </div>
                 );
               })
-            ) : (
-              <div className="text-center py-8">
-                <div className="text-gray-400 mb-2">
-                  <svg className="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </div>
-                <p className="text-gray-500 font-medium">No flight data available</p>
-                <p className="text-sm text-gray-400 mt-1">Start flying to see your top destinations!</p>
-              </div>
             )}
           </div>
         </CardContent>
       </Card>
+
+      {/* <div className="lg:col-span-3 border-2 border-red-500">
+        <DistancePerDayLineChart />
+      </div> */}
 
       {/* Route Analytics */}
       {/* <div className="lg:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-6"> */}

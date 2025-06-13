@@ -17,6 +17,7 @@ import { FaPlane } from "react-icons/fa";
 
 import { TbBuildingAirport, TbBuildingBroadcastTower } from "react-icons/tb";
 
+let maintenanceMode = true;
 
 const DirectoryPage = async ({
   searchParams,
@@ -169,7 +170,7 @@ const DirectoryPage = async ({
         Directory
       </h1>
 
-      <Tabs defaultValue="airport" className="!w-full">
+      <Tabs defaultValue="airport-list" className="!w-full">
         <TabsList className="mt-4 w-full bg-gray-500 p-1 rounded-full">
           <TabsTrigger
             value="airport"
@@ -189,7 +190,7 @@ const DirectoryPage = async ({
             value="airport-list"
             className="data-[state=active]:bg-gray-700 data-[state=active]:text-white data-[state=inactive]:bg-transparent data-[state=inactive]:text-gray-300 transition-all duration-200 rounded-full flex gap-2 items-center"
           >
-            <TbBuildingBroadcastTower className="w-6 h-6 text-light" />
+            <TbBuildingBroadcastTower className="w-6 h-6 text-green-500 animate-pulse" />
             Active ATC
           </TabsTrigger>
         </TabsList>
@@ -229,6 +230,12 @@ const DirectoryPage = async ({
         </TabsContent>
 
         <TabsContent value="airport">
+
+          {maintenanceMode ? (
+            <div className="text-center py-8">
+              <p className="text-gray-500">This feature is currently under maintenance, please check back later.</p>
+            </div>
+          ) : (
           <div className="flex flex-col gap-6">
             <Card className="p-6 bg-gradient-to-br from-gray to-dark text-white">
               <h2 className="text-2xl tracking-tight font-bold mb-2 flex gap-2 items-center">
@@ -265,6 +272,7 @@ const DirectoryPage = async ({
 
             <Component />
           </div>
+          )}
         </TabsContent>
 
         <TabsContent value="airport-list">

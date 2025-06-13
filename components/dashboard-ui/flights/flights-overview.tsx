@@ -220,7 +220,7 @@ const FlightsOverview = ({
             className="col-span-2"
           />
         ) : (
-          <Card className="lg:col-span-2 bg-gradient-to-br from-gray-900 to-gray-800 border-gray-700">
+          <Card className="col-span-2 bg-gradient-to-br from-gray-900 to-gray-800 border-gray-700">
             <CardHeader>
               <CardTitle className="text-2xl font-bold text-white flex items-center gap-3">
                 <FaPlane className="text-blue-400" />
@@ -246,7 +246,7 @@ const FlightsOverview = ({
             className="lg:col-span-1"  
           />
         ) : (
-          <Card className="lg:col-span-1 bg-gradient-to-br from-gray-900 to-gray-800 border-gray-700">
+          <Card className="col-span-2 lg:col-span-1 bg-gradient-to-br from-gray-900 to-gray-800 border-gray-700">
             <CardHeader>
               <CardTitle className="text-2xl font-bold text-white flex items-center gap-3">
                 <FaPlane className="text-purple-400" />
