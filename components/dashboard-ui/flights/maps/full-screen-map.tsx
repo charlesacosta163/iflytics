@@ -169,9 +169,9 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
         "🕯️", "🧯", "🛢️", "💸", "💵", "💴", "💶", "💷", "💳", "🧾",
         "hi", "bye", "wow", "oof", "hehe", "joe", "poo", "bus", "boeing",
         "mcdonalds", "burger king", "wendys", "subway", "pizza hut", "dominos",
-        "kfc", "chick fil a", "taco bell", "starbucks", "booing 737 min", "airboos a322 paleo",
+        "kfc", "chick fil a", "taco bell", "starbucks", "booing 737 min", "a340 paleo",
         "booing 797", "airboos a350-10000", "mcdonald doglas md-500", "lukla airport",
-        "toyota sikorsky","airplane 101"
+        "toyota sikorsky","airplane", "✈️","💺", "🛣️"
         ];
 
       chosenCompliment =
