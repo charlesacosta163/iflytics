@@ -1,9 +1,11 @@
 'use client'
 
-import React from 'react'
+import React, { useMemo } from 'react'
 import useSWR from 'swr'
 import FullScreenMap from '@/components/dashboard-ui/flights/maps/full-screen-map'
 import { getFlightsFromServer } from '@/lib/actions'
+
+import { aviationCompliments, alternator } from '@/lib/data'
 
 const fetcher = () => getFlightsFromServer()
 
@@ -17,6 +19,15 @@ const MapPage = () => {
       revalidateOnReconnect: true
     }
   )
+
+  // Memoize quirkyFlights to prevent constant recreation
+  const quirkyFlights = useMemo(() => {
+    return flights.map((flight: any) => ({
+      ...flight,
+      emoji: alternator[Math.floor(Math.random() * alternator.length)],
+      compliment: aviationCompliments[Math.floor(Math.random() * aviationCompliments.length)]
+    }))
+  }, [flights]) // Only recreate when flights data actually changes
 
   if (error) {
     return (
@@ -55,7 +66,7 @@ const MapPage = () => {
         </div>
       </div>
 
-      <FullScreenMap flights={flights} />
+      <FullScreenMap flights={quirkyFlights} />
     </div>
   )
 }
