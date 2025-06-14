@@ -530,10 +530,10 @@ const ComplimentLeaderboard = ({ flights }: { flights: any[] }) => {
   if (topUsers.length === 0) return null;
 
   return (
-    <div className="absolute right-0 top-1/2 transform -translate-y-1/2 z-[1000]">
+    <div className="absolute right-4 top-1/2 transform -translate-y-1/2 z-[1000]">
       {/* Slide-out Panel */}
       <div className={`
-        bg-white/90 backdrop-blur-sm rounded-l-xl shadow-xl border border-gray-200 
+        bg-white/90 backdrop-blur-sm rounded-xl shadow-xl border border-gray-200 
         transition-transform duration-300 ease-in-out 
         w-72 md:w-80
         ${isOpen ? 'translate-x-0' : 'translate-x-full'}
