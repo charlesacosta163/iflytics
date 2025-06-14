@@ -28,12 +28,7 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
     });
     
     // Remove duplicates by username and take max 10 results
-    const uniqueUsers = filtered.reduce((acc, flight) => {
-      if (!acc.find((f: any) => f.username === flight.username)) {
-        acc.push(flight);
-      }
-      return acc;
-    }, []).slice(0, 10);
+    const uniqueUsers = filtered.slice(0, 15);
 
     setSearchResults(uniqueUsers);
     setShowResults(uniqueUsers.length > 0);
@@ -59,6 +54,7 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
     
     // Show popup for the user
     setPopupInfo({
+      role: flight.role,
       emoji: flight.emoji,
       customImage: flight.customImage,
       compliment: flight.compliment,
@@ -111,7 +107,7 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
         type: "symbol",
         source: "flights",
         layout: {
-          "icon-image": ["get", "emojiId"],
+          "icon-image": ["get", "imageId"],
           "icon-size": 0.8,
           "icon-allow-overlap": true,
         },
@@ -161,21 +157,29 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
     const map = mapRef.current;
     
     const updateFlightData = () => {
-      // Get unique emojis from current flights
+      // Get unique emojis AND users with custom images
       const uniqueEmojis = [...new Set(flights.map(f => f.emoji).filter(Boolean))];
+      const usersWithCustomImages = flights.filter(f => f.customImage);
+      
+      // console.log('Unique emojis:', uniqueEmojis.length);
+      // console.log('Users with custom images:', usersWithCustomImages.map(u => ({username: u.username, customImage: u.customImage})));
+      
       let loadedImages = 0;
-      const totalImages = uniqueEmojis.length;
+      const totalImages = uniqueEmojis.length + usersWithCustomImages.length;
+      
+      const checkAllImagesLoaded = () => {
+        loadedImages++;
+       // console.log(`Loaded ${loadedImages}/${totalImages} images`);
+        if (loadedImages === totalImages) {
+          // console.log('All images loaded, updating map data');
+          updateMapData();
+        }
+      };
 
-      if (totalImages === 0) return;
-
-      // Function to create emoji images
+      // Create emoji images (existing working logic)
       const createEmojiImage = (emoji: string) => {
-        // Check if image already exists
         if (map.hasImage(`emoji-${emoji}`)) {
-          loadedImages++;
-          if (loadedImages === totalImages) {
-            updateMapData();
-          }
+          checkAllImagesLoaded();
           return;
         }
 
@@ -188,44 +192,107 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
           ctx.textAlign = "center";
           ctx.textBaseline = "middle";
           ctx.fillText(emoji, 16, 16);
+          ctx.fillStyle = "white";
+          ctx.fillText(emoji, 16, 16);
         }
 
         const img = new Image();
         img.onload = () => {
           try {
             map.addImage(`emoji-${emoji}`, img);
+            // console.log(`Loaded emoji: ${emoji}`);
           } catch (error) {
-            console.log(`Image emoji-${emoji} already exists`);
+            // console.log(`Image emoji-${emoji} already exists`);
           }
-          loadedImages++;
-          
-          if (loadedImages === totalImages) {
-            updateMapData();
-          }
+          checkAllImagesLoaded();
         };
         img.src = canvas.toDataURL();
       };
 
+      // Create custom user images (new functionality)
+      const createCustomUserImage = (flight: any) => {
+        const imageId = `user-${flight.username}`;
+        
+        // console.log(`Attempting to load custom image for ${flight.username}:`, flight.customImage);
+        
+        if (map.hasImage(imageId)) {
+          // console.log(`Custom image for ${flight.username} already exists`);
+          checkAllImagesLoaded();
+          return;
+        }
+
+        const img = new Image();
+        img.crossOrigin = "anonymous";
+        
+        img.onload = () => {
+          const canvas = document.createElement("canvas");
+          canvas.width = canvas.height = 32;
+          const ctx = canvas.getContext("2d");
+          
+          if (ctx) {
+            // Enable high-quality rendering
+            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingQuality = 'high';
+            
+            // Create perfect circle clipping
+            ctx.beginPath();
+            ctx.arc(16, 16, 16, 0, 2 * Math.PI, false);
+            ctx.clip();
+            
+            // Draw the image to fill the entire circle
+            ctx.drawImage(img, 0, 0, 32, 32);
+          }
+
+          try {
+            const imageData = ctx?.getImageData(0, 0, 32, 32);
+            if (imageData) {
+              map.addImage(imageId, imageData);
+            }
+          } catch (error) {
+            // console.log(`Error adding custom image ${imageId}:`, error);
+          }
+          checkAllImagesLoaded();
+        };
+        
+        img.onerror = (error) => {
+          // console.log(`Failed to load custom image for ${flight.username}:`, error);
+          // console.log(`Image URL was:`, flight.customImage);
+          checkAllImagesLoaded();
+        };
+        
+        img.src = flight.customImage;
+      };
+
       // Function to update the actual map data
       const updateMapData = () => {
-        const flightFeatures = flights.map((flight) => ({
-          type: "Feature" as const,
-          geometry: {
-            type: "Point" as const,
-            coordinates: [flight.longitude, flight.latitude] as [number, number],
-          },
-          properties: {
-            callsign: flight.callsign,
-            username: flight.username,
-            altitude: flight.altitude,
-            speed: flight.speed,
-            emoji: flight.emoji,
-            compliment: flight.compliment,
-            customImage: flight.customImage,
-            emojiId: `emoji-${flight.emoji}`,
-          },
-        }));
+        const flightFeatures = flights.map((flight) => {
+          // Determine which image to use
+          const imageId = flight.customImage ? `user-${flight.username}` : `emoji-${flight.emoji}`;
+          
+          // console.log(`Flight ${flight.username} using imageId: ${imageId}, customImage: ${!!flight.customImage}`);
+          
+          return {
+            type: "Feature" as const,
+            id: `flight-${flight.username}`,
+            geometry: {
+              type: "Point" as const,
+              coordinates: [flight.longitude, flight.latitude] as [number, number],
+            },
+            properties: {
+              callsign: flight.callsign,
+              username: flight.username,
+              altitude: flight.altitude,
+              speed: flight.speed,
+              emoji: flight.emoji,
+              compliment: flight.compliment,
+              customImage: flight.customImage,
+              imageId: imageId, // Dynamic image ID
+            },
+          };
+        });
 
+        // console.log('Updating map with features:', flightFeatures.length);
+        
         const source = map.getSource("flights") as any;
         if (source) {
           source.setData({
@@ -235,8 +302,18 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
         }
       };
 
-      // Create images for all unique emojis
+      // Handle case where there are no images to load
+      if (totalImages === 0) {
+        // console.log('No images to load, updating map data immediately');
+        updateMapData();
+        return;
+      }
+
+      // Load emoji images
       uniqueEmojis.forEach(createEmojiImage);
+      
+      // Load custom user images
+      usersWithCustomImages.forEach(createCustomUserImage);
     };
 
     // Wait for map to be loaded
@@ -348,7 +425,7 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
           />
 
           {/* Flight Information Card */}
-          <div className="absolute top-5 left-5 bg-light rounded-xl overflow-hidden font-sans w-[280px] shadow-2xl z-[1001] border border-gray-300">
+          <div className="absolute top-16 left-5 bg-light rounded-xl overflow-hidden font-sans w-[280px] shadow-2xl z-[1001] border border-gray-300">
             {/* Header */}
             <div className="p-6 pb-4 border-b-2 border-blue-500 bg-white">
               <div className="flex justify-between items-start">
@@ -364,7 +441,7 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
                       popupInfo.emoji
                     )}
                   </div>
-                  <div className="text-2xl font-bold text-gray-900">
+                  <div className={`text-2xl font-bold text-gray-900 ${popupInfo.role === "staff" ? "!text-blue-500" : ""}`}>
                     {popupInfo.callsign}
                   </div>
                 </div>
@@ -378,8 +455,8 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
                   <div className="text-gray-500 text-xs uppercase tracking-wide mb-1">
                     Pilot
                   </div>
-                  <div className="text-gray-900 font-semibold">
-                    {popupInfo.username || "Unknown"}
+                  <div className={`text-gray-900 font-semibold ${popupInfo.role === "staff" ? "!text-blue-500" : ""}`}>
+                    {popupInfo.username || "Unknown"} {popupInfo.role === "staff" && <span className="text-xs text-blue-500">(STAFF)</span>}
                   </div>
                 </div>
 

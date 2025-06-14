@@ -21,12 +21,37 @@ const MapPage = () => {
     }
   )
 
+  // Add this helper function before the component
+const getConsistentEmojiForUser = (username: string) => {
+  // Handle null/undefined usernames
+  if (!username) {
+    return "🧟"; // Return first emoji as fallback
+  }
+  
+  // Simple hash function to convert username to a consistent number
+  let hash = 0;
+  for (let i = 0; i < username.length; i++) {
+    const char = username.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash; // Convert to 32-bit integer
+  }
+  // Use absolute value and modulo to get consistent index
+  return alternator[Math.abs(hash) % alternator.length];
+};
+
+const findUserRole = (username: string) => {
+  return customUserImages.find(image => image.username === username)?.role || "user";
+}
+
   // Memoize quirkyFlights to prevent constant recreation
   const quirkyFlights = useMemo(() => {
     return flights.map((flight: any) => ({
       ...flight,
-      emoji: alternator[Math.floor(Math.random() * alternator.length)],
-      compliment: aviationCompliments[Math.floor(Math.random() * aviationCompliments.length)],
+      role: findUserRole(flight.username),
+      emoji: getConsistentEmojiForUser(flight.username),
+      compliment: flight.username 
+        ? aviationCompliments[Math.abs(flight.username.split('').reduce((a: any, b: any) => a + b.charCodeAt(0), 0)) % aviationCompliments.length]
+        : aviationCompliments[0], // Fallback compliment
       customImage: customUserImages.find(image => image.username === flight.username)?.image
     }))
   }, [flights]) // Only recreate when flights data actually changes
