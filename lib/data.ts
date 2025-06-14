@@ -415,15 +415,23 @@ export const alternator = [
   "🦪", "🍤", "🍚", "🍘", "🍥", "🥠", "🥮", "🍢", "🍡", "🍧",
   "🍨", "🍦", "🥧", "🍰", "🎂", "🧁", "🍮", "🍭", "🍬", "🍫",
   "🍿", "🍩", "🍪", "🥛", "🍼", "☕", "🫖", "🍵", "🍶", "🍺",
-  "🍻", "🥂", "🍷", "🥃", "🍸", "🍹", "🧃", "🧉", "🧊", "lol",
+  "🍻", "🥂", "🍷", "🥃", "🍸", "🍹", "🧃", "🧉", "🧊",
   "💻", "🖥️", "📱", "📲", "⌚", "⌨️", "🖱️", "🖲️", "🕹️", "💽",
   "💾", "💿", "📀", "📼", "📷", "📸", "📹", "🎥", "📽️", "🎞️",
   "📞", "☎️", "📟", "📠", "📺", "📻", "🎙️", "🎚️", "🎛️", "🧭",
   "⏰", "⏱️", "⏲️", "🕰️", "🌡️", "🧱", "🔋", "🔌", "💡", "🔦",
   "🕯️", "🧯", "🛢️", "💸", "💵", "💴", "💶", "💷", "💳", "🧾",
-  "hi", "bye", "wow", "oof", "joe", "poo", "bus", "boeing",
-  "mcdonalds", "burger king", "wendys", "subway", "pizza hut", "dominos",
-  "kfc", "chick fil a", "taco bell", "starbucks", "booing 737 min", "a340 paleo",
-  "booing 797", "airboos a350-10000", "mcdonald doglas md-500", "lukla airport",
-  "toyota sikorsky","airplane", "✈️","💺", "🛣️"
+  "✈️","💺", "🛣️"
   ];
+
+  export const customUserImages = [
+    {
+      username: "rulizalhafizh",
+      image: `https://images.weserv.nl/?url=${encodeURIComponent("https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/rulizalhafizh/288/1061097_2.png")}&w=64&h=64&fit=cover&mask=circle`
+    },
+    {
+      username: "Veloist",
+      image: `https://images.weserv.nl/?url=${encodeURIComponent("https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/veloist/288/1509072_2.png")}&w=64&h=64&fit=cover&mask=circle`
+    }
+  ]
+    

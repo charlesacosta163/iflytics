@@ -57,31 +57,31 @@ export function DistancePerDayLineChart({ className }: { className?: string }) {
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" height={250}>
-          <LineChart
-            accessibilityLayer
-            data={chartData}
-            margin={{
+            <LineChart
+              accessibilityLayer
+              data={chartData}
+              margin={{
               left: -8,
-              right: 12,
+                right: 12,
               top: 20,
               bottom: 20,
-            }}
-          >
-            <CartesianGrid vertical={false} />
-            <XAxis
-              dataKey="month"
-              tickLine={false}
-              axisLine={false}
-              tickMargin={8}
-              tickFormatter={(value) => value.slice(0, 3)}
-            />
+              }}
+            >
+              <CartesianGrid vertical={false} />
+              <XAxis
+                dataKey="month"
+                tickLine={false}
+                axisLine={false}
+                tickMargin={8}
+                tickFormatter={(value) => value.slice(0, 3)}
+              />
             <YAxis
               tickLine={false}
               axisLine={false}
               tickMargin={8}
             />
             <Tooltip
-              cursor={false}
+                cursor={false}
               content={({ active, payload, label }) => {
                 if (!active || !payload || !payload.length) {
                   return null;
@@ -98,21 +98,21 @@ export function DistancePerDayLineChart({ className }: { className?: string }) {
                   </div>
                 );
               }}
-            />
-            <Line
-              dataKey="desktop"
-              type="linear"
+              />
+              <Line
+                dataKey="desktop"
+                type="linear"
               stroke="#3B82F6"
-              strokeWidth={2}
-              dot={{
+                strokeWidth={2}
+                dot={{
                 fill: "#3B82F6",
-              }}
-              activeDot={{
-                r: 6,
-              }}
-            />
-          </LineChart>
-        </ResponsiveContainer>
+                }}
+                activeDot={{
+                  r: 6,
+                }}
+              />
+            </LineChart>
+          </ResponsiveContainer>
       </CardContent>
     </Card>
   );

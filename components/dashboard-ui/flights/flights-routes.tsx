@@ -88,26 +88,26 @@ const FlightsRoutes = async ({ flights }: { flights: Flight[] }) => {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-      <div className="lg:col-span-3 border-2 border-yellow-200 bg-yellow-50 p-6 rounded-lg flex items-center gap-2">
-        <VscCopilotWarning className="w-6 h-6 text-yellow-500" />
-        <p className="text-sm text-yellow-700">
+          <div className="lg:col-span-3 border-2 border-yellow-200 bg-yellow-50 p-6 rounded-lg flex items-center gap-2">
+            <VscCopilotWarning className="w-6 h-6 text-yellow-500" />
+            <p className="text-sm text-yellow-700">
           Note: The route analysis and summary stats are a{" "}
           <b>premium feature</b>. Currently free to use during development/early
           alpha
-        </p>
-      </div>
-      {/* Summary Stats Cards */}
-      <div className="lg:col-span-3 grid grid-cols-1 md:grid-cols-4 gap-4">
+            </p>
+          </div>
+          {/* Summary Stats Cards */}
+          <div className="lg:col-span-3 grid grid-cols-1 md:grid-cols-4 gap-4">
         <div className="flex flex-col gap-2 bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl p-6 text-white">
-          <div className="flex items-center justify-between">
-            <div>
+              <div className="flex items-center justify-between">
+                <div>
               <p className="text-blue-100 text-sm font-medium">
                 Total Unique Routes
               </p>
               <p className="text-3xl font-bold">{uniqueRoutes.length}</p>
-            </div>
-            <div className="bg-blue-400/30 p-3 rounded-full">
-              <FaRoute className="w-6 h-6 text-blue-100" />
+                </div>
+                <div className="bg-blue-400/30 p-3 rounded-full">
+                  <FaRoute className="w-6 h-6 text-blue-100" />
             </div>
           </div>
           <Dialog>
@@ -294,45 +294,45 @@ const FlightsRoutes = async ({ flights }: { flights: Flight[] }) => {
               </div>
             </DialogContent>
           </Dialog>
-        </div>
+            </div>
 
-        <div className="bg-gradient-to-r from-green-500 to-green-600 rounded-xl p-6 text-white">
-          <div className="flex items-center justify-between">
-            <div>
+            <div className="bg-gradient-to-r from-green-500 to-green-600 rounded-xl p-6 text-white">
+              <div className="flex items-center justify-between">
+                <div>
               <p className="text-green-100 text-sm font-medium">
                 Total Distance
               </p>
               <p className="text-2xl font-bold">{maintenanceMode ? "Under Maintenance" : shortenNumber(totalDistanceTraveled)}</p>
-              <p className="text-green-100 text-xs">nautical miles</p>
+                  <p className="text-green-100 text-xs">nautical miles</p>
+                </div>
+                <div className="bg-green-400/30 p-3 rounded-full">
+                  <RiPinDistanceLine className="w-6 h-6 text-green-100" />
+                </div>
+              </div>
             </div>
-            <div className="bg-green-400/30 p-3 rounded-full">
-              <RiPinDistanceLine className="w-6 h-6 text-green-100" />
-            </div>
-          </div>
-        </div>
 
-        <div className="bg-gradient-to-r from-purple-500 to-purple-600 rounded-xl p-6 text-white">
-          <div className="flex items-center justify-between">
-            <div>
+            <div className="bg-gradient-to-r from-purple-500 to-purple-600 rounded-xl p-6 text-white">
+              <div className="flex items-center justify-between">
+                <div>
               <p className="text-purple-100 text-sm font-medium">
                 Avg Route Length
               </p>
               <p className="text-2xl font-bold">
                 {maintenanceMode ? "Under Maintenance" : shortenNumber(Math.round(totalDistanceTraveled / validFlights.length))}
               </p>
-              <p className="text-purple-100 text-xs">nautical miles</p>
-            </div>
-            <div className="bg-purple-400/30 p-3 rounded-full">
-              <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                  <p className="text-purple-100 text-xs">nautical miles</p>
+                </div>
+                <div className="bg-purple-400/30 p-3 rounded-full">
+                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z" />
-              </svg>
+                  </svg>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
 
-        <div className="bg-gradient-to-r from-orange-500 to-orange-600 rounded-xl p-6 text-white">
-          <div className="flex items-center justify-between">
-            <div>
+            <div className="bg-gradient-to-r from-orange-500 to-orange-600 rounded-xl p-6 text-white">
+              <div className="flex items-center justify-between">
+                <div>
               <p className="text-orange-100 text-sm font-medium">
                 Longest Route
               </p>
@@ -342,20 +342,20 @@ const FlightsRoutes = async ({ flights }: { flights: Flight[] }) => {
               <p className="text-orange-100 text-xs">
                 {maintenanceMode ? "Under Maintenance" : `${longestRouteInfo.distance} nm`}
               </p>
-            </div>
-            <div className="bg-orange-400/30 p-3 rounded-full">
-              <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                </div>
+                <div className="bg-orange-400/30 p-3 rounded-full">
+                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" />
-              </svg>
+                  </svg>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
 
-      {/* Route Map */}
+          {/* Route Map */}
       <div className="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-200 h-[500px] lg:h-auto">
         <RouteMap routes={uniqueRoutes} />
-      </div>
+                </div>
 
       {/* Top 5 Countries List */}
       <Card className="bg-gradient-to-br from-gray-700 to-gray-800 rounded-xl shadow-sm border border-gray-200">
@@ -374,7 +374,7 @@ const FlightsRoutes = async ({ flights }: { flights: Flight[] }) => {
                 <div className="text-gray-400 mb-2">
                   <svg className="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg> 
+                  </svg>
                 </div>
                 <p className="text-gray-500 font-medium">Under Maintenance</p>
                 <p className="text-sm text-gray-400 mt-1">We're working on it!</p>
@@ -393,13 +393,13 @@ const FlightsRoutes = async ({ flights }: { flights: Flight[] }) => {
                       <div className="flex items-center gap-3">
                         <div className="flex items-center justify-center w-8 h-8 rounded-full bg-gray text-white text-sm font-bold">
                           {index + 1}
-                        </div>
+            </div>
                         <div>
                           <p className="font-semibold text-light">{countryName}</p>
                           <p className="text-sm text-gray-200">
                             {count} flight{count !== 1 ? 's' : ''}
                           </p>
-                        </div>
+            </div>
                       </div>
                       <div className="text-right">
                         <p className="text-lg font-bold text-light">
@@ -408,7 +408,7 @@ const FlightsRoutes = async ({ flights }: { flights: Flight[] }) => {
                         <p className="text-xs text-gray-200">
                           {((count / top5Countries.reduce((sum, c) => sum + c[1], 0)) * 100).toFixed(1)}%
                         </p>
-                      </div>
+                    </div>
                     </div>
                     <Progress 
                     // change progress bar color
@@ -419,19 +419,19 @@ const FlightsRoutes = async ({ flights }: { flights: Flight[] }) => {
                 );
               })
             )}
-          </div>
+              </div>
         </CardContent>
       </Card>
 
       {/* <div className="lg:col-span-3 border-2 border-red-500">
         <DistancePerDayLineChart />
-      </div> */}
+          </div> */}
 
-      {/* Route Analytics */}
-      {/* <div className="lg:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-6"> */}
-
-      {/* Distance Distribution Chart */}
-      {/* <div className="bg-white rounded-xl shadow-sm border border-gray-200">
+          {/* Route Analytics */}
+          {/* <div className="lg:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-6"> */}
+            
+            {/* Distance Distribution Chart */}
+            {/* <div className="bg-white rounded-xl shadow-sm border border-gray-200">
               <div className="p-6 border-b border-gray-200">
                 <h3 className="text-lg font-semibold text-gray-900">Route Distance Distribution</h3>
               </div>
@@ -450,8 +450,8 @@ const FlightsRoutes = async ({ flights }: { flights: Flight[] }) => {
               </div>
             </div> */}
 
-      {/* Route Frequency Over Time */}
-      {/* <div className="bg-white rounded-xl shadow-sm border border-gray-200">
+            {/* Route Frequency Over Time */}
+            {/* <div className="bg-white rounded-xl shadow-sm border border-gray-200">
               <div className="p-6 border-b border-gray-200">
                 <h3 className="text-lg font-semibold text-gray-900">Routes Over Time</h3>
               </div>

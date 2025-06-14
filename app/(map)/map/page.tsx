@@ -4,6 +4,7 @@ import React, { useMemo } from 'react'
 import useSWR from 'swr'
 import FullScreenMap from '@/components/dashboard-ui/flights/maps/full-screen-map'
 import { getFlightsFromServer } from '@/lib/actions'
+import { customUserImages } from '@/lib/data'
 
 import { aviationCompliments, alternator } from '@/lib/data'
 
@@ -25,7 +26,8 @@ const MapPage = () => {
     return flights.map((flight: any) => ({
       ...flight,
       emoji: alternator[Math.floor(Math.random() * alternator.length)],
-      compliment: aviationCompliments[Math.floor(Math.random() * aviationCompliments.length)]
+      compliment: aviationCompliments[Math.floor(Math.random() * aviationCompliments.length)],
+      customImage: customUserImages.find(image => image.username === flight.username)?.image
     }))
   }, [flights]) // Only recreate when flights data actually changes
 
