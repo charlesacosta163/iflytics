@@ -337,7 +337,7 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
             <input
               type="text"
-              placeholder="Search pilots..."
+              placeholder="👨‍✈️ Search pilots..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onFocus={() => searchResults.length > 0 && setShowResults(true)}
@@ -515,14 +515,10 @@ const ComplimentLeaderboard = ({ flights }: { flights: any[] }) => {
   useEffect(() => {
     if (!flights || flights.length === 0) return;
 
-    // Pick a random compliment from all possible compliments
     const randomCompliment = aviationCompliments[Math.floor(Math.random() * aviationCompliments.length)];
     setCurrentCompliment(randomCompliment);
 
-    // Find all users with this compliment
     const usersWithCompliment = flights.filter(flight => flight.compliment === randomCompliment);
-    
-    // Shuffle and take top 10
     const shuffled = usersWithCompliment.sort(() => Math.random() - 0.5);
     setTopUsers(shuffled.slice(0, 10));
   }, [flights]);
@@ -530,105 +526,96 @@ const ComplimentLeaderboard = ({ flights }: { flights: any[] }) => {
   if (topUsers.length === 0) return null;
 
   return (
-    <div className="absolute right-4 top-1/2 transform -translate-y-1/2 z-[1000]">
-      {/* Slide-out Panel */}
-      <div className={`
-        bg-white/90 backdrop-blur-sm rounded-xl shadow-xl border border-gray-200 
-        transition-transform duration-300 ease-in-out 
-        w-72 md:w-80
-        ${isOpen ? 'translate-x-0' : 'translate-x-full'}
-      `}>
-        <div className="p-3 md:p-4 max-h-80 md:max-h-96 overflow-hidden">
-          {/* Header with Close Button */}
-          <div className="flex justify-between items-start mb-3 md:mb-4">
-            <div>
-              <h3 className="font-bold text-gray-800 text-base md:text-lg tracking-tight mb-1">Compliment Kings</h3>
-              <p className="text-xs font-semibold text-blue-600 font-mono truncate pr-8">"{currentCompliment}"</p>
+    <>
+      {/* Toggle Button - Always visible and separate */}
+      {!isOpen && (
+        <button
+          onClick={() => setIsOpen(true)}
+          className="absolute right-0 top-1/2 transform -translate-y-1/2 z-[1000]
+                     bg-blue-500/90 backdrop-blur-sm rounded-lg shadow-lg
+                     p-1.5 md:p-2 hover:bg-blue-600 border-4 border-blue-100 transition-all duration-200"
+        >
+          <div className="animate-ping absolute -top-1 -left-1 w-2 h-2 bg-orange-500 rounded-full"></div>
+          <div className="flex items-center gap-1">
+            <span className="text-xs font-medium text-gray-600">😂</span>
+            <div className="transform -rotate-90">
+              <svg className="w-3 h-3 md:w-4 md:h-4 text-light" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
             </div>
-            <button
-              onClick={() => setIsOpen(false)}
-              className="text-gray-400 hover:text-gray-600 p-1"
-            >
-              <X className="w-4 h-4" />
-            </button>
           </div>
+        </button>
+      )}
 
-          {/* Scrollable User List */}
-          <div className="space-y-2 max-h-52 md:max-h-64 overflow-y-auto">
-            {topUsers.map((flight, index) => (
-              <div key={`${flight.username}-${index}`} className="flex items-center gap-2 md:gap-3 p-2 hover:bg-gray-50 rounded-lg">
-                {/* Ranking */}
-                <div className="text-xs font-bold text-gray-400 w-5 md:w-6">
-                  #{index + 1}
+      {/* Slide-out Panel - Only render when open */}
+      {isOpen && (
+        <div className="absolute right-4 top-1/2 transform -translate-y-1/2 z-[1001]">
+          <div className="bg-white/90 backdrop-blur-sm rounded-xl shadow-xl
+                          w-72 md:w-80 animate-in slide-in-from-right duration-300">
+            <div className="p-3 md:p-4 max-h-80 md:max-h-96 overflow-hidden">
+              {/* Header with Close Button */}
+              <div className="flex justify-between items-start mb-3 md:mb-4">
+                <div>
+                  <h3 className="font-bold text-gray-800 text-base md:text-lg tracking-tight mb-1">Compliment Kings</h3>
+                  <p className="text-xs font-semibold text-blue-600 font-mono truncate pr-8">"{currentCompliment}"</p>
                 </div>
-
-                {/* User Avatar */}
-                <div className="w-5 h-5 md:w-6 md:h-6 flex-shrink-0">
-                  {flight.customImage ? (
-                    <img 
-                      src={flight.customImage} 
-                      alt="Avatar" 
-                      className="w-5 h-5 md:w-6 md:h-6 rounded-full object-cover"
-                    />
-                  ) : (
-                    <span className="text-xs md:text-sm">{flight.emoji}</span>
-                  )}
-                </div>
-
-                {/* User Info */}
-                <div className="flex-1 min-w-0">
-                  <div className="text-xs font-semibold text-gray-800 truncate">
-                    {flight.username}
-                  </div>
-                  <div className="text-xs text-gray-500 truncate">
-                    {flight.callsign}
-                  </div>
-                </div>
-
-                {/* Flight Info */}
-                <div className="text-right flex-shrink-0">
-                  <div className="text-xs text-gray-500">
-                    {Math.round(flight.altitude)}ft
-                  </div>
-                </div>
+                <button
+                  onClick={() => setIsOpen(false)}
+                  className="text-gray-400 hover:text-gray-600 p-1"
+                >
+                  <X className="w-4 h-4" />
+                </button>
               </div>
-            ))}
-          </div>
 
-          {/* Footer */}
-          <div className="mt-2 md:mt-3 pt-2 border-t border-gray-100">
-            <p className="text-xs text-gray-400 text-center">
-              Refreshes every update • Top 10 pilots
-            </p>
+              {/* Scrollable User List */}
+              <div className="space-y-2 max-h-52 md:max-h-64 overflow-y-auto">
+                {topUsers.map((flight, index) => (
+                  <div key={`${flight.username}-${index}`} className="flex items-center gap-2 md:gap-3 p-2 hover:bg-gray-50 rounded-lg">
+                    <div className="text-xs font-bold text-gray-400 w-5 md:w-6">
+                      #{index + 1}
+                    </div>
+
+                    <div className="w-5 h-5 md:w-6 md:h-6 flex-shrink-0">
+                      {flight.customImage ? (
+                        <img 
+                          src={flight.customImage} 
+                          alt="Avatar" 
+                          className="w-5 h-5 md:w-6 md:h-6 rounded-full object-cover"
+                        />
+                      ) : (
+                        <span className="text-xs md:text-sm">{flight.emoji}</span>
+                      )}
+                    </div>
+
+                    <div className="flex-1 min-w-0">
+                      <div className="text-xs font-semibold text-gray-800 truncate">
+                        {flight.username}
+                      </div>
+                      <div className="text-xs text-gray-500 truncate">
+                        {flight.callsign}
+                      </div>
+                    </div>
+
+                    <div className="text-right flex-shrink-0">
+                      <div className="text-xs text-gray-500">
+                        {Math.round(flight.altitude)}ft
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Footer */}
+              <div className="mt-2 md:mt-3 pt-2 border-t border-gray-100">
+                <p className="text-xs text-gray-400 text-center">
+                  Refreshes every update • Top 10 pilots
+                </p>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-
-      {/* Toggle Button - Always visible */}
-      <button
-        onClick={() => setIsOpen(true)}
-        className={`
-          absolute right-0 top-1/2 transform -translate-y-1/2
-          bg-blue-500/90 backdrop-blur-sm rounded-l-lg shadow-lg
-          p-1.5 md:p-2 hover:bg-blue-600 transition-all duration-200
-          ${isOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}
-        `}
-        style={{ transform: 'translateY(-50%) translateX(0)' }}
-      >
-        {/* add a pinging animation, left top corner */}
-        <div className="animate-ping absolute -top-1 -left-1 w-2 h-2 bg-orange-500 rounded-full"></div>
-        <div className="flex items-center gap-1">
-          <span className="text-xs font-medium text-gray-600">
-          😂
-          </span>
-          <div className="transform -rotate-90">
-            <svg className="w-3 h-3 md:w-4 md:h-4 text-light" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-          </div>
-        </div>
-      </button>
-    </div>
+      )}
+    </>
   );
 };
 

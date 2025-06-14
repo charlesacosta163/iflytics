@@ -1,47 +1,57 @@
-'use client'
+"use client";
 
-import React, { useMemo } from 'react'
-import useSWR from 'swr'
-import FullScreenMap from '@/components/dashboard-ui/flights/maps/full-screen-map'
-import { getFlightsFromServer } from '@/lib/actions'
-import { customUserImages } from '@/lib/data'
+import React, { useMemo } from "react";
+import useSWR from "swr";
+import FullScreenMap from "@/components/dashboard-ui/flights/maps/full-screen-map";
+import {
+  getFlightsFromServer,
+} from "@/lib/actions";
+import { customUserImages } from "@/lib/data";
 
-import { aviationCompliments, alternator } from '@/lib/data'
+import { aviationCompliments, alternator } from "@/lib/data";
 
-const fetcher = () => getFlightsFromServer()
+const fetcher = () => getFlightsFromServer();
 
 const MapPage = () => {
-  const { data: flights = [], error, isLoading } = useSWR(
-    'flights',
-    fetcher,
-    {
-      refreshInterval: 30000, // 30 seconds
-      revalidateOnFocus: true,
-      revalidateOnReconnect: true
-    }
-  )
+  const {
+    data: flights = [],
+    error,
+    isLoading,
+  } = useSWR("flights", fetcher, {
+    refreshInterval: 30000, // 30 seconds
+    revalidateOnFocus: true,
+    revalidateOnReconnect: true,
+  });
 
   // Add this helper function before the component
-const getConsistentEmojiForUser = (username: string) => {
-  // Handle null/undefined usernames
-  if (!username) {
-    return "🧟"; // Return first emoji as fallback
-  }
-  
-  // Simple hash function to convert username to a consistent number
-  let hash = 0;
-  for (let i = 0; i < username.length; i++) {
-    const char = username.charCodeAt(i);
-    hash = ((hash << 5) - hash) + char;
-    hash = hash & hash; // Convert to 32-bit integer
-  }
-  // Use absolute value and modulo to get consistent index
-  return alternator[Math.abs(hash) % alternator.length];
-};
+  const getConsistentEmojiForUser = (username: string) => {
+    // Handle null/undefined usernames
+    if (!username) {
+      return "🧟"; // Return first emoji as fallback
+    }
 
-const findUserRole = (username: string) => {
-  return customUserImages.find(image => image.username === username)?.role || "user";
-}
+    // Simple hash function to convert username to a consistent number
+    let hash = 0;
+    for (let i = 0; i < username.length; i++) {
+      const char = username.charCodeAt(i);
+      hash = (hash << 5) - hash + char;
+      hash = hash & hash; // Convert to 32-bit integer
+    }
+    // Use absolute value and modulo to get consistent index
+    return alternator[Math.abs(hash) % alternator.length];
+  };
+
+  // Roles:
+  // Flyer: Not registered in IFlytics
+  // User: Registered in IFlytics
+  // Staff: Staff Member in Infinite Flight
+
+  const findUserRole = (username: string) => {
+    return (
+      customUserImages.find((image) => image.username === username)?.role ||
+      "flyer"
+    );
+  };
 
   // Memoize quirkyFlights to prevent constant recreation
   const quirkyFlights = useMemo(() => {
@@ -49,19 +59,27 @@ const findUserRole = (username: string) => {
       ...flight,
       role: findUserRole(flight.username),
       emoji: getConsistentEmojiForUser(flight.username),
-      compliment: flight.username 
-        ? aviationCompliments[Math.abs(flight.username.split('').reduce((a: any, b: any) => a + b.charCodeAt(0), 0)) % aviationCompliments.length]
+      compliment: flight.username
+        ? aviationCompliments[
+            Math.abs(
+              flight.username
+                .split("")
+                .reduce((a: any, b: any) => a + b.charCodeAt(0), 0)
+            ) % aviationCompliments.length
+          ]
         : aviationCompliments[0], // Fallback compliment
-      customImage: customUserImages.find(image => image.username === flight.username)?.image
-    }))
-  }, [flights]) // Only recreate when flights data actually changes
+      customImage: customUserImages.find(
+        (image) => image.username === flight.username
+      )?.image,
+    }));
+  }, [flights]); // Only recreate when flights data actually changes
 
   if (error) {
     return (
       <div className="h-[calc(100vh-120px)] w-full flex items-center justify-center">
         <div className="text-center">
           <p className="text-red-500 mb-2">Failed to load flight data</p>
-          <button 
+          <button
             onClick={() => window.location.reload()}
             className="px-4 py-2 bg-blue-500 text-white rounded-lg"
           >
@@ -69,7 +87,7 @@ const findUserRole = (username: string) => {
           </button>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -84,18 +102,23 @@ const findUserRole = (username: string) => {
       )}
 
       {/* Live indicator */}
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-40 bg-white/50 backdrop-blur-sm px-3 py-2 rounded-lg ">
+      <div className="absolute bottom-4 left-4 z-40 bg-white/50 backdrop-blur-sm px-3 py-2 rounded-lg ">
         <div className="flex items-center gap-2 w-[200px]">
-          <div className={`w-2 h-2 rounded-full ${isLoading ? 'bg-yellow-400' : 'bg-green-400'} animate-pulse`}></div>
+          <div
+            className={`w-2 h-2 rounded-full ${
+              isLoading ? "bg-yellow-400" : "bg-green-400"
+            } animate-pulse`}
+          ></div>
           <span className="text-sm font-medium">
-            {isLoading ? 'Updating...' : 'Expert Server'} • {flights.length} flights
+            {isLoading ? "Updating..." : "Expert Server"} • {flights.length}{" "}
+            flights
           </span>
         </div>
       </div>
 
       <FullScreenMap flights={quirkyFlights} />
     </div>
-  )
-}
+  );
+};
 
-export default MapPage
+export default MapPage;
