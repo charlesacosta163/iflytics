@@ -712,7 +712,7 @@ export const alternator = [
       id: 38,
       role: "user",
       username: "charlesacosta163",
-      image: `https://images.weserv.nl/?url=${encodeURIComponent("https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/charlesacosta163/288/509744_2.png")}&w=64&h=64&fit=cover&mask=circle`
+      image: `https://images.weserv.nl/?url=https%3A%2F%2Fsea1.discourse-cdn.com%2Finfiniteflight%2Fuser_avatar%2Fcommunity.infiniteflight.com%2Fcharlesacosta163%2F288%2F509744_2.png&w=64&h=64&fit=cover&mask=circle`
     },
     { // IFLYTICS USER
       id: 39,
@@ -844,7 +844,21 @@ export const alternator = [
       id: 60,
       role: "staff",
       username: "AdamCallow",
-      image: `https://images.weserv.nl/?url=${encodeURIComponent("hhttps://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/adamcallow/288/1098129_2.png")}&w=64&h=64&fit=cover&mask=circle`
-    } 
+      image: `https://images.weserv.nl/?url=https%3A//sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/adamcallow/288/1098129_2.png&w=64&h=64&fit=cover&mask=circle`
+    },
+    { // IFLYTICS USER
+      id: 61,
+      role: "user",
+      username: "CaptainDinglehopper",
+      image: `https://images.weserv.nl/?url=${encodeURIComponent("https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/captaindinglehopper/288/664951_2.png")}&w=64&h=64&fit=cover&mask=circle`
+    },
+    { // IFLYTICS USER
+      id: 62,
+      role: "user",
+      username: "BenR22",
+      image: `https://images.weserv.nl/?url=${encodeURIComponent("https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/benr22/288/1504790_2.png")}&w=64&h=64&fit=cover&mask=circle`
+    },
+    
+    
   ]
     

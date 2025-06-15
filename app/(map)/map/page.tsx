@@ -101,6 +101,7 @@ const MapPage = () => {
         </div>
       )}
 
+
       {/* Live indicator */}
       <div className="absolute bottom-4 left-4 z-40 bg-white/50 backdrop-blur-sm px-3 py-2 rounded-lg ">
         <div className="flex items-center gap-2 w-[200px]">

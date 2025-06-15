@@ -214,10 +214,7 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
       const createCustomUserImage = (flight: any) => {
         const imageId = `user-${flight.username}`;
         
-        // console.log(`Attempting to load custom image for ${flight.username}:`, flight.customImage);
-        
         if (map.hasImage(imageId)) {
-          // console.log(`Custom image for ${flight.username} already exists`);
           checkAllImagesLoaded();
           return;
         }
@@ -231,16 +228,13 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
           const ctx = canvas.getContext("2d");
           
           if (ctx) {
-            // Enable high-quality rendering
             ctx.imageSmoothingEnabled = true;
             ctx.imageSmoothingQuality = 'high';
             
-            // Create perfect circle clipping
             ctx.beginPath();
             ctx.arc(16, 16, 16, 0, 2 * Math.PI, false);
             ctx.clip();
             
-            // Draw the image to fill the entire circle
             ctx.drawImage(img, 0, 0, 32, 32);
           }
 
@@ -258,6 +252,10 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
         img.onerror = (error) => {
           // console.log(`Failed to load custom image for ${flight.username}:`, error);
           // console.log(`Image URL was:`, flight.customImage);
+          
+          // IMPORTANT: Remove the custom image flag so it falls back to emoji
+          flight.customImage = null;
+          
           checkAllImagesLoaded();
         };
         
@@ -327,6 +325,7 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
 
   return (
     <div style={{ position: "relative", width: "100%", height: "100%" }}>
+      <p className="hidden lg:block absolute bottom-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-blue-500 to-purple-500 text-white backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold"><b>IFlytics Users & IF Staff</b> get their IFC avatar on the map!</p>
       <div ref={mapContainerRef} className="w-full h-full" />
 
       {/* Search Component */}
@@ -569,7 +568,7 @@ const ComplimentLeaderboard = ({ flights }: { flights: any[] }) => {
 
               {/* Scrollable User List */}
               <div className="space-y-2 max-h-52 md:max-h-64 overflow-y-auto">
-                {topUsers.map((flight, index) => (
+                {topUsers.length > 0 ? topUsers.map((flight, index) => (
                   <div key={`${flight.username}-${index}`} className="flex items-center gap-2 md:gap-3 p-2 hover:bg-gray-50 rounded-lg">
                     <div className="text-xs font-bold text-gray-400 w-5 md:w-6">
                       #{index + 1}
@@ -602,7 +601,11 @@ const ComplimentLeaderboard = ({ flights }: { flights: any[] }) => {
                       </div>
                     </div>
                   </div>
-                ))}
+                )) : (
+                  <div className="text-center text-sm text-gray-500">
+                    Looks like no one has been complimented yet!
+                  </div>
+                )}
               </div>
 
               {/* Footer */}
