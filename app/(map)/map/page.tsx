@@ -8,7 +8,7 @@ import {
 } from "@/lib/actions";
 import { customUserImages } from "@/lib/data";
 
-import { aviationCompliments, alternator } from "@/lib/data";
+import { aviationCompliments, alternator, unknownUserCompliments } from "@/lib/data";
 
 const fetcher = () => getFlightsFromServer();
 
@@ -59,18 +59,10 @@ const MapPage = () => {
       ...flight,
       role: findUserRole(flight.username),
       emoji: getConsistentEmojiForUser(flight.username),
-      compliment: flight.username
-        ? aviationCompliments[
-            Math.abs(
-              flight.username
-                .split("")
-                .reduce((a: any, b: any) => a + b.charCodeAt(0), 0)
-            ) % aviationCompliments.length
-          ]
-        : aviationCompliments[0], // Fallback compliment
-      customImage: customUserImages.find(
-        (image) => image.username === flight.username
-      )?.image,
+      compliment: flight.username 
+        ? aviationCompliments[Math.abs(flight.username.split('').reduce((a: any, b: any) => a + b.charCodeAt(0), 0)) % aviationCompliments.length]
+        : unknownUserCompliments[Math.floor(Math.random() * unknownUserCompliments.length)], // Random for unknown users
+      customImage: customUserImages.find((image) => image.username === flight.username)?.image,
     }));
   }, [flights]); // Only recreate when flights data actually changes
 

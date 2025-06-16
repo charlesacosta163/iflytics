@@ -37,3 +37,29 @@ export function calculateFlightTimeXP(minutes: number): number {
     return minutes * 10;
 }
 
+export const getMinutesAgo = (lastReport: string) => {
+  if (!lastReport) return "Unknown";
+  
+  try {
+    const lastReportTime = new Date(lastReport);
+    const now = new Date();
+    const diffInMs = now.getTime() - lastReportTime.getTime();
+    const diffInMinutes = Math.floor(diffInMs / (1000 * 60));
+    
+    if (diffInMinutes < 1) return "Just now";
+    if (diffInMinutes === 1) return "1 min ago";
+    if (diffInMinutes < 60) return `${diffInMinutes} mins ago`;
+    
+    // For longer periods, show hours
+    const hours = Math.floor(diffInMinutes / 60);
+    if (hours === 1) return "1 hour ago";
+    if (hours < 24) return `${hours} hours ago`;
+    
+    // For very long periods, show days
+    const days = Math.floor(hours / 24);
+    return `${days} day${days > 1 ? 's' : ''} ago`;
+    
+  } catch (error) {
+    return "Unknown";
+  }
+};
