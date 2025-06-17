@@ -50,6 +50,7 @@ const GameMapPage = () => {
   const [gameStartTime, setGameStartTime] = useState<number>(0);
   const [shouldZoomToTarget, setShouldZoomToTarget] = useState(false);
   const [showDefeatPopup, setShowDefeatPopup] = useState(false);
+  const [isGamePanelHidden, setIsGamePanelHidden] = useState(false);
 
   // Get current difficulty config
   const currentConfig = difficultySettings[selectedDifficulty];
@@ -139,6 +140,7 @@ const GameMapPage = () => {
     setGameStatus('idle');
     setShouldZoomToTarget(false);
     setShowDefeatPopup(false);
+    setIsGamePanelHidden(false);
   };
 
   // Calculate completion time and points for won games
@@ -252,36 +254,82 @@ const GameMapPage = () => {
         )}
 
         {gameStatus === 'playing' && targetPilot && (
-          <div className="p-6 bg-[#FFF8ED] rounded-lg shadow-xl flex flex-col items-center gap-4 w-56">
-            <div className="text-center">
-              <div className={`text-xs font-bold mb-2 flex items-center gap-2 ${
-                selectedDifficulty === 'easy' ? 'text-green-600' :
-                selectedDifficulty === 'medium' ? 'text-yellow-600' : 'text-red-600'
-              }`}>
-                {selectedDifficulty === 'easy' ? <FaRegFaceGrinBeam /> : selectedDifficulty === 'medium' ? <FaRegFaceGrin /> : <FaRegFaceGrimace />} {selectedDifficulty.toUpperCase()} MODE
+          <>
+            {/* Main Game Panel */}
+            {!isGamePanelHidden && (
+              <div className="p-6 bg-[#FFF8ED] rounded-lg shadow-xl flex flex-col items-center gap-4 w-56 relative">
+                {/* Hide Button */}
+                <button
+                  onClick={() => setIsGamePanelHidden(true)}
+                  className="absolute top-2 right-2 text-gray-400 hover:text-gray-600 transition-colors"
+                  title="Hide panel"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+
+                <div className="text-center">
+                  <div className={`text-xs font-bold mb-2 flex items-center gap-2 ${
+                    selectedDifficulty === 'easy' ? 'text-green-600' :
+                    selectedDifficulty === 'medium' ? 'text-yellow-600' : 'text-red-600'
+                  }`}>
+                    {selectedDifficulty === 'easy' ? <FaRegFaceGrinBeam /> : selectedDifficulty === 'medium' ? <FaRegFaceGrin /> : <FaRegFaceGrimace />} {selectedDifficulty.toUpperCase()} MODE
+                  </div>
+                </div>
+
+                <header className="text-center">
+                  <h2 className="text-xl font-bold text-gray-800">{targetPilot.emoji} {targetPilot.username}</h2>
+                  <p className="text-sm text-gray-600 font-medium">{targetPilot.callsign}</p>
+                </header>
+
+                <div className={`text-2xl font-black ${timeLeft <= 10 ? 'text-red-500' : 'text-green-500'}`}>
+                  {timeLeft}s
+                </div>
+
+                <p className="text-xs text-white bg-gray-700 rounded-full font-medium px-3 py-1">
+                  Find the pilot
+                </p>
+
+                <button
+                  onClick={resetGame}
+                  className="text-xs text-gray-500 hover:text-gray-700 underline"
+                >
+                  Give up
+                </button>
               </div>
-            </div>
+            )}
 
-            <header className="text-center">
-              <h2 className="text-xl font-bold text-gray-800">{targetPilot.emoji} {targetPilot.username}</h2>
-              <p className="text-sm text-gray-600 font-medium">{targetPilot.callsign}</p>
-            </header>
+            {/* Collapsed Show Button */}
+            {isGamePanelHidden && (
+              <div className="flex flex-col gap-2">
+                {/* Compact Info Bar */}
+                <div className="bg-[#FFF8ED]/90 backdrop-blur-sm rounded-lg shadow-lg p-2 flex items-center gap-2 text-xs border border-orange-200">
+                  <div className="text-lg">
+                    {targetPilot.emoji}
+                  </div>
+                  <div className={`font-bold ${timeLeft <= 10 ? 'text-red-500' : 'text-green-500'}`}>
+                    {timeLeft}s
+                  </div>
+                  <div className="text-gray-400">|</div>
+                  <div className="text-gray-700 font-medium truncate max-w-20">
+                    {targetPilot.username}
+                  </div>
+                </div>
 
-            <div className={`text-2xl font-black ${timeLeft <= 10 ? 'text-red-500' : 'text-green-500'}`}>
-              {timeLeft}s
-            </div>
-
-            <p className="text-xs text-white bg-gray-700 rounded-full font-medium px-3 py-1">
-              Find the pilot
-            </p>
-
-            <button
-              onClick={resetGame}
-              className="text-xs text-gray-500 hover:text-gray-700 underline"
-            >
-              Give up
-            </button>
-          </div>
+                {/* Show Panel Button */}
+                <button
+                  onClick={() => setIsGamePanelHidden(false)}
+                  className="bg-orange-100 hover:bg-orange-200 text-orange-700 border-2 border-orange-300 rounded-lg shadow-lg p-2 transition-colors self-end"
+                  title="Show game panel"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                  </svg>
+                </button>
+              </div>
+            )}
+          </>
         )}
       </div>
 
