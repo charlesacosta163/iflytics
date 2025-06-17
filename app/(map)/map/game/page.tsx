@@ -8,11 +8,13 @@ import {
 import { customUserImages, aviationCompliments, alternator } from "@/lib/data";
 import { GrAlarm } from "react-icons/gr";
 import { FaRegFaceGrinBeam, FaRegFaceGrin, FaRegFaceGrimace } from "react-icons/fa6"; // Easy, Medium, Hard Mode Icons
+import { FaGlobeAsia } from "react-icons/fa";
 import { BiSolidFaceMask } from "react-icons/bi";
 import { GiPodiumWinner } from "react-icons/gi";
 
 import FindThePilotGameMap from "@/components/dashboard-ui/flights/maps/find-the-pilot-game-map";
 import { calculatePoints, getPerformanceLevel, difficultySettings, Difficulty } from "@/lib/cache/game-actions";
+import Link from "next/link";
 
 const fetcher = () => getFlightsFromServer();
 
@@ -32,6 +34,8 @@ const getConsistentEmojiForUser = (username: string) => {
 };
 
 const GameMapPage = () => {
+  const [frozenFlights, setFrozenFlights] = useState<any[]>([]);
+  
   const {
     data: flights = [],
     error,
@@ -55,12 +59,15 @@ const GameMapPage = () => {
   // Get current difficulty config
   const currentConfig = difficultySettings[selectedDifficulty];
 
-  // Memoize quirkyFlights to prevent constant recreation
+  // Memoize quirkyFlights - use frozen data during game
   const quirkyFlights = useMemo(() => {
-    // Filter out flights without usernames or callsigns first
-    // Exclude users with custom images
-    const flightsWithUsernames = flights.filter((flight: any) => 
-      flight.username && flight.username.trim() !== '' && flight.callsign && flight.callsign.trim() !== '' && !customUserImages.find((image) => image.username === flight.username)
+    // Use frozen flights during active game, otherwise use live data
+    const sourceFlights = gameActive ? frozenFlights : flights;
+    
+    const flightsWithUsernames = sourceFlights.filter((flight: any) => 
+      flight.username && flight.username.trim() !== '' && 
+      flight.callsign && flight.callsign.trim() !== '' && 
+      !customUserImages.find((image) => image.username === flight.username)
     );
     
     const limitedFlights = flightsWithUsernames.slice(0, currentConfig.pilots);
@@ -71,7 +78,7 @@ const GameMapPage = () => {
       compliment: aviationCompliments[Math.abs(flight.username.split('').reduce((a: any, b: any) => a + b.charCodeAt(0), 0)) % aviationCompliments.length],
       customImage: customUserImages.find((image) => image.username === flight.username)?.image
     }));
-  }, [flights, selectedDifficulty]); // Recreate when difficulty changes
+  }, [flights, frozenFlights, gameActive, selectedDifficulty]);
 
   // Timer effect
   useEffect(() => {
@@ -96,12 +103,32 @@ const GameMapPage = () => {
     setShouldZoomToTarget(false);
   };
 
-  // Start game function
+  // Start game function - freeze current flight data
   const startGame = () => {
-    if (quirkyFlights.length === 0) return;
+    if (flights.length === 0) return;
     
-    // Select random pilot
-    const randomPilot = quirkyFlights[Math.floor(Math.random() * quirkyFlights.length)];
+    // Freeze current flight data
+    setFrozenFlights([...flights]);
+    
+    // Create quirky flights from current data
+    const currentQuirkyFlights = flights
+      .filter((flight: any) => 
+        flight.username && flight.username.trim() !== '' && 
+        flight.callsign && flight.callsign.trim() !== '' && 
+        !customUserImages.find((image) => image.username === flight.username)
+      )
+      .slice(0, currentConfig.pilots)
+      .map((flight: any) => ({
+        ...flight,
+        emoji: getConsistentEmojiForUser(flight.username),
+        compliment: aviationCompliments[Math.abs(flight.username.split('').reduce((a: any, b: any) => a + b.charCodeAt(0), 0)) % aviationCompliments.length],
+        customImage: customUserImages.find((image) => image.username === flight.username)?.image
+      }));
+    
+    if (currentQuirkyFlights.length === 0) return;
+    
+    // Select random pilot from frozen data
+    const randomPilot = currentQuirkyFlights[Math.floor(Math.random() * currentQuirkyFlights.length)];
     setTargetPilot(randomPilot);
     setTimeLeft(currentConfig.timeLimit);
     setGameStartTime(Date.now());
@@ -132,7 +159,7 @@ const GameMapPage = () => {
     console.log("🎉 You won! Target found via Find button!");
   };
 
-  // Reset game
+  // Reset game - clear frozen data
   const resetGame = () => {
     setGameActive(false);
     setTargetPilot(null);
@@ -141,6 +168,7 @@ const GameMapPage = () => {
     setShouldZoomToTarget(false);
     setShowDefeatPopup(false);
     setIsGamePanelHidden(false);
+    setFrozenFlights([]); // Clear frozen data
   };
 
   // Calculate completion time and points for won games
@@ -173,6 +201,9 @@ const GameMapPage = () => {
   return (
     <div className="relative w-full h-screen">
       {/* Test Mode Badge */}
+      <Link href="/map" className="absolute bottom-4 text-sm font-bold left-4 z-50 bg-blue-500 hover:bg-blue-600 text-light px-4 py-2 rounded-lg shadow-lg flex items-center gap-2">
+        <FaGlobeAsia className="text-light" /> <span className="hidden sm:block">Map</span>
+      </Link>
       <div className="absolute top-24 sm:top-20 left-1/2 transform -translate-x-1/2 z-50">
         <div className="bg-orange-100 border-2 border-orange-300 text-orange-700 px-3 py-1 rounded-full text-xs font-bold shadow-lg flex items-center gap-2">
           <BiSolidFaceMask className="text-orange-700" /> Find the Pilot - Still WIP
@@ -241,14 +272,14 @@ const GameMapPage = () => {
             
             <button
               onClick={startGame}
-              disabled={quirkyFlights.length === 0}
+              disabled={flights.length === 0}
               className="w-full bg-blue-500 hover:bg-blue-600 disabled:bg-gray-300 text-white font-bold py-3 px-6 rounded-lg transition-colors"
             >
-              {quirkyFlights.length === 0 ? 'Loading...' : `Start ${selectedDifficulty.toUpperCase()} Game`}
+              {flights.length === 0 ? 'Loading...' : `Start ${selectedDifficulty.toUpperCase()} Game`}
             </button>
 
             <p className="text-xs text-gray-500 text-center">
-              {quirkyFlights.length} pilots available • Expert Server
+              {flights.length} pilots available • Expert Server
             </p>
           </div>
         )}
@@ -337,7 +368,7 @@ const GameMapPage = () => {
       <div className="absolute top-4 left-4 z-50 bg-[#FFF8ED]/70 backdrop-blur-sm rounded-lg shadow-lg p-3">
         <h1 className="text-lg font-bold text-gray-800 flex items-center gap-2"><BiSolidFaceMask /> Find the Pilot</h1>
         <p className="text-sm text-gray-600">
-          {quirkyFlights.length} pilots • Expert Server
+          {flights.length} pilots • Expert Server
         </p>
       </div>
 
