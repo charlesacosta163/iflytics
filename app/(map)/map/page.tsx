@@ -7,8 +7,11 @@ import {
   getFlightsFromServer,
 } from "@/lib/actions";
 import { customUserImages } from "@/lib/data";
+import { BiSolidFaceMask } from "react-icons/bi";
 
 import { aviationCompliments, alternator, unknownUserCompliments } from "@/lib/data";
+import Link from "next/link";
+import { FaRegFaceGrinBeam } from "react-icons/fa6";
 
 const fetcher = () => getFlightsFromServer();
 
@@ -108,6 +111,13 @@ const MapPage = () => {
           </span>
         </div>
       </div>
+
+      <Link href="/map/game">
+        <div className="absolute bottom-4 right-4 z-50 bg-gray-700 text-light backdrop-blur-sm rounded-lg shadow-lg px-4 py-2 flex items-center gap-2">
+          <BiSolidFaceMask className="text-light" />
+          <h1 className="hidden sm:block tracking-tight font-bold">Find the Pilot</h1>
+        </div>
+      </Link>
 
       <FullScreenMap flights={quirkyFlights} />
     </div>

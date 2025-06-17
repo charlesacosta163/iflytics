@@ -392,8 +392,8 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
       <div className="absolute top-4 left-4 z-[1002]" ref={searchInputRef}>
         <div className="relative">
           {/* Search Input */}
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+          <div className="relative text-sm font-medium">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 z-[1003]" />
             <input
               type="text"
               placeholder="👨‍✈️ Search pilots..."
@@ -422,7 +422,7 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
                 <div
                   key={`${flight.username}-${index}`}
                   onClick={() => focusOnUser(flight)}
-                  className={cn("flex items-center gap-3 px-4 py-3 hover:bg-blue-50 cursor-pointer border-b border-gray-100 last:border-b-0", flight.role === "staff" ? "hover:bg-blue-600 bg-blue-500 text-light" : flight.role === "user" ? "hover:bg-black/50 bg-gradient-to-br from-gray to-dark !text-light" : "")}
+                  className={cn("flex items-center gap-3 px-4 py-3 text-sm hover:bg-blue-50 cursor-pointer border-b border-gray-100 last:border-b-0", flight.role === "staff" ? "hover:bg-blue-600 bg-blue-500 text-light" : flight.role === "user" ? "hover:bg-black/50 bg-gradient-to-br from-gray to-dark !text-light" : "")}
                 >
                   {/* User Emoji */}
                   <div className="flex-shrink-0">
@@ -442,9 +442,9 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
                   {/* User Info */}
                   <div className="flex-1 min-w-0">
                     <div className={cn("font-semibold truncate", flight.role === "staff" ? "text-light" : flight.role === "user" ? "!text-light" : "text-gray-900")}>
-                      {flight.username}
+                      {flight.username || "Zombie"}
                     </div>
-                    <div className={cn("text-sm truncate", flight.role === "staff" ? "text-light" : flight.role === "user" ? "!text-light" : "text-gray-500")}>
+                    <div className={cn("text-xs truncate", flight.role === "staff" ? "text-light" : flight.role === "user" ? "!text-light" : "text-gray-500")}>
                       {flight.callsign}
                     </div>
                   </div>
@@ -545,7 +545,7 @@ const ComplimentLeaderboard = ({ flights }: { flights: any[] }) => {
               <div className="flex justify-between items-start mb-3 md:mb-4">
                 <div>
                   <h3 className="font-bold text-gray-800 text-base md:text-lg tracking-tight mb-1">Compliment Kings</h3>
-                  <p className="text-xs font-semibold text-blue-600 font-mono truncate pr-8">"{currentCompliment}"</p>
+                  <p className="text-xs font-semibold text-blue-600 font-mono">{currentCompliment}</p>
                 </div>
                 <button
                   onClick={() => setIsOpen(false)}
