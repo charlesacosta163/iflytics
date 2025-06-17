@@ -1,75 +1,166 @@
-export type Difficulty = 'easy' | 'medium' | 'hard';
+'use server'
+import { createClient } from '../supabase/server'
+import { getUser } from '../supabase/user-actions'
 
-export interface DifficultyConfig {
-  pilots: number;
-  timeLimit: number;
-  maxPoints: number;
-  description: string;
+import { calculatePoints, getPerformanceLevel, difficultySettings, Difficulty } from "@/lib/cache/game-config";
+
+// ------------------- GAME ACTIONS------------------------- //
+
+export async function getAllGames() {
+    const supabase = await createClient()
+    const { data: gamesData, error } = await supabase.from('pilot_game_results').select('*')
+
+    if (error) {
+        console.error(error)
+        return []
+    }
+
+    return gamesData || []
 }
 
-export const difficultySettings: Record<Difficulty, DifficultyConfig> = {
-  easy: {
-    pilots: 100,
-    timeLimit: 45,
-    maxPoints: 15,
-    description: "100 pilots, 45 seconds"
-  },
-  medium: {
-    pilots: 250,
-    timeLimit: 75,
-    maxPoints: 25,
-    description: "250 pilots, 75 seconds"
-  },
-  hard: {
-    pilots: 500,
-    timeLimit: 90,
-    maxPoints: 40,
-    description: "500 pilots, 90 seconds"
-  }
-};
+export async function getGameById(id: string) {
+    const supabase = await createClient()
+    const { data: gameData, error } = await supabase.from('pilot_game_results').select('*').eq('id', id).single()
 
-export function calculatePoints(completionTime: number, difficulty: Difficulty): number {
-  switch (difficulty) {
-    case 'easy':
-      // 🟢 EASY MODE (100 pilots, 45 seconds) - Max: 15 points
-      if (completionTime <= 8) return 15;   // ⚡ Lightning Fast!
-      if (completionTime <= 15) return 12;  // 🔥 Very Fast!
-      if (completionTime <= 25) return 9;   // ⭐ Fast!
-      if (completionTime <= 35) return 6;   // ✅ Good!
-      if (completionTime <= 45) return 3;   // 😅 Just Made It!
-      return 0; // Time's up
+    if (error) {
+        console.error(error)
+        return null
+    }
 
-    case 'medium':
-      // 🟡 MEDIUM MODE (250 pilots, 75 seconds) - Max: 25 points
-      if (completionTime <= 12) return 25;  // ⚡ Lightning Fast!
-      if (completionTime <= 25) return 20;  // 🔥 Very Fast!
-      if (completionTime <= 40) return 15;  // ⭐ Fast!
-      if (completionTime <= 55) return 10;  // ✅ Good!
-      if (completionTime <= 75) return 5;   // 😅 Just Made It!
-      return 0; // Time's up
-
-    case 'hard':
-      // 🔴 HARD MODE (500 pilots, 90 seconds) - Max: 35 points
-      if (completionTime <= 15) return 40;  // ⚡ Lightning Fast!
-      if (completionTime <= 30) return 32;  // 🔥 Very Fast!
-      if (completionTime <= 50) return 24;  // ⭐ Fast!
-      if (completionTime <= 70) return 16;  // ✅ Good!
-      if (completionTime <= 90) return 8;   // 😅 Just Made It!
-      return 0; // Time's up
-
-    default:
-      return 0;
-  }
+    return gameData || null
 }
 
-export function getPerformanceLevel(completionTime: number, difficulty: Difficulty): string {
-  const points = calculatePoints(completionTime, difficulty);
-  const config = difficultySettings[difficulty];
-  
-  if (points === config.maxPoints) return "⚡ Lightning Fast!";
-  if (points >= config.maxPoints * 0.8) return "🔥 Very Fast!";
-  if (points >= config.maxPoints * 0.6) return "⭐ Fast!";
-  if (points >= config.maxPoints * 0.4) return "✅ Good!";
-  if (points > 0) return "😅 Just Made It!";
-  return "⏰ Time's Up!";
+
+export async function createGameEntry(gameData: any) {
+    const user = await getUser()
+
+    if (!user) {
+        return;
+    }
+
+    const { difficulty, points, completionTime } = gameData
+    const username = user.user_metadata.ifcUsername
+    const gameDate = new Date() // Date object
+
+    const supabase = await createClient()
+    const { data, error } = await supabase.from('pilot_game_results').insert({
+        ifc_user_id: user.id,
+        username,
+        difficulty,
+        points,
+        completion_time: completionTime,
+        game_date: gameDate
+    })
+
+    if (error) {
+        console.error(error)
+        return {
+            success: false,
+            message: 'Failed to create game entry',
+            error: error.message
+        }
+    }
+
+    return {
+        success: true,
+        message: 'Game entry created successfully',
+        data: data
+    }
+}
+
+// ------------------- LEADERBOARD QUERIES ----------------------- //
+
+export async function getTodaysLeaderboard() {
+    const supabase = await createClient()
+    
+    const today = new Date().toISOString().split('T')[0]; // Get YYYY-MM-DD format
+    
+    const { data, error } = await supabase
+        .from('pilot_game_results')
+        .select('username, points')
+        .eq('game_date', today)
+
+    if (error) {
+        console.error('Error fetching today\'s leaderboard:', error)
+        return []
+    }
+
+    // Aggregate points by username
+    const aggregated = (data || []).reduce((acc: any[], curr) => {
+        const existing = acc.find(item => item.username === curr.username);
+        if (existing) {
+            existing.total_points += curr.points;
+            existing.games_played += 1;
+        } else {
+            acc.push({
+                username: curr.username,
+                total_points: curr.points,
+                games_played: 1
+            });
+        }
+        return acc;
+    }, []);
+
+    // Sort by total points descending
+    return aggregated
+        .sort((a, b) => b.total_points - a.total_points)
+        .slice(0, 50);
+}
+
+export async function getAllTimeLeaderboard() {
+    const supabase = await createClient()
+    
+    const { data, error } = await supabase
+        .from('pilot_game_results')
+        .select('username, points')
+
+    if (error) {
+        console.error('Error fetching all-time leaderboard:', error)
+        return []
+    }
+
+    // Aggregate points by username
+    const aggregated = (data || []).reduce((acc: any[], curr) => {
+        const existing = acc.find(item => item.username === curr.username);
+        if (existing) {
+            existing.total_points += curr.points;
+            existing.games_played += 1;
+        } else {
+            acc.push({
+                username: curr.username,
+                total_points: curr.points,
+                games_played: 1
+            });
+        }
+        return acc;
+    }, []);
+
+    // Sort by total points descending
+    return aggregated
+        .sort((a, b) => b.total_points - a.total_points)
+        .slice(0, 100);
+}
+
+export async function getUserGameHistory() {
+    const user = await getUser()
+    
+    if (!user) {
+        return []
+    }
+
+    const supabase = await createClient()
+    
+    const { data, error } = await supabase
+        .from('pilot_game_results')
+        .select('username, difficulty, points, completion_time, created_at, game_date')
+        .eq('ifc_user_id', user.id)
+        .order('created_at', { ascending: false })
+        .limit(100)
+
+    if (error) {
+        console.error('Error fetching user game history:', error)
+        return []
+    }
+
+    return data || []
 }

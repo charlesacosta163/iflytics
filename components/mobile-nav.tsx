@@ -42,7 +42,7 @@ const MobileNav = ({ isLoggedIn, isLoading, onAuthClick }: MobileNavProps) => {
 
       {/* Mobile Dropdown Menu */}
       <div
-        className={`md:hidden absolute top-12 right-0 w-64 bg-[#FAF0E6] rounded-lg shadow-2xl transition-all duration-300 ease-out transform origin-top-right !z-[100] ${
+        className={`md:hidden absolute top-12 right-0 w-64 bg-[#FAF0E6] rounded-lg shadow-2xl transition-all duration-300 ease-out transform origin-top-right z-[9999] ${
           isOpen
             ? 'opacity-100 scale-100 translate-y-0'
             : 'opacity-0 scale-95 -translate-y-2 pointer-events-none'
@@ -119,7 +119,7 @@ const MobileNav = ({ isLoggedIn, isLoading, onAuthClick }: MobileNavProps) => {
       {/* Backdrop for mobile */}
       {isOpen && (
         <div
-          className="md:hidden fixed inset-0 bg-opacity-25 z-40"
+          className="md:hidden fixed inset-0 bg-opacity-25 z-[9998]"
           onClick={closeMenu}
         />
       )}

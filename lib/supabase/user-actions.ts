@@ -17,6 +17,11 @@ export async function getUser() {
   return data.user
 }
 
+export async function isLoggedIn() {
+  const user = await getUser()
+  return user !== null
+}
+
 export async function getUserProfile() {
    const user = await getUser()
 
