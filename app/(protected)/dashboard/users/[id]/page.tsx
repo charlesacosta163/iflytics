@@ -1,4 +1,5 @@
 import React from "react";
+import { Metadata } from 'next'
 import { getUserProfileById } from "@/lib/supabase/user-actions";
 import { getPilotServerSessions, getUserStats, matchATCRankToTitle } from "@/lib/actions";
 import { FaStar, FaPlane, FaPlaneDeparture, FaArrowLeft, FaPlus } from "react-icons/fa";
@@ -10,6 +11,40 @@ import { PiAirTrafficControlBold } from "react-icons/pi";
 import { GiCaptainHatProfile } from "react-icons/gi";
 import { convertMinutesToHours, numberWithCommas } from "@/lib/utils";
 import Link from "next/link";
+
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const { id } = await params;
+  
+  try {
+    // Fetch user data in the metadata function
+    const userProfile = await getUserProfileById(id);
+    const displayName = userProfile?.display_name || userProfile?.ifc_game_id || 'Unknown Pilot';
+    
+    return {
+      title: `${displayName} - Profile | IFlytics`,
+      description: `View ${displayName}'s Infinite Flight statistics including flight hours, landings, XP, grade level, and ATC operations. Track pilot performance and aviation achievements on IFlytics.`,
+      keywords: `infinite flight, flight tracking, aviation analytics, pilot statistics, flight data, expert server, flight simulator, aviation dashboard, pilot leaderboards, flight history, ${displayName}, iflytics user`,
+      openGraph: {
+        title: `${displayName} - IFlytics Pilot Profile`,
+        description: `View ${displayName}'s comprehensive Infinite Flight statistics and aviation achievements.`,
+        type: 'profile',
+        url: `/dashboard/users/${id}`,
+      },
+      twitter: {
+        card: 'summary',
+        title: `${displayName} - IFlytics Pilot Profile`,
+        description: `View ${displayName}'s Infinite Flight statistics and aviation achievements.`,
+      },
+    }
+  } catch (error) {
+    // Fallback metadata if user data can't be fetched
+    return {
+      title: "Pilot Profile - IFlytics",
+      description: "View pilot statistics and aviation achievements on IFlytics.",
+      keywords: "infinite flight, flight tracking, aviation analytics, pilot statistics",
+    }
+  }
+}
 
 const ViewUserPage = async ({
   params,

@@ -25,6 +25,13 @@ import FlightsDisplay from "@/components/dashboard-ui/flights/flights-display";
 import FlightsRoutes from "@/components/dashboard-ui/flights/flights-routes";
 import { FaPlane, FaRoute } from "react-icons/fa";
 import { FaChartLine } from "react-icons/fa";
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: "Flights - IFlytics | Your Infinite Flight Statistics",
+  description: "View your Infinite Flight statistics with advanced data visualization, real-time flight maps, leaderboards, and interactive games. Join thousands of pilots exploring their aviation data.",
+  keywords: "infinite flight, flight tracking, aviation analytics, pilot statistics, flight data, expert server, flight simulator, aviation dashboard, pilot leaderboards, flight history, iflytics flights",
+}
 
 const FlightsPage = async ({searchParams}: { searchParams: Promise < {
   [key: string]: string | string[] | undefined

@@ -23,7 +23,7 @@ const MobileNav = ({ isLoggedIn, isLoading, onAuthClick }: MobileNavProps) => {
       {/* Hamburger Button */}
       <button
         onClick={toggleMenu}
-        className="md:hidden p-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-all duration-200 hover:scale-105 active:scale-95 border-2 border-gray-600"
+        className="md:hidden p-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-all duration-200 hover:scale-105 active:scale-95 border-2 border-gray-600 !z-[10000]"
         aria-label="Toggle menu"
       >
         <div className="relative w-6 h-6">
@@ -42,7 +42,7 @@ const MobileNav = ({ isLoggedIn, isLoading, onAuthClick }: MobileNavProps) => {
 
       {/* Mobile Dropdown Menu */}
       <div
-        className={`md:hidden absolute top-12 right-0 w-64 bg-[#FAF0E6] rounded-lg shadow-2xl transition-all duration-300 ease-out transform origin-top-right z-[9999] ${
+        className={`md:hidden absolute top-12 right-0 w-64 bg-[#FAF0E6] rounded-lg shadow-2xl transition-all duration-300 ease-out transform origin-top-right !z-[9999] ${
           isOpen
             ? 'opacity-100 scale-100 translate-y-0'
             : 'opacity-0 scale-95 -translate-y-2 pointer-events-none'

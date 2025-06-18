@@ -3,7 +3,7 @@
 import React, { useMemo, useState, useEffect } from "react";
 import useSWR from "swr";
 import {
-  getFlightsFromServer,
+    getFlightsFromServer,
 } from "@/lib/actions";
 import { customUserImages, aviationCompliments, alternator } from "@/lib/data";
 import { GrAlarm } from "react-icons/gr";
@@ -398,7 +398,7 @@ const GameMapPage = () => {
         </div>
 
         {/* Game Info */}
-        <div className="absolute top-4 left-4 -z-10 bg-[#FFF8ED]/70 backdrop-blur-sm rounded-lg shadow-lg p-3">
+        <div className="absolute top-4 left-4 bg-[#FFF8ED]/70 backdrop-blur-sm rounded-lg shadow-lg p-3 z-[1000]">
           <h1 className="text-lg font-bold text-gray-800 flex items-center gap-2"><BiSolidFaceMask /> Find the Pilot</h1>
           <p className="text-sm text-gray-600">
             {flights.length} pilots • Expert Server
@@ -725,27 +725,23 @@ const GameMapPage = () => {
         )}
       </div>
 
-      {/* Game Info */}
-      <div className="absolute top-4 left-4 z-50 bg-[#FFF8ED]/70 backdrop-blur-sm rounded-lg shadow-lg p-3">
-        <h1 className="text-lg font-bold text-gray-800 flex items-center gap-2"><BiSolidFaceMask /> Find the Pilot</h1>
-        <p className="text-sm text-gray-600">
-          {flights.length} pilots • Expert Server
-        </p>
+    
         
         {/* Auth Status Badge */}
-        {isUserLoggedIn !== null && (
-          <div className={`mt-2 px-2 py-1 rounded-full text-xs font-medium ${
-            isUserLoggedIn 
-              ? 'bg-green-100 text-green-700 border border-green-300' 
-              : 'bg-orange-100 text-orange-700 border border-orange-300'
-          }`}>
-            {isUserLoggedIn 
-              ? '🏆 Scores count for leaderboard' 
-              : '🔐 Not logged in - scores won\'t be saved'
-            }
-          </div>
-        )}
-      </div>
+        <div className="absolute left-1/2 -translate-x-1/2 w-[275px] top-18 sm:top-16">
+            {isUserLoggedIn !== null && (
+            <div className={`mt-2 px-2 py-1 rounded-full text-xs font-medium text-center ${
+                isUserLoggedIn 
+                ? 'bg-green-100 text-green-700 border border-green-300' 
+                : 'bg-orange-100 text-orange-700 border border-orange-300'
+            }`}>
+                {isUserLoggedIn 
+                ? '🏆 Scores count for leaderboard'
+                : '🔐 Not logged in - scores won\'t be saved'
+                }
+            </div>
+            )}
+        </div>
 
       {/* Victory/Defeat Popup */}
       {(gameStatus === 'won' || (gameStatus === 'lost' && showDefeatPopup)) && (

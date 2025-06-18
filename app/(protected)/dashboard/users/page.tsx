@@ -4,6 +4,13 @@ import { emojiCharacterRandomizer } from '@/lib/data'
 import { Card } from '@/components/ui/card'
 import Link from 'next/link'
 import { FaUsers, FaCalendarAlt, FaEye } from 'react-icons/fa'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: "Community - IFlytics | Your Infinite Flight Statistics",
+  description: "View the IFlytics community and their flying journeys. Join thousands of pilots exploring their aviation data.",
+  keywords: "infinite flight, flight tracking, aviation analytics, pilot statistics, flight data, expert server, flight simulator, aviation dashboard, pilot leaderboards, flight history, iflytics community",
+}
 
 const UsersPage = async () => {
   const users = await getAllIFlyticsUsers() || []

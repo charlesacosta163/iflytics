@@ -155,7 +155,7 @@ export async function getUserGameHistory() {
         .select('username, difficulty, points, completion_time, created_at, game_date')
         .eq('ifc_user_id', user.id)
         .order('created_at', { ascending: false })
-        .limit(100)
+        .limit(25)
 
     if (error) {
         console.error('Error fetching user game history:', error)

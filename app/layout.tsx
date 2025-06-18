@@ -14,8 +14,49 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "IFlytics - Your Data Visualizer for Infinite Flight!",
-  description: "A web application made by me, to track your Infinite Flight stats and more.",
+  title: "IFlytics - Your Advanced Flight Data Analytics Companion for Infinite Flight",
+  description: "Track and analyze your Infinite Flight statistics with advanced data visualization, real-time flight maps, leaderboards, and interactive games. Join thousands of pilots exploring their aviation data.",
+  keywords: "infinite flight, flight tracking, aviation analytics, pilot statistics, flight data, expert server, flight simulator, aviation dashboard, pilot leaderboards, flight history",
+  authors: [{ name: "IFlytics Team" }],
+  creator: "IFlytics",
+  publisher: "IFlytics",
+  metadataBase: new URL('https://iflytics.vercel.app'),
+  alternates: {
+    canonical: '/',
+  },
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    url: '/',
+    title: 'IFlytics - Advanced Flight Data Analytics for Infinite Flight',
+    description: 'Track and analyze your Infinite Flight statistics with advanced data visualization, real-time flight maps, leaderboards, and interactive games.',
+    siteName: 'IFlytics',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'IFlytics - Advanced Flight Data Analytics for Infinite Flight',
+    description: 'Track and analyze your Infinite Flight statistics with advanced data visualization, real-time flight maps, and interactive games.',
+    creator: '@iflytics',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  verification: {
+    google: 'your-google-verification-code',
+  },
+  icons: {
+    icon: '/favicon.ico',
+    shortcut: '/favicon.ico',
+    apple: '/favicon.ico',
+  },
 };
 
 export default function RootLayout({
@@ -25,6 +66,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="shortcut icon" href="/favicon.ico" />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#FAF0E6]`}
       >

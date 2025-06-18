@@ -19,6 +19,34 @@ import { notFound } from "next/navigation";
 
 import { Card } from "@/components/ui/card";
 
+// Dynamic Metadata
+import { Metadata } from 'next'
+
+export async function generateMetadata({ params }: { params: Promise<{ name: string }> }): Promise<Metadata> {
+  const { name } = await params;
+  
+  // Decode and format the username for display
+  const decodedName = decodeURIComponent(name);
+  const formattedName = decodedName.replace(/\+/g, ' ');
+  
+  return {
+    title: `${formattedName} - Overview | IFlytics`,
+    description: `View ${formattedName}'s Infinite Flight statistics including flight hours, landings, XP, grade level, and ATC operations. Track pilot performance and aviation achievements on IFlytics.`,
+    keywords: `infinite flight, flight tracking, aviation analytics, pilot statistics, flight data, expert server, flight simulator, aviation dashboard, pilot leaderboards, flight history, ${formattedName}, iflytics user`,
+    openGraph: {
+      title: `${formattedName} - IFlytics Pilot Profile`,
+      description: `View ${formattedName}'s comprehensive Infinite Flight statistics and aviation achievements.`,
+      type: 'profile',
+      url: `/user/${name}`,
+    },
+    twitter: {
+      card: 'summary',
+      title: `${formattedName} - IFlytics Pilot Profile`,
+      description: `View ${formattedName}'s Infinite Flight statistics and aviation achievements.`,
+    },
+  }
+}
+
 const UserPage = async ({ params }: { params: Promise<{ name: string }> }) => {
   const { name } = await params;
 

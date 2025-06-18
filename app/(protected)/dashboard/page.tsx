@@ -4,6 +4,13 @@ import { LogoutButton } from '@/components/logout-button'
 import { getUser } from '@/lib/supabase/user-actions'
 
 import { getAggregatedFlights } from '@/lib/cache/flightdata'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: "Dashboard - IFlytics | Your Infinite Flight Statistics",
+  description: "View your Infinite Flight statistics with advanced data visualization, real-time flight maps, leaderboards, and interactive games. Join thousands of pilots exploring their aviation data.",
+  keywords: "infinite flight, flight tracking, aviation analytics, pilot statistics, flight data, expert server, flight simulator, aviation dashboard, pilot leaderboards, flight history",
+}
 
 export default async function DashboardPage() {
   let maintenance = true

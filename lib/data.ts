@@ -1735,6 +1735,78 @@ export const customUserImages = [
       "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/benr22/288/1504790_2.png"
     )}&w=64&h=64&fit=cover&mask=circle`,
   },
+  {
+    // IFLYTICS USER
+    id: 63,
+    role: "user",
+    username: "CQSamuelCai",
+    image: `https://images.weserv.nl/?url=${encodeURIComponent(
+      "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/cqsamuelcai/288/1324946_2.png"
+    )}&w=64&h=64&fit=cover&mask=circle`,
+  },
+  {
+    // IFLYTICS USER
+    id: 64,
+    role: "user",
+    username: "Mrp_98",
+    image: `https://images.weserv.nl/?url=${encodeURIComponent(
+      "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/mrp_98/288/1490886_2.png"
+    )}&w=64&h=64&fit=cover&mask=circle`,
+  },
+  {
+    // IFLYTICS USER
+    id: 65,
+    role: "user",
+    username: "MagiK",
+    image: `https://images.weserv.nl/?url=${encodeURIComponent(
+      "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/magik/288/1376513_2.png"
+    )}&w=64&h=64&fit=cover&mask=circle`,
+  },
+  {
+    // IFLYTICS USER
+    id: 66,
+    role: "user",
+    username: "JH_AVIATION",
+    image: `https://images.weserv.nl/?url=${encodeURIComponent(
+      "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/jh_aviation/288/1524047_2.png"
+    )}&w=64&h=64&fit=cover&mask=circle`,
+  },
+  {
+    // IFLYTICS USER
+    id: 67,
+    role: "user",
+    username: "Shaun0312",
+    image: `https://images.weserv.nl/?url=${encodeURIComponent(
+      "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/shaun0312/288/1266749_2.png"
+    )}&w=64&h=64&fit=cover&mask=circle`,
+  },
+  {
+    // IFLYTICS USER
+    id: 68,
+    role: "user",
+    username: "IF.Russian",
+    image: `https://images.weserv.nl/?url=${encodeURIComponent(
+      "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/if.russian/288/1482824_2.png"
+    )}&w=64&h=64&fit=cover&mask=circle`,
+  },
+  {
+    // IFLYTICS USER
+    id: 69,
+    role: "user",
+    username: "Chuck4D22",
+    image: `https://images.weserv.nl/?url=${encodeURIComponent(
+      "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/chuck4d22/288/1476855_2.png"
+    )}&w=64&h=64&fit=cover&mask=circle`,
+  },
+  {
+    // IFLYTICS USER
+    id: 70,
+    role: "user",
+    username: "FreshOuttaPoland",
+    image: `https://images.weserv.nl/?url=${encodeURIComponent(
+      "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/freshouttapoland/288/1504687_2.png"
+    )}&w=64&h=64&fit=cover&mask=circle`,
+  },
 ];
 
 // Unknown User Compliments - Maximum Corn Level

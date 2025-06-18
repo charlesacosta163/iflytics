@@ -1,15 +1,39 @@
 import React from 'react'
 import { getAircraftAndLivery, getUserFlights } from '@/lib/actions'
-import { formatDate } from '@/lib/utils'
+import { Metadata } from 'next'
 import Link from 'next/link'
 import ProfileHeader from '@/components/profile-header'
 import FlightEntryCard from '@/components/flight-entry'
 import PaginationBtn from '@/components/pagination-btn'
-import UserNavigation from '@/components/user-navigation'
 
 type PageProps = {
     params: Promise<{name: string | string[] | undefined}>,
     searchParams: Promise<{page?: string}>
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ name: string }> }): Promise<Metadata> {
+  const { name } = await params;
+  
+  // Decode and format the username for display
+  const decodedName = decodeURIComponent(name);
+  const formattedName = decodedName.replace(/\+/g, ' ');
+  
+  return {
+    title: `${formattedName} - Flights | IFlytics`,
+    description: `View ${formattedName}'s Infinite Flight flights. Track pilot performance and aviation achievements on IFlytics.`,
+    keywords: `infinite flight, flight tracking, aviation analytics, pilot statistics, flight data, expert server, flight simulator, aviation dashboard, pilot leaderboards, flight history, ${formattedName}, iflytics user, flights`,
+    openGraph: {
+      title: `${formattedName} - IFlytics Pilot Profile`,
+      description: `View ${formattedName}'s comprehensive Infinite Flight statistics and aviation achievements.`,
+      type: 'profile',
+      url: `/user/${name}`,
+    },
+    twitter: {
+      card: 'summary',
+      title: `${formattedName} - IFlytics Pilot Profile`,
+      description: `View ${formattedName}'s Infinite Flight statistics and aviation achievements.`,
+    },
+  }
 }
 
 const FlightsPage = async ({

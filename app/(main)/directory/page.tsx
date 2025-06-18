@@ -14,10 +14,17 @@ import { Card } from "@/components/ui/card";
 import AirportDetails from "@/components/airport-details";
 import AirportWithATCCard from "@/components/airport-with-atc-card";
 import { FaPlane } from "react-icons/fa";
-
+import { Metadata } from 'next'
 import { TbBuildingAirport, TbBuildingBroadcastTower } from "react-icons/tb";
 
 let maintenanceMode = true;
+
+export const metadata: Metadata = {
+  title: "Directory - IFlytics | Your Infinite Flight Statistics",
+  description: "View the directory of airports and aircraft in Infinite Flight. Join thousands of pilots exploring their aviation data.",
+  keywords: "infinite flight, flight tracking, aviation analytics, pilot statistics, flight data, expert server, flight simulator, aviation dashboard, pilot leaderboards, flight history, iflytics directory",
+}
+
 
 const DirectoryPage = async ({
   searchParams,
