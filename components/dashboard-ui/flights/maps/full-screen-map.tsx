@@ -6,15 +6,112 @@ import { X, Search, MapPin } from "lucide-react";
 import { aviationCompliments } from "@/lib/data";
 import UserPopupInfo from "./user-popup-info";
 import { cn } from "@/lib/utils";
+import { getUserFlightPlan } from "@/lib/actions";
 
 const FullScreenMap = ({ flights }: { flights: any[] }) => {
   const [popupInfo, setPopupInfo] = useState<any>(null);
+  const [selectedFlightPlan, setSelectedFlightPlan] = useState<any>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [showResults, setShowResults] = useState(false);
   const mapRef = useRef<Map | null>(null);
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
+  
+  // Add state for current route
+  const [currentRouteId, setCurrentRouteId] = useState<string | null>(null);
+
+  // Function to show flight route
+  const showFlightRoute = async (flightId: string) => {
+    if (!mapRef.current) return;
+    
+    try {
+      const flightPlan = await getUserFlightPlan(flightId);
+      
+      if (flightPlan?.flightPlanItems?.length > 1) {
+        // Convert waypoints to coordinates array
+        const coordinates = flightPlan.flightPlanItems
+          .filter((item: any) => item.location)
+          .map((item: any) => [item.location.longitude, item.location.latitude]);
+        
+        if (coordinates.length > 1) {
+          const map = mapRef.current;
+          const routeId = `route-${flightId}`;
+          
+          // Remove previous route if exists
+          if (currentRouteId && map.getLayer(currentRouteId)) {
+            map.removeLayer(currentRouteId);
+            map.removeSource(currentRouteId);
+          }
+          
+          // Add new route source
+          map.addSource(routeId, {
+            type: 'geojson',
+            data: {
+              type: 'Feature',
+              properties: {},
+              geometry: {
+                type: 'LineString',
+                coordinates: coordinates
+              }
+            }
+          });
+          
+          // Add route layer
+          map.addLayer({
+            id: routeId,
+            type: 'line',
+            source: routeId,
+            layout: {
+              'line-join': 'round',
+              'line-cap': 'round'
+            },
+            paint: {
+              'line-color': '#3b82f6',
+              'line-width': 3,
+              'line-opacity': 0.8
+            }
+          });
+          
+          setCurrentRouteId(routeId);
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching flight plan:', error);
+    }
+  };
+
+  // Function to clear current route
+  const clearFlightRoute = () => {
+    if (!mapRef.current || !currentRouteId) return;
+    
+    const map = mapRef.current;
+    if (map.getLayer(currentRouteId)) {
+      map.removeLayer(currentRouteId);
+      map.removeSource(currentRouteId);
+    }
+    setCurrentRouteId(null);
+  };
+
+  // Modified function to set popup info and show route
+  const setPopupInfoWithRoute = (info: any) => {
+    // Clear previous route
+    clearFlightRoute();
+    
+    // Set new popup info
+    setPopupInfo(info);
+    
+    // Show route for new flight if info exists
+    if (info && info.flightId) {
+      showFlightRoute(info.flightId);
+    }
+  };
+
+  // Modified function to clear popup and route
+  const clearPopupAndRoute = () => {
+    clearFlightRoute();
+    setPopupInfo(null);
+  };
 
   // Search logic
   useEffect(() => {
@@ -37,7 +134,7 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
     setShowResults(uniqueUsers.length > 0);
   }, [searchQuery, flights]);
 
-  // Focus on user function
+  // Modified focus on user function
   const focusOnUser = (flight: any) => {
     if (!mapRef.current) return;
 
@@ -46,8 +143,8 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
     // Fly to user's position with smooth animation
     map.flyTo({
       center: [flight.longitude, flight.latitude],
-      zoom: 8, // Zoom in to focus on the user
-      duration: 2000, // 2 second animation
+      zoom: 8,
+      duration: 2000,
       essential: true
     });
 
@@ -55,8 +152,8 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
     setSearchQuery("");
     setShowResults(false);
         
-    // Show popup for the user
-    setPopupInfo({
+    // Show popup and route for the user
+    setPopupInfoWithRoute({
       emoji: flight?.emoji,
       compliment: flight?.compliment,
       customImage: flight?.customImage,
@@ -129,11 +226,11 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
         },
       });
 
-      // Click handlers
+      // Keep the click handler for flight points
       map.on("click", "flight-points", (e) => {
         if (e.features && e.features[0]) {
           const flight = e.features[0].properties;
-          setPopupInfo({
+          setPopupInfoWithRoute({
             emoji: flight?.emoji,
             compliment: flight?.compliment,
             customImage: flight?.customImage,
@@ -156,12 +253,6 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
             verticalSpeed: flight?.verticalSpeed,
             virtualOrganization: flight?.virtualOrganization,
           });
-        }
-      });
-
-      map.on("click", (e) => {
-        if (!map.queryRenderedFeatures(e.point, { layers: ["flight-points"] }).length) {
-          setPopupInfo(null);
         }
       });
 
@@ -383,6 +474,45 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
     }
   }, [flights]);
 
+  // Clear all route sources (nuclear option)
+  const clearAllRoutes = () => {
+    if (!mapRef.current) return;
+    
+    const map = mapRef.current;
+    const style = map.getStyle();
+    
+    // Find all route layers and sources
+    if (style && style.layers) {
+      style.layers.forEach((layer: any) => {
+        if (layer.id.startsWith('route-')) {
+          try {
+            if (map.getLayer(layer.id)) {
+              map.removeLayer(layer.id);
+            }
+          } catch (error) {
+            console.warn(`Error removing layer ${layer.id}:`, error);
+          }
+        }
+      });
+    }
+    
+    if (style && style.sources) {
+      Object.keys(style.sources).forEach(sourceId => {
+        if (sourceId.startsWith('route-')) {
+          try {
+            if (map.getSource(sourceId)) {
+              map.removeSource(sourceId);
+            }
+          } catch (error) {
+            console.warn(`Error removing source ${sourceId}:`, error);
+          }
+        }
+      });
+    }
+    
+    setCurrentRouteId(null);
+  };
+
   return (
     <div style={{ position: "relative", width: "100%", height: "100%" }}>
       <p className="hidden lg:block absolute bottom-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-blue-500 to-purple-500 text-white backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold"><b>IFlytics Users & IF Staff</b> get their IFC avatar on the map!</p>
@@ -478,18 +608,12 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
       {/* Compliment Leaderboard */}
       <ComplimentLeaderboard flights={flights} />
 
-      {/* Flight Information Popup */}
+      {/* Flight Information Popup - NO BACKDROP */}
       {popupInfo && (
-        <>
-          {/* Backdrop */}
-          <div
-            className="absolute inset-0 z-[1000]"
-            onClick={() => setPopupInfo(null)}
-          />
-
-          {/* Flight Information Card */}
-         <UserPopupInfo popupInfo={popupInfo} setPopupInfo={setPopupInfo} />
-        </>
+        <UserPopupInfo 
+          popupInfo={popupInfo} 
+          setPopupInfo={clearPopupAndRoute} // Only X button will call this
+        />
       )}
     </div>
   );
