@@ -28,9 +28,9 @@ export const difficultySettings: Record<Difficulty, DifficultyConfig> = {
   },
   extreme: {
     pilots: 1000,
-    timeLimit: 120,
+    timeLimit: 90,
     maxPoints: 50,
-    description: "1000 pilots, 120 seconds"
+    description: "1000 pilots, 90 seconds"
   }
 };
 
@@ -61,11 +61,11 @@ export function calculatePoints(completionTime: number, difficulty: Difficulty):
       return 0;
 
     case 'extreme':
-      if (completionTime <= 24) return 50;
-      if (completionTime <= 48) return 40;
-      if (completionTime <= 72) return 30;
-      if (completionTime <= 96) return 20;
-      if (completionTime <= 120) return 10;
+      if (completionTime <= 18) return 50;
+      if (completionTime <= 36) return 40;
+      if (completionTime <= 54) return 30;
+      if (completionTime <= 72) return 20;
+      if (completionTime <= 90) return 10;
       return 0;
 
     default:

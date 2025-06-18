@@ -40,7 +40,7 @@ export async function createGameEntry(gameData: any) {
 
     const { difficulty, points, completionTime } = gameData
     const username = user.user_metadata.ifcUsername
-    const gameDate = new Date() // Date object
+    const gameDate = new Date().toISOString().split('T')[0]
 
     const supabase = await createClient()
     const { data, error } = await supabase.from('pilot_game_results').insert({

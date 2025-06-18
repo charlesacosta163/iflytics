@@ -17,6 +17,12 @@ import { FaRegFaceGrinBeam, FaRegFaceGrin, FaRegFaceGrimace, FaRegFaceAngry, FaR
 import { getPerformanceLevel } from "@/lib/cache/game-config";
 import { createClient } from "@/lib/supabase/client";
 import { PiLightning } from 'react-icons/pi';
+import { LuCalendarClock } from "react-icons/lu";
+
+import { TbMedal2 } from "react-icons/tb";
+import { GiGemNecklace } from "react-icons/gi";
+import { LuFlower } from "react-icons/lu";
+import { CgSmile } from "react-icons/cg";
 
 interface LeaderboardEntry {
   username: string;
@@ -95,21 +101,21 @@ const FindThePilotLeaderboard: React.FC<FindThePilotLeaderboardProps> = ({ isOpe
 
   const getDifficultyIcon = (difficulty: string) => {
     switch (difficulty) {
-      case 'easy': return <FaRegFaceGrinBeam className="text-green-600" />;
-      case 'medium': return <FaRegFaceGrin className="text-yellow-600" />;
-      case 'hard': return <FaRegFaceGrimace className="text-red-600" />;
-      case 'extreme': return <FaRegFaceAngry className="text-black" />;
+      case 'easy': return <FaRegFaceGrinBeam className="text-light " />;
+      case 'medium': return <FaRegFaceGrin className="text-light" />;
+      case 'hard': return <FaRegFaceGrimace className="text-light" />;
+      case 'extreme': return <FaRegFaceAngry className="text-light" />;
       default: return null;
     }
   };
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
-      case 'easy': return 'text-green-600 bg-green-50 border-green-200';
-      case 'medium': return 'text-yellow-600 bg-yellow-50 border-yellow-200';
-      case 'hard': return 'text-red-600 bg-red-50 border-red-200';
-      case 'extreme': return 'text-black bg-gray-50 border-gray-200';
-      default: return 'text-gray-600 bg-gray-50 border-gray-200';
+      case 'easy': return 'text-light bg-green-600';
+      case 'medium': return 'text-light bg-yellow-600';
+      case 'hard': return 'text-light bg-red-600';
+      case 'extreme': return 'text-light bg-black';
+      default: return 'text-light bg-gray-600';
     }
   };
 
@@ -152,7 +158,7 @@ const FindThePilotLeaderboard: React.FC<FindThePilotLeaderboardProps> = ({ isOpe
           {data.map((entry, index) => (
             <div
               key={`${entry.username}-${index}`}
-              className={`flex items-center justify-between p-3 bg-white rounded-lg hover:bg-gray-50 transition-colors ${index + 1 === 1 ? 'bg-yellow-100 hover:bg-yellow-200' : index + 1 === 2 ? 'bg-gray-100 hover:bg-gray-200' : index + 1 === 3 ? 'bg-amber-100 hover:bg-amber-200' : 'bg-white hover:bg-gray-50'}`}
+              className={`relative flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 transition-colors shadow ${index + 1 === 1 ? 'bg-yellow-100 hover:bg-yellow-200' : index + 1 === 2 ? 'bg-gray-200 hover:bg-gray-300' : index + 1 === 3 ? 'bg-amber-200 hover:bg-amber-300' : 'bg-gray-100 hover:bg-gray-200'}`}
             >
               <div className={`flex items-center gap-3 font-medium ${index + 1 === 1 ? 'text-yellow-500' : index + 1 === 2 ? 'text-gray-400' : index + 1 === 3 ? 'text-amber-600' : 'text-gray-500'}`}>
                 <span className="text-lg font-black">{index + 1}</span>
@@ -166,6 +172,13 @@ const FindThePilotLeaderboard: React.FC<FindThePilotLeaderboardProps> = ({ isOpe
               
               <div className={`text-right ${index + 1 === 1 ? 'text-yellow-500' : index + 1 === 2 ? 'text-gray-400' : index + 1 === 3 ? 'text-amber-600' : 'text-gray-500'}`}>
                 <div className="text-lg font-black">{entry.total_points} pts</div>
+              </div>
+
+              <div className="absolute top-2 left-[0.6rem]">
+                {index + 1 === 1 && <TbMedal2 className="text-yellow-500" />}
+                {index + 1 === 2 && <GiGemNecklace className="text-gray-400" />}
+                {index + 1 === 3 && <LuFlower className="text-amber-600" />}
+                {index + 1 > 3 && <CgSmile className="text-gray-500" />}
               </div>
             </div>
           ))}
@@ -198,13 +211,13 @@ const FindThePilotLeaderboard: React.FC<FindThePilotLeaderboardProps> = ({ isOpe
               <div className="flex items-center gap-3">
                 <div>
                   <div className="flex items-center gap-2 mb-1">
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium border flex items-center gap-1 ${getDifficultyColor(entry.difficulty)}`}>
+                    <span className={`px-2 py-1 rounded-full text-xs font-semibold flex items-center gap-1 ${getDifficultyColor(entry.difficulty)}`}>
                       {getDifficultyIcon(entry.difficulty)}
-                      {entry.difficulty.toUpperCase()}
+                      {entry.difficulty.charAt(0).toUpperCase() + entry.difficulty.slice(1)}
                     </span>
                   </div>
-                  <div className="text-sm text-gray-500">
-                    {formatDate(entry.created_at)}
+                  <div className="text-sm text-gray-500 flex items-center gap-1 font-semibold">
+                    <LuCalendarClock /> {formatDate(entry.created_at)}
                   </div>
                 </div>
               </div>
@@ -225,15 +238,14 @@ const FindThePilotLeaderboard: React.FC<FindThePilotLeaderboardProps> = ({ isOpe
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl max-h-[80vh] flex flex-col bg-[#FFF8ED]/90">
+      <DialogContent className="max-w-2xl min-h-[80vh] max-h-[80vh] flex flex-col bg-[#FFF8ED]/90">
         <DialogHeader className="flex-shrink-0">
           <DialogTitle className="flex items-center gap-2 text-2xl tracking-tight font-bold text-orange-700">
             <GiPodiumWinner className="text-yellow-500" />
             Find the Pilot Leaderboard
           </DialogTitle>
         </DialogHeader>
-
-        <div className="flex-1 overflow-hidden">
+        <div className="flex-1 overflow-y-auto">
           <Tabs defaultValue="today" className="w-full h-full flex flex-col">
             <TabsList className={`grid w-full ${isUserLoggedIn ? 'grid-cols-3' : 'grid-cols-2'} bg-[#f9ddbd] flex-shrink-0`}>
               <TabsTrigger value="today" className="flex items-center gap-2 [data-state=active]:bg-[#ffdfbb] text-orange-600">
@@ -249,7 +261,7 @@ const FindThePilotLeaderboard: React.FC<FindThePilotLeaderboardProps> = ({ isOpe
               )}
             </TabsList>
             
-            <div className="flex-1 overflow-hidden mt-4">
+            <div className="flex-1 mt-4">
               <TabsContent value="today" className="h-full overflow-y-auto">
                 <LeaderboardTable 
                   data={todaysLeaderboard} 
