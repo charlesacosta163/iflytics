@@ -1,7 +1,7 @@
 "use client";
 
 import { X } from "lucide-react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { TbPlaneInflight } from "react-icons/tb";
 import { LiaCompass } from "react-icons/lia";
@@ -11,6 +11,13 @@ import { MdAirplanemodeActive } from "react-icons/md";
 import { cn, getMinutesAgo } from "@/lib/utils";
 import { RiCopilotFill } from "react-icons/ri";
 
+import { CgArrowLongRightC } from "react-icons/cg";
+import { LuPlaneTakeoff, LuPlaneLanding, LuMap } from "react-icons/lu";
+
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
+import { getUserFlightInfo, getUserFlightPlan } from "@/lib/actions";
+
 const UserPopupInfo = ({
   popupInfo,
   setPopupInfo,
@@ -18,8 +25,47 @@ const UserPopupInfo = ({
   popupInfo: any;
   setPopupInfo: React.Dispatch<React.SetStateAction<any>>;
 }) => {
-  // For staff, bg blue
-  // For Iflytics Users (role = user) = bg-gray
+  const [flightInfo, setFlightInfo] = useState<any>(null);
+  const [flightPlan, setFlightPlan] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchAllFlightData = async () => {
+      try {
+        // Fetch both pieces of data in parallel
+        const [flightInfo, flightPlan] = await Promise.all([
+          getUserFlightInfo(popupInfo.userId, popupInfo.flightId),
+          getUserFlightPlan(popupInfo.flightId),
+        ]);
+
+        // Set flight info
+        setFlightInfo(flightInfo);
+
+        // Set flight plan (with your existing logic)
+        if (flightPlan?.flightPlanItems?.length > 0) {
+          setFlightPlan(flightPlan);
+        } else {
+          setFlightPlan(null);
+        }
+      } catch (error) {
+        console.error("Error fetching flight data:", error);
+        setFlightInfo(null);
+        setFlightPlan(null);
+      }
+    };
+
+    fetchAllFlightData();
+  }, [popupInfo.flightId, popupInfo.userId]);
+
+  // If originAirport exists, use it, else the first flight plan item, if that doesn't exist, "N/A"
+  const originAirportFinal = flightInfo?.originAirport 
+    || flightPlan?.flightPlanItems?.at(0)?.name 
+    || "N/A";
+
+  // If destinationAirport exists, use it, else the last flight plan item, if that doesn't exist, "N/A"
+  const destinationAirportFinal = flightInfo?.destinationAirport 
+    || flightPlan?.flightPlanItems?.at(-1)?.name 
+    || "N/A";
+
   return (
     <div
       className={cn(
@@ -72,31 +118,216 @@ const UserPopupInfo = ({
             >
               {popupInfo.callsign}
             </div>
-            {
-                (popupInfo.role == "staff" || popupInfo.role == "user") && (
-                    <span className="text-gray-300 text-sm font-medium">{popupInfo.role === "staff" ? "STAFF" : popupInfo.role === "user" ? "IFLYTICS USER" : ""}</span>
-                )
-            }
+            {(popupInfo.role == "staff" || popupInfo.role == "user") && (
+              <span className="text-gray-300 text-sm font-medium">
+                {popupInfo.role === "staff"
+                  ? "STAFF"
+                  : popupInfo.role === "user"
+                  ? "IFLYTICS USER"
+                  : ""}
+              </span>
+            )}
           </div>
         </div>
       </div>
 
       {/* Flight Details */}
-      <div className="p-6 bg-[#fff5ee] rounded-t-xl shadow">
-        <div className="space-y-4">
+      <section className="bg-[#fff5ee] p-6 pt-4 rounded-t-xl shadow-xl">
+        <Tabs defaultValue="pilot" className="flex flex-col gap-4">
+          <TabsList className="w-full bg-orange-200">
+            <TabsTrigger
+              value="pilot"
+              className="text-orange-500 font-semibold flex items-center gap-2 justify-center"
+            >
+              <RiCopilotFill className="text-orange-500" />
+              <span className="text-orange-500">Pilot</span>
+            </TabsTrigger>
+            <TabsTrigger
+              value="flight"
+              className="text-orange-500 font-semibold flex items-center gap-2"
+            >
+              <TbPlaneInflight className="text-orange-500" />
+              <span className="text-orange-500">Flight Info</span>
+            </TabsTrigger>
+          </TabsList>
+
           <div id="pilot" className="flex items-center justify-between gap-2">
             <div>
-              <div className="text-gray-500 font-medium mb-1 flex items-center gap-1">
-                <RiCopilotFill className="text-gray-500" />
-                Pilot
+              <div className="text-gray-500 font-medium flex items-center gap-2">
+                <RiCopilotFill className="text-gray-500 flex-1 text-3xl" />
+                <div
+                  className={`text-gray-700 text-lg font-bold tracking-tight ${
+                    popupInfo.role === "staff" ? "!text-blue-500" : ""
+                  }`}
+                >
+                  {popupInfo.username || "Unknown"}{" "}
+                </div>
               </div>
+            </div>
+          </div>
+          <TabsContent value="pilot" className="">
+            <div className="space-y-4">
+              <div className="grid grid-cols-3 gap-2">
+                {[
+                  {
+                    label: "Altitude",
+                    value: popupInfo.altitude,
+                    icon: <TbPlaneInflight className="text-gray-500" />,
+                    unit: "ft",
+                  },
+                  {
+                    label: "Speed",
+                    value: popupInfo.speed,
+                    icon: <PiSpeedometer className="text-gray-500" />,
+                    unit: "kts",
+                  },
+                  {
+                    label: "Heading",
+                    value: popupInfo.heading,
+                    icon: <LiaCompass className="text-gray-500" />,
+                    unit: "°",
+                  },
+                ].map((item: any) => (
+                  <div
+                    className="bg-gradient-to-br from-[#FFE7D5] to-[#ffca9c] px-2 py-3 rounded-lg flex flex-col items-center gap-2 shadow-md"
+                    key={item.label}
+                  >
+                    <div className="text-gray-600 font-extrabold tracking-tight">
+                      {item.value ? Math.round(item.value) : "N/A"} {item.unit}
+                    </div>
+
+                    <div className="flex flex-col items-center">
+                      {item.icon}
+                      <div className="text-gray-500 text-xs font-semibold mb-1">
+                        {item.label}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
               <div
-                className={`text-gray-700 text-lg font-bold tracking-tight ${
-                  popupInfo.role === "staff" ? "!text-blue-500" : ""
-                }`}
+                className={cn(
+                  "relative p-4 pr-6 rounded-lg shadow-md flex flex-col gap-1",
+                  popupInfo.username
+                    ? "bg-gradient-to-br from-[#1E3B70] to-[#29539B]"
+                    : "bg-gradient-to-br from-yellow-600 to-yellow-800"
+                )}
               >
-                {popupInfo.username || "Unknown"}{" "}
+                <BiMessageRoundedDots className="text-light text-2xl absolute top-2 right-2" />
+                <div className="font-semibold font-mono text-light tracking-tight text-lg">
+                  {popupInfo.compliment}
+                </div>
               </div>
+
+              <div className="flex gap-2 flex-col">
+                {/* <div className="flex items-center gap-2">
+                <span className="text-gray-500 text-sm font-medium">Status:</span>
+                {popupInfo.isConnected ? (
+                  <span className="text-green-500 text-sm font-medium flex items-center gap-1">
+                    <div className="w-2 h-2 bg-green-500 rounded-full inline-block mr-1 animate-pulse"></div>
+                    Connected
+                  </span>
+                ) : (
+                  <span className="text-red-500 text-sm font-medium flex items-center gap-1">
+                    <div className="w-2 h-2 bg-red-400 rounded-full inline-block mr-1 animate-pulse"></div>
+                    Disconnected
+                  </span>
+                )}
+              </div> */}
+              </div>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="flight" className="">
+            <div className="space-y-4">
+              <section className="flex justify-between gap-2">
+                <div className="flex flex-col items-center">
+                  <div className="flex items-center gap-2 text-gray">
+                    <LuPlaneTakeoff className="text-gray-500" />
+                    <span className="text-gray-500 font-black">
+                      {originAirportFinal}
+                    </span>
+                  </div>
+
+                  <span className="text-gray-500 text-sm font-medium">
+                    Origin
+                  </span>
+                </div>
+
+                {/* Stretched arrow */}
+                <div className="flex-1 flex justify-center items-center px-2 relative">
+                  <TbPlaneInflight className="text-xl text-gray-500 absolute left-1/2 -translate-x-1/2 bottom-5" />
+                  <svg
+                    className="w-full h-6 text-gray-500"
+                    viewBox="0 0 100 24"
+                    fill="none"
+                    preserveAspectRatio="none"
+                  >
+                    {/* Hollow circle at start */}
+                    <circle
+                      cx="12"
+                      cy="12"
+                      r="6"
+                      stroke="currentColor"
+                      strokeWidth="3"
+                      fill="none"
+                    />
+
+                    {/* Long horizontal line */}
+                    <line
+                      x1="18"
+                      y1="12"
+                      x2="80"
+                      y2="12"
+                      stroke="currentColor"
+                      strokeWidth="3"
+                    />
+
+                    {/* Solid arrow head */}
+                    <path d="M75 6 L88 12 L75 18 Z" fill="currentColor" />
+                  </svg>
+                </div>
+
+                <div className="flex flex-col items-center">
+                  <div className="flex items-center gap-2 text-gray">
+                    <LuPlaneLanding className="text-gray-500" />
+                    <span className="text-gray-500 font-black">
+                      {destinationAirportFinal}
+                    </span>
+                  </div>
+
+                  <span className="text-gray-500 text-sm font-medium">
+                    Destination
+                  </span>
+                </div>
+              </section>
+
+              <section className="flex flex-col gap-1 text-gray">
+                <div className="flex items-center gap-1">
+                  <LuMap className="text-gray" />
+                  <h3 className="text-sm font-semibold">Flight Plan</h3>
+                </div>
+
+                <div className="p-2 rounded-lg bg-gray text-light font-mono text-xs font-medium break-all h-[75px] overflow-y-auto">
+                  {flightPlan && flightPlan.flightPlanItems.length > 0
+                    ? flightPlan?.flightPlanItems
+                        ?.map((item: any) => item.name)
+                        .join(" ")
+                    : "No flight plan found"}
+                </div>
+              </section>
+            </div>
+          </TabsContent>
+
+          <div className="flex justify-between">
+            <div className="flex items-center gap-2">
+              <span className="text-gray-500 text-sm font-medium">
+                Last Seen:
+              </span>
+              <span className="text-gray-500 text-sm font-medium">
+                {getMinutesAgo(popupInfo.lastReport)}
+              </span>
             </div>
 
             {popupInfo.username && (
@@ -110,80 +341,8 @@ const UserPopupInfo = ({
               </div>
             )}
           </div>
-
-          <div className="grid grid-cols-3 gap-2">
-            {[
-              {
-                label: "Altitude",
-                value: popupInfo.altitude,
-                icon: <TbPlaneInflight className="text-gray-500" />,
-                unit: "ft",
-              },
-              {
-                label: "Speed",
-                value: popupInfo.speed,
-                icon: <PiSpeedometer className="text-gray-500" />,
-                unit: "kts",
-              },
-              {
-                label: "Heading",
-                value: popupInfo.heading,
-                icon: <LiaCompass className="text-gray-500" />,
-                unit: "°",
-              },
-            ].map((item: any) => (
-              <div
-                className="bg-gradient-to-br from-[#FFE7D5] to-[#ffca9c] px-2 py-3 rounded-lg flex flex-col items-center gap-2 shadow-md"
-                key={item.label}
-              >
-                <div className="text-gray-600 font-extrabold tracking-tight">
-                  {item.value ? Math.round(item.value) : "N/A"} {item.unit}
-                </div>
-
-                <div className="flex flex-col items-center">
-                  {item.icon}
-                  <div className="text-gray-500 text-xs font-semibold mb-1">
-                    {item.label}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-          
-          <div className={cn("relative p-4 pr-6 rounded-lg shadow-md flex flex-col gap-1", popupInfo.username ? "bg-gradient-to-br from-[#1E3B70] to-[#29539B]" : "bg-gradient-to-br from-yellow-600 to-yellow-800")}>
-            <BiMessageRoundedDots className="text-light text-2xl absolute top-2 right-2" />
-            <div className="font-semibold font-mono text-light tracking-tight text-lg">
-              {popupInfo.compliment}
-            </div>
-          </div>
-
-          <div className="flex gap-2 flex-col">
-            <div className="flex items-center gap-2">
-              <span className="text-gray-500 text-sm font-medium">Status:</span>
-              {popupInfo.isConnected ? (
-                <span className="text-green-500 text-sm font-medium flex items-center gap-1">
-                  <div className="w-2 h-2 bg-green-500 rounded-full inline-block mr-1 animate-pulse"></div>
-                  Connected
-                </span>
-              ) : (
-                <span className="text-red-500 text-sm font-medium flex items-center gap-1">
-                  <div className="w-2 h-2 bg-red-400 rounded-full inline-block mr-1 animate-pulse"></div>
-                  Disconnected
-                </span>
-              )}
-            </div>
-
-            <div className="flex items-center gap-2">
-              <span className="text-gray-500 text-sm font-medium">
-                Last Seen:
-              </span>
-              <span className="text-gray-500 text-sm font-medium">
-                {getMinutesAgo(popupInfo.lastReport)}
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
+        </Tabs>
+      </section>
 
       {/* Close Button */}
       <button

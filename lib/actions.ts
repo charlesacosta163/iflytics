@@ -465,3 +465,36 @@ export async function getFlightsFromServer() {
 
     return data.result || []
 }
+
+export async function getUserFlightInfo(userId: string, flightId: string) {
+    // Args: userId, flightId
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/${userId}/flights/${flightId}`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${API_KEY}`
+        },
+        next: { revalidate: 60 } // Cache for 1 minute
+    })
+
+    const data = await response.json()
+
+    return data.result || null
+}
+
+export async function getUserFlightPlan(flightId: string) {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/sessions/${process.env.NEXT_PUBLIC_IF_EXPERT_SERVER_ID}/flights/${flightId}/flightplan`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${API_KEY}`
+        },
+        next: { revalidate: 60 }
+    })
+
+   // console.log("🛩️ Flight plan API status:", response.status);
+    const data = await response.json()
+   //  console.log("🛩️ Flight plan API response:", data);
+
+    return data.result || "Flight Plan not found"
+}
