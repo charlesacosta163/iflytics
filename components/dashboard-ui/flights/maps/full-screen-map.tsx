@@ -695,6 +695,8 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
     // console.log("✅ All routes cleared");
   };
 
+
+
   return (
     <div style={{ position: "relative", width: "100%", height: "100%" }}>
       <p className="hidden lg:block absolute bottom-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-blue-500 to-purple-500 text-white backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold">
@@ -716,6 +718,12 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
   );
 };
 
+const deduplicateFlights = (flights: any[]) => {
+  return flights.filter((flight, index, self) =>
+    index === self.findIndex((t) => t.username === flight.username)
+  );
+};
+
 const FloatingRightNav = ({ flights, onSelectUser }: { flights: any[], onSelectUser: (flight: any) => void }) => {
   return (
     <div className="absolute right-4 top-1/2 transform -translate-y-1/2 z-[999]">
@@ -727,7 +735,7 @@ const FloatingRightNav = ({ flights, onSelectUser }: { flights: any[], onSelectU
         <SearchButton flights={flights} onSelectUser={onSelectUser} />
         
         {/* Compliment Button */}
-        <ComplimentButton flights={flights} />
+        <ComplimentButton flights={deduplicateFlights(flights)} />
       </div>
     </div>
   );
@@ -992,6 +1000,7 @@ const ComplimentButton = ({ flights }: { flights: any[] }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [currentCompliment, setCurrentCompliment] = useState("");
   const [topUsers, setTopUsers] = useState<any[]>([]);
+  
 
   useEffect(() => {
     if (!flights || flights.length === 0) return;
@@ -1038,7 +1047,7 @@ const ComplimentButton = ({ flights }: { flights: any[] }) => {
                 </button>
               </div>
 
-              <div className="space-y-2 max-h-52 md:max-h-64 overflow-y-auto">
+              <div className="space-y-2 max-h-42 md:max-h-48 overflow-y-auto">
                 {topUsers.length > 0 ? topUsers.map((flight, index) => (
                   <div key={`${flight.username}-${index}`} className="flex items-center gap-2 md:gap-3 p-2 hover:bg-gray-50 rounded-lg">
                     <div className="text-xs font-bold text-gray-400 w-5 md:w-6">

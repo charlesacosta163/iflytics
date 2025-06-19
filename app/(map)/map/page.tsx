@@ -113,9 +113,15 @@ const MapPage = () => {
       </div>
 
       <Link href="/map/game">
-        <div className="absolute bottom-4 right-4 z-50 bg-gray-700 text-light backdrop-blur-sm rounded-lg shadow-lg px-4 py-2 flex items-center gap-2">
-          <BiSolidFaceMask className="text-light" />
-          <h1 className="hidden sm:block tracking-tight font-bold">Find the Pilot</h1>
+        <div className="absolute bottom-4 right-4 z-50">
+          {/* Gradient border wrapper */}
+          <div className="bg-gradient-to-r from-orange-500 via-yellow-500 to-green-500 p-[4px] rounded-lg shadow-lg">
+            {/* Inner content */}
+            <div className="bg-gray-700 text-light backdrop-blur-sm rounded-md px-4 py-2 flex items-center gap-2 hover:bg-gray-600 transition-colors">
+              <BiSolidFaceMask className="text-light" />
+              <h1 className="hidden sm:block tracking-tight font-bold">Find the Pilot</h1>
+            </div>
+          </div>
         </div>
       </Link>
 
