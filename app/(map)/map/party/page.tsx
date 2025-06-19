@@ -11,11 +11,10 @@ import { BiSolidFaceMask } from "react-icons/bi";
 
 import { aviationCompliments, alternator, unknownUserCompliments } from "@/lib/data";
 import Link from "next/link";
-import { FaRegFaceGrinBeam } from "react-icons/fa6";
 
 const fetcher = () => getFlightsFromServer();
 
-const MapPage = () => {
+const MapPartyPage = () => {
   const {
     data: flights = [],
     error,
@@ -125,9 +124,9 @@ const MapPage = () => {
         </div>
       </Link>
 
-      <FullScreenMap flights={quirkyFlights} styleUrl="https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json"/>
+      <FullScreenMap flights={quirkyFlights} styleUrl="https://demotiles.maplibre.org/style.json"/>
     </div>
   );
 };
 
-export default MapPage;
+export default MapPartyPage;

@@ -2,7 +2,10 @@
 
 import React, { useEffect, useState, useRef } from "react";
 import { Map } from "maplibre-gl";
-import { X, Search, MapPin } from "lucide-react";
+import { X, Search, ChevronDown } from "lucide-react";
+import { LuPartyPopper, LuSun, LuMoon } from "react-icons/lu";
+import { useRouter, usePathname } from "next/navigation";
+
 import { aviationCompliments } from "@/lib/data";
 import UserPopupInfo from "./user-popup-info";
 import { cn } from "@/lib/utils";
@@ -11,21 +14,29 @@ import { GiControlTower } from "react-icons/gi";
 import { FaRegFaceGrinWink } from "react-icons/fa6";
 import { getUserFlightPlan, getAllAirportsWithActiveATC } from "@/lib/actions";
 
-const FullScreenMap = ({ flights }: { flights: any[] }) => {
+// Add the map themes configuration
+const mapThemes = {
+  "/map": {
+    name: "Light",
+    icon: <LuSun className="w-6 h-6" />
+  },
+  "/map/dark": {
+    name: "Dark", 
+    icon: <LuMoon className="w-6 h-6" />
+  },
+  "/map/party": {
+    name: "Party",
+    icon: <LuPartyPopper className="w-6 h-6" />
+  }
+};
+
+const FullScreenMap = ({ flights, styleUrl }: { flights: any[], styleUrl: string }) => {
   const [popupInfo, setPopupInfo] = useState<any>(null);
-  // const [searchQuery, setSearchQuery] = useState("");
-  // const [searchResults, setSearchResults] = useState<any[]>([]);
-  // const [showResults, setShowResults] = useState(false);
   const mapRef = useRef<Map | null>(null);
   const mapContainerRef = useRef<HTMLDivElement>(null);
-  const searchInputRef = useRef<HTMLInputElement>(null);
   
   // Add state for current route
   const [currentRouteId, setCurrentRouteId] = useState<string | null>(null);
-
-  // Panel visibility states
-  // const [showSearchPanel, setShowSearchPanel] = useState(false);
-  // const [showAtcPanel, setShowAtcPanel] = useState(false);
 
   // Function to create origin and destination sprites
   const createRouteSprites = (map: Map) => {
@@ -280,26 +291,11 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
           });
           
           setCurrentRouteId(routeId);
-          // console.log(`✈️ Added validated gradient route for flight ${flightId}`);
-        } else {
-          // console.log("❌ No valid waypoints for route");
         }
       }
     } catch (error) {
       console.error('Error fetching flight plan:', error);
     }
-  };
-
-  // Function to clear current route
-  const clearFlightRoute = () => {
-    if (!mapRef.current || !currentRouteId) return;
-    
-    const map = mapRef.current;
-    if (map.getLayer(currentRouteId)) {
-      map.removeLayer(currentRouteId);
-      map.removeSource(currentRouteId);
-    }
-    setCurrentRouteId(null);
   };
 
   // Modified function to set popup info and show route
@@ -335,10 +331,6 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
       duration: 2000,
       essential: true
     });
-
-    // Clear search
-    // setSearchQuery("");
-    // setShowResults(false);
         
     // Show popup and route for the user
     setPopupInfoWithRoute({
@@ -366,13 +358,13 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
     });
   };
 
-  // Modified map initialization
+  // Simple map initialization
   useEffect(() => {
     if (!mapContainerRef.current || mapRef.current) return;
 
     const map = new Map({
       container: mapContainerRef.current,
-      style: "https://demotiles.maplibre.org/style.json",
+      style: styleUrl,
       center: [0, 0],
       zoom: 1,
       attributionControl: false,
@@ -381,16 +373,13 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
     mapRef.current = map;
 
     map.on("load", () => {
-      // Create route sprites immediately when map loads
       createRouteSprites(map);
       
-      // Add source
       map.addSource("flights", {
         type: "geojson",
         data: { type: "FeatureCollection", features: [] },
       });
 
-      // Add flight layer
       map.addLayer({
         id: "flight-points",
         type: "symbol",
@@ -451,6 +440,9 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
   useEffect(() => {
     if (!mapRef.current || !flights || flights.length === 0) return;
 
+    const handleRefresh = () => updateFlightData();
+    window.addEventListener('refreshFlights', handleRefresh);
+    
     const map = mapRef.current;
     
     const updateFlightData = () => {
@@ -660,6 +652,10 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
     } else {
       updateFlightData();
     }
+
+    return () => {
+      window.removeEventListener('refreshFlights', handleRefresh);
+    };
   }, [flights]);
 
   // Enhanced clearAllRoutes function - nuclear cleanup
@@ -669,8 +665,6 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
     const map = mapRef.current;
     const style = map.getStyle();
     
-    // console.log("🧹 Clearing ALL flight routes...");
-    
     // Find and remove all route, origin, and destination layers
     if (style && style.layers) {
       style.layers.forEach((layer: any) => {
@@ -678,7 +672,6 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
           try {
             if (map.getLayer(layer.id)) {
               map.removeLayer(layer.id);
-              // console.log(`Removed layer: ${layer.id}`);
             }
           } catch (error) {
             console.warn(`Error removing layer ${layer.id}:`, error);
@@ -694,7 +687,6 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
           try {
             if (map.getSource(sourceId)) {
               map.removeSource(sourceId);
-              console.log(`Removed source: ${sourceId}`);
             }
           } catch (error) {
             console.warn(`Error removing source ${sourceId}:`, error);
@@ -704,10 +696,7 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
     }
     
     setCurrentRouteId(null);
-    // console.log("✅ All routes cleared");
   };
-
-
 
   return (
     <div style={{ position: "relative", width: "100%", height: "100%" }}>
@@ -716,10 +705,13 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
       </p>
       <div ref={mapContainerRef} className="w-full h-full" />
 
-      {/* Replace the three separate panels with the floating nav */}
-      <FloatingRightNav flights={flights} onSelectUser={focusOnUser} />
+      {/* FloatingRightNav with theme button */}
+      <FloatingRightNav 
+        flights={flights} 
+        onSelectUser={focusOnUser}
+      />
 
-      {/* Flight Information Popup - NO BACKDROP */}
+      {/* Flight Information Popup */}
       {popupInfo && (
         <UserPopupInfo 
           popupInfo={popupInfo} 
@@ -730,15 +722,15 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
   );
 };
 
-const deduplicateFlights = (flights: any[]) => {
-  return flights.filter((flight, index, self) =>
-    index === self.findIndex((t) => t.username === flight.username)
-  );
-};
-
-const FloatingRightNav = ({ flights, onSelectUser }: { flights: any[], onSelectUser: (flight: any) => void }) => {
+const FloatingRightNav = ({ 
+  flights, 
+  onSelectUser
+}: { 
+  flights: any[], 
+  onSelectUser: (flight: any) => void
+}) => {
   return (
-    <div className="absolute right-2 top-1/2 transform -translate-y-1/2 z-[999]">
+    <div className="absolute right-4 top-1/2 transform -translate-y-1/2 z-[999]">
       <div className="bg-white/20 backdrop-blur-sm rounded-2xl shadow-lg p-2 space-y-2 border border-white/30">
         {/* ATC Button */}
         <ActiveATCButton />
@@ -747,7 +739,10 @@ const FloatingRightNav = ({ flights, onSelectUser }: { flights: any[], onSelectU
         <SearchButton flights={flights} onSelectUser={onSelectUser} />
         
         {/* Compliment Button */}
-        <ComplimentButton flights={deduplicateFlights(flights)} />
+        <ComplimentButton flights={flights} />
+        
+        {/* Map Theme Button */}
+        <MapThemeButton />
       </div>
     </div>
   );
@@ -899,7 +894,7 @@ const SearchButton = ({ flights, onSelectUser }: { flights: any[], onSelectUser:
 
       {/* Panel */}
       {isOpen && (
-        <div className="absolute right-16 top-14 z-[1001]">
+        <div className="absolute right-16 top-0 z-[1001]">
           <div className="bg-[#FFEFD5] backdrop-blur-sm rounded-xl shadow-xl
                           w-72 animate-in slide-in-from-right duration-300">
             <div className="p-4 max-h-96 overflow-hidden">
@@ -1046,7 +1041,7 @@ const ComplimentButton = ({ flights }: { flights: any[] }) => {
 
       {/* Panel */}
       {isOpen && (
-        <div className="absolute right-16 top-28 z-[1001]">
+        <div className="absolute right-16 top-0 z-[1001]">
           <div className="bg-[#FFEFD5] backdrop-blur-sm rounded-xl shadow-xl
                           w-72 md:w-80 animate-in slide-in-from-right duration-300">
             <div className="p-3 md:p-4 max-h-80 md:max-h-96 overflow-hidden">
@@ -1113,6 +1108,80 @@ const ComplimentButton = ({ flights }: { flights: any[] }) => {
           </div>
         </div>
       )}
+    </>
+  );
+};
+
+const MapThemeButton = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter();
+  const pathname = usePathname();
+
+  return (
+    <>
+      {/* Theme Button */}
+      <div className="relative">
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className="w-12 h-12 bg-purple-500/90 backdrop-blur-sm rounded-xl shadow-lg
+                     hover:bg-purple-600 transition-all duration-200
+                     flex items-center justify-center group relative"
+        >
+          <span className="text-light text-lg">
+            {mapThemes[pathname as keyof typeof mapThemes]?.icon || mapThemes["/map"].icon}
+          </span>
+          <ChevronDown className={cn("w-3 h-3 text-light absolute -bottom-1 -right-1 transition-transform duration-200", 
+            isOpen && "rotate-180")} />
+        </button>
+
+        {/* Dropdown */}
+        {isOpen && (
+          <>
+            {/* Backdrop to close dropdown */}
+            <div 
+              className="fixed inset-0 z-[998]" 
+              onClick={() => setIsOpen(false)}
+            />
+            
+            {/* Dropdown Panel */}
+            <div className="absolute right-16 top-0 z-[1002] w-40">
+              <div className="bg-gray-700 backdrop-blur-sm rounded-xl shadow-xl border border-white/20 overflow-hidden">
+                <div className="p-2">
+                  <div className="text-xs font-semibold text-light px-3 py-2 border-b border-gray-600">
+                    <div className="flex items-center justify-between">
+                      <span>Map Theme</span>
+                      <button onClick={() => setIsOpen(false)}>
+                        <X className="w-3 h-3 text-light" />
+                      </button>
+                    </div>
+                  </div>
+                  {Object.entries(mapThemes).map(([path, theme]) => (
+                    <button
+                      key={path}
+                      onClick={() => {
+                        router.push(path);
+                        setIsOpen(false);
+                      }}
+                      className={cn(
+                        "w-full flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-colors text-light",
+                        pathname === path 
+                          ? "bg-purple-600 font-medium" 
+                          : "hover:bg-gray-600"
+                      )}
+                    >
+                      <span className="text-base">{theme.icon}</span>
+                      <span className="flex-1 text-left">{theme.name}</span>
+                      {pathname === path && (
+                        <div className="w-2 h-2 bg-purple-400 rounded-full"></div>
+                      )}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </>
+        )}
+      </div>
     </>
   );
 };
