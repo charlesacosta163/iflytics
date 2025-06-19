@@ -68,6 +68,7 @@ const UserPopupInfo = ({
     || "N/A";
 
   return (
+    // Mod is purple
     <div
       className={cn(
         "absolute top-16 !rounded-xl font-sans w-[330px] shadow-2xl z-[1001] bg-white transition-transform duration-300",
@@ -75,6 +76,8 @@ const UserPopupInfo = ({
         "animate-in slide-in-from-left duration-300",
         popupInfo.role === "staff"
           ? "bg-blue-500 text-light"
+          : popupInfo.role === "mod"
+          ? "bg-purple-500 text-light"
           : popupInfo.role === "user"
           ? "bg-gradient-to-br from-gray to-dark !text-light"
           : ""
@@ -96,6 +99,8 @@ const UserPopupInfo = ({
           "p-6 pb-4 relative overflow-hidden rounded-t-xl",
           popupInfo.role === "staff"
             ? "bg-blue-500 text-light"
+            : popupInfo.role === "mod"
+            ? "bg-purple-500 text-light"
             : popupInfo.role === "user"
             ? "bg-gradient-to-br from-gray to-dark !text-light"
             : "bg-[#fffafa]"
@@ -104,7 +109,7 @@ const UserPopupInfo = ({
         <MdAirplanemodeActive
           className={cn(
             "text-gray-500/20 text-[7rem] rotate-90 absolute top-4 right-10",
-            popupInfo.role === "staff" ? "text-light/20" : ""
+            popupInfo.role === "staff" ? "text-light/20" : popupInfo.role === "mod" ? "text-gray-100/20" : "text-gray-500/20"
           )}
         />
         <div className="flex justify-between items-start">
@@ -124,6 +129,8 @@ const UserPopupInfo = ({
               className={`text-2xl font-bold text-gray tracking-tight ${
                 popupInfo.role === "staff"
                   ? "!text-light"
+                  : popupInfo.role === "mod"
+                  ? "!text-light"
                   : popupInfo.role === "user"
                   ? "!text-light"
                   : ""
@@ -131,12 +138,14 @@ const UserPopupInfo = ({
             >
               {popupInfo.callsign}
             </div>
-            {(popupInfo.role == "staff" || popupInfo.role == "user") && (
+            {(popupInfo.role == "staff" || popupInfo.role == "user" || popupInfo.role == "mod") && (
               <span className="text-gray-300 text-sm font-medium">
                 {popupInfo.role === "staff"
-                  ? "STAFF"
+                  ? "INFINITE FLIGHT STAFF"
                   : popupInfo.role === "user"
                   ? "IFLYTICS USER"
+                  : popupInfo.role === "mod"
+                  ? "INFINITE FLIGHT MODERATOR"
                   : ""}
               </span>
             )}
@@ -170,7 +179,7 @@ const UserPopupInfo = ({
                 <RiCopilotFill className="text-gray-500 flex-1 text-3xl" />
                 <div
                   className={`text-gray-700 text-lg font-bold tracking-tight ${
-                    popupInfo.role === "staff" ? "!text-blue-500" : ""
+                    popupInfo.role === "staff" ? "!text-blue-500" : popupInfo.role === "mod" ? "!text-purple-500" : ""
                   }`}
                 >
                   {popupInfo.username || "Unknown"}{" "}

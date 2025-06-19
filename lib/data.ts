@@ -1825,6 +1825,103 @@ export const alternator = [
       "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/guest/288/1222656_2.png"
     )}&w=64&h=64&fit=cover&mask=circle`,
   },
+  {
+    // MODERATOR INFINITE FLIGHT
+    id: 73,
+    role: "mod",
+    username: "Trey",
+    image: `https://images.weserv.nl/?url=${encodeURIComponent(
+      "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/trey/288/1498977_2.png")}&w=64&h=64&fit=cover&mask=circle`,
+  }, 
+  {
+    // MODERATOR INFINITE FLIGHT
+    id: 74,
+    role: "mod",
+    username: "Chris_S",
+    image: `https://images.weserv.nl/?url=${encodeURIComponent(
+      "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/chris_s/288/1233089_2.png")}&w=64&h=64&fit=cover&mask=circle`,
+  }, 
+  {
+    // MODERATOR INFINITE FLIGHT
+    id: 75,
+    role: "mod",
+    username: "Asher",
+    image: `https://images.weserv.nl/?url=${encodeURIComponent(
+      "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/asher/288/885244_2.png"
+    )}&w=64&h=64&fit=cover&mask=circle`,
+  }, 
+  {
+    // MODERATOR INFINITE FLIGHT
+    id: 76,
+    role: "mod",
+    username: "Darius_Glover",
+    image: `https://images.weserv.nl/?url=${encodeURIComponent(
+      "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/darius_glover/288/1006755_2.png"
+    )}&w=64&h=64&fit=cover&mask=circle`,
+  }, 
+  {
+    // MODERATOR INFINITE FLIGHT
+    id: 77,
+    role: "mod",
+     username: "tomthetank",
+    image: `https://images.weserv.nl/?url=${encodeURIComponent(
+      "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/tomthetank/144/1104903_2.png"
+    )}&w=64&h=64&fit=cover&mask=circle`,
+  }, 
+  {
+  // MODERATOR INFINITE FLIGHT
+  id: 78,
+  role: "mod",
+  username: "Ecoops123",
+  image: `https://images.weserv.nl/?url=${encodeURIComponent(
+    "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/ecoops123/144/1344646_2.png"
+  )}&w=64&h=64&fit=cover&mask=circle`,
+  }, 
+  {
+    // MODERATOR INFINITE FLIGHT
+    id: 79,
+    role: "mod",
+    username: "RickG",
+    image: `https://images.weserv.nl/?url=${encodeURIComponent(
+      "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/rickg/144/1398415_2.png"
+    )}&w=64&h=64&fit=cover&mask=circle`,
+  }, 
+  {
+    // MODERATOR INFINITE FLIGHT
+    id: 80,
+    role: "mod",
+    username: "JoshFly8",
+    image: `https://images.weserv.nl/?url=${encodeURIComponent(
+      "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/joshfly8/144/723737_2.png"
+    )}&w=64&h=64&fit=cover&mask=circle`,
+  }, 
+  {
+    // MODERATOR INFINITE FLIGHT
+    id: 81,
+    role: "mod",
+    username: "Jet_Airways_995",
+    image: `https://images.weserv.nl/?url=${encodeURIComponent(
+      "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/jet_airways_995/144/696532_2.png"
+    )}&w=64&h=64&fit=cover&mask=circle`,
+  }, 
+  {
+    // MODERATOR INFINITE FLIGHT
+    id: 82,
+    role: "mod",
+    username: "Alex",
+    image: `https://images.weserv.nl/?url=${encodeURIComponent(
+      "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/alex/144/1382654_2.png"
+    )}&w=64&h=64&fit=cover&mask=circle`,
+  }, 
+  {
+    // MODERATOR INFINITE FLIGHT
+    id: 83,
+    role: "mod",
+    username: "Evan",
+    image: `https://images.weserv.nl/?url=${encodeURIComponent(
+      "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/evan/144/1448403_2.png"
+    )}&w=64&h=64&fit=cover&mask=circle`,
+  }, 
 ];
 
 // Unknown User Compliments - Maximum Corn Level

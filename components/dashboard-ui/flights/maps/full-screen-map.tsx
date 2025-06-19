@@ -502,6 +502,12 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
                 ctx.beginPath();
                 ctx.arc(18, 18, 16, 0, 2 * Math.PI);
                 ctx.stroke();
+              } else if (flight.role === "mod") {
+                ctx.strokeStyle = "#8b5cf6"; // purple-500
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.arc(18, 18, 16, 0, 2 * Math.PI);
+                ctx.stroke();
               } else if (flight.role === "user") {
                 ctx.fillStyle = "#374151"; // gray-700
                 ctx.beginPath();
@@ -555,6 +561,12 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
           // Draw border/background based on role
           if (flight.role === "staff") {
             ctx.strokeStyle = "#3b82f6"; // blue-500
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.arc(18, 18, 16, 0, 2 * Math.PI);
+            ctx.stroke();
+          } else if (flight.role === "mod") {
+            ctx.strokeStyle = "#8b5cf6"; // purple-500
             ctx.lineWidth = 3;
             ctx.beginPath();
             ctx.arc(18, 18, 16, 0, 2 * Math.PI);
@@ -726,7 +738,7 @@ const deduplicateFlights = (flights: any[]) => {
 
 const FloatingRightNav = ({ flights, onSelectUser }: { flights: any[], onSelectUser: (flight: any) => void }) => {
   return (
-    <div className="absolute right-4 top-1/2 transform -translate-y-1/2 z-[999]">
+    <div className="absolute right-2 top-1/2 transform -translate-y-1/2 z-[999]">
       <div className="bg-white/20 backdrop-blur-sm rounded-2xl shadow-lg p-2 space-y-2 border border-white/30">
         {/* ATC Button */}
         <ActiveATCButton />
@@ -945,6 +957,7 @@ const SearchButton = ({ flights, onSelectUser }: { flights: any[], onSelectUser:
                       }}
                       className={cn("flex items-center gap-3 px-3 py-3 text-sm hover:bg-blue-50 cursor-pointer rounded-lg mb-2", 
                         flight.role === "staff" ? "hover:bg-blue-600 bg-blue-500 text-light" : 
+                        flight.role === "mod" ? "hover:bg-purple-600 bg-purple-500 text-light" :
                         flight.role === "user" ? "hover:bg-black/50 bg-gradient-to-br from-gray to-dark !text-light" : "")}
                     >
                       <div className="flex-shrink-0">
@@ -963,11 +976,13 @@ const SearchButton = ({ flights, onSelectUser }: { flights: any[], onSelectUser:
                       <div className="flex-1 min-w-0">
                         <div className={cn("font-semibold truncate", 
                           flight.role === "staff" ? "text-light" : 
+                          flight.role === "mod" ? "!text-light" :
                           flight.role === "user" ? "!text-light" : "text-gray-900")}>
                           {flight.username || "Zombie"}
                         </div>
                         <div className={cn("text-xs truncate", 
                           flight.role === "staff" ? "text-light" : 
+                          flight.role === "mod" ? "!text-light" :
                           flight.role === "user" ? "!text-light" : "text-gray-500")}>
                           {flight.callsign}
                         </div>
@@ -975,6 +990,7 @@ const SearchButton = ({ flights, onSelectUser }: { flights: any[], onSelectUser:
                       <div className="flex-shrink-0 text-right">
                         <div className={cn("text-xs", 
                           flight.role === "staff" ? "text-light" : 
+                          flight.role === "mod" ? "!text-light" :
                           flight.role === "user" ? "!text-light" : "text-gray-500")}>
                           {Math.round(flight.altitude)}ft
                         </div>

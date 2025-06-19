@@ -221,46 +221,11 @@ export async function getFullAirportInfo(airportIcao: string) {
     }
 }
 
-export async function getAirportCoordinates(airportIcao: string) {
-    try {
-        // const response = await fetch(`${process.env.NEXT_PUBLIC_AIRPORT_DB_API_URL}/${airportIcao}?apiToken=${process.env.AIRPORT_DB_API_KEY}`, {
-        //     method: "GET",
-        //     headers: {
-        //         "Content-Type": "application/json",
-        //         "Authorization": `Bearer ${API_KEY}`
-        //     },
-        //     next: { revalidate: 3600 },
-        //     signal: AbortSignal.timeout(10000) // 10 second timeout
-        // });
+// NEW FUNCTION - USE FROM INFINITE FLIGHT API
+export async function getInfiniteFlightAirportCoordinates(airportIcao: string) {
 
-        // if (!response.ok) {
-        //     console.error(`Airport coordinates API error for ${airportIcao}:`, response.status);
-        //     return { latitude_deg: 0, longitude_deg: 0 }; // Fallback coordinates
-        // }
-
-        // const data = await response.json();
-        
-        // // Validate the data exists and is numeric
-        // if (!data || 
-        //     typeof data.latitude_deg !== 'number' || 
-        //     typeof data.longitude_deg !== 'number' ||
-        //     isNaN(data.latitude_deg) || 
-        //     isNaN(data.longitude_deg)) {
-        //     console.error(`Invalid coordinates for ${airportIcao}:`, data);
-        //     return { latitude_deg: 0, longitude_deg: 0 }; // Fallback coordinates
-        // }
-
-        return {
-            latitude_deg: 0,
-            longitude_deg: 0,
-            iso_country: "AAAA",
-        };
-        
-    } catch (error) {
-        console.error(`Failed to fetch coordinates for ${airportIcao}:`, error);
-        return { latitude_deg: 0, longitude_deg: 0 }; // Fallback coordinates
-    }
 }
+
 
 export async function getAllAirportsWithActiveATC() {
     try {
@@ -497,4 +462,59 @@ export async function getUserFlightPlan(flightId: string) {
    //  console.log("🛩️ Flight plan API response:", data);
 
     return data.result || "Flight Plan not found"
+}
+
+
+
+
+
+
+
+
+
+
+
+
+// ---------------------------------------------LEGACY FUNCTIONS--------------------------------------------- //
+
+// LEGACY FUNCTION - DO NOT USE
+export async function getAirportCoordinates(airportIcao: string) {
+    try {
+        // const response = await fetch(`${process.env.NEXT_PUBLIC_AIRPORT_DB_API_URL}/${airportIcao}?apiToken=${process.env.AIRPORT_DB_API_KEY}`, {
+        //     method: "GET",
+        //     headers: {
+        //         "Content-Type": "application/json",
+        //         "Authorization": `Bearer ${API_KEY}`
+        //     },
+        //     next: { revalidate: 3600 },
+        //     signal: AbortSignal.timeout(10000) // 10 second timeout
+        // });
+
+        // if (!response.ok) {
+        //     console.error(`Airport coordinates API error for ${airportIcao}:`, response.status);
+        //     return { latitude_deg: 0, longitude_deg: 0 }; // Fallback coordinates
+        // }
+
+        // const data = await response.json();
+        
+        // // Validate the data exists and is numeric
+        // if (!data || 
+        //     typeof data.latitude_deg !== 'number' || 
+        //     typeof data.longitude_deg !== 'number' ||
+        //     isNaN(data.latitude_deg) || 
+        //     isNaN(data.longitude_deg)) {
+        //     console.error(`Invalid coordinates for ${airportIcao}:`, data);
+        //     return { latitude_deg: 0, longitude_deg: 0 }; // Fallback coordinates
+        // }
+
+        return {
+            latitude_deg: 0,
+            longitude_deg: 0,
+            iso_country: "AAAA",
+        };
+        
+    } catch (error) {
+        console.error(`Failed to fetch coordinates for ${airportIcao}:`, error);
+        return { latitude_deg: 0, longitude_deg: 0 }; // Fallback coordinates
+    }
 }

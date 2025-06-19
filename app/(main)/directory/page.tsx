@@ -17,7 +17,7 @@ import { FaPlane } from "react-icons/fa";
 import { Metadata } from 'next'
 import { TbBuildingAirport, TbBuildingBroadcastTower } from "react-icons/tb";
 
-let maintenanceMode = true;
+let maintenanceMode = false;
 
 export const metadata: Metadata = {
   title: "Directory - IFlytics | Your Infinite Flight Statistics",
@@ -177,7 +177,7 @@ const DirectoryPage = async ({
         Directory
       </h1>
 
-      <Tabs defaultValue="airport-list" className="!w-full">
+      <Tabs defaultValue="airport" className="!w-full">
         <TabsList className="mt-4 w-full bg-gray-500 p-1 rounded-full">
           <TabsTrigger
             value="airport"
