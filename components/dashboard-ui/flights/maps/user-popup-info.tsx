@@ -1,6 +1,6 @@
 "use client";
 
-import { X } from "lucide-react";
+import { X, ChevronRight, ChevronLeft } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { TbPlaneInflight } from "react-icons/tb";
@@ -27,6 +27,7 @@ const UserPopupInfo = ({
 }) => {
   const [flightInfo, setFlightInfo] = useState<any>(null);
   const [flightPlan, setFlightPlan] = useState<any>(null);
+  const [isHidden, setIsHidden] = useState(false);
 
   useEffect(() => {
     const fetchAllFlightData = async () => {
@@ -69,7 +70,9 @@ const UserPopupInfo = ({
   return (
     <div
       className={cn(
-        "absolute top-16 left-5 rounded-xl overflow-hidden font-sans w-[330px] shadow-2xl z-[1001] bg-white",
+        "absolute top-16 !rounded-xl font-sans w-[330px] shadow-2xl z-[1001] bg-white transition-transform duration-300",
+        isHidden ? "left-[-290px]" : "left-5", // Slide mostly off-screen when hidden
+        "animate-in slide-in-from-left duration-300",
         popupInfo.role === "staff"
           ? "bg-blue-500 text-light"
           : popupInfo.role === "user"
@@ -77,10 +80,20 @@ const UserPopupInfo = ({
           : ""
       )}
     >
+      {/* Show Button - Only visible when hidden */}
+      {isHidden && (
+        <button
+          onClick={() => setIsHidden(false)}
+          className="absolute -right-6 top-1/2 transform -translate-y-1/2 bg-gray-200/20 hover:bg-gray-300/20 shadow-lg rounded-full p-2 backdrop-blur-sm transition-all duration-200 z-10"
+        >
+          <ChevronRight className="w-8 h-8 text-gray" />
+        </button>
+      )}
+
       {/* Header */}
       <div
         className={cn(
-          "p-6 pb-4 relative overflow-hidden",
+          "p-6 pb-4 relative overflow-hidden rounded-t-xl",
           popupInfo.role === "staff"
             ? "bg-blue-500 text-light"
             : popupInfo.role === "user"
@@ -132,7 +145,7 @@ const UserPopupInfo = ({
       </div>
 
       {/* Flight Details */}
-      <section className="bg-[#fff5ee] p-6 pt-4 rounded-t-xl shadow-xl">
+      <section className="bg-[#fff5ee] p-6 pt-4 rounded-xl shadow-xl">
         <Tabs defaultValue="pilot" className="flex flex-col gap-4">
           <TabsList className="w-full bg-orange-200">
             <TabsTrigger
@@ -344,13 +357,27 @@ const UserPopupInfo = ({
         </Tabs>
       </section>
 
-      {/* Close Button */}
-      <button
-        onClick={() => setPopupInfo(null)}
-        className="absolute top-4 right-4 bg-gray-200 hover:bg-gray-300 border-none rounded-full w-8 h-8 text-gray-600 text-lg cursor-pointer flex items-center justify-center transition-colors"
-      >
-        <X className="w-4 h-4" />
-      </button>
+      {!isHidden && (
+        <button
+          onClick={() => setIsHidden(true)}
+          className="absolute -right-6 top-1/2 transform -translate-y-1/2 bg-gray-200/20 hover:bg-gray-300/20 shadow-lg rounded-full p-2 backdrop-blur-sm transition-all duration-200 z-10"
+        >
+          <ChevronLeft className="w-8 h-8 text-gray" />
+        </button>
+      )}
+      {/* Close and Hide Buttons */}
+      <div className="absolute top-4 right-4 flex gap-2">
+        {/* Hide Button */}
+        
+        {/* Close Button */}
+        <button
+          onClick={() => setPopupInfo(null)}
+          className="bg-gray-200 hover:bg-gray-300 border-none rounded-full w-8 h-8 text-gray-600 text-lg cursor-pointer flex items-center justify-center transition-colors"
+          title="Close popup"
+        >
+          <X className="w-4 h-4" />
+        </button>
+      </div>
     </div>
   );
 };

@@ -8,13 +8,14 @@ import UserPopupInfo from "./user-popup-info";
 import { cn } from "@/lib/utils";
 import { LuTowerControl } from "react-icons/lu";
 import { GiControlTower } from "react-icons/gi";
+import { FaRegFaceGrinWink } from "react-icons/fa6";
 import { getUserFlightPlan, getAllAirportsWithActiveATC } from "@/lib/actions";
 
 const FullScreenMap = ({ flights }: { flights: any[] }) => {
   const [popupInfo, setPopupInfo] = useState<any>(null);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [searchResults, setSearchResults] = useState<any[]>([]);
-  const [showResults, setShowResults] = useState(false);
+  // const [searchQuery, setSearchQuery] = useState("");
+  // const [searchResults, setSearchResults] = useState<any[]>([]);
+  // const [showResults, setShowResults] = useState(false);
   const mapRef = useRef<Map | null>(null);
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -22,9 +23,9 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
   // Add state for current route
   const [currentRouteId, setCurrentRouteId] = useState<string | null>(null);
 
-  // ATC state for simple dropdown
-  const [atcFacilities, setAtcFacilities] = useState<any[]>([]);
-  const [showAtcDropdown, setShowAtcDropdown] = useState(false);
+  // Panel visibility states
+  // const [showSearchPanel, setShowSearchPanel] = useState(false);
+  // const [showAtcPanel, setShowAtcPanel] = useState(false);
 
   // Function to create origin and destination sprites
   const createRouteSprites = (map: Map) => {
@@ -321,27 +322,6 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
     setPopupInfo(null);
   };
 
-  // Search logic
-  useEffect(() => {
-    if (searchQuery.trim() === "") {
-      setSearchResults([]);
-      setShowResults(false);
-      return;
-    }
-
-    const filtered = flights.filter(flight => {
-      const matchesUsername = flight.username?.toLowerCase().includes(searchQuery.toLowerCase());
-      const matchesCallsign = flight.callsign?.toLowerCase().includes(searchQuery.toLowerCase());
-      return matchesUsername || matchesCallsign;
-    });
-    
-    // Remove duplicates by username and take max 10 results
-    const uniqueUsers = filtered.slice(0, 15);
-
-    setSearchResults(uniqueUsers);
-    setShowResults(uniqueUsers.length > 0);
-  }, [searchQuery, flights]);
-
   // Focus on user function
   const focusOnUser = (flight: any) => {
     if (!mapRef.current) return;
@@ -357,8 +337,8 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
     });
 
     // Clear search
-    setSearchQuery("");
-    setShowResults(false);
+    // setSearchQuery("");
+    // setShowResults(false);
         
     // Show popup and route for the user
     setPopupInfoWithRoute({
@@ -385,18 +365,6 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
       virtualOrganization: flight?.virtualOrganization,
     });
   };
-
-  // Handle click outside to close search results
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (searchInputRef.current && !searchInputRef.current.contains(event.target as Node)) {
-        setShowResults(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
 
   // Modified map initialization
   useEffect(() => {
@@ -682,40 +650,6 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
     }
   }, [flights]);
 
-  // Fetch ATC data for dropdown
-  useEffect(() => {
-    const loadATC = async () => {
-      try {
-        const data = await getAllAirportsWithActiveATC();
-
-        console.log(data)
-        
-        if (data && data.length > 0) {
-          // Filter for unique airports and sort by airport name
-          const uniqueAirports = data
-            .filter((item: any, index: number, self: any[]) => 
-              index === self.findIndex(airport => airport.airportName === item.airportName)
-            )
-            .filter((airport: any) => airport.airportName && airport.username) // Ensure we have both airport and controller
-            .sort((a: any, b: any) => a.airportName.localeCompare(b.airportName));
-          
-          setAtcFacilities(uniqueAirports);
-        } else {
-          setAtcFacilities([]);
-        }
-      } catch (error) {
-        console.error("Error fetching ATC data:", error);
-        setAtcFacilities([]);
-      }
-    };
-
-    loadATC();
-    
-    // Refresh ATC data every 30 seconds
-    const interval = setInterval(loadATC, 30000);
-    return () => clearInterval(interval);
-  }, []);
-
   // Enhanced clearAllRoutes function - nuclear cleanup
   const clearAllRoutes = () => {
     if (!mapRef.current) return;
@@ -768,159 +702,293 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
       </p>
       <div ref={mapContainerRef} className="w-full h-full" />
 
-      {/* Search Component */}
-      <div className="absolute top-4 left-4 z-[1002]" ref={searchInputRef}>
-        <div className="relative">
-          {/* Search Input */}
-          <div className="relative text-sm font-medium">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 z-[1003]" />
-            <input
-              type="text"
-              placeholder="👨‍✈️ Search pilots..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              onFocus={() => searchResults.length > 0 && setShowResults(true)}
-              className="w-56 pl-10 pr-4 py-2 bg-[#FFEFD5] backdrop-blur-sm  rounded-lg shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
-            {searchQuery && (
-              <button
-                onClick={() => {
-                  setSearchQuery("");
-                  setShowResults(false);
-                }}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            )}
-          </div>
-
-          {/* Search Results Dropdown */}
-          {showResults && (
-            <div className="absolute top-full mt-1 w-full bg-[#FFEFD5] backdrop-blur-sm border border-gray-300 rounded-lg shadow-xl max-h-80 overflow-y-auto z-[1003]">
-              {searchResults.map((flight, index) => (
-                <div
-                  key={`${flight.username}-${index}`}
-                  onClick={() => focusOnUser(flight)}
-                  className={cn("flex items-center gap-3 px-4 py-3 text-sm hover:bg-blue-50 cursor-pointer border-b border-gray-100 last:border-b-0", flight.role === "staff" ? "hover:bg-blue-600 bg-blue-500 text-light" : flight.role === "user" ? "hover:bg-black/50 bg-gradient-to-br from-gray to-dark !text-light" : "")}
-                >
-                  {/* User Emoji */}
-                  <div className="flex-shrink-0">
-                    <div className="w-8 h-8 text-lg flex items-center justify-center">
-                      {flight.customImage ? (
-                        <img 
-                          src={new URL(flight.customImage, import.meta.url).href} 
-                          alt="Custom avatar" 
-                          className="w-8 h-8 rounded-full object-cover border-2 border-gray-200"
-                        />
-                      ) : (
-                        flight.emoji
-                      )}
-                    </div>
-                  </div>
-
-                  {/* User Info */}
-                  <div className="flex-1 min-w-0">
-                    <div className={cn("font-semibold truncate", flight.role === "staff" ? "text-light" : flight.role === "user" ? "!text-light" : "text-gray-900")}>
-                      {flight.username || "Zombie"}
-                    </div>
-                    <div className={cn("text-xs truncate", flight.role === "staff" ? "text-light" : flight.role === "user" ? "!text-light" : "text-gray-500")}>
-                      {flight.callsign}
-                    </div>
-                  </div>
-
-                  {/* Flight Status */}
-                  <div className="flex-shrink-0 text-right">
-                    <div className={cn("text-xs", flight.role === "staff" ? "text-light" : flight.role === "user" ? "!text-light" : "text-gray-500")}>
-                      {Math.round(flight.altitude)}ft
-                    </div>
-                    <div className={cn("text-xs", flight.role === "staff" ? "text-light" : flight.role === "user" ? "!text-light" : "text-gray-500")}>
-                      {Math.round(flight.speed)}kts
-                    </div>
-                  </div>
-
-                  {/* Focus Icon */}
-                  <MapPin className={cn("w-4 h-4 text-blue-500 flex-shrink-0", flight.role === "staff" ? "text-light" : flight.role === "user" ? "!text-light" : "")} />
-                </div>
-              ))}
-
-              {searchResults.length === 0 && searchQuery.trim() !== "" && (
-                <div className="px-4 py-6 text-center text-gray-500">
-                  <Search className="w-8 h-8 mx-auto mb-2 text-gray-300" />
-                  <div>No pilots found matching "{searchQuery}"</div>
-                </div>
-              )}
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* ATC Dropdown */}
-      <div className="absolute top-20 left-4 z-[1001]">
-        <div className="relative">
-          {/* ATC Toggle Button */}
-          <button
-            onClick={() => setShowAtcDropdown(!showAtcDropdown)}
-            className="w-56 flex items-center justify-between px-4 py-2 bg-[#E8F4FD] backdrop-blur-sm rounded-lg shadow-lg text-sm font-medium text-gray-700 hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <div className="flex items-center gap-2">
-              <span className="text-blue-500"><LuTowerControl className="w-4 h-4" /></span>
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-              <span>Active ATC ({atcFacilities.length})</span>
-            </div>
-            <div className={`transform transition-transform ${showAtcDropdown ? 'rotate-180' : ''}`}>
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-              </svg>
-            </div>
-          </button>
-
-          {/* ATC Dropdown List */}
-          {showAtcDropdown && (
-            <div className="absolute top-full mt-1 w-full bg-[#E8F4FD] backdrop-blur-sm border border-blue-200 rounded-lg shadow-xl max-h-80 overflow-y-auto z-[1002]">
-              {atcFacilities.length > 0 ? (
-                atcFacilities.map((facility, index) => (
-                  <div
-                    key={`${facility.airportName}-${index}`}
-                    className="flex items-center gap-3 px-4 py-3 text-sm hover:bg-blue-50 border-b border-blue-100 last:border-b-0"
-                  >
-                    <div className="text-gray text-lg"><GiControlTower /></div>
-                    <div className="flex-1 min-w-0">
-                      <div className="font-semibold text-gray-900 truncate">
-                        {facility.airportName}
-                      </div>
-                      <div className="text-xs text-gray-600 truncate">
-                        Controller: {facility.username}
-                      </div>
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <div className="px-4 py-6 text-center text-gray-500">
-                  <span className="text-2xl mb-2 block">🏗️</span>
-                  <div className="text-sm">No active ATC facilities</div>
-                </div>
-              )}
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Compliment Leaderboard */}
-      <ComplimentLeaderboard flights={flights} />
+      {/* Replace the three separate panels with the floating nav */}
+      <FloatingRightNav flights={flights} onSelectUser={focusOnUser} />
 
       {/* Flight Information Popup - NO BACKDROP */}
       {popupInfo && (
         <UserPopupInfo 
           popupInfo={popupInfo} 
-          setPopupInfo={clearPopupAndRoute} // Only X button will call this
+          setPopupInfo={clearPopupAndRoute}
         />
       )}
     </div>
   );
 };
 
-const ComplimentLeaderboard = ({ flights }: { flights: any[] }) => {
+const FloatingRightNav = ({ flights, onSelectUser }: { flights: any[], onSelectUser: (flight: any) => void }) => {
+  return (
+    <div className="absolute right-4 top-1/2 transform -translate-y-1/2 z-[999]">
+      <div className="bg-white/20 backdrop-blur-sm rounded-2xl shadow-lg p-2 space-y-2 border border-white/30">
+        {/* ATC Button */}
+        <ActiveATCButton />
+        
+        {/* Search Button */}
+        <SearchButton flights={flights} onSelectUser={onSelectUser} />
+        
+        {/* Compliment Button */}
+        <ComplimentButton flights={flights} />
+      </div>
+    </div>
+  );
+};
+
+const ActiveATCButton = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [atcFacilities, setAtcFacilities] = useState<any[]>([]);
+
+  useEffect(() => {
+    const loadATC = async () => {
+      try {
+        const data = await getAllAirportsWithActiveATC();
+        
+        if (data && data.length > 0) {
+          const uniqueAirports = data
+            .filter((item: any, index: number, self: any[]) => 
+              index === self.findIndex(airport => airport.airportName === item.airportName)
+            )
+            .filter((airport: any) => airport.airportName && airport.username)
+            .sort((a: any, b: any) => a.airportName.localeCompare(b.airportName));
+          
+          setAtcFacilities(uniqueAirports);
+        } else {
+          setAtcFacilities([]);
+        }
+      } catch (error) {
+        console.error("Error fetching ATC data:", error);
+        setAtcFacilities([]);
+      }
+    };
+
+    loadATC();
+    const interval = setInterval(loadATC, 30000);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <>
+      {/* Button in the floating nav */}
+      <button
+        onClick={() => setIsOpen(true)}
+        className="w-12 h-12 bg-green-500/90 backdrop-blur-sm rounded-xl shadow-lg
+                   hover:bg-green-600 transition-all duration-200 relative
+                   flex items-center justify-center group"
+      >
+        <div className="animate-ping absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full"></div>
+        <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full"></div>
+        <LuTowerControl className="w-5 h-5 text-white" />
+      </button>
+
+      {/* Panel - slides out from the floating nav */}
+      {isOpen && (
+        <div className="absolute right-16 top-0 z-[1001]">
+          <div className="bg-[#E8F4FD] backdrop-blur-sm rounded-xl shadow-xl
+                          w-72 animate-in slide-in-from-right duration-300">
+            <div className="p-4 max-h-80 overflow-hidden">
+              <div className="flex justify-between items-start mb-4">
+                <div className="flex items-center gap-2">
+                  <LuTowerControl className="w-5 h-5 text-blue-500" />
+                  <h3 className="font-bold text-gray-800 text-lg">Active ATC</h3>
+                  <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                </div>
+                <button
+                  onClick={() => setIsOpen(false)}
+                  className="text-gray-400 hover:text-gray-600 p-1"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              <div className="text-sm text-gray-600 mb-3">
+                {atcFacilities.length} facilities active
+              </div>
+
+              <div className="max-h-52 overflow-y-auto">
+                {atcFacilities.length > 0 ? (
+                  atcFacilities.map((facility, index) => (
+                    <div
+                      key={`${facility.airportName}-${index}`}
+                      className="flex items-center gap-3 px-3 py-3 text-sm hover:bg-blue-50 rounded-lg mb-2"
+                    >
+                      <div className="text-blue-500">
+                        <GiControlTower className="w-5 h-5" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="font-semibold text-gray-900 truncate">
+                          {facility.airportName}
+                        </div>
+                        <div className="text-xs text-gray-600 truncate">
+                          Controller: {facility.username}
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <div className="text-center text-gray-500 py-6">
+                    <GiControlTower className="w-8 h-8 mx-auto mb-2 text-gray-300" />
+                    <div className="text-sm">No active ATC facilities</div>
+                  </div>
+                )}
+              </div>
+
+              <div className="mt-3 pt-3 border-t border-blue-100">
+                <p className="text-xs text-gray-400 text-center">
+                  Updates every 30 seconds
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+};
+
+const SearchButton = ({ flights, onSelectUser }: { flights: any[], onSelectUser: (flight: any) => void }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState<any[]>([]);
+
+  useEffect(() => {
+    if (searchQuery.trim() === "") {
+      setSearchResults([]);
+      return;
+    }
+
+    const filtered = flights.filter(flight => {
+      const username = flight.username?.toLowerCase() || "";
+      const callsign = flight.callsign?.toLowerCase() || "";
+      const query = searchQuery.toLowerCase();
+      return username.includes(query) || callsign.includes(query);
+    });
+    
+    setSearchResults(filtered.slice(0, 15));
+  }, [searchQuery, flights]);
+
+  return (
+    <>
+      {/* Button in the floating nav */}
+      <button
+        onClick={() => setIsOpen(true)}
+        className="w-12 h-12 bg-blue-500/90 backdrop-blur-sm rounded-xl shadow-lg
+                   hover:bg-blue-600 transition-all duration-200
+                   flex items-center justify-center"
+      >
+        <Search className="w-5 h-5 text-white" />
+      </button>
+
+      {/* Panel */}
+      {isOpen && (
+        <div className="absolute right-16 top-14 z-[1001]">
+          <div className="bg-[#FFEFD5] backdrop-blur-sm rounded-xl shadow-xl
+                          w-72 animate-in slide-in-from-right duration-300">
+            <div className="p-4 max-h-96 overflow-hidden">
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="font-bold text-gray-800 text-lg">Search Pilots</h3>
+                <button
+                  onClick={() => {
+                    setIsOpen(false);
+                    setSearchQuery("");
+                    setSearchResults([]);
+                  }}
+                  className="text-gray-400 hover:text-gray-600 p-1"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              <div className="relative text-sm font-medium mb-4">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                <input
+                  type="text"
+                  placeholder="👨‍✈️ Search pilots..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full pl-10 pr-4 py-2 bg-white rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                {searchQuery && (
+                  <button
+                    onClick={() => {
+                      setSearchQuery("");
+                      setSearchResults([]);
+                    }}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                )}
+              </div>
+
+              <div className="max-h-60 overflow-y-auto">
+                {searchQuery.trim() === "" ? (
+                  <div className="text-center text-gray-500 py-4">
+                    <Search className="w-8 h-8 mx-auto mb-2 text-gray-300" />
+                    <div>Start typing to search pilots...</div>
+                  </div>
+                ) : searchResults.length > 0 ? (
+                  searchResults.map((flight, index) => (
+                    <div
+                      key={`${flight.username}-${index}`}
+                      onClick={() => {
+                        onSelectUser(flight);
+                        setIsOpen(false);
+                        setSearchQuery("");
+                        setSearchResults([]);
+                      }}
+                      className={cn("flex items-center gap-3 px-3 py-3 text-sm hover:bg-blue-50 cursor-pointer rounded-lg mb-2", 
+                        flight.role === "staff" ? "hover:bg-blue-600 bg-blue-500 text-light" : 
+                        flight.role === "user" ? "hover:bg-black/50 bg-gradient-to-br from-gray to-dark !text-light" : "")}
+                    >
+                      <div className="flex-shrink-0">
+                        <div className="w-8 h-8 text-lg flex items-center justify-center">
+                          {flight.customImage ? (
+                            <img 
+                              src={new URL(flight.customImage, import.meta.url).href} 
+                              alt="Custom avatar" 
+                              className="w-8 h-8 rounded-full object-cover border-2 border-gray-200"
+                            />
+                          ) : (
+                            flight.emoji
+                          )}
+                        </div>
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className={cn("font-semibold truncate", 
+                          flight.role === "staff" ? "text-light" : 
+                          flight.role === "user" ? "!text-light" : "text-gray-900")}>
+                          {flight.username || "Zombie"}
+                        </div>
+                        <div className={cn("text-xs truncate", 
+                          flight.role === "staff" ? "text-light" : 
+                          flight.role === "user" ? "!text-light" : "text-gray-500")}>
+                          {flight.callsign}
+                        </div>
+                      </div>
+                      <div className="flex-shrink-0 text-right">
+                        <div className={cn("text-xs", 
+                          flight.role === "staff" ? "text-light" : 
+                          flight.role === "user" ? "!text-light" : "text-gray-500")}>
+                          {Math.round(flight.altitude)}ft
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <div className="text-center text-gray-500 py-4">
+                    <Search className="w-8 h-8 mx-auto mb-2 text-gray-300" />
+                    <div>No pilots found matching "{searchQuery}"</div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+};
+
+const ComplimentButton = ({ flights }: { flights: any[] }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [currentCompliment, setCurrentCompliment] = useState("");
   const [topUsers, setTopUsers] = useState<any[]>([]);
@@ -940,33 +1008,23 @@ const ComplimentLeaderboard = ({ flights }: { flights: any[] }) => {
 
   return (
     <>
-      {/* Toggle Button - Always visible and separate */}
-      {!isOpen && (
-        <button
-          onClick={() => setIsOpen(true)}
-          className="absolute right-0 top-1/2 transform -translate-y-1/2 z-[1000]
-                     bg-blue-500/90 backdrop-blur-sm rounded-lg shadow-lg
-                     p-1.5 md:p-2 hover:bg-blue-600 border-4 border-blue-100 transition-all duration-200"
-        >
-          <div className="animate-ping absolute -top-1 -left-1 w-2 h-2 bg-orange-500 rounded-full"></div>
-          <div className="flex items-center gap-1">
-            <span className="text-xs font-medium text-gray-600">😂</span>
-            <div className="transform -rotate-90">
-              <svg className="w-3 h-3 md:w-4 md:h-4 text-light" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-              </svg>
-            </div>
-          </div>
-        </button>
-      )}
+      {/* Button in the floating nav */}
+      <button
+        onClick={() => setIsOpen(true)}
+        className="w-12 h-12 bg-orange-400/90 backdrop-blur-sm rounded-xl shadow-lg
+                   hover:bg-orange-500 transition-all duration-200 relative
+                   flex items-center justify-center"
+      >
+        <div className="animate-ping absolute -top-1 -right-1 w-2 h-2 bg-orange-500 rounded-full"></div>
+        <FaRegFaceGrinWink className="w-5 h-5 text-white" />
+      </button>
 
-      {/* Slide-out Panel - Only render when open */}
+      {/* Panel */}
       {isOpen && (
-        <div className="absolute right-4 top-1/2 transform -translate-y-1/2 z-[1001]">
+        <div className="absolute right-16 top-28 z-[1001]">
           <div className="bg-[#FFEFD5] backdrop-blur-sm rounded-xl shadow-xl
                           w-72 md:w-80 animate-in slide-in-from-right duration-300">
             <div className="p-3 md:p-4 max-h-80 md:max-h-96 overflow-hidden">
-              {/* Header with Close Button */}
               <div className="flex justify-between items-start mb-3 md:mb-4">
                 <div>
                   <h3 className="font-bold text-gray-800 text-base md:text-lg tracking-tight mb-1">Compliment Kings</h3>
@@ -980,7 +1038,6 @@ const ComplimentLeaderboard = ({ flights }: { flights: any[] }) => {
                 </button>
               </div>
 
-              {/* Scrollable User List */}
               <div className="space-y-2 max-h-52 md:max-h-64 overflow-y-auto">
                 {topUsers.length > 0 ? topUsers.map((flight, index) => (
                   <div key={`${flight.username}-${index}`} className="flex items-center gap-2 md:gap-3 p-2 hover:bg-gray-50 rounded-lg">
@@ -1022,7 +1079,6 @@ const ComplimentLeaderboard = ({ flights }: { flights: any[] }) => {
                 )}
               </div>
 
-              {/* Footer */}
               <div className="mt-2 md:mt-3 pt-2 border-t border-gray-100">
                 <p className="text-xs text-gray-400 text-center">
                   Refreshes every update • Top 10 pilots
