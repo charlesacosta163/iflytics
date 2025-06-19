@@ -6,7 +6,7 @@ import { X, Search, MapPin } from "lucide-react";
 import { aviationCompliments } from "@/lib/data";
 import UserPopupInfo from "./user-popup-info";
 import { cn } from "@/lib/utils";
-import { getUserFlightPlan, getAllAirportsWithActiveATC } from "@/lib/actions";
+import { getUserFlightPlan } from "@/lib/actions";
 
 const FullScreenMap = ({ flights }: { flights: any[] }) => {
   const [popupInfo, setPopupInfo] = useState<any>(null);
@@ -19,9 +19,6 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
   
   // Add state for current route
   const [currentRouteId, setCurrentRouteId] = useState<string | null>(null);
-
-  // Add ATC state
-  const [activeATC, setActiveATC] = useState<any[]>([]);
 
   // Function to show flight route
   const showFlightRoute = async (flightId: string) => {
@@ -41,11 +38,10 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
           
           // Skip if route already exists
           if (map.getSource(routeId)) {
-            console.log(`Route ${routeId} already exists, skipping`);
+            console.log(`Route ${routeId} already exists`);
             return;
           }
           
-          // Add new route (no cleanup)
           try {
             map.addSource(routeId, {
               type: 'geojson',
@@ -74,6 +70,7 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
               }
             });
             
+            setCurrentRouteId(routeId);
             console.log(`✈️ Added route for flight ${flightId}`);
           } catch (error) {
             console.error('Error adding route to map:', error);
@@ -99,7 +96,10 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
 
   // Modified function to set popup info and show route
   const setPopupInfoWithRoute = (info: any) => {
-    // Set new popup info (don't clear previous routes)
+    // Clear previous route first
+    clearAllRoutes();
+    
+    // Set new popup info
     setPopupInfo(info);
     
     // Show route for new flight if info exists
@@ -110,7 +110,7 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
 
   // Enhanced clearPopupAndRoute function - destroys everything
   const clearPopupAndRoute = () => {
-    clearAllRoutes(); // Nuclear option - destroy all routes
+    clearAllRoutes();
     setPopupInfo(null);
   };
 
@@ -135,7 +135,7 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
     setShowResults(uniqueUsers.length > 0);
   }, [searchQuery, flights]);
 
-  // Modified focus on user function
+  // Focus on user function
   const focusOnUser = (flight: any) => {
     if (!mapRef.current) return;
 
@@ -191,216 +191,6 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Fetch ATC data periodically (every 5 minutes)
-  useEffect(() => {
-    const fetchATC = async () => {
-      try {
-        const atcData = await getAllAirportsWithActiveATC();
-        
-        if (atcData && atcData.length > 0) {
-          // Filter unique airports (in case multiple controllers at same airport)
-          const uniqueAirports = atcData.reduce((acc: any[], facility: any) => {
-            const existing = acc.find(item => item.airportName === facility.airportName);
-            if (!existing) {
-              acc.push({
-                airportName: facility.airportName,
-                latitude: facility.latitude,
-                longitude: facility.longitude,
-                type: facility.type,
-                username: facility.username, // Keep first controller's name
-                startTime: facility.startTime
-              });
-            }
-            return acc;
-          }, []);
-          
-          setActiveATC(uniqueAirports);
-          console.log(`🏗️ Found ${uniqueAirports.length} airports with active ATC`);
-        } else {
-          setActiveATC([]);
-        }
-      } catch (error) {
-        console.error('Error fetching ATC data:', error);
-        setActiveATC([]);
-      }
-    };
-
-    // Fetch immediately
-    fetchATC();
-    
-    // Then fetch every 5 minutes
-    const atcInterval = setInterval(fetchATC, 5 * 60 * 1000);
-    
-    return () => clearInterval(atcInterval);
-  }, []);
-
-  // Create a unified image creation function that handles both
-  const createAllMapImages = (map: Map) => {
-    let imagesLoaded = 0;
-    const totalImages = 1; // Just ATC for now
-    
-    const checkAllImagesLoaded = () => {
-      imagesLoaded++;
-      if (imagesLoaded === totalImages) {
-        console.log("✅ All map images loaded successfully");
-      }
-    };
-
-    // Create ATC image first
-    const createATCImage = () => {
-      const canvas = document.createElement("canvas");
-      canvas.width = canvas.height = 50;
-      const ctx = canvas.getContext("2d");
-      
-      if (ctx) {
-        // Clear canvas
-        ctx.clearRect(0, 0, 50, 50);
-        
-        // Draw large green circle
-        ctx.fillStyle = "#10b981";
-        ctx.beginPath();
-        ctx.arc(25, 25, 22, 0, 2 * Math.PI);
-        ctx.fill();
-        
-        // White border
-        ctx.strokeStyle = "#ffffff";
-        ctx.lineWidth = 4;
-        ctx.beginPath();
-        ctx.arc(25, 25, 22, 0, 2 * Math.PI);
-        ctx.stroke();
-        
-        // Inner circle for depth
-        ctx.fillStyle = "rgba(255, 255, 255, 0.2)";
-        ctx.beginPath();
-        ctx.arc(25, 25, 16, 0, 2 * Math.PI);
-        ctx.fill();
-        
-        // ATC text
-        ctx.font = "bold 48px Arial, sans-serif";
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.fillStyle = "white";
-        ctx.fillText("🗿", 25, 25);
-        
-        // Antenna
-        ctx.strokeStyle = "white";
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.moveTo(25, 3);
-        ctx.lineTo(25, 9);
-        ctx.stroke();
-        
-        ctx.fillStyle = "white";
-        ctx.beginPath();
-        ctx.arc(25, 3, 2, 0, 2 * Math.PI);
-        ctx.fill();
-      }
-
-      const img = new Image();
-      img.onload = () => {
-        try {
-          // Remove if exists first
-          if (map.hasImage("atc-tower")) {
-            map.removeImage("atc-tower");
-          }
-          map.addImage("atc-tower", img);
-          console.log("✅ ATC image added successfully");
-          checkAllImagesLoaded();
-        } catch (error) {
-          console.error("❌ Error adding ATC image:", error);
-          checkAllImagesLoaded();
-        }
-      };
-      
-      img.onerror = () => {
-        console.error("❌ Error loading ATC image");
-        checkAllImagesLoaded();
-      };
-      
-      img.src = canvas.toDataURL();
-    };
-
-    // Start ATC image creation
-    createATCImage();
-  };
-
-  // Modify the existing flight image creation to not interfere
-  const updateFlightData = () => {
-    // Get unique users
-    const uniqueUsers = flights.reduce((acc: any[], flight) => {
-      if (!acc.find(f => f.username === flight.username)) {
-        acc.push(flight);
-      }
-      return acc;
-    }, []);
-    
-    let loadedImages = 0;
-    const totalImages = uniqueUsers.length;
-    
-    const checkAllImagesLoaded = () => {
-      loadedImages++;
-      if (loadedImages === totalImages) {
-        updateFlightData();
-      }
-    };
-
-    // Create user-specific images
-    const createUserImage = (flight: any) => {
-      const imageId = `user-${flight.username}`;
-      
-      // Skip if already exists
-      if (mapRef.current?.hasImage(imageId)) {
-        checkAllImagesLoaded();
-        return;
-      }
-
-      if (flight.customImage) {
-        // Custom image logic...
-        const img = new Image();
-        img.crossOrigin = "anonymous";
-        
-        img.onload = () => {
-          const canvas = document.createElement("canvas");
-          canvas.width = canvas.height = 36;
-          const ctx = canvas.getContext("2d");
-          
-          if (ctx) {
-            // ... existing custom image logic ...
-          }
-
-          try {
-            const imageData = ctx?.getImageData(0, 0, 36, 36);
-            if (imageData) {
-              mapRef.current?.addImage(imageId, imageData);
-            }
-          } catch (error) {
-            console.log(`Error adding custom image ${imageId}:`, error);
-          }
-          checkAllImagesLoaded();
-        };
-        
-        img.onerror = () => {
-          // createEmojiWithBorder(flight);
-        };
-        
-        img.src = flight.customImage;
-      } else {
-        // createEmojiWithBorder(flight);
-      }
-    };
-
-    // ... rest of existing emoji creation logic ...
-
-    // Handle case where there are no images to load
-    if (totalImages === 0) {
-      updateFlightData();
-      return;
-    }
-
-    // Create images for all unique users
-    uniqueUsers.forEach(createUserImage);
-  };
-
   // Modified map initialization
   useEffect(() => {
     if (!mapContainerRef.current || mapRef.current) return;
@@ -416,59 +206,25 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
     mapRef.current = map;
 
     map.on("load", () => {
-      // Add sources first
+      // Add source
       map.addSource("flights", {
         type: "geojson",
         data: { type: "FeatureCollection", features: [] },
       });
 
-      map.addSource("atc", {
-        type: "geojson", 
-        data: { type: "FeatureCollection", features: [] },
+      // Add flight layer
+      map.addLayer({
+        id: "flight-points",
+        type: "symbol",
+        source: "flights",
+        layout: {
+          "icon-image": ["get", "imageId"],
+          "icon-size": 0.8,
+          "icon-allow-overlap": true,
+        },
       });
 
-      // Create all images BEFORE adding layers
-      createAllMapImages(map);
-
-      // Add layers after a small delay to ensure images are ready
-      setTimeout(() => {
-        // Add flight layer
-        map.addLayer({
-          id: "flight-points",
-          type: "symbol",
-          source: "flights",
-          layout: {
-            "icon-image": ["get", "imageId"],
-            "icon-size": 0.8,
-            "icon-allow-overlap": true,
-          },
-        });
-
-        // Add ATC layer
-        map.addLayer({
-          id: "atc-points",
-          type: "symbol", 
-          source: "atc",
-          layout: {
-            "icon-image": "atc-tower",
-            "icon-size": 1.0,
-            "icon-allow-overlap": true,
-            "text-field": ["get", "airportName"],
-            "text-offset": [0, 2.5],
-            "text-anchor": "top", 
-            "text-size": 12,
-          },
-          paint: {
-            "text-color": "#10b981",
-            "text-halo-color": "#ffffff",
-            "text-halo-width": 2
-          }
-        });
-
-        console.log("✅ All map layers added");
-      }, 100); // Small delay
-
-      // Keep the click handler for flight points
+      // Click handlers
       map.on("click", "flight-points", (e) => {
         if (e.features && e.features[0]) {
           const flight = e.features[0].properties;
@@ -503,24 +259,6 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
       });
 
       map.on("mouseleave", "flight-points", () => {
-        map.getCanvas().style.cursor = "";
-      });
-
-      // Add ATC click handler
-      map.on("click", "atc-points", (e) => {
-        if (e.features && e.features[0]) {
-          const atc = e.features[0].properties;
-          
-          // You can customize this popup or create a separate ATC popup
-          alert(`🏗️ ${atc.airportName} Airport\nController: ${atc.username}\nActive since: ${new Date(atc.startTime).toLocaleString()}`);
-        }
-      });
-
-      map.on("mouseenter", "atc-points", () => {
-        map.getCanvas().style.cursor = "pointer";
-      });
-
-      map.on("mouseleave", "atc-points", () => {
         map.getCanvas().style.cursor = "";
       });
     });
@@ -734,48 +472,7 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
     }
   }, [flights]);
 
-  // Update ATC data when activeATC changes
-  useEffect(() => {
-    if (!mapRef.current || !activeATC) return;
-
-    const map = mapRef.current;
-    
-    const updateATCData = () => {
-      const atcFeatures = activeATC.map((facility) => {
-        return {
-          type: "Feature" as const,
-          id: `atc-${facility.airportName}`,
-          geometry: {
-            type: "Point" as const,
-            coordinates: [facility.longitude, facility.latitude] as [number, number],
-          },
-          properties: {
-            airportName: facility.airportName,
-            username: facility.username,
-            type: facility.type,
-            startTime: facility.startTime,
-          },
-        };
-      });
-
-      const source = map.getSource("atc") as any;
-      if (source) {
-        source.setData({
-          type: "FeatureCollection",
-          features: atcFeatures,
-        });
-      }
-    };
-
-    // Wait for map to be loaded
-    if (!map.isStyleLoaded()) {
-      map.on("load", updateATCData);
-    } else {
-      updateATCData();
-    }
-  }, [activeATC]);
-
-  // Enhanced clearAllRoutes function - more thorough cleanup
+  // Enhanced clearAllRoutes function - nuclear cleanup
   const clearAllRoutes = () => {
     if (!mapRef.current) return;
     
@@ -816,7 +513,6 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
       });
     }
     
-    // Clear the single route tracker too
     setCurrentRouteId(null);
     console.log("✅ All routes cleared");
   };
@@ -824,7 +520,7 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
   return (
     <div style={{ position: "relative", width: "100%", height: "100%" }}>
       <p className="hidden lg:block absolute bottom-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-blue-500 to-purple-500 text-white backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold">
-        <b>IFlytics Users & IF Staff</b> get their IFC avatar on the map! • <span className="text-red-200">🏗️ Active ATC</span>
+        <b>IFlytics Users & IF Staff</b> get their IFC avatar on the map!
       </p>
       <div ref={mapContainerRef} className="w-full h-full" />
 
