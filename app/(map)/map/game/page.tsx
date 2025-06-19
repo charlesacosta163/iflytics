@@ -3,7 +3,7 @@
 import React, { useMemo, useState, useEffect } from "react";
 import useSWR from "swr";
 import {
-    getFlightsFromServer,
+  getFlightsFromServer,
 } from "@/lib/actions";
 import { customUserImages, aviationCompliments, alternator } from "@/lib/data";
 import { GrAlarm } from "react-icons/gr";
@@ -688,8 +688,8 @@ const GameMapPage = () => {
                 >
                   Give up
                 </button>
-              </div>
-            )}
+        </div>
+      )}
 
             {/* Collapsed Show Button */}
             {isGamePanelHidden && (
@@ -719,7 +719,7 @@ const GameMapPage = () => {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                   </svg>
                 </button>
-              </div>
+        </div>
             )}
           </>
         )}
@@ -819,8 +819,8 @@ const GameMapPage = () => {
                       selectedDifficulty === 'extreme' ? 'text-black' : 'text-gray-600'
                     }`}>
                       {selectedDifficulty === 'easy' ? <FaRegFaceGrinBeam /> : selectedDifficulty === 'medium' ? <FaRegFaceGrin /> : selectedDifficulty === 'hard' ? <FaRegFaceGrimace /> : <FaRegFaceAngry />} {selectedDifficulty.toUpperCase()} MODE
-                    </div>
-                    
+      </div>
+
                     <p className="text-lg text-red-800 font-semibold mb-2">
                       Couldn't find {targetPilot?.emoji} {targetPilot?.username}
                     </p>

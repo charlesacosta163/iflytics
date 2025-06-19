@@ -48,7 +48,7 @@ const NavbarMap = () => {
 
   return (
     <header className="p-2 w-full flex justify-center gap-2 bg-transparent absolute top-0 left-0 right-0 !z-[1000]">
-      <nav className="flex justify-between items-center w-full max-w-[1000px] rounded-full py-2 sm:px-5">
+      <nav className="flex justify-between items-center w-full max-w-[1000px] rounded-full p-2 sm:px-5">
         {/* Logo Section */}
         <Pathname />
 

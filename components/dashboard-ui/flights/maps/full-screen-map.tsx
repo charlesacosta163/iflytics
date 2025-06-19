@@ -6,7 +6,9 @@ import { X, Search, MapPin } from "lucide-react";
 import { aviationCompliments } from "@/lib/data";
 import UserPopupInfo from "./user-popup-info";
 import { cn } from "@/lib/utils";
-import { getUserFlightPlan } from "@/lib/actions";
+import { LuTowerControl } from "react-icons/lu";
+import { GiControlTower } from "react-icons/gi";
+import { getUserFlightPlan, getAllAirportsWithActiveATC } from "@/lib/actions";
 
 const FullScreenMap = ({ flights }: { flights: any[] }) => {
   const [popupInfo, setPopupInfo] = useState<any>(null);
@@ -20,6 +22,110 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
   // Add state for current route
   const [currentRouteId, setCurrentRouteId] = useState<string | null>(null);
 
+  // ATC state for simple dropdown
+  const [atcFacilities, setAtcFacilities] = useState<any[]>([]);
+  const [showAtcDropdown, setShowAtcDropdown] = useState(false);
+
+  // Function to create origin and destination sprites
+  const createRouteSprites = (map: Map) => {
+    const spriteSize = 32;
+    
+    // Create takeoff sprite (green circle with plane icon)
+    const createTakeoffSprite = () => {
+      const canvas = document.createElement("canvas");
+      canvas.width = canvas.height = spriteSize;
+      const ctx = canvas.getContext("2d");
+      
+      if (ctx) {
+        // Clear canvas
+        ctx.clearRect(0, 0, spriteSize, spriteSize);
+        
+        // Draw green circle background
+        ctx.fillStyle = "#10B981"; // green-500
+        ctx.beginPath();
+        ctx.arc(spriteSize / 2, spriteSize / 2, spriteSize / 2 - 2, 0, 2 * Math.PI);
+        ctx.fill();
+        
+        // Draw white border
+        ctx.strokeStyle = "#FFFFFF";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(spriteSize / 2, spriteSize / 2, spriteSize / 2 - 2, 0, 2 * Math.PI);
+        ctx.stroke();
+        
+        // Draw takeoff icon (simplified plane)
+        ctx.fillStyle = "#FFFFFF";
+        ctx.font = "16px Arial";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText("🛫", spriteSize / 2, spriteSize / 2);
+      }
+      
+      return canvas;
+    };
+    
+    // Create landing sprite (red circle with plane icon)
+    const createLandingSprite = () => {
+      const canvas = document.createElement("canvas");
+      canvas.width = canvas.height = spriteSize;
+      const ctx = canvas.getContext("2d");
+      
+      if (ctx) {
+        // Clear canvas
+        ctx.clearRect(0, 0, spriteSize, spriteSize);
+        
+        // Draw red circle background
+        ctx.fillStyle = "#EF4444"; // red-500
+        ctx.beginPath();
+        ctx.arc(spriteSize / 2, spriteSize / 2, spriteSize / 2 - 2, 0, 2 * Math.PI);
+        ctx.fill();
+        
+        // Draw white border
+        ctx.strokeStyle = "#FFFFFF";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(spriteSize / 2, spriteSize / 2, spriteSize / 2 - 2, 0, 2 * Math.PI);
+        ctx.stroke();
+        
+        // Draw landing icon (simplified plane)
+        ctx.fillStyle = "#FFFFFF";
+        ctx.font = "16px Arial";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText("🛬", spriteSize / 2, spriteSize / 2);
+      }
+      
+      return canvas;
+    };
+    
+    // Add sprites to map if they don't exist
+    if (!map.hasImage("takeoff-sprite")) {
+      const takeoffCanvas = createTakeoffSprite();
+      const takeoffImg = new Image();
+      takeoffImg.onload = () => {
+        try {
+          map.addImage("takeoff-sprite", takeoffImg);
+        } catch (error) {
+          console.warn("Error adding takeoff sprite:", error);
+        }
+      };
+      takeoffImg.src = takeoffCanvas.toDataURL();
+    }
+    
+    if (!map.hasImage("landing-sprite")) {
+      const landingCanvas = createLandingSprite();
+      const landingImg = new Image();
+      landingImg.onload = () => {
+        try {
+          map.addImage("landing-sprite", landingImg);
+        } catch (error) {
+          console.warn("Error adding landing sprite:", error);
+        }
+      };
+      landingImg.src = landingCanvas.toDataURL();
+    }
+  };
+
   // Function to show flight route
   const showFlightRoute = async (flightId: string) => {
     if (!mapRef.current) return;
@@ -30,51 +136,152 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
       if (flightPlan?.flightPlanItems?.length > 1) {
         const coordinates = flightPlan.flightPlanItems
           .filter((item: any) => item.location)
-          .map((item: any) => [item.location.longitude, item.location.latitude]);
+          .map((item: any) => [item.location.longitude, item.location.latitude])
+          .filter((coord: [number, number]) => {
+            // Filter out invalid coordinates
+            const [lon, lat] = coord;
+            return lon >= -180 && lon <= 180 && lat >= -90 && lat <= 90;
+          });
         
-        if (coordinates.length > 1) {
+        // Additional validation: reject routes with waypoints too far apart
+        const validCoordinates = coordinates.filter((coord: [number, number], index: number) => {
+          if (index === 0) return true;
+          
+          const [prevLon, prevLat] = coordinates[index - 1];
+          const [currLon, currLat] = coord;
+          
+          // Calculate rough distance (reject if > 2000km between waypoints)
+          const distance = Math.sqrt(
+            Math.pow(currLon - prevLon, 2) + Math.pow(currLat - prevLat, 2)
+          );
+          
+          return distance < 20; // Roughly 2000km
+        });
+        
+        if (validCoordinates.length > 1) {
           const map = mapRef.current;
           const routeId = `route-${flightId}`;
+          const originMarkerId = `origin-${flightId}`;
+          const destinationMarkerId = `destination-${flightId}`;
           
-          // Skip if route already exists
-          if (map.getSource(routeId)) {
-            console.log(`Route ${routeId} already exists`);
-            return;
-          }
-          
+          // FORCE cleanup first
           try {
-            map.addSource(routeId, {
-              type: 'geojson',
-              data: {
-                type: 'Feature',
-                properties: {},
-                geometry: {
-                  type: 'LineString',
-                  coordinates: coordinates
-                }
-              }
-            });
-            
-            map.addLayer({
-              id: routeId,
-              type: 'line',
-              source: routeId,
-              layout: {
-                'line-join': 'round',
-                'line-cap': 'round'
-              },
-              paint: {
-                'line-color': '#3b82f6',
-                'line-width': 3,
-                'line-opacity': 0.8
-              }
-            });
-            
-            setCurrentRouteId(routeId);
-            console.log(`✈️ Added route for flight ${flightId}`);
-          } catch (error) {
-            console.error('Error adding route to map:', error);
+            if (map.getLayer(routeId)) map.removeLayer(routeId);
+            if (map.getSource(routeId)) map.removeSource(routeId);
+            if (map.getLayer(originMarkerId)) map.removeLayer(originMarkerId);
+            if (map.getSource(originMarkerId)) map.removeSource(originMarkerId);
+            if (map.getLayer(destinationMarkerId)) map.removeLayer(destinationMarkerId);
+            if (map.getSource(destinationMarkerId)) map.removeSource(destinationMarkerId);
+          } catch (e) {
+            // console.log("Route cleanup:", e);
           }
+          
+          // Create route sprites if they don't exist
+          createRouteSprites(map);
+          
+          // Create gradient segments with VALIDATED coordinates
+          const segments = [];
+          const totalSegments = validCoordinates.length - 1;
+          
+          for (let i = 0; i < totalSegments; i++) {
+            const progress = i / totalSegments;
+            const red = Math.round(30 + (147 - 30) * progress);
+            const green = Math.round(58 + (197 - 58) * progress);
+            const blue = Math.round(138 + (253 - 138) * progress);
+            
+            segments.push({
+              type: "Feature",
+              properties: { 
+                color: `rgb(${red}, ${green}, ${blue})`,
+                segment: i 
+              },
+              geometry: {
+                type: "LineString",
+                coordinates: [validCoordinates[i], validCoordinates[i + 1]]
+              }
+            });
+          }
+          
+          // Add route source and layer
+          map.addSource(routeId, {
+            type: 'geojson',
+            data: {
+              type: 'FeatureCollection',
+              features: segments as any
+            }
+          });
+          
+          map.addLayer({
+            id: routeId,
+            type: 'line',
+            source: routeId,
+            layout: {
+              'line-join': 'round',
+              'line-cap': 'round'
+            },
+            paint: {
+              'line-color': ['get', 'color'],
+              'line-width': 4,
+              'line-opacity': 0.9
+            }
+          });
+          
+          // Add origin marker (takeoff)
+          const originCoord = validCoordinates[0];
+          map.addSource(originMarkerId, {
+            type: 'geojson',
+            data: {
+              type: 'Feature',
+              geometry: {
+                type: 'Point',
+                coordinates: originCoord
+              },
+              properties: {}
+            }
+          });
+          
+          map.addLayer({
+            id: originMarkerId,
+            type: 'symbol',
+            source: originMarkerId,
+            layout: {
+              'icon-image': 'takeoff-sprite',
+              'icon-size': 1,
+              'icon-allow-overlap': true,
+              'icon-ignore-placement': true
+            }
+          });
+          
+          // Add destination marker (landing)
+          const destinationCoord = validCoordinates[validCoordinates.length - 1];
+          map.addSource(destinationMarkerId, {
+            type: 'geojson',
+            data: {
+              type: 'Feature',
+              geometry: {
+                type: 'Point',
+                coordinates: destinationCoord
+              },
+              properties: {}
+            }
+          });
+          
+          map.addLayer({
+            id: destinationMarkerId,
+            type: 'symbol',
+            source: destinationMarkerId,
+            layout: {
+              'icon-image': 'landing-sprite',
+              'icon-size': 1,
+              'icon-allow-overlap': true,
+              'icon-ignore-placement': true
+            }
+          });
+          
+          setCurrentRouteId(routeId);
+          // console.log(`✈️ Added validated gradient route for flight ${flightId}`);
+        } else {
+          // console.log("❌ No valid waypoints for route");
         }
       }
     } catch (error) {
@@ -206,6 +413,9 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
     mapRef.current = map;
 
     map.on("load", () => {
+      // Create route sprites immediately when map loads
+      createRouteSprites(map);
+      
       // Add source
       map.addSource("flights", {
         type: "geojson",
@@ -348,7 +558,7 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
                 map.addImage(imageId, imageData);
               }
             } catch (error) {
-              console.log(`Error adding custom image ${imageId}:`, error);
+              // console.log(`Error adding custom image ${imageId}:`, error);
             }
             checkAllImagesLoaded();
           };
@@ -401,7 +611,7 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
           try {
             map.addImage(`user-${flight.username}`, img);
           } catch (error) {
-            console.log(`Image user-${flight.username} already exists`);
+            // console.log(`Image user-${flight.username} already exists`);
           }
           checkAllImagesLoaded();
         };
@@ -472,6 +682,40 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
     }
   }, [flights]);
 
+  // Fetch ATC data for dropdown
+  useEffect(() => {
+    const loadATC = async () => {
+      try {
+        const data = await getAllAirportsWithActiveATC();
+
+        console.log(data)
+        
+        if (data && data.length > 0) {
+          // Filter for unique airports and sort by airport name
+          const uniqueAirports = data
+            .filter((item: any, index: number, self: any[]) => 
+              index === self.findIndex(airport => airport.airportName === item.airportName)
+            )
+            .filter((airport: any) => airport.airportName && airport.username) // Ensure we have both airport and controller
+            .sort((a: any, b: any) => a.airportName.localeCompare(b.airportName));
+          
+          setAtcFacilities(uniqueAirports);
+        } else {
+          setAtcFacilities([]);
+        }
+      } catch (error) {
+        console.error("Error fetching ATC data:", error);
+        setAtcFacilities([]);
+      }
+    };
+
+    loadATC();
+    
+    // Refresh ATC data every 30 seconds
+    const interval = setInterval(loadATC, 30000);
+    return () => clearInterval(interval);
+  }, []);
+
   // Enhanced clearAllRoutes function - nuclear cleanup
   const clearAllRoutes = () => {
     if (!mapRef.current) return;
@@ -479,16 +723,16 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
     const map = mapRef.current;
     const style = map.getStyle();
     
-    console.log("🧹 Clearing ALL flight routes...");
+    // console.log("🧹 Clearing ALL flight routes...");
     
-    // Find and remove all route layers
+    // Find and remove all route, origin, and destination layers
     if (style && style.layers) {
       style.layers.forEach((layer: any) => {
-        if (layer.id.startsWith('route-')) {
+        if (layer.id.startsWith('route-') || layer.id.startsWith('origin-') || layer.id.startsWith('destination-')) {
           try {
             if (map.getLayer(layer.id)) {
               map.removeLayer(layer.id);
-              console.log(`Removed layer: ${layer.id}`);
+              // console.log(`Removed layer: ${layer.id}`);
             }
           } catch (error) {
             console.warn(`Error removing layer ${layer.id}:`, error);
@@ -497,10 +741,10 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
       });
     }
     
-    // Find and remove all route sources  
+    // Find and remove all route, origin, and destination sources  
     if (style && style.sources) {
       Object.keys(style.sources).forEach(sourceId => {
-        if (sourceId.startsWith('route-')) {
+        if (sourceId.startsWith('route-') || sourceId.startsWith('origin-') || sourceId.startsWith('destination-')) {
           try {
             if (map.getSource(sourceId)) {
               map.removeSource(sourceId);
@@ -514,7 +758,7 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
     }
     
     setCurrentRouteId(null);
-    console.log("✅ All routes cleared");
+    // console.log("✅ All routes cleared");
   };
 
   return (
@@ -536,7 +780,7 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onFocus={() => searchResults.length > 0 && setShowResults(true)}
-              className="w-64 pl-10 pr-4 py-2 bg-white/90 backdrop-blur-sm border border-gray-300 rounded-lg shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-56 pl-10 pr-4 py-2 bg-[#FFEFD5] backdrop-blur-sm  rounded-lg shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
             {searchQuery && (
               <button
@@ -553,7 +797,7 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
 
           {/* Search Results Dropdown */}
           {showResults && (
-            <div className="absolute top-full mt-1 w-full bg-white/95 backdrop-blur-sm border border-gray-300 rounded-lg shadow-xl max-h-80 overflow-y-auto z-[1003]">
+            <div className="absolute top-full mt-1 w-full bg-[#FFEFD5] backdrop-blur-sm border border-gray-300 rounded-lg shadow-xl max-h-80 overflow-y-auto z-[1003]">
               {searchResults.map((flight, index) => (
                 <div
                   key={`${flight.username}-${index}`}
@@ -604,6 +848,57 @@ const FullScreenMap = ({ flights }: { flights: any[] }) => {
                 <div className="px-4 py-6 text-center text-gray-500">
                   <Search className="w-8 h-8 mx-auto mb-2 text-gray-300" />
                   <div>No pilots found matching "{searchQuery}"</div>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* ATC Dropdown */}
+      <div className="absolute top-20 left-4 z-[1001]">
+        <div className="relative">
+          {/* ATC Toggle Button */}
+          <button
+            onClick={() => setShowAtcDropdown(!showAtcDropdown)}
+            className="w-56 flex items-center justify-between px-4 py-2 bg-[#E8F4FD] backdrop-blur-sm rounded-lg shadow-lg text-sm font-medium text-gray-700 hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <div className="flex items-center gap-2">
+              <span className="text-blue-500"><LuTowerControl className="w-4 h-4" /></span>
+              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+              <span>Active ATC ({atcFacilities.length})</span>
+            </div>
+            <div className={`transform transition-transform ${showAtcDropdown ? 'rotate-180' : ''}`}>
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </div>
+          </button>
+
+          {/* ATC Dropdown List */}
+          {showAtcDropdown && (
+            <div className="absolute top-full mt-1 w-full bg-[#E8F4FD] backdrop-blur-sm border border-blue-200 rounded-lg shadow-xl max-h-80 overflow-y-auto z-[1002]">
+              {atcFacilities.length > 0 ? (
+                atcFacilities.map((facility, index) => (
+                  <div
+                    key={`${facility.airportName}-${index}`}
+                    className="flex items-center gap-3 px-4 py-3 text-sm hover:bg-blue-50 border-b border-blue-100 last:border-b-0"
+                  >
+                    <div className="text-gray text-lg"><GiControlTower /></div>
+                    <div className="flex-1 min-w-0">
+                      <div className="font-semibold text-gray-900 truncate">
+                        {facility.airportName}
+                      </div>
+                      <div className="text-xs text-gray-600 truncate">
+                        Controller: {facility.username}
+                      </div>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="px-4 py-6 text-center text-gray-500">
+                  <span className="text-2xl mb-2 block">🏗️</span>
+                  <div className="text-sm">No active ATC facilities</div>
                 </div>
               )}
             </div>
@@ -668,7 +963,7 @@ const ComplimentLeaderboard = ({ flights }: { flights: any[] }) => {
       {/* Slide-out Panel - Only render when open */}
       {isOpen && (
         <div className="absolute right-4 top-1/2 transform -translate-y-1/2 z-[1001]">
-          <div className="bg-white/90 backdrop-blur-sm rounded-xl shadow-xl
+          <div className="bg-[#FFEFD5] backdrop-blur-sm rounded-xl shadow-xl
                           w-72 md:w-80 animate-in slide-in-from-right duration-300">
             <div className="p-3 md:p-4 max-h-80 md:max-h-96 overflow-hidden">
               {/* Header with Close Button */}

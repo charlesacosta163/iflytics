@@ -98,7 +98,7 @@ const MapPage = () => {
 
 
       {/* Live indicator */}
-      <div className="absolute bottom-4 left-4 z-40 bg-white/50 backdrop-blur-sm px-3 py-2 rounded-lg ">
+      <div className="absolute bottom-4 left-4 z-40 bg-[#FFEFD5]/50 backdrop-blur-sm px-3 py-2 rounded-lg ">
         <div className="flex items-center gap-2 w-[200px]">
           <div
             className={`w-2 h-2 rounded-full ${
