@@ -1916,10 +1916,37 @@ export const alternator = [
   {
     // MODERATOR INFINITE FLIGHT
     id: 83,
-    role: "mod",
+    role: "user",
     username: "Evan",
     image: `https://images.weserv.nl/?url=${encodeURIComponent(
       "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/evan/144/1448403_2.png"
+    )}&w=64&h=64&fit=cover&mask=circle`,
+  }, 
+  {
+    // IFLYTICS USER
+    id: 84,
+    role: "user",
+    username: "EliteExpert",
+    image: `https://images.weserv.nl/?url=${encodeURIComponent(
+      "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/eliteexpert/288/1528104_2.png"
+    )}&w=64&h=64&fit=cover&mask=circle`,
+  }, 
+  {
+    // IFLYTICS USER
+    id: 85,
+    role: "user",
+    username: "Avean",
+    image: `https://images.weserv.nl/?url=${encodeURIComponent(
+      "https://avatars.discourse-cdn.com/v4/letter/a/3bc359/96.png"
+    )}&w=64&h=64&fit=cover&mask=circle`,
+  }, 
+  {
+    // IFLYTICS USER
+    id: 86,
+    role: "user",
+    username: "Beluga1",
+    image: `https://images.weserv.nl/?url=${encodeURIComponent(
+      "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/beluga1/288/1533701_2.png"
     )}&w=64&h=64&fit=cover&mask=circle`,
   }, 
 ];

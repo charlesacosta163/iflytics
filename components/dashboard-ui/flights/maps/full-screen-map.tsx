@@ -730,7 +730,7 @@ const FloatingRightNav = ({
   onSelectUser: (flight: any) => void
 }) => {
   return (
-    <div className="absolute right-4 top-1/2 transform -translate-y-1/2 z-[999]">
+    <div className="absolute sm:right-4 right-2 top-1/2 transform -translate-y-1/2 z-[999]">
       <div className="bg-white/20 backdrop-blur-sm rounded-2xl shadow-lg p-2 space-y-2 border border-white/30">
         {/* ATC Button */}
         <ActiveATCButton />
@@ -787,11 +787,12 @@ const ActiveATCButton = () => {
         onClick={() => setIsOpen(true)}
         className="w-12 h-12 bg-green-500/90 backdrop-blur-sm rounded-xl shadow-lg
                    hover:bg-green-600 transition-all duration-200 relative
-                   flex items-center justify-center group"
+                   flex flex-col items-center justify-center group"
       >
         <div className="animate-ping absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full"></div>
         <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full"></div>
         <LuTowerControl className="w-5 h-5 text-white" />
+        <span className="text-[0.5rem] text-white font-bold">ATC</span>
       </button>
 
       {/* Panel - slides out from the floating nav */}
@@ -825,15 +826,15 @@ const ActiveATCButton = () => {
                       key={`${facility.airportName}-${index}`}
                       className="flex items-center gap-3 px-3 py-3 text-sm hover:bg-blue-50 rounded-lg mb-2"
                     >
-                      <div className="text-blue-500">
+                      <div className="text-gray">
                         <GiControlTower className="w-5 h-5" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <div className="font-semibold text-gray-900 truncate">
+                        <div className="font-black tracking-tight text-blue-500 truncate">
                           {facility.airportName}
                         </div>
                         <div className="text-xs text-gray-600 truncate">
-                          Controller: {facility.username}
+                          Controller: <span className="font-bold tracking-tight text-blue-900">{facility.username}</span>
                         </div>
                       </div>
                     </div>
@@ -887,9 +888,10 @@ const SearchButton = ({ flights, onSelectUser }: { flights: any[], onSelectUser:
         onClick={() => setIsOpen(true)}
         className="w-12 h-12 bg-blue-500/90 backdrop-blur-sm rounded-xl shadow-lg
                    hover:bg-blue-600 transition-all duration-200
-                   flex items-center justify-center"
+                   flex flex-col items-center justify-center"
       >
         <Search className="w-5 h-5 text-white" />
+        <span className="text-[0.5rem] text-white font-bold">Find</span>
       </button>
 
       {/* Panel */}
@@ -919,7 +921,7 @@ const SearchButton = ({ flights, onSelectUser }: { flights: any[], onSelectUser:
                   placeholder="👨‍✈️ Search pilots..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 bg-white rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full pl-10 pr-4 py-2 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
                 {searchQuery && (
                   <button
@@ -1033,10 +1035,11 @@ const ComplimentButton = ({ flights }: { flights: any[] }) => {
         onClick={() => setIsOpen(true)}
         className="w-12 h-12 bg-orange-400/90 backdrop-blur-sm rounded-xl shadow-lg
                    hover:bg-orange-500 transition-all duration-200 relative
-                   flex items-center justify-center"
+                   flex flex-col items-center justify-center"
       >
         <div className="animate-ping absolute -top-1 -right-1 w-2 h-2 bg-orange-500 rounded-full"></div>
         <FaRegFaceGrinWink className="w-5 h-5 text-white" />
+        <span className="text-[0.5rem] text-white font-bold">Doritos</span>
       </button>
 
       {/* Panel */}
@@ -1117,21 +1120,28 @@ const MapThemeButton = () => {
   const router = useRouter();
   const pathname = usePathname();
 
+  const path = pathname.split("/")[1];
   return (
     <>
       {/* Theme Button */}
       <div className="relative">
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="w-12 h-12 bg-purple-500/90 backdrop-blur-sm rounded-xl shadow-lg
-                     hover:bg-purple-600 transition-all duration-200
-                     flex items-center justify-center group relative"
+          className={cn(
+            "w-12 h-12 backdrop-blur-sm rounded-xl shadow-lg transition-all duration-200 flex flex-col items-center justify-center group relative",
+            pathname === "/map" 
+              ? "bg-light text-gray-700 hover:bg-gray-100" 
+              : pathname === "/map/dark" 
+              ? "bg-gray-700 text-light hover:bg-gray-600" 
+              : pathname === "/map/party"
+              ? "bg-indigo-600 text-light hover:bg-indigo-700"
+              : "bg-light text-gray-700 hover:bg-gray-100" // default fallback
+          )}
         >
-          <span className="text-light text-lg">
+          <span className="text-lg">
             {mapThemes[pathname as keyof typeof mapThemes]?.icon || mapThemes["/map"].icon}
           </span>
-          <ChevronDown className={cn("w-3 h-3 text-light absolute -bottom-1 -right-1 transition-transform duration-200", 
-            isOpen && "rotate-180")} />
+          <span className="text-[0.5rem] font-bold">Theme</span>
         </button>
 
         {/* Dropdown */}
