@@ -123,7 +123,7 @@ const MapDarkPage = () => {
         </div>
       </Link> */}
 
-      <FullScreenMap flights={quirkyFlights} styleUrl="https://tiles.stadiamaps.com/styles/alidade_satellite.json"/>
+      <FullScreenMap flights={quirkyFlights} styleUrl="https://basemaps.cartocdn.com/gl/positron-gl-style/style.json"/>
     </div>
   );
 };

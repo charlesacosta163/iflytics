@@ -3,7 +3,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Map } from "maplibre-gl";
 import { X, Search, ChevronDown, Link } from "lucide-react";
-import { LuPartyPopper, LuSun, LuMoon, LuTowerControl, LuEarth } from "react-icons/lu";
+import { LuPartyPopper, LuSun, LuMoon, LuTowerControl, LuEarth, LuSnowflake } from "react-icons/lu";
 import { useRouter, usePathname } from "next/navigation";
 
 import { aviationCompliments } from "@/lib/data";
@@ -28,9 +28,9 @@ const mapThemes = {
     name: "Party",
     icon: <LuPartyPopper className="w-6 h-6" />,
   },
-  "/map/earth": {
-    name: "Earth",
-    icon: <LuEarth className="w-6 h-6" />,
+  "/map/winter": {
+    name: "Winter",
+    icon: <LuSnowflake className="w-6 h-6" />,
   },
 };
 
@@ -1272,8 +1272,8 @@ const MapThemeButton = () => {
               ? "bg-gray-700 text-light hover:bg-gray-600"
               : pathname === "/map/party"
               ? "bg-indigo-600 text-light hover:bg-indigo-700"
-              : pathname === "/map/earth"
-              ? "bg-green-700 text-light hover:bg-green-800"
+              : pathname === "/map/winter"
+              ? "bg-blue-300 text-light hover:bg-blue-400"
               : "bg-light text-gray-700 hover:bg-gray-100" // default fallback
           )}
         >
