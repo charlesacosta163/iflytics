@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState, useRef } from "react";
 import { Map } from "maplibre-gl";
-import { X, Search, ChevronDown, Link } from "lucide-react";
+import { X, Search, ChevronDown, Link, Plus, Minus } from "lucide-react";
 import { LuPartyPopper, LuSun, LuMoon, LuTowerControl, LuEarth, LuSnowflake } from "react-icons/lu";
 import { useRouter, usePathname } from "next/navigation";
 
@@ -780,6 +780,19 @@ const FullScreenMap = ({
     setCurrentRouteId(null);
   };
 
+  // Add zoom functions
+  const zoomIn = () => {
+    if (mapRef.current) {
+      mapRef.current.zoomIn({ duration: 300 });
+    }
+  };
+
+  const zoomOut = () => {
+    if (mapRef.current) {
+      mapRef.current.zoomOut({ duration: 300 });
+    }
+  };
+
   return (
     <div style={{ position: "relative", width: "100%", height: "100%" }}>
       <p className="hidden lg:block absolute bottom-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-blue-500 to-purple-500 text-white backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold">
@@ -787,12 +800,17 @@ const FullScreenMap = ({
       </p>
       <div ref={mapContainerRef} className="w-full h-full" />
 
+      {/* Zoom Controls */}
+      <ZoomControls onZoomIn={zoomIn} onZoomOut={zoomOut} />
+
       {/* FloatingRightNav with theme button */}
       <FloatingRightNav 
         flights={flights}
         activeFilter={activeFilter}
         onSelectUser={focusOnUser} 
         onFilterChange={handleFilterChange}
+        onZoomIn={zoomIn}
+        onZoomOut={zoomOut}
       />
 
       {/* Flight Information Popup */}
@@ -811,17 +829,41 @@ const FloatingRightNav = ({
   activeFilter,
   onSelectUser,
   onFilterChange,
+  onZoomIn,
+  onZoomOut,
 }: {
   flights: any[];
   activeFilter: string;
   onSelectUser: (flight: any) => void;
   onFilterChange: (filteredFlights: any[], filterId: string) => void;
+  onZoomIn: () => void;
+  onZoomOut: () => void;
 }) => {
   const router = useRouter();
 
   return (
     <div className="absolute sm:right-4 right-2 top-1/2 transform -translate-y-1/2 z-[999]">
       <div className="bg-white/20 backdrop-blur-sm rounded-2xl shadow-lg p-2 space-y-2 border border-white/30">
+        {/* Zoom Controls */}
+        <div className="flex flex-col space-y-1">
+          <button
+            onClick={onZoomIn}
+            className="w-12 h-6 bg-blue-500/90 backdrop-blur-sm rounded-lg shadow-lg
+                       hover:bg-blue-600 transition-all duration-200
+                       flex items-center justify-center"
+          >
+            <Plus className="w-4 h-4 text-white" />
+          </button>
+          <button
+            onClick={onZoomOut}
+            className="w-12 h-6 bg-blue-500/90 backdrop-blur-sm rounded-lg shadow-lg
+                       hover:bg-blue-600 transition-all duration-200
+                       flex items-center justify-center"
+          >
+            <Minus className="w-4 h-4 text-white" />
+          </button>
+        </div>
+
         {/* ATC Button */}
         <ActiveATCButton />
 
@@ -1325,8 +1367,6 @@ const ComplimentButton = ({ flights }: { flights: any[] }) => {
     setTopUsers(shuffled.slice(0, 10));
   }, [flights]);
 
-  if (topUsers.length === 0) return null;
-
   return (
     <>
       {/* Button in the floating nav */}
@@ -1336,7 +1376,9 @@ const ComplimentButton = ({ flights }: { flights: any[] }) => {
                    hover:bg-orange-500 transition-all duration-200 relative
                    flex flex-col items-center justify-center"
       >
-        <div className="animate-ping absolute -top-1 -right-1 w-2 h-2 bg-orange-500 rounded-full"></div>
+        {topUsers.length > 0 && (
+          <div className="animate-ping absolute -top-1 -right-1 w-2 h-2 bg-orange-500 rounded-full"></div>
+        )}
         <FaRegFaceGrinWink className="w-5 h-5 text-white" />
         <span className="text-[0.5rem] text-white font-bold">Doritos</span>
       </button>
@@ -1355,7 +1397,7 @@ const ComplimentButton = ({ flights }: { flights: any[] }) => {
                     Compliment Kings
                   </h3>
                   <p className="text-xs font-semibold text-blue-600 font-mono">
-                    {currentCompliment}
+                    {currentCompliment || "Loading compliments..."}
                   </p>
                 </div>
                 <button
@@ -1408,15 +1450,27 @@ const ComplimentButton = ({ flights }: { flights: any[] }) => {
                     </div>
                   ))
                 ) : (
-                  <div className="text-center text-sm text-gray-500">
-                    Looks like no one has been complimented yet!
+                  // Fallback message when no compliments match
+                  <div className="text-center py-8">
+                    <div className="text-4xl mb-3">🎭</div>
+                    <div className="text-sm font-semibold text-gray-700 mb-2">
+                      No Compliment Kings Found!
+                    </div>
+                    <div className="text-xs text-gray-500 leading-relaxed">
+                      Nobody online has earned the "{currentCompliment}" compliment yet.
+                      <br />
+                      Check back later to see who deserves this praise!
+                    </div>
                   </div>
                 )}
               </div>
 
               <div className="mt-2 md:mt-3 pt-2 border-t border-gray-100">
                 <p className="text-xs text-gray-400 text-center">
-                  Refreshes every update • Top 10 pilots
+                  {topUsers.length > 0 
+                    ? "Refreshes every update • Top 10 pilots"
+                    : "Compliments refresh with new flight data"
+                  }
                 </p>
               </div>
             </div>
@@ -1517,6 +1571,39 @@ const MapThemeButton = () => {
         )}
       </div>
     </>
+  );
+};
+
+const ZoomControls = ({ 
+  onZoomIn, 
+  onZoomOut 
+}: { 
+  onZoomIn: () => void; 
+  onZoomOut: () => void; 
+}) => {
+  return (
+    <div className="absolute left-4 top-4 z-[999]">
+      <div className="bg-white/20 backdrop-blur-sm rounded-xl shadow-lg border border-white/30 overflow-hidden">
+        {/* Zoom In Button */}
+        <button
+          onClick={onZoomIn}
+          className="w-10 h-10 bg-white/10 hover:bg-white/20 transition-all duration-200
+                     flex items-center justify-center text-white
+                     border-b border-white/20"
+        >
+          <Plus className="w-5 h-5" />
+        </button>
+        
+        {/* Zoom Out Button */}
+        <button
+          onClick={onZoomOut}
+          className="w-10 h-10 bg-white/10 hover:bg-white/20 transition-all duration-200
+                     flex items-center justify-center text-white"
+        >
+          <Minus className="w-5 h-5" />
+        </button>
+      </div>
+    </div>
   );
 };
 
