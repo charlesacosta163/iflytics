@@ -6,13 +6,17 @@ import { X, Search, ChevronDown, Link } from "lucide-react";
 import { LuPartyPopper, LuSun, LuMoon, LuTowerControl, LuEarth, LuSnowflake } from "react-icons/lu";
 import { useRouter, usePathname } from "next/navigation";
 
-import { aviationCompliments } from "@/lib/data";
+import { aviationCompliments, customUserImages } from "@/lib/data";
 import UserPopupInfo from "./user-popup-info";
 import { cn } from "@/lib/utils";
 import { GiControlTower } from "react-icons/gi";
 import { FaRegFaceGrinWink } from "react-icons/fa6";
 import { getUserFlightPlan, getAllAirportsWithActiveATC } from "@/lib/actions";
 import { BiSolidFaceMask } from "react-icons/bi";
+import { SlGlobe } from "react-icons/sl";
+import { ImBlocked } from "react-icons/im";
+import { RiUserCommunityLine } from "react-icons/ri";
+
 
 // Add the map themes configuration
 const mapThemes = {
@@ -41,12 +45,39 @@ const FullScreenMap = ({
   flights: any[];
   styleUrl: string;
 }) => {
+  const [displayedFlights, setDisplayedFlights] = useState(flights);
+  const [activeFilter, setActiveFilter] = useState<string>("all");
   const [popupInfo, setPopupInfo] = useState<any>(null);
   const mapRef = useRef<Map | null>(null);
   const mapContainerRef = useRef<HTMLDivElement>(null);
-
-  // Add state for current route
   const [currentRouteId, setCurrentRouteId] = useState<string | null>(null);
+
+  // Function to apply current filter to flight data
+  const applyActiveFilter = (flightData: any[]) => {
+    switch(activeFilter) {
+      case "iflytics":
+        return flightData.filter(f => 
+          f.username && 
+          customUserImages.some(user => user.username === f.username)
+        );
+      case "no-zombies":
+        return flightData.filter(f => f.username && f.username.trim() !== "");
+      default:
+        return flightData;
+    }
+  };
+
+  // Update displayed flights when flights prop changes - but maintain filter
+  useEffect(() => {
+    const filteredData = applyActiveFilter(flights);
+    setDisplayedFlights(filteredData);
+  }, [flights, activeFilter]);
+
+  // Handle filter changes
+  const handleFilterChange = (filteredFlights: any[], filterId: string) => {
+    setActiveFilter(filterId);
+    setDisplayedFlights(filteredFlights);
+  };
 
   // Function to create origin and destination sprites
   const createRouteSprites = (map: Map) => {
@@ -642,7 +673,7 @@ const FullScreenMap = ({
 
     // Update the map data function
     const updateMapData = () => {
-      const flightFeatures = flights.map((flight) => {
+      const flightFeatures = displayedFlights.map((flight) => {
         return {
           type: "Feature" as const,
           id: `flight-${flight.username}`,
@@ -661,7 +692,7 @@ const FullScreenMap = ({
             emoji: flight.emoji,
             compliment: flight.compliment,
             customImage: flight.customImage,
-            imageId: `user-${flight.username}`, // Always use user-specific image
+            imageId: `user-${flight.username}`,
             aircraftId: flight.aircraftId,
             flightId: flight.flightId,
             heading: flight.heading,
@@ -699,7 +730,7 @@ const FullScreenMap = ({
     return () => {
       window.removeEventListener("refreshFlights", handleRefresh);
     };
-  }, [flights]);
+  }, [displayedFlights, styleUrl]);
 
   // Enhanced clearAllRoutes function - nuclear cleanup
   const clearAllRoutes = () => {
@@ -757,7 +788,12 @@ const FullScreenMap = ({
       <div ref={mapContainerRef} className="w-full h-full" />
 
       {/* FloatingRightNav with theme button */}
-      <FloatingRightNav flights={flights} onSelectUser={focusOnUser} />
+      <FloatingRightNav 
+        flights={flights}
+        activeFilter={activeFilter}
+        onSelectUser={focusOnUser} 
+        onFilterChange={handleFilterChange}
+      />
 
       {/* Flight Information Popup */}
       {popupInfo && (
@@ -772,29 +808,40 @@ const FullScreenMap = ({
 
 const FloatingRightNav = ({
   flights,
+  activeFilter,
   onSelectUser,
+  onFilterChange,
 }: {
   flights: any[];
+  activeFilter: string;
   onSelectUser: (flight: any) => void;
+  onFilterChange: (filteredFlights: any[], filterId: string) => void;
 }) => {
   const router = useRouter();
+
   return (
     <div className="absolute sm:right-4 right-2 top-1/2 transform -translate-y-1/2 z-[999]">
       <div className="bg-white/20 backdrop-blur-sm rounded-2xl shadow-lg p-2 space-y-2 border border-white/30">
         {/* ATC Button */}
         <ActiveATCButton />
 
-        {/* Search Button */}
+        {/* Search Button - use original flights for search */}
         <SearchButton flights={flights} onSelectUser={onSelectUser} />
 
-        {/* Compliment Button */}
+        {/* Filter Button */}
+        <FilterButton 
+          flights={flights} 
+          activeFilter={activeFilter}
+          onFilterChange={onFilterChange} 
+        />
+
+        {/* Compliment Button - use original flights */}
         <ComplimentButton flights={flights} />
 
         {/* Map Theme Button */}
         <MapThemeButton />
 
-        {/* Find the Pilot Button */}
-
+        {/* Game Button */}
         <div className="bg-gradient-to-r from-orange-500 via-yellow-500 to-green-500 p-[4px] rounded-xl shadow-lg">
           <button
             onClick={() => router.push("/map/game")}
@@ -806,7 +853,6 @@ const FloatingRightNav = ({
             <span className="text-[0.4rem] text-white font-bold">Game</span>
           </button>
         </div>
-
       </div>
     </div>
   );
@@ -1124,6 +1170,135 @@ const SearchButton = ({
             </div>
           </div>
         </div>
+      )}
+    </>
+  );
+};
+
+const FilterButton = ({ 
+  flights, 
+  activeFilter,
+  onFilterChange 
+}: { 
+  flights: any[]; 
+  activeFilter: string;
+  onFilterChange: (filteredFlights: any[], filterId: string) => void;
+}) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const filterOptions = [
+    { 
+      id: "all", 
+      name: "All Flights", 
+      icon: <SlGlobe className="w-6 h-6" />,
+      count: flights.length 
+    },
+    { 
+      id: "iflytics", 
+      name: "IFlytics Community", 
+      icon: <RiUserCommunityLine className="w-6 h-6" />,
+      count: flights.filter(f => 
+        f.username && 
+        customUserImages.some(user => user.username === f.username)
+      ).length
+    },
+    { 
+      id: "no-zombies", 
+      name: "Hide Zombies", 
+      icon: <ImBlocked className="w-6 h-6" />,
+      count: flights.filter(f => f.username && f.username.trim() !== "").length
+    }
+  ];
+
+  const applyFilter = (filterId: string) => {
+    let filtered = flights;
+    
+    switch(filterId) {
+      case "iflytics":
+        filtered = flights.filter(f => 
+          f.username && 
+          customUserImages.some(user => user.username === f.username)
+        );
+        break;
+      case "no-zombies":
+        filtered = flights.filter(f => f.username && f.username.trim() !== "");
+        break;
+      default:
+        filtered = flights;
+    }
+    
+    onFilterChange(filtered, filterId);
+    setIsOpen(false);
+  };
+
+  return (
+    <>
+      {/* Filter Button */}
+      <button
+        onClick={() => setIsOpen(true)}
+        className="w-12 h-12 bg-purple-500/90 backdrop-blur-sm rounded-xl shadow-lg
+                   hover:bg-purple-600 transition-all duration-200
+                   flex flex-col items-center justify-center relative"
+      >
+        {activeFilter !== "all" && (
+          <div className="absolute -top-1 -right-1 w-3 h-3 bg-orange-500 rounded-full"></div>
+        )}
+        <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
+                d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.414A1 1 0 013 6.707V4z" />
+        </svg>
+        <span className="text-[0.5rem] text-white font-bold">Filter</span>
+      </button>
+
+      {/* Filter Panel */}
+      {isOpen && (
+        <>
+          {/* Backdrop */}
+          <div
+            className="fixed inset-0 z-[998]"
+            onClick={() => setIsOpen(false)}
+          />
+
+          <div className="absolute right-16 top-0 z-[1002] w-52">
+            <div className="bg-gray-800/95 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-700/50">
+              
+              {/* Header */}
+              <div className="flex items-center justify-between p-3 pb-2 border-b border-gray-700/50">
+                <h3 className="text-sm font-semibold text-white">Filter Flights</h3>
+                <button 
+                  onClick={() => setIsOpen(false)} 
+                  className="w-6 h-6 flex items-center justify-center rounded-lg hover:bg-gray-700/80 transition-colors text-gray-400 hover:text-white"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              {/* Filter Options */}
+              <div className="p-3 pt-2 space-y-2">
+                {filterOptions.map((option) => (
+                  <button
+                    key={option.id}
+                    onClick={() => applyFilter(option.id)}
+                    className={cn(
+                      "w-full flex items-center justify-between p-3 rounded-xl transition-all duration-200",
+                      activeFilter === option.id
+                        ? "bg-purple-600/90 text-white"
+                        : "bg-gray-700/40 text-gray-300 hover:bg-gray-700/80"
+                    )}
+                  >
+                    <div className="flex items-center gap-3">
+                      <span className="text-lg">{option.icon}</span>
+                      <span className="text-sm font-medium">{option.name}</span>
+                    </div>
+                    <span className="text-xs bg-black/20 px-2 py-1 rounded-full">
+                      {option.count}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        </>
       )}
     </>
   );
