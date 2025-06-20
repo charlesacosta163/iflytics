@@ -16,6 +16,21 @@
   --rounded-smooth: 25px;
 }
 
+.maplibregl-ctrl-attrib {
+  position: fixed !important;
+  bottom: 10px !important;
+  right: 10px !important;
+  background: rgba(255, 255, 255, 0.95) !important;
+  backdrop-filter: blur(10px) !important;
+  padding: 6px 10px !important;
+  border-radius: 8px !important;
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+  z-index: 999 !important;
+  font-size: 10px !important;
+  color: rgba(0, 0, 0, 0.7) !important;
+  max-width: 200px !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+}
 
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
