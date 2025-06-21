@@ -843,7 +843,7 @@ const NavToggleButton = ({
       onClick={onToggle}
       className={`
         fixed top-1/2 transform -translate-y-1/2 z-[5]
-        w-12 h-24 backdrop-blur-2xl
+        w-10 h-16 backdrop-blur-2xl
         transition-all duration-500 ease-out group overflow-hidden
         ${isVisible 
           ? 'right-[calc(4rem+0.5rem)] sm:right-[calc(4rem+1rem)] bg-white/15 hover:bg-white/25 rounded-l-3xl border-l border-t border-b border-white/30' 
@@ -1143,7 +1143,7 @@ const SearchButton = ({
 
       {/* Panel - NO BLUR EFFECT */}
       {isOpen && (
-        <div className="absolute right-18 top-[-0.5rem] z-[10001] w-80 slide-in-from-right-2 duration-500 ease-out">
+        <div className="absolute right-18 top-[-0.5rem] z-[10001] w-72 md:w-80 slide-in-from-right-2 duration-500 ease-out">
           <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl border border-gray-200/50">
             {/* Header */}
             <div className="flex items-center justify-between p-4 pb-3 border-b border-gray-200/50 bg-gradient-to-r from-blue-50/50 to-white/30 rounded-t-3xl">

@@ -18,13 +18,13 @@
 
 .maplibregl-ctrl-attrib {
   position: fixed !important;
+  backdrop-filter: blur(10px) !important;
   bottom: 10px !important;
   right: 10px !important;
-  background: rgba(255, 255, 255, 0.95) !important;
+  background: rgba(255, 255, 255, 0.9) !important;
   backdrop-filter: blur(10px) !important;
   padding: 6px 10px !important;
   border-radius: 8px !important;
-  border: 1px solid rgba(0, 0, 0, 0.1) !important;
   z-index: 999 !important;
   font-size: 10px !important;
   color: rgba(0, 0, 0, 0.7) !important;
@@ -202,4 +202,32 @@
   to {
     opacity: 1;
   }
+}
+
+/* Make just the toggle button larger */
+.maplibregl-ctrl-attrib summary {
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  padding: 4px 6px !important;
+  cursor: pointer !important;
+  min-height: 32px !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+/* Make the toggle arrow bigger */
+.maplibregl-ctrl-attrib summary::before {
+  content: "👇" !important;
+  font-size: 14px !important;
+  margin-right: 6px !important;
+  transition: transform 0.2s ease !important;
+}
+
+.maplibregl-ctrl-attrib[open] summary::before {
+  transform: rotate(180deg) !important;
+}
+
+/* Remove default browser styling */
+.maplibregl-ctrl-attrib summary::-webkit-details-marker {
+  display: none !important;
 }
