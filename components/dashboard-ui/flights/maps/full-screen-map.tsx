@@ -2,7 +2,8 @@
 
 import React, { useEffect, useState, useRef } from "react";
 import { Map } from "maplibre-gl";
-import { X, Search, ChevronDown, Link, Plus, Minus } from "lucide-react";
+import { X, Search, ChevronLeft, ChevronRight } from "lucide-react";
+import { TiZoomInOutline, TiZoomOutOutline } from "react-icons/ti";
 import { LuPartyPopper, LuSun, LuMoon, LuTowerControl, LuEarth, LuSnowflake } from "react-icons/lu";
 import { useRouter, usePathname } from "next/navigation";
 
@@ -51,6 +52,7 @@ const FullScreenMap = ({
   const mapRef = useRef<Map | null>(null);
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const [currentRouteId, setCurrentRouteId] = useState<string | null>(null);
+  const [isNavVisible, setIsNavVisible] = useState(true);
 
   // Function to apply current filter to flight data
   const applyActiveFilter = (flightData: any[]) => {
@@ -800,10 +802,13 @@ const FullScreenMap = ({
       </p>
       <div ref={mapContainerRef} className="w-full h-full" />
 
-      {/* Zoom Controls */}
-      <ZoomControls onZoomIn={zoomIn} onZoomOut={zoomOut} />
+      {/* Toggle Button - Always Visible */}
+      <NavToggleButton 
+        isVisible={isNavVisible} 
+        onToggle={() => setIsNavVisible(!isNavVisible)} 
+      />
 
-      {/* FloatingRightNav with theme button */}
+      {/* FloatingRightNav with slide animation */}
       <FloatingRightNav 
         flights={flights}
         activeFilter={activeFilter}
@@ -811,6 +816,7 @@ const FullScreenMap = ({
         onFilterChange={handleFilterChange}
         onZoomIn={zoomIn}
         onZoomOut={zoomOut}
+        isVisible={isNavVisible}
       />
 
       {/* Flight Information Popup */}
@@ -824,6 +830,39 @@ const FullScreenMap = ({
   );
 };
 
+// Add the toggle button component
+const NavToggleButton = ({ 
+  isVisible, 
+  onToggle 
+}: { 
+  isVisible: boolean; 
+  onToggle: () => void; 
+}) => {
+  return (
+    <button
+      onClick={onToggle}
+      className={`
+        fixed top-1/2 transform -translate-y-1/2 z-[1000]
+        w-8 h-16 bg-white/20 backdrop-blur-sm rounded-l-2xl shadow-lg
+        border border-white/30 border-r-0
+        hover:bg-white/30 transition-all duration-300
+        flex items-center justify-center text-white
+        ${isVisible ? 'right-20' : 'right-0'}
+      `}
+      style={{
+        transition: 'right 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
+      }}
+    >
+      {isVisible ? (
+        <ChevronRight className="w-4 h-4" />
+      ) : (
+        <ChevronLeft className="w-4 h-4" />
+      )}
+    </button>
+  );
+};
+
+// Update FloatingRightNav with slide animation and zoom controls
 const FloatingRightNav = ({
   flights,
   activeFilter,
@@ -831,6 +870,7 @@ const FloatingRightNav = ({
   onFilterChange,
   onZoomIn,
   onZoomOut,
+  isVisible, // Add visibility prop
 }: {
   flights: any[];
   activeFilter: string;
@@ -838,36 +878,49 @@ const FloatingRightNav = ({
   onFilterChange: (filteredFlights: any[], filterId: string) => void;
   onZoomIn: () => void;
   onZoomOut: () => void;
+  isVisible: boolean; // Add visibility prop
 }) => {
   const router = useRouter();
 
   return (
-    <div className="absolute sm:right-4 right-2 top-1/2 transform -translate-y-1/2 z-[999]">
+    <div 
+      className={`
+        absolute top-1/2 transform -translate-y-1/2 z-[999]
+        transition-all duration-300 ease-in-out
+        ${isVisible 
+          ? 'right-2 sm:right-4 translate-x-0 opacity-100' 
+          : 'right-2 sm:right-4 translate-x-full opacity-0 pointer-events-none'
+        }
+      `}
+      style={{
+        transition: 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease-in-out'
+      }}
+    >
       <div className="bg-white/20 backdrop-blur-sm rounded-2xl shadow-lg p-2 space-y-2 border border-white/30">
         {/* Zoom Controls */}
-        <div className="flex flex-col space-y-1">
+        <div className="flex flex-col space-y-2">
           <button
             onClick={onZoomIn}
-            className="w-12 h-6 bg-blue-500/90 backdrop-blur-sm rounded-lg shadow-lg
-                       hover:bg-blue-600 transition-all duration-200
+            className="w-12 h-8 bg-light/60 backdrop-blur-sm rounded-lg shadow-lg
+                       hover:bg-gray-200 transition-all duration-200
                        flex items-center justify-center"
           >
-            <Plus className="w-4 h-4 text-white" />
+            <TiZoomInOutline className="w-7 h-7 text-blue-400" />
           </button>
           <button
             onClick={onZoomOut}
-            className="w-12 h-6 bg-blue-500/90 backdrop-blur-sm rounded-lg shadow-lg
-                       hover:bg-blue-600 transition-all duration-200
+            className="w-12 h-8 bg-light/60 backdrop-blur-sm rounded-lg shadow-lg
+                       hover:bg-gray-200 transition-all duration-200
                        flex items-center justify-center"
           >
-            <Minus className="w-4 h-4 text-white" />
+            <TiZoomOutOutline className="w-7 h-7 text-red-400" />
           </button>
         </div>
 
         {/* ATC Button */}
         <ActiveATCButton />
 
-        {/* Search Button - use original flights for search */}
+        {/* Search Button */}
         <SearchButton flights={flights} onSelectUser={onSelectUser} />
 
         {/* Filter Button */}
@@ -877,7 +930,7 @@ const FloatingRightNav = ({
           onFilterChange={onFilterChange} 
         />
 
-        {/* Compliment Button - use original flights */}
+        {/* Compliment Button */}
         <ComplimentButton flights={flights} />
 
         {/* Map Theme Button */}
@@ -1571,39 +1624,6 @@ const MapThemeButton = () => {
         )}
       </div>
     </>
-  );
-};
-
-const ZoomControls = ({ 
-  onZoomIn, 
-  onZoomOut 
-}: { 
-  onZoomIn: () => void; 
-  onZoomOut: () => void; 
-}) => {
-  return (
-    <div className="absolute left-4 top-4 z-[999]">
-      <div className="bg-white/20 backdrop-blur-sm rounded-xl shadow-lg border border-white/30 overflow-hidden">
-        {/* Zoom In Button */}
-        <button
-          onClick={onZoomIn}
-          className="w-10 h-10 bg-white/10 hover:bg-white/20 transition-all duration-200
-                     flex items-center justify-center text-white
-                     border-b border-white/20"
-        >
-          <Plus className="w-5 h-5" />
-        </button>
-        
-        {/* Zoom Out Button */}
-        <button
-          onClick={onZoomOut}
-          className="w-10 h-10 bg-white/10 hover:bg-white/20 transition-all duration-200
-                     flex items-center justify-center text-white"
-        >
-          <Minus className="w-5 h-5" />
-        </button>
-      </div>
-    </div>
   );
 };
 
