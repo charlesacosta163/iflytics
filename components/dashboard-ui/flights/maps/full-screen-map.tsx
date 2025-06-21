@@ -842,22 +842,53 @@ const NavToggleButton = ({
     <button
       onClick={onToggle}
       className={`
-        fixed top-1/2 transform -translate-y-1/2 z-[1000]
-        w-8 h-16 bg-white/20 backdrop-blur-sm rounded-l-2xl shadow-lg
-        border border-white/30 border-r-0
-        hover:bg-white/30 transition-all duration-300
-        flex items-center justify-center text-white
-        ${isVisible ? 'right-20' : 'right-0'}
+        fixed top-1/2 transform -translate-y-1/2 z-[5]
+        w-12 h-24 backdrop-blur-2xl
+        transition-all duration-500 ease-out group overflow-hidden
+        ${isVisible 
+          ? 'right-[calc(4rem+0.5rem)] sm:right-[calc(4rem+1rem)] bg-white/15 hover:bg-white/25 rounded-l-3xl border-l border-t border-b border-white/30' 
+          : 'right-0 bg-gradient-to-br from-white/20 via-blue-500/20 to-purple-600/20 hover:from-white/30 hover:via-blue-500/30 hover:to-purple-600/30 rounded-l-[2rem] border border-white/40 border-r-0'
+        }
       `}
       style={{
-        transition: 'right 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
+        transform: 'translateY(-50%)',
+        transition: 'all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)',
       }}
     >
-      {isVisible ? (
-        <ChevronRight className="w-4 h-4" />
-      ) : (
-        <ChevronLeft className="w-4 h-4" />
-      )}
+      {/* Animated background */}
+      <div className={`
+        absolute inset-0 opacity-0 group-hover:opacity-100 transition-all duration-700
+        ${isVisible 
+          ? 'bg-gradient-to-r from-transparent via-white/10 to-blue-400/20'
+          : 'bg-gradient-to-br from-blue-400/30 via-purple-500/30 to-pink-500/20'
+        }
+      `} />
+      
+      {/* Floating orb effect */}
+      <div className="absolute inset-0 group-hover:animate-pulse">
+        <div className={`
+          absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2
+          w-8 h-8 rounded-full opacity-0 group-hover:opacity-20 transition-all duration-500
+          ${isVisible ? 'bg-white' : 'bg-gradient-to-br from-blue-400 to-purple-500'}
+        `} />
+      </div>
+      
+      {/* Icon with enhanced animation */}
+      <div className="relative z-10 flex items-center justify-center h-full">
+        <div className={`
+          transition-all duration-500 ease-out
+          ${isVisible 
+            ? 'text-white/80 group-hover:text-white group-hover:scale-125 group-hover:rotate-12' 
+            : 'text-white/90 group-hover:text-white group-hover:scale-125 group-hover:-rotate-12'
+          }
+        `}>
+          {isVisible ? (
+            <ChevronRight className="w-6 h-6 drop-shadow-lg" />
+          ) : (
+            <ChevronLeft className="w-6 h-6 drop-shadow-lg" />
+          )}
+        </div>
+      </div>
     </button>
   );
 };
@@ -1006,13 +1037,10 @@ const ActiveATCButton = () => {
         <span className="text-[0.5rem] text-white font-bold">ATC</span>
       </button>
 
-      {/* Panel - slides out from the floating nav */}
+      {/* Panel - NO BLUR EFFECT */}
       {isOpen && (
-        <div className="absolute right-16 top-0 z-[1001]">
-          <div
-            className="bg-[#E8F4FD] backdrop-blur-sm rounded-xl shadow-xl
-                          w-72 animate-in slide-in-from-right duration-300"
-          >
+        <div className="absolute right-18 top-[-0.5rem] z-[10001] slide-in-from-right-2 duration-500 ease-out">
+          <div className="bg-[#E8F4FD]/95 backdrop-blur-xl rounded-3xl shadow-2xl w-72">
             <div className="p-4 max-h-80 overflow-hidden">
               <div className="flex justify-between items-start mb-4">
                 <div className="flex items-center gap-2">
@@ -1065,11 +1093,6 @@ const ActiveATCButton = () => {
                 )}
               </div>
 
-              <div className="mt-3 pt-3 border-t border-blue-100">
-                <p className="text-xs text-gray-400 text-center">
-                  Updates every 30 seconds
-                </p>
-              </div>
             </div>
           </div>
         </div>
@@ -1111,157 +1134,150 @@ const SearchButton = ({
       <button
         onClick={() => setIsOpen(true)}
         className="w-12 h-12 bg-blue-500/90 backdrop-blur-sm rounded-xl shadow-lg
-                   hover:bg-blue-600 transition-all duration-200
-                   flex flex-col items-center justify-center"
+                   hover:bg-blue-600 hover:scale-105 transition-all duration-300
+                   flex flex-col items-center justify-center relative group"
       >
-        <Search className="w-5 h-5 text-white" />
+        <Search className="w-5 h-5 text-white group-hover:scale-110 transition-transform duration-300" />
         <span className="text-[0.5rem] text-white font-bold">Find</span>
       </button>
 
-      {/* Panel */}
+      {/* Panel - NO BLUR EFFECT */}
       {isOpen && (
-        <div className="absolute right-16 top-0 z-[1001]">
-          <div
-            className="bg-[#FFEFD5] backdrop-blur-sm rounded-xl shadow-xl
-                          w-72 animate-in slide-in-from-right duration-300"
-          >
-            <div className="p-4 max-h-96 overflow-hidden">
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="font-bold text-gray-800 text-lg">
-                  Search Pilots
-                </h3>
+        <div className="absolute right-18 top-[-0.5rem] z-[10001] w-80 slide-in-from-right-2 duration-500 ease-out">
+          <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl border border-gray-200/50">
+            {/* Header */}
+            <div className="flex items-center justify-between p-4 pb-3 border-b border-gray-200/50 bg-gradient-to-r from-blue-50/50 to-white/30 rounded-t-3xl">
+              <h3 className="text-lg tracking-tight font-bold text-gray-700 flex items-center gap-2">
+                <Search className="w-4 h-4 text-blue-500" />
+                Find Pilot
+              </h3>
+              <button
+                onClick={() => setIsOpen(false)}
+                className="w-7 h-7 flex items-center justify-center rounded-xl hover:bg-gray-100 transition-all duration-300 text-gray-400 hover:text-gray-600 hover:rotate-90"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <div className="relative text-sm font-medium mb-4">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <input
+                type="text"
+                placeholder="👨‍✈️ Search pilots..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              {searchQuery && (
                 <button
                   onClick={() => {
-                    setIsOpen(false);
                     setSearchQuery("");
                     setSearchResults([]);
                   }}
-                  className="text-gray-400 hover:text-gray-600 p-1"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
                 >
                   <X className="w-4 h-4" />
                 </button>
-              </div>
+              )}
+            </div>
 
-              <div className="relative text-sm font-medium mb-4">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-                <input
-                  type="text"
-                  placeholder="👨‍✈️ Search pilots..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                {searchQuery && (
-                  <button
+            <div className="max-h-60 overflow-y-auto px-2">
+              {searchQuery.trim() === "" ? (
+                <div className="text-center text-gray-500 py-4">
+                  <Search className="w-8 h-8 mx-auto mb-2 text-gray-300" />
+                  <div>Start typing to search pilots...</div>
+                </div>
+              ) : searchResults.length > 0 ? (
+                searchResults.map((flight, index) => (
+                  <div
+                    key={`${flight.username}-${index}`}
                     onClick={() => {
+                      onSelectUser(flight);
+                      setIsOpen(false);
                       setSearchQuery("");
                       setSearchResults([]);
                     }}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                    className={cn(
+                      "flex items-center gap-3 px-3 py-3 text-sm hover:bg-blue-50 cursor-pointer rounded-lg mb-2",
+                      flight.role === "staff"
+                        ? "hover:bg-blue-600 bg-blue-500 text-light"
+                        : flight.role === "mod"
+                        ? "hover:bg-purple-600 bg-purple-500 text-light"
+                        : flight.role === "user"
+                        ? "hover:bg-black/50 bg-gradient-to-br from-gray to-dark !text-light"
+                        : ""
+                    )}
                   >
-                    <X className="w-4 h-4" />
-                  </button>
-                )}
-              </div>
-
-              <div className="max-h-60 overflow-y-auto">
-                {searchQuery.trim() === "" ? (
-                  <div className="text-center text-gray-500 py-4">
-                    <Search className="w-8 h-8 mx-auto mb-2 text-gray-300" />
-                    <div>Start typing to search pilots...</div>
-                  </div>
-                ) : searchResults.length > 0 ? (
-                  searchResults.map((flight, index) => (
-                    <div
-                      key={`${flight.username}-${index}`}
-                      onClick={() => {
-                        onSelectUser(flight);
-                        setIsOpen(false);
-                        setSearchQuery("");
-                        setSearchResults([]);
-                      }}
-                      className={cn(
-                        "flex items-center gap-3 px-3 py-3 text-sm hover:bg-blue-50 cursor-pointer rounded-lg mb-2",
-                        flight.role === "staff"
-                          ? "hover:bg-blue-600 bg-blue-500 text-light"
-                          : flight.role === "mod"
-                          ? "hover:bg-purple-600 bg-purple-500 text-light"
-                          : flight.role === "user"
-                          ? "hover:bg-black/50 bg-gradient-to-br from-gray to-dark !text-light"
-                          : ""
-                      )}
-                    >
-                      <div className="flex-shrink-0">
-                        <div className="w-8 h-8 text-lg flex items-center justify-center">
-                          {flight.customImage ? (
-                            <img
-                              src={
-                                new URL(flight.customImage, import.meta.url)
-                                  .href
-                              }
-                              alt="Custom avatar"
-                              className="w-8 h-8 rounded-full object-cover border-2 border-gray-200"
-                            />
-                          ) : (
-                            flight.emoji
-                          )}
-                        </div>
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div
-                          className={cn(
-                            "font-semibold truncate",
-                            flight.role === "staff"
-                              ? "text-light"
-                              : flight.role === "mod"
-                              ? "!text-light"
-                              : flight.role === "user"
-                              ? "!text-light"
-                              : "text-gray-900"
-                          )}
-                        >
-                          {flight.username || "Zombie"}
-                        </div>
-                        <div
-                          className={cn(
-                            "text-xs truncate",
-                            flight.role === "staff"
-                              ? "text-light"
-                              : flight.role === "mod"
-                              ? "!text-light"
-                              : flight.role === "user"
-                              ? "!text-light"
-                              : "text-gray-500"
-                          )}
-                        >
-                          {flight.callsign}
-                        </div>
-                      </div>
-                      <div className="flex-shrink-0 text-right">
-                        <div
-                          className={cn(
-                            "text-xs",
-                            flight.role === "staff"
-                              ? "text-light"
-                              : flight.role === "mod"
-                              ? "!text-light"
-                              : flight.role === "user"
-                              ? "!text-light"
-                              : "text-gray-500"
-                          )}
-                        >
-                          {Math.round(flight.altitude)}ft
-                        </div>
+                    <div className="flex-shrink-0">
+                      <div className="w-8 h-8 text-lg flex items-center justify-center">
+                        {flight.customImage ? (
+                          <img
+                            src={
+                              new URL(flight.customImage, import.meta.url)
+                                .href
+                            }
+                            alt="Custom avatar"
+                            className="w-8 h-8 rounded-full object-cover border-2 border-gray-200"
+                          />
+                        ) : (
+                          flight.emoji
+                        )}
                       </div>
                     </div>
-                  ))
-                ) : (
-                  <div className="text-center text-gray-500 py-4">
-                    <Search className="w-8 h-8 mx-auto mb-2 text-gray-300" />
-                    <div>No pilots found matching "{searchQuery}"</div>
+                    <div className="flex-1 min-w-0">
+                      <div
+                        className={cn(
+                          "font-semibold truncate",
+                          flight.role === "staff"
+                            ? "text-light"
+                            : flight.role === "mod"
+                            ? "!text-light"
+                            : flight.role === "user"
+                            ? "!text-light"
+                            : "text-gray-900"
+                        )}
+                      >
+                        {flight.username || "Zombie"}
+                      </div>
+                      <div
+                        className={cn(
+                          "text-xs truncate",
+                          flight.role === "staff"
+                            ? "text-light"
+                            : flight.role === "mod"
+                            ? "!text-light"
+                            : flight.role === "user"
+                            ? "!text-light"
+                            : "text-gray-500"
+                        )}
+                      >
+                        {flight.callsign}
+                      </div>
+                    </div>
+                    <div className="flex-shrink-0 text-right">
+                      <div
+                        className={cn(
+                          "text-xs",
+                          flight.role === "staff"
+                            ? "text-light"
+                            : flight.role === "mod"
+                            ? "!text-light"
+                            : flight.role === "user"
+                            ? "!text-light"
+                            : "text-gray-500"
+                        )}
+                      >
+                        {Math.round(flight.altitude)}ft
+                      </div>
+                    </div>
                   </div>
-                )}
-              </div>
+                ))
+              ) : (
+                <div className="text-center text-gray-500 py-4">
+                  <Search className="w-8 h-8 mx-auto mb-2 text-gray-300" />
+                  <div>No pilots found matching "{searchQuery}"</div>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -1270,6 +1286,7 @@ const SearchButton = ({
   );
 };
 
+// Update FilterButton - remove blur effect
 const FilterButton = ({ 
   flights, 
   activeFilter,
@@ -1332,60 +1349,66 @@ const FilterButton = ({
       <button
         onClick={() => setIsOpen(true)}
         className="w-12 h-12 bg-purple-500/90 backdrop-blur-sm rounded-xl shadow-lg
-                   hover:bg-purple-600 transition-all duration-200
-                   flex flex-col items-center justify-center relative"
+                   hover:bg-purple-600 hover:scale-105 transition-all duration-300
+                   flex flex-col items-center justify-center relative group"
       >
         {activeFilter !== "all" && (
-          <div className="absolute -top-1 -right-1 w-3 h-3 bg-orange-500 rounded-full"></div>
+          <div className="absolute -top-1 -right-1 w-3 h-3 bg-orange-500 rounded-full animate-bounce"></div>
         )}
-        <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg className="w-5 h-5 text-white group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
                 d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.414A1 1 0 013 6.707V4z" />
         </svg>
         <span className="text-[0.5rem] text-white font-bold">Filter</span>
       </button>
 
-      {/* Filter Panel */}
       {isOpen && (
         <>
-          {/* Backdrop */}
           <div
-            className="fixed inset-0 z-[998]"
+            className=""
             onClick={() => setIsOpen(false)}
           />
 
-          <div className="absolute right-16 top-0 z-[1002] w-52">
-            <div className="bg-gray-800/95 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-700/50">
+          <div className="absolute right-18 top-[-0.5rem] z-[10001] w-52
+                          animate-in slide-in-from-right-2 duration-500 ease-out">
+            <div className="bg-gray-800/95 rounded-3xl shadow-2xl border border-gray-700/50">
               
               {/* Header */}
-              <div className="flex items-center justify-between p-3 pb-2 border-b border-gray-700/50">
-                <h3 className="text-sm font-semibold text-white">Filter Flights</h3>
+              <div className="flex items-center justify-between p-4 pb-3 border-b border-gray-700/50 bg-gradient-to-r from-gray-800/50 to-gray-700/30 rounded-t-3xl">
+                <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                  <div className="w-2 h-2 bg-purple-500 rounded-full animate-pulse"></div>
+                  Filter Flights
+                </h3>
                 <button 
                   onClick={() => setIsOpen(false)} 
-                  className="w-6 h-6 flex items-center justify-center rounded-lg hover:bg-gray-700/80 transition-colors text-gray-400 hover:text-white"
+                  className="w-7 h-7 flex items-center justify-center rounded-xl hover:bg-gray-700/80 transition-all duration-300 text-gray-400 hover:text-white hover:rotate-90"
                 >
                   <X className="w-4 h-4" />
                 </button>
               </div>
 
               {/* Filter Options */}
-              <div className="p-3 pt-2 space-y-2">
-                {filterOptions.map((option) => (
+              <div className="p-4 pt-3 space-y-3">
+                {filterOptions.map((option, index) => (
                   <button
                     key={option.id}
                     onClick={() => applyFilter(option.id)}
                     className={cn(
-                      "w-full flex items-center justify-between p-3 rounded-xl transition-all duration-200",
+                      "w-full flex items-center justify-between p-3 rounded-2xl transition-all duration-300 transform-gpu group hover:scale-[1.02]",
                       activeFilter === option.id
-                        ? "bg-purple-600/90 text-white"
-                        : "bg-gray-700/40 text-gray-300 hover:bg-gray-700/80"
+                        ? "bg-purple-600/90 text-white shadow-lg shadow-purple-500/25"
+                        : "bg-gray-700/40 text-gray-300 hover:bg-gray-700/80 hover:text-white"
                     )}
+                    style={{
+                      animationDelay: `${index * 100}ms`,
+                      animation: 'slideInUp 0.5s ease-out forwards'
+                    }}
                   >
                     <div className="flex items-center gap-3">
-                      <span className="text-lg">{option.icon}</span>
+                      <span className="text-lg group-hover:scale-110 transition-transform duration-300">{option.icon}</span>
                       <span className="text-sm font-medium">{option.name}</span>
                     </div>
-                    <span className="text-xs bg-black/20 px-2 py-1 rounded-full">
+                    <span className="text-xs bg-black/20 px-2 py-1 rounded-full font-mono">
                       {option.count}
                     </span>
                   </button>
@@ -1426,7 +1449,7 @@ const ComplimentButton = ({ flights }: { flights: any[] }) => {
       <button
         onClick={() => setIsOpen(true)}
         className="w-12 h-12 bg-orange-400/90 backdrop-blur-sm rounded-xl shadow-lg
-                   hover:bg-orange-500 transition-all duration-200 relative
+                   hover:bg-orange-500 hover:scale-105 transition-all duration-200 relative
                    flex flex-col items-center justify-center"
       >
         {topUsers.length > 0 && (
@@ -1436,13 +1459,10 @@ const ComplimentButton = ({ flights }: { flights: any[] }) => {
         <span className="text-[0.5rem] text-white font-bold">Doritos</span>
       </button>
 
-      {/* Panel */}
+      {/* Panel - NO BLUR EFFECT */}
       {isOpen && (
-        <div className="absolute right-16 top-0 z-[1001]">
-          <div
-            className="bg-[#FFEFD5] backdrop-blur-sm rounded-xl shadow-xl
-                          w-72 md:w-80 animate-in slide-in-from-right duration-300"
-          >
+        <div className="absolute right-18 top-[-0.5rem] z-[10001] slide-in-from-right-2 duration-500 ease-out">
+          <div className="bg-[#FFEFD5]/95 backdrop-blur-xl rounded-3xl shadow-2xl  w-72 md:w-80">
             <div className="p-3 md:p-4 max-h-80 md:max-h-96 overflow-hidden">
               <div className="flex justify-between items-start mb-3 md:mb-4">
                 <div>
@@ -1534,12 +1554,12 @@ const ComplimentButton = ({ flights }: { flights: any[] }) => {
   );
 };
 
+// Update MapThemeButton - completely remove ALL blur effects
 const MapThemeButton = () => {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
 
-  const path = pathname.split("/")[1];
   return (
     <>
       {/* Theme Button */}
@@ -1547,7 +1567,7 @@ const MapThemeButton = () => {
         <button
           onClick={() => setIsOpen(!isOpen)}
           className={cn(
-            "w-12 h-12 backdrop-blur-sm rounded-xl shadow-lg transition-all duration-200 flex flex-col items-center justify-center group relative",
+            "w-12 h-12 backdrop-blur-sm rounded-xl shadow-lg transition-all duration-300 flex flex-col items-center justify-center group relative hover:scale-105",
             pathname === "/map"
               ? "bg-light text-gray-700 hover:bg-gray-100"
               : pathname === "/map/dark"
@@ -1556,46 +1576,45 @@ const MapThemeButton = () => {
               ? "bg-indigo-600 text-light hover:bg-indigo-700"
               : pathname === "/map/winter"
               ? "bg-blue-300 text-light hover:bg-blue-400"
-              : "bg-light text-gray-700 hover:bg-gray-100" // default fallback
+              : "bg-light text-gray-700 hover:bg-gray-100"
           )}
         >
-          <span className="text-lg">
-            {mapThemes[pathname as keyof typeof mapThemes]?.icon ||
-              mapThemes["/map"].icon}
+          <span className="text-lg group-hover:scale-110 transition-transform duration-300">
+            {mapThemes[pathname as keyof typeof mapThemes]?.icon || mapThemes["/map"].icon}
           </span>
           <span className="text-[0.5rem] font-bold">{mapThemes[pathname as keyof typeof mapThemes]?.name || "Theme"}</span>
         </button>
 
-        {/* Dropdown */}
         {isOpen && (
           <>
-            {/* Backdrop to close dropdown */}
             <div
-              className="fixed inset-0 z-[998]"
+              className=""
               onClick={() => setIsOpen(false)}
             />
 
             {/* Dropdown Panel */}
-            <div className="absolute right-16 top-0 z-[1002] w-44">
-              <div className="bg-gray-800/95 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-700/50">
+            <div className="absolute right-16 top-[-20rem] z-[10001] w-48
+                            animate-in slide-in-from-right-2 duration-500 ease-out">
+              <div className="bg-gray-800/95 rounded-3xl shadow-2xl border border-gray-700/50">
                 
-                {/* Header with title and X button */}
-                <div className="flex items-center justify-between p-3 pb-2 border-b border-gray-700/50">
-                  <h3 className="text-sm font-semibold text-white">Map Theme</h3>
+                {/* Header */}
+                <div className="flex items-center justify-between p-4 pb-3 border-b border-gray-700/50 bg-gradient-to-r from-gray-800/50 to-gray-700/30 rounded-t-3xl">
+                  <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                    <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+                    Map Theme
+                  </h3>
                   <button
                     onClick={() => setIsOpen(false)}
-                    className="w-6 h-6 flex items-center justify-center rounded-lg hover:bg-gray-700/80 transition-colors text-gray-400 hover:text-white"
+                    className="w-7 h-7 flex items-center justify-center rounded-xl hover:bg-gray-700/80 transition-all duration-300 text-gray-400 hover:text-white hover:rotate-90"
                   >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                    </svg>
+                    <X className="w-4 h-4" />
                   </button>
                 </div>
 
                 {/* Theme Grid */}
-                <div className="p-3 pt-2">
+                <div className="p-4 pt-3">
                   <div className="grid grid-cols-2 gap-3">
-                    {Object.entries(mapThemes).map(([path, theme]) => (
+                    {Object.entries(mapThemes).map(([path, theme], index) => (
                       <button
                         key={path}
                         onClick={() => {
@@ -1603,16 +1622,20 @@ const MapThemeButton = () => {
                           setIsOpen(false);
                         }}
                         className={cn(
-                          "w-full flex flex-col items-center justify-center gap-1 p-3 text-sm rounded-xl transition-all duration-200 text-light relative",
+                          "w-full flex flex-col items-center justify-center gap-2 p-3 text-sm rounded-2xl transition-all duration-300 text-light relative group hover:scale-105 transform-gpu",
                           pathname === path
-                            ? "bg-purple-600/90 font-medium shadow-lg"
+                            ? "bg-purple-600/90 font-medium shadow-lg shadow-purple-500/25"
                             : "hover:bg-gray-700/80 bg-gray-700/40"
                         )}
+                        style={{
+                          animationDelay: `${index * 75}ms`,
+                          animation: 'slideInUp 0.4s ease-out forwards'
+                        }}
                       >
-                        <span className="text-xl">{theme.icon}</span>
+                        <span className="text-xl group-hover:scale-110 transition-transform duration-300">{theme.icon}</span>
                         <span className="text-xs text-center leading-tight">{theme.name}</span>
                         {pathname === path && (
-                          <div className="absolute top-2 right-2 w-2 h-2 bg-purple-400 rounded-full"></div>
+                          <div className="absolute top-2 right-2 w-2 h-2 bg-purple-400 rounded-full animate-pulse"></div>
                         )}
                       </button>
                     ))}
