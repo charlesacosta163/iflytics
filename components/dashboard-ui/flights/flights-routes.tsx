@@ -92,7 +92,7 @@ const FlightsRoutes = async ({ flights }: { flights: Flight[] }) => {
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-3 border-2 border-yellow-200 bg-yellow-50 p-6 rounded-lg flex items-center gap-2">
             <VscCopilotWarning className="w-6 h-6 text-yellow-500" />
-            <p className="text-sm text-yellow-700">
+            <p className="text-sm sm:text-lg font-medium text-yellow-700">
           Note: The route analysis and summary stats are a{" "}
           <b>premium feature</b>. Currently free to use during development/early
           alpha

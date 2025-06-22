@@ -23,6 +23,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 
 // Move the InfoCard component here or import it if it's elsewhere
 const InfoCard = ({
@@ -240,13 +241,21 @@ const FlightsOverview = ({
 
         {/* Aircraft Usage Chart */}
         {aircraftUsageData.length > 0 ? (
-          <AircraftUsageDonutChart
-            aircraftUsageData={aircraftUsageData}
-            timeframe={timeframe}
-            className="lg:col-span-1"  
-          />
+          <div className="relative">
+            <Badge className="absolute -top-2 -right-2 bg-yellow-500 shadow-lg font-semibold text-lg">
+             Premium
+            </Badge>
+            <AircraftUsageDonutChart
+              aircraftUsageData={aircraftUsageData}
+              timeframe={timeframe}
+              className="lg:col-span-1"  
+            />
+          </div>
         ) : (
-          <Card className="col-span-2 lg:col-span-1 bg-gradient-to-br from-gray-900 to-gray-800 border-gray-700">
+          <Card className="col-span-2 lg:col-span-1 bg-gradient-to-br from-gray-900 to-gray-800 border-gray-700 relative">
+            <Badge className="absolute -top-2 -right-2 bg-yellow-500 shadow-lg font-semibold">
+             Premium
+            </Badge>
             <CardHeader>
               <CardTitle className="text-2xl font-bold text-white flex items-center gap-3">
                 <FaPlane className="text-purple-400" />
@@ -264,7 +273,10 @@ const FlightsOverview = ({
         )}
 
         {/* Top 3 Aircraft */}
-        <Card className="lg:col-span-1 col-span-2 bg-dark">
+        <Card className="lg:col-span-1 col-span-2 bg-dark relative">
+          <Badge className="absolute -top-2 -right-2 bg-yellow-500 shadow-lg font-semibold text-lg">
+            Premium
+          </Badge>
           <CardHeader>  
             <CardTitle className="text-2xl font-bold text-white flex items-center gap-3">
               <div className="p-2 bg-amber-500 rounded-lg">
