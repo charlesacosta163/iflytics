@@ -6,8 +6,8 @@ import {
   AccordionTrigger,
   AccordionContent,
 } from "./ui/accordion";
-import { FaLightbulb, FaRegCalendarAlt, FaRegClock } from "react-icons/fa";
-import { LuPlane } from "react-icons/lu";
+import { FaLightbulb, FaRegCalendarAlt, FaRegClock, FaServer, FaExclamationTriangle } from "react-icons/fa";
+import { LuPlane, LuPlaneLanding } from "react-icons/lu";
 import { IoLocationOutline, IoSparklesOutline } from "react-icons/io5";
 import { MdFlight } from "react-icons/md";
 import { IoInfinite } from "react-icons/io5";
@@ -103,28 +103,32 @@ const FlightEntryCard = ({
                 </div>
               </div>
 
-              <div className="flex flex-col gap-2">
-                <h3 className="font-semibold text-gray-300">Flight Details</h3>
+                              <div className="flex flex-col gap-2">
+                  <h3 className="font-semibold text-gray-300">Flight Details</h3>
 
-                <div className="flex flex-col gap-2">
-                  <div className="flex gap-2 items-center text-sm font-medium">
-                    <span className="text-muted-foreground">Server</span>
-                    <div className="flex-1 text-right">{flight.server}</div>
-                  </div>
-                  <div className="flex gap-2 items-center text-sm font-medium">
-                    <span className="text-muted-foreground">Landings</span>
-                    <div className="flex-1 text-right">
-                      {flight.landingCount}
+                  <div className="grid grid-cols-3 gap-3">
+                    {/* Server Column */}
+                    <div className="bg-gradient-to-br from-green-900/40 to-green-800/40 rounded-lg p-3 text-center">
+                      <FaServer className="w-6 h-6 text-green-400 mx-auto mb-2" />
+                      <div className="text-green-300 text-xs font-medium mb-1">Server</div>
+                      <div className="text-green-400 font-bold tracking-tight text-xl">{flight.server}</div>
                     </div>
-                  </div>
-                  <div className="flex gap-2 items-center text-sm font-medium">
-                    <span className="text-muted-foreground">Violations</span>
-                    <div className="flex-1 text-right">
-                      {flight.violations.length}
+
+                    {/* Landings Column */}
+                    <div className="bg-gradient-to-br from-blue-900/40 to-blue-800/40 rounded-lg p-3 text-center">
+                      <LuPlaneLanding className="w-6 h-6 text-blue-400 mx-auto mb-2" />
+                      <div className="text-blue-300 text-xs font-medium mb-1">Landings</div>
+                      <div className="text-blue-400 font-bold tracking-tight text-xl">{flight.landingCount}</div>
+                    </div>
+
+                    {/* Violations Column */}
+                    <div className="bg-gradient-to-br from-red-900/40 to-red-800/40 rounded-lg p-3 text-center">
+                      <FaExclamationTriangle className="w-6 h-6 text-red-400 mx-auto mb-2" />
+                      <div className="text-red-300 text-xs font-medium mb-1">Violations</div>
+                      <div className="text-red-400 font-bold tracking-tight text-xl">{flight.violations.length}</div>
                     </div>
                   </div>
                 </div>
-              </div>
             </section>
           </AccordionContent>
         </AccordionItem>
