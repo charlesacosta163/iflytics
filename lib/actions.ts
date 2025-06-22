@@ -493,7 +493,17 @@ export async function getUserFlightPlan(flightId: string) {
     return data.result || "Flight Plan not found"
 }
 
-
+export async function getInfiniteFlightRouteDistanceWithCoordinates(originAirportCoords: [number, number], destinationAirportCoords: [number, number]) {
+    // Use haversine formula to calculate distance --> display in nautical miles
+    const R = 6371; // Radius of the earth in km
+    const dLat = (destinationAirportCoords[0] - originAirportCoords[0]) * (Math.PI / 180);
+    const dLon = (destinationAirportCoords[1] - originAirportCoords[1]) * (Math.PI / 180);
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(originAirportCoords[0] * (Math.PI / 180)) * Math.cos(destinationAirportCoords[0] * (Math.PI / 180)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const distance = R * c;
+    
+    return distance * 0.539957; // Convert to nautical miles
+}
 
 
 
