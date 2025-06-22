@@ -223,7 +223,36 @@ export async function getFullAirportInfo(airportIcao: string) {
 
 // NEW FUNCTION - USE FROM INFINITE FLIGHT API
 export async function getInfiniteFlightAirportCoordinates(airportIcao: string) {
+    try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/airport/${airportIcao}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${API_KEY}`
+            },
+            next: { revalidate: 21600 }, // Cache for 6 hours
+            signal: AbortSignal.timeout(10000) // 10 second timeout
+        });
 
+        if (!response.ok) {
+            console.error(`Airport coordinates API error for ${airportIcao}:`, response.status);
+            return { latitude_deg: 0, longitude_deg: 0 }; // Fallback coordinates
+        }
+
+        const data = await response.json();
+
+        const { latitude, longitude, country } = data.result;
+
+        return {
+            latitude_deg: latitude || 0,
+            longitude_deg: longitude || 0,
+            iso_country: country.isoCode,
+        };
+        
+    } catch (error) {
+        console.error(`Failed to fetch coordinates for ${airportIcao}:`, error);
+        return { latitude_deg: 0, longitude_deg: 0 }; // Fallback coordinates
+    }
 }
 
 

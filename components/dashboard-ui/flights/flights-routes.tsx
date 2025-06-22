@@ -4,6 +4,7 @@ import { Flight } from "@/lib/types";
 import {
   calculateTotalDistance,
   getAllFlightRoutes,
+  getFlightTimeCategorizerData,
   getTop5Countries,
   getUniqueRoutes,
 } from "@/lib/cache/flightinsightsdata";
@@ -34,10 +35,10 @@ import { convertMinutesToHours } from "@/lib/utils";
 import {RouteMap} from "./maps/route-map";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { DistancePerDayLineChart } from "../charts/distance-per-day-line-chart";
+import { FlightTimeCategorizerBarChart } from "../charts/flight-time-categorizer-barchart";
 
 
-let maintenanceMode = true;
+let maintenanceMode = false;
 
 const FlightsRoutes = async ({ flights }: { flights: Flight[] }) => {
     // console.log(`🔄 FlightsRoutes called at ${new Date().toISOString()}`); --> Debugging
@@ -85,6 +86,7 @@ const FlightsRoutes = async ({ flights }: { flights: Flight[] }) => {
 
   const top5Countries = getTop5Countries(uniqueRoutes);
 
+  const flightTimeCategorizerData = getFlightTimeCategorizerData(validFlights);
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -115,7 +117,7 @@ const FlightsRoutes = async ({ flights }: { flights: Flight[] }) => {
               View All
             </DialogTrigger>
 
-            <DialogContent className="min-h-[500px] max-h-[700px] max-w-3xl overflow-y-auto bg-[#FFD6BA] !border-none">
+            <DialogContent className="min-h-[500px] max-h-[90svh] max-w-3xl overflow-y-auto bg-[#FFD6BA] !border-none">
               <DialogHeader>
                 <DialogTitle className="text-xl font-bold">
                   All Flight Routes
@@ -201,7 +203,7 @@ const FlightsRoutes = async ({ flights }: { flights: Flight[] }) => {
                                 </span>
                               </div>
                             ) : (
-                              <span className="text-gray-400 italic">N/A...</span>
+                              <span className="text-gray-400 italic">{maintenanceMode ? "Under Maintenance" : route.totalTime}</span>
                             )}
                           </TableCell>
                           <TableCell className="text-right">
@@ -215,7 +217,7 @@ const FlightsRoutes = async ({ flights }: { flights: Flight[] }) => {
                                 </span>
                               </div>
                             ) : (
-                              <span className="text-gray-400 italic">N/A</span>
+                              <span className="text-gray-400 italic">{maintenanceMode ? "Under Maintenance" : route.distance}</span>
                             )}
                           </TableCell>
                           <TableCell className="text-center">
@@ -353,7 +355,7 @@ const FlightsRoutes = async ({ flights }: { flights: Flight[] }) => {
           </div>
 
           {/* Route Map */}
-      <div className="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-200 h-[500px] lg:h-auto">
+      <div className="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-200 min-h-[500px]">
         <RouteMap routes={uniqueRoutes} />
                 </div>
 
@@ -423,52 +425,9 @@ const FlightsRoutes = async ({ flights }: { flights: Flight[] }) => {
         </CardContent>
       </Card>
 
-      {/* <div className="lg:col-span-3 border-2 border-red-500">
-        <DistancePerDayLineChart />
-          </div> */}
-
-          {/* Route Analytics */}
-          {/* <div className="lg:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-6"> */}
-            
-            {/* Distance Distribution Chart */}
-            {/* <div className="bg-white rounded-xl shadow-sm border border-gray-200">
-              <div className="p-6 border-b border-gray-200">
-                <h3 className="text-lg font-semibold text-gray-900">Route Distance Distribution</h3>
-              </div>
-              <div className="p-6">
-                <div className="h-64 bg-gray-50 rounded-lg flex items-center justify-center">
-                  <div className="text-center">
-                    <div className="w-12 h-12 bg-purple-500 rounded-full flex items-center justify-center mx-auto mb-3">
-                      <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/>
-                      </svg>
-                    </div>
-                    <p className="text-gray-600 text-sm">Bar Chart</p>
-                    <p className="text-gray-500 text-xs">Short/Medium/Long haul distribution</p>
-                  </div>
-                </div>
-              </div>
-            </div> */}
-
-            {/* Route Frequency Over Time */}
-            {/* <div className="bg-white rounded-xl shadow-sm border border-gray-200">
-              <div className="p-6 border-b border-gray-200">
-                <h3 className="text-lg font-semibold text-gray-900">Routes Over Time</h3>
-              </div>
-              <div className="p-6">
-                <div className="h-64 bg-gray-50 rounded-lg flex items-center justify-center">
-                  <div className="text-center">
-                    <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-3">
-                      <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/>
-                      </svg>
-                    </div>
-                    <p className="text-gray-600 text-sm">Line Chart</p>
-                    <p className="text-gray-500 text-xs">Route frequency trends</p>
-                  </div>
-                </div>
-              </div>
-            </div> */}
+      <div className="lg:col-span-3">
+        <FlightTimeCategorizerBarChart flightTimeCategorizerData={flightTimeCategorizerData} />
+      </div>
     </div>
   );
 };

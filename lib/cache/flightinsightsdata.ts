@@ -1,5 +1,5 @@
 import { Flight, FlightRoute } from "../types";
-import { getAircraft, getAirport, getAirportCoordinates } from "../actions";
+import { getAircraft, getAirport, getAirportCoordinates, getInfiniteFlightAirportCoordinates } from "../actions";
 import { aircraftImages } from "../data";
 import { unstable_cache as cache, unstable_cache } from "next/cache";
 import { getAircraftCached } from "./flightdata";
@@ -463,7 +463,7 @@ export async function calculateTotalDistance(validFlights: Flight[]) {
     }
   */
 
-// Functions Needed: getAirportCoordinates
+// Functions Needed: getInfiniteFlightAirportCoordinates
 
 export async function calculateDistanceBetweenAirports(
   originAirport: string,
@@ -471,12 +471,12 @@ export async function calculateDistanceBetweenAirports(
 ) {
   try {
     const { latitude_deg: originLatitude, longitude_deg: originLongitude, iso_country: originIsoCountry } =
-      await getAirportCoordinates(originAirport);
+      await getInfiniteFlightAirportCoordinates(originAirport);
     const {
       latitude_deg: destinationLatitude,
       longitude_deg: destinationLongitude,
       iso_country: destinationIsoCountry,
-    } = await getAirportCoordinates(destinationAirport);
+    } = await getInfiniteFlightAirportCoordinates(destinationAirport);
 
     // In Nautical Miles
     const R = 3959; // Miles
@@ -541,3 +541,29 @@ export function getTop5Countries(routes: FlightRoute[]) {
 
 }
 
+export function getFlightTimeCategorizerData(validFlights: Flight[]) {
+  // examine the totalTime of each flight and categorize them into the following:
+  // <60, 1h, 2h, 3h, 4h, 5h, 6h, 7h, 8h, 9h, 10h+
+  // return { label: "<1h", value: 0 }
+
+  const categorizerData = [
+    { label: "<1h", min: 0, max: 60 },
+    { label: "1h", min: 60, max: 120 },
+    { label: "2h", min: 120, max: 180 },
+    { label: "3h", min: 180, max: 240 },
+    { label: "4h", min: 240, max: 300 },
+    { label: "5h", min: 300, max: 360 },
+    { label: "6h", min: 360, max: 420 },
+    { label: "7h", min: 420, max: 480 },
+    { label: "8h", min: 480, max: 540 },
+    { label: "9h", min: 540, max: 600 },
+    { label: "10h+", min: 600, max: Infinity },
+  ]
+
+  const categorizerDataWithCounts = categorizerData.map(category => ({
+    ...category,
+    count: validFlights.filter(flight => flight.totalTime >= category.min && flight.totalTime <= category.max).length,
+  }));
+
+  return categorizerDataWithCounts;
+}
