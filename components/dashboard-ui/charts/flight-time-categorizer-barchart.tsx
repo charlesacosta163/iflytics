@@ -50,13 +50,14 @@ export function FlightTimeCategorizerBarChart({
           Flights categorized by flight time duration
         </CardDescription>
       </CardHeader>
-      <CardContent>
-        <ResponsiveContainer width="100%" height={250}>
+      <CardContent className="overflow-x-auto p-2">
+        <div className="min-w-[600px] md:min-w-full">
+          <ResponsiveContainer width="100%" height={250}>
           <BarChart
             accessibilityLayer
             data={chartData}
             margin={{
-              left: -8,
+              left: 20,
               right: 12,
               top: 20,
               bottom: 20
@@ -110,6 +111,7 @@ export function FlightTimeCategorizerBarChart({
             </Bar>
           </BarChart>
         </ResponsiveContainer>
+        </div>
       </CardContent>
     </Card>
   )
