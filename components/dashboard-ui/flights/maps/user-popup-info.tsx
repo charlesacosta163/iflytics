@@ -12,11 +12,17 @@ import { cn, getMinutesAgo } from "@/lib/utils";
 import { RiCopilotFill } from "react-icons/ri";
 
 import { CgArrowLongRightC } from "react-icons/cg";
-import { LuPlaneTakeoff, LuPlaneLanding, LuMap } from "react-icons/lu";
+import { LuPlaneTakeoff, LuPlaneLanding, LuMap, LuPlane } from "react-icons/lu";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import Image from "next/image";
 
-import { getUserFlightInfo, getUserFlightPlan } from "@/lib/actions";
+import {
+  getUserFlightInfo,
+  getUserFlightPlan,
+  getAircraftAndLivery,
+} from "@/lib/actions";
+import { matchAircraftNameToImage } from "@/lib/cache/flightinsightsdata";
 
 const UserPopupInfo = ({
   popupInfo,
@@ -28,18 +34,21 @@ const UserPopupInfo = ({
   const [flightInfo, setFlightInfo] = useState<any>(null);
   const [flightPlan, setFlightPlan] = useState<any>(null);
   const [isHidden, setIsHidden] = useState(false);
+  const [aircraft, setAircraft] = useState<any>(null);
 
   useEffect(() => {
     const fetchAllFlightData = async () => {
       try {
         // Fetch both pieces of data in parallel
-        const [flightInfo, flightPlan] = await Promise.all([
+        const [flightInfo, flightPlan, aircraft] = await Promise.all([
           getUserFlightInfo(popupInfo.userId, popupInfo.flightId),
           getUserFlightPlan(popupInfo.flightId),
+          getAircraftAndLivery(popupInfo.aircraftId, popupInfo.liveryId),
         ]);
 
         // Set flight info
         setFlightInfo(flightInfo);
+        setAircraft(aircraft);
 
         // Set flight plan (with your existing logic)
         if (flightPlan?.flightPlanItems?.length > 0) {
@@ -51,6 +60,10 @@ const UserPopupInfo = ({
         console.error("Error fetching flight data:", error);
         setFlightInfo(null);
         setFlightPlan(null);
+        setAircraft({
+          aircraftName: "Unknown Aircraft",
+          liveryName: "Unknown Livery",
+        });
       }
     };
 
@@ -58,14 +71,16 @@ const UserPopupInfo = ({
   }, [popupInfo.flightId, popupInfo.userId]);
 
   // If originAirport exists, use it, else the first flight plan item, if that doesn't exist, "N/A"
-  const originAirportFinal = flightInfo?.originAirport 
-    || flightPlan?.flightPlanItems?.at(0)?.name 
-    || "N/A";
+  const originAirportFinal =
+    flightInfo?.originAirport ||
+    flightPlan?.flightPlanItems?.at(0)?.name ||
+    "N/A";
 
   // If destinationAirport exists, use it, else the last flight plan item, if that doesn't exist, "N/A"
-  const destinationAirportFinal = flightInfo?.destinationAirport 
-    || flightPlan?.flightPlanItems?.at(-1)?.name 
-    || "N/A";
+  const destinationAirportFinal =
+    flightInfo?.destinationAirport ||
+    flightPlan?.flightPlanItems?.at(-1)?.name ||
+    "N/A";
 
   return (
     // Mod is purple
@@ -109,7 +124,11 @@ const UserPopupInfo = ({
         <MdAirplanemodeActive
           className={cn(
             "text-gray-500/20 text-[7rem] rotate-90 absolute top-4 right-10",
-            popupInfo.role === "staff" ? "text-light/20" : popupInfo.role === "mod" ? "text-gray-100/20" : "text-gray-500/20"
+            popupInfo.role === "staff"
+              ? "text-light/20"
+              : popupInfo.role === "mod"
+              ? "text-gray-100/20"
+              : "text-gray-500/20"
           )}
         />
         <div className="flex justify-between items-start">
@@ -138,7 +157,9 @@ const UserPopupInfo = ({
             >
               {popupInfo.callsign}
             </div>
-            {(popupInfo.role == "staff" || popupInfo.role == "user" || popupInfo.role == "mod") && (
+            {(popupInfo.role == "staff" ||
+              popupInfo.role == "user" ||
+              popupInfo.role == "mod") && (
               <span className="text-gray-300 text-sm font-medium">
                 {popupInfo.role === "staff"
                   ? "INFINITE FLIGHT STAFF"
@@ -179,7 +200,11 @@ const UserPopupInfo = ({
                 <RiCopilotFill className="text-gray-500 flex-1 text-3xl" />
                 <div
                   className={`text-gray-700 text-lg font-bold tracking-tight ${
-                    popupInfo.role === "staff" ? "!text-blue-500" : popupInfo.role === "mod" ? "!text-purple-500" : ""
+                    popupInfo.role === "staff"
+                      ? "!text-blue-500"
+                      : popupInfo.role === "mod"
+                      ? "!text-purple-500"
+                      : ""
                   }`}
                 >
                   {popupInfo.username || "Unknown"}{" "}
@@ -339,6 +364,33 @@ const UserPopupInfo = ({
                     : "No flight plan found"}
                 </div>
               </section>
+
+              <section className="flex flex-col gap-1 text-gray">
+                  <div className="flex items-center gap-1">
+                    <LuPlane className="text-gray" />
+                    <h3 className="text-sm font-semibold">Aircraft</h3>
+                  </div>
+                <div className="flex justify-between items-center gap-2 py-3 p-2 rounded-lg bg-gradient-to-br from-gray to-dark text-light">
+
+                  <header className="flex flex-col gap-[0.125rem]">
+                    <p className="text-light font-bold tracking-tight">
+                      {aircraft?.aircraftName || "Unknown Aircraft"}
+                    </p>
+                    <span className="text-gray-300 text-xs font-medium">
+                      {aircraft?.liveryName || "Unknown Livery"}
+                    </span>
+                  </header>
+                  <Image
+                    src={`/images/aircraft/${matchAircraftNameToImage(
+                      aircraft?.aircraftName || ""
+                    )}`}
+                    alt="Aircraft"
+                    width={100}
+                    height={100}
+                  />
+                </div>
+
+              </section>
             </div>
           </TabsContent>
 
@@ -377,7 +429,7 @@ const UserPopupInfo = ({
       {/* Close and Hide Buttons */}
       <div className="absolute top-4 right-4 flex gap-2">
         {/* Hide Button */}
-        
+
         {/* Close Button */}
         <button
           onClick={() => setPopupInfo(null)}

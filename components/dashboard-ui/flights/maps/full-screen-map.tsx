@@ -206,7 +206,7 @@ const FullScreenMap = ({
   };
 
   // Function to show flight route
-  const showFlightRoute = async (flightId: string) => {
+const showFlightRoute = async (flightId: string) => {
     if (!mapRef.current) return;
 
     try {
@@ -217,9 +217,9 @@ const FullScreenMap = ({
           .filter((item: any) => item.location)
           .map((item: any) => [item.location.longitude, item.location.latitude])
           .filter((coord: [number, number]) => {
-            // Filter out invalid coordinates
+            // Filter out invalid coordinates and null island (0,0)
             const [lon, lat] = coord;
-            return lon >= -180 && lon <= 180 && lat >= -90 && lat <= 90;
+            return lon >= -180 && lon <= 180 && lat >= -90 && lat <= 90 && !(lon === 0 && lat === 0);
           });
 
         // Additional validation: reject routes with waypoints too far apart
@@ -262,28 +262,38 @@ const FullScreenMap = ({
           // Create route sprites if they don't exist
           createRouteSprites(map);
 
-          // Create gradient segments with VALIDATED coordinates
-          const segments = [];
-          const totalSegments = validCoordinates.length - 1;
+          // Split route at antimeridian crossings
+          const routeSegments = splitAntimeridianRoute(validCoordinates);
+          
+          // Create gradient segments for each antimeridian-split route
+          const segments: any[] = [];
+          let globalSegmentIndex = 0;
+          const totalOriginalSegments = validCoordinates.length - 1;
 
-          for (let i = 0; i < totalSegments; i++) {
-            const progress = i / totalSegments;
-            const red = Math.round(30 + (147 - 30) * progress);
-            const green = Math.round(58 + (197 - 58) * progress);
-            const blue = Math.round(138 + (253 - 138) * progress);
+          routeSegments.forEach((segmentCoords: [number, number][]) => {
+            if (segmentCoords.length > 1) {
+              for (let i = 0; i < segmentCoords.length - 1; i++) {
+                const progress = globalSegmentIndex / totalOriginalSegments;
+                const red = Math.round(30 + (147 - 30) * progress);
+                const green = Math.round(58 + (197 - 58) * progress);
+                const blue = Math.round(138 + (253 - 138) * progress);
 
-            segments.push({
-              type: "Feature",
-              properties: {
-                color: `rgb(${red}, ${green}, ${blue})`,
-                segment: i,
-              },
-              geometry: {
-                type: "LineString",
-                coordinates: [validCoordinates[i], validCoordinates[i + 1]],
-              },
-            });
-          }
+                segments.push({
+                  type: "Feature",
+                  properties: {
+                    color: `rgb(${red}, ${green}, ${blue})`,
+                    segment: globalSegmentIndex,
+                  },
+                  geometry: {
+                    type: "LineString",
+                    coordinates: [segmentCoords[i], segmentCoords[i + 1]],
+                  },
+                });
+                
+                globalSegmentIndex++;
+              }
+            }
+          });
 
           // Add route source and layer
           map.addSource(routeId, {
@@ -793,6 +803,30 @@ const FullScreenMap = ({
     if (mapRef.current) {
       mapRef.current.zoomOut({ duration: 300 });
     }
+  };
+
+  // Add this function to handle antimeridian crossing
+  const splitAntimeridianRoute = (coordinates: [number, number][]): [number, number][][] => {
+    const segments: [number, number][][] = [];
+    let currentSegment: [number, number][] = [coordinates[0]];
+    
+    for (let i = 1; i < coordinates.length; i++) {
+      const [prevLon] = coordinates[i - 1];
+      const [currLon] = coordinates[i];
+      
+      // Check if we're crossing the antimeridian (180° difference)
+      if (Math.abs(currLon - prevLon) > 180) {
+        // Finish current segment
+        segments.push([...currentSegment]);
+        // Start new segment
+        currentSegment = [coordinates[i]];
+      } else {
+        currentSegment.push(coordinates[i]);
+      }
+    }
+    
+    segments.push(currentSegment);
+    return segments;
   };
 
   return (
