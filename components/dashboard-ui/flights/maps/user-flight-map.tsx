@@ -312,7 +312,7 @@ const UserFlightMap = ({
     // Initialize map
     const map = new Map({
       container: mapContainerRef.current,
-      style: 'https://tiles.stadiamaps.com/styles/alidade_smooth_dark.json',
+      style: 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json',
       center: [-95.7129, 37.0902], // Center of US
       zoom: 3,
       attributionControl: false,
@@ -349,7 +349,7 @@ const UserFlightMap = ({
       
       {/* Attribution */}
       <div className="absolute bottom-2 right-2 text-xs text-gray-400 bg-black/50 px-2 py-1 rounded backdrop-blur-sm">
-        © Stadia Maps
+        © Carto Basemaps
       </div>
       
       {/* Airport labels if provided */}
@@ -365,7 +365,7 @@ const UserFlightMap = ({
       {!originCoordinates || !destinationCoordinates ? (
         <div className="absolute top-2 right-2 bg-yellow-500/20 backdrop-blur-sm px-3 py-2 rounded-lg border border-yellow-500/30">
           <p className="text-yellow-400 text-xs font-semibold">
-            Demo Route
+            Flight Route
           </p>
         </div>
       ) : null}
