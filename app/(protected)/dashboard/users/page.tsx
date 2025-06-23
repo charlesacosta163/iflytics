@@ -5,6 +5,7 @@ import { Card } from '@/components/ui/card'
 import Link from 'next/link'
 import { FaUsers, FaCalendarAlt, FaEye } from 'react-icons/fa'
 import { Metadata } from 'next'
+import { customUserImages } from '@/lib/data'
 
 export const metadata: Metadata = {
   title: "Community - IFlytics | Your Infinite Flight Statistics",
@@ -78,6 +79,9 @@ const UserCard = ({
   const joinDate = new Date(created_at)
   const isRecent = (Date.now() - joinDate.getTime()) < (7 * 24 * 60 * 60 * 1000) // Last 7 days
 
+  // If the ifc username doesnt exist in the customUserImages array, use the randomEmoji
+  const userImage = customUserImages.find(image => image.username === ifc_username)?.image
+
   return (
     <Card className='group bg-dark rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-600 overflow-hidden'>
       {/* Card Header with Avatar */}
@@ -91,7 +95,21 @@ const UserCard = ({
         <div className="flex items-center gap-4">
           <div className="">
             <div className="w-16 h-16 bg-gray-700 rounded-full flex items-center justify-center text-2xl shadow-lg border-2 border-gray-600">
-              {randomEmoji}
+              {
+                userImage ? (
+                  <img 
+                    src={userImage}
+                    alt={display_name}
+                    width={64}
+                    height={64}
+                    className="w-16 h-16 bg-gray-700 rounded-full flex items-center justify-center text-2xl shadow-lg border-2 border-gray-600"
+                  />
+                ) : ( 
+                  <div className="w-16 h-16 bg-gray-700 rounded-full flex items-center justify-center text-4xl shadow-lg border-2 border-gray-600">
+                    🤨
+                  </div>
+                )
+              }
             </div>
           </div>
           

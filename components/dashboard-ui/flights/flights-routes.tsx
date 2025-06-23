@@ -36,6 +36,7 @@ import {RouteMap} from "./maps/route-map";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { FlightTimeCategorizerBarChart } from "../charts/flight-time-categorizer-barchart";
+import { RevalidateRoutesButton } from "@/components/revalidate-routes-btn";
 
 
 let maintenanceMode = false;
@@ -73,7 +74,7 @@ const FlightsRoutes = async ({ flights }: { flights: Flight[] }) => {
   
   // console.log(`⏱️ Route calculation took ${endTime - startTime}ms`); --> Debugging
   
-  const uniqueRoutes = getUniqueRoutes(
+  const uniqueRoutes = await getUniqueRoutes(
     routesWithDistances.map(route => ({
       ...route,
       originIsoCountry: route.originIsoCountry || 'US',
@@ -98,6 +99,7 @@ const FlightsRoutes = async ({ flights }: { flights: Flight[] }) => {
           alpha
             </p>
           </div>
+          <RevalidateRoutesButton userId={user.id} />
           {/* Summary Stats Cards */}
           <div className="lg:col-span-3 grid grid-cols-1 md:grid-cols-4 gap-4">
         <div className="flex flex-col gap-2 bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl p-6 text-white">

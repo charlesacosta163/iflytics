@@ -1,5 +1,7 @@
 'use server'
 
+import { revalidateTag } from "next/cache"
+
 const API_KEY = process.env.API_KEY as string
 
 export async function getUserId(username: string) {
@@ -556,4 +558,26 @@ export async function getAirportCoordinates(airportIcao: string) {
         console.error(`Failed to fetch coordinates for ${airportIcao}:`, error);
         return { latitude_deg: 0, longitude_deg: 0 }; // Fallback coordinates
     }
+}
+
+export async function revalidateFlightRoutes(userId: string) {
+  'use server'
+  
+  try {
+    // Revalidate both cache tags used in the flight routes
+    revalidateTag(`flight-routes-${userId}`)
+    revalidateTag(`user-${userId}`)
+    revalidateTag('flight-routes')
+    
+    return {
+      success: true,
+      message: 'Flight routes cache refreshed successfully!'
+    }
+  } catch (error) {
+    console.error('Error revalidating flight routes:', error)
+    return {
+      success: false,
+      message: 'Failed to refresh flight routes cache'
+    }
+  }
 }

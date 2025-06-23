@@ -2057,6 +2057,15 @@ export const customUserImages = [
       "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/your-fav-car-guy-o52/288/1419768_2.png"
     )}&w=64&h=64&fit=cover&mask=circle`,
   }, 
+  {
+    // IFLYTICS USER
+    id: 99,
+    role: "user",
+    username: "PARSA_ISAZADEH",
+    image: `https://images.weserv.nl/?url=${encodeURIComponent(
+      "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/parsa_isazadeh/288/1259379_2.png"
+    )}&w=64&h=64&fit=cover&mask=circle`,
+  }, 
 ];
 
 // Unknown User Compliments - Maximum Corn Level

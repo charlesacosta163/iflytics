@@ -2,7 +2,7 @@ import React from "react";
 import { Metadata } from 'next'
 import { getUserProfileById } from "@/lib/supabase/user-actions";
 import { getPilotServerSessions, getUserStats, matchATCRankToTitle } from "@/lib/actions";
-import { FaStar, FaPlane, FaPlaneDeparture, FaArrowLeft, FaPlus } from "react-icons/fa";
+import { FaStar, FaPlane, FaPlaneDeparture, FaArrowLeft, FaPlus, FaChartLine } from "react-icons/fa";
 import { BiSolidPlaneLand } from "react-icons/bi";
 import { FaLocationDot } from "react-icons/fa6";
 import { FaRegClock } from "react-icons/fa";
@@ -10,6 +10,7 @@ import { PiArrowFatLineUpBold } from "react-icons/pi";
 import { PiAirTrafficControlBold } from "react-icons/pi";
 import { GiCaptainHatProfile } from "react-icons/gi";
 import { convertMinutesToHours, numberWithCommas } from "@/lib/utils";
+import { customUserImages } from "@/lib/data";
 import Link from "next/link";
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
@@ -65,6 +66,7 @@ const ViewUserPage = async ({
     userProfile.ifc_game_id
   );
   const userStats = stats?.result?.[0]; // Get the first (and likely only) user from results
+  const userImage = customUserImages.find(image => image.username === userProfile.ifc_username)?.image
 
   return (
     <main className="flex flex-col items-center gap-4 min-h-full w-full py-6">
@@ -80,14 +82,29 @@ const ViewUserPage = async ({
         <div className="flex flex-col md:flex-row gap-4 max-w-[1000px] w-full">
           <div className="flex-1 flex flex-col gap-4">
             <div className="self-start flex-1 flex flex-col gap-4 max-w-[500px] w-full px-4 bg-white rounded-lg shadow p-8">
-              <header>
-                <h2 className="text-4xl font-bold bg-gradient-to-r from-gray-600 to-dark py-0.5 bg-clip-text text-transparent tracking-tight">
-                  {userProfile.display_name}
-                </h2>
-                <span className="text-gray-500 text-xs font-medium">
-                  @{userProfile.ifc_username}
-                </span>
-              </header>
+
+              <div className="flex gap-4 items-center">
+
+                <div className="p-1 bg-gray rounded-full flex items-center justify-center text-2xl shadow-lg">
+                  {
+                    userImage ? (
+                      <img src={userImage} alt={userProfile.display_name} className="w-16 h-16 rounded-full" />
+                    ) : (
+                      <div className="w-16 h-16 rounded-full flex items-center justify-center text-4xl shadow-lg">
+                        🤨
+                      </div>
+                    )
+                  }
+                </div>
+                <header>
+                  <h2 className="text-4xl font-bold bg-gradient-to-r from-gray-600 to-dark py-0.5 bg-clip-text text-transparent tracking-tight">
+                    {userProfile.display_name}
+                  </h2>
+                  <span className="text-gray-500 text-xs font-medium">
+                    @{userProfile.ifc_username}
+                  </span>
+                </header>
+              </div>
 
               <p className="p-4 bg-gray-100 rounded-lg text-gray-700 font-medium">
                 {userProfile.bio ? userProfile.bio : "No bio for me 🤷‍♂️"}
@@ -181,8 +198,8 @@ const ViewUserPage = async ({
           <div className="flex-1 max-w-[500px] w-full px-4 bg-gray-800 rounded-lg shadow p-8">
             {userStats ? (
               <div className="flex flex-col gap-4">
-                <h3 className="text-4xl font-bold text-white mb-4 tracking-tight text-center">
-                  Infinite Flight Stats
+                <h3 className="text-4xl font-bold text-white mb-4 tracking-tight text-center flex items-center justify-center gap-2">
+                  <FaChartLine className="text-amber-400" /> Infinite Flight <span className="text-amber-400">Stats</span>
                 </h3>
 
                 {/* Grade and Basic Stats */}
