@@ -43,7 +43,8 @@ export async function getUserStats(username: string, userId?: string) {
             }, 
             body: JSON.stringify({
                 userIds: [userId]
-            })
+            }),
+            next: { revalidate: 3600 }
         })
 
         const data = await response.json()
@@ -232,7 +233,7 @@ export async function getInfiniteFlightAirportCoordinates(airportIcao: string) {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${API_KEY}`
             },
-            next: { revalidate: 21600 }, // Cache for 6 hours
+            next: { revalidate: 86400 }, // Cache for 24 hours
             signal: AbortSignal.timeout(10000) // 10 second timeout
         });
 
