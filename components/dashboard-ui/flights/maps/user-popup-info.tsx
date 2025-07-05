@@ -35,16 +35,27 @@ const UserPopupInfo = ({
   const [flightPlan, setFlightPlan] = useState<any>(null);
   const [isHidden, setIsHidden] = useState(false);
   const [aircraft, setAircraft] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchAllFlightData = async () => {
+      setIsLoading(true);
+      
       try {
-        // Fetch both pieces of data in parallel
-        const [flightInfo, flightPlan, aircraft] = await Promise.all([
-          getUserFlightInfo(popupInfo.userId, popupInfo.flightId),
-          getUserFlightPlan(popupInfo.flightId),
-          getAircraftAndLivery(popupInfo.aircraftId, popupInfo.liveryId),
-        ]);
+        // Add timeout to prevent hanging
+        const timeoutPromise = new Promise((_, reject) => 
+          setTimeout(() => reject(new Error('Request timeout')), 10000) // 10 second timeout
+        );
+
+        // Fetch data with timeout
+        const [flightInfo, flightPlan, aircraft] = await Promise.race([
+          Promise.all([
+            getUserFlightInfo(popupInfo.userId, popupInfo.flightId),
+            getUserFlightPlan(popupInfo.flightId),
+            getAircraftAndLivery(popupInfo.aircraftId, popupInfo.liveryId),
+          ]),
+          timeoutPromise
+        ]) as [any, any, any];
 
         // Set flight info
         setFlightInfo(flightInfo);
@@ -64,6 +75,8 @@ const UserPopupInfo = ({
           aircraftName: "Unknown Aircraft",
           liveryName: "Unknown Livery",
         });
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -357,11 +370,19 @@ const UserPopupInfo = ({
                 </div>
 
                 <div className="p-2 rounded-lg bg-gray text-light font-mono text-xs font-medium break-all h-[75px] overflow-y-auto">
-                  {flightPlan && flightPlan.flightPlanItems.length > 0
-                    ? flightPlan?.flightPlanItems
-                        ?.map((item: any) => item.name)
-                        .join(" ")
-                    : "No flight plan found"}
+                  {isLoading ? (
+                    <div className="flex flex-col gap-2">
+                      <div className="w-full h-3 bg-gray-600 rounded animate-pulse"></div>
+                      <div className="w-3/4 h-3 bg-gray-600 rounded animate-pulse"></div>
+                      <div className="w-1/2 h-3 bg-gray-600 rounded animate-pulse"></div>
+                    </div>
+                  ) : flightPlan && flightPlan.flightPlanItems.length > 0 ? (
+                    flightPlan?.flightPlanItems
+                      ?.map((item: any) => item.name)
+                      .join(" ")
+                  ) : (
+                    "No flight plan found"
+                  )}
                 </div>
               </section>
 
@@ -373,21 +394,34 @@ const UserPopupInfo = ({
                 <div className="flex justify-between items-center gap-2 py-3 p-2 rounded-lg bg-gradient-to-br from-gray to-dark text-light">
 
                   <header className="flex flex-col gap-[0.125rem]">
-                    <p className="text-light font-bold tracking-tight">
-                      {aircraft?.aircraftName || "Unknown Aircraft"}
-                    </p>
-                    <span className="text-gray-300 text-xs font-medium">
-                      {aircraft?.liveryName || "Unknown Livery"}
-                    </span>
+                    {isLoading ? (
+                      <>
+                        <div className="w-24 h-4 bg-gray-600 rounded animate-pulse"></div>
+                        <div className="w-20 h-3 bg-gray-600 rounded animate-pulse mt-1"></div>
+                      </>
+                    ) : (
+                      <>
+                        <p className="text-light font-bold tracking-tight">
+                          {aircraft?.aircraftName || "Unknown Aircraft"}
+                        </p>
+                        <span className="text-gray-300 text-xs font-medium">
+                          {aircraft?.liveryName || "Unknown Livery"}
+                        </span>
+                      </>
+                    )}
                   </header>
-                  <Image
-                    src={`/images/aircraft/${matchAircraftNameToImage(
-                      aircraft?.aircraftName || ""
-                    )}`}
-                    alt="Aircraft"
-                    width={100}
-                    height={100}
-                  />
+                  {isLoading ? (
+                    <div className="w-[100px] h-[100px] bg-gray-600 rounded animate-pulse"></div>
+                  ) : (
+                    <Image
+                      src={`/images/aircraft/${matchAircraftNameToImage(
+                        aircraft?.aircraftName || ""
+                      )}`}
+                      alt="Aircraft"
+                      width={100}
+                      height={100}
+                    />
+                  )}
                 </div>
 
               </section>

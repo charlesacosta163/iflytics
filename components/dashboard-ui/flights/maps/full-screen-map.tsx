@@ -10,6 +10,8 @@ import { useRouter, usePathname } from "next/navigation";
 import { aviationCompliments, customUserImages } from "@/lib/data";
 import UserPopupInfo from "./user-popup-info";
 import { cn } from "@/lib/utils";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 import { GiControlTower } from "react-icons/gi";
 import { FaRegFaceGrinWink } from "react-icons/fa6";
 import { getUserFlightPlan, getAllAirportsWithActiveATC } from "@/lib/actions";
@@ -17,6 +19,7 @@ import { BiSolidFaceMask } from "react-icons/bi";
 import { SlGlobe } from "react-icons/sl";
 import { ImBlocked } from "react-icons/im";
 import { RiUserCommunityLine } from "react-icons/ri";
+import { FaPlane, FaRegSmileBeam } from "react-icons/fa";
 
 
 // Add the map themes configuration
@@ -53,6 +56,7 @@ const FullScreenMap = ({
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const [currentRouteId, setCurrentRouteId] = useState<string | null>(null);
   const [isNavVisible, setIsNavVisible] = useState(true);
+  const [showAirplanes, setShowAirplanes] = useState(true);
 
   // Function to apply current filter to flight data
   const applyActiveFilter = (flightData: any[]) => {
@@ -519,6 +523,52 @@ const showFlightRoute = async (flightId: string) => {
     };
   }, []);
 
+  // Function to create airplane sprites
+  const createAirplaneSprite = (flight: any) => {
+    const canvas = document.createElement("canvas");
+    canvas.width = canvas.height = 60;
+    const ctx = canvas.getContext("2d");
+
+    if (ctx) {
+      // Clear canvas
+      ctx.clearRect(0, 0, 60, 60);
+
+      // Set up rotation based on heading
+      const centerX = 30;
+      const centerY = 30;
+      const heading = flight.heading || 0;
+      const rotation = ((heading - 90) * Math.PI) / 180; // Convert to radians, adjust for airplane pointing right
+
+      // Save context and apply rotation
+      ctx.save();
+      ctx.translate(centerX, centerY);
+      ctx.rotate(rotation);
+
+      // Draw airplane character
+      ctx.font = "32px Arial";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      
+      // Role-based coloring
+      if (flight.role === "staff") {
+        ctx.fillStyle = "#3b82f6"; // blue
+      } else if (flight.role === "mod") {
+        ctx.fillStyle = "#8b5cf6"; // purple
+      } else if (flight.role === "user") {
+        ctx.fillStyle = "#ffd1a8"; // cream
+      } else {
+        ctx.fillStyle = "#536178"; // gray-500
+      }
+      
+      ctx.fillText("✈", 0, 0);
+
+      // Restore context
+      ctx.restore();
+    }
+
+    return canvas;
+  };
+
   // Update flight data when flights change
   useEffect(() => {
     if (!mapRef.current || !flights || flights.length === 0) return;
@@ -538,7 +588,7 @@ const showFlightRoute = async (flightId: string) => {
       }, []);
 
       let loadedImages = 0;
-      const totalImages = uniqueUsers.length;
+      const totalImages = uniqueUsers.length * (showAirplanes ? 2 : 1); // Double if we need both emoji and airplane
 
       const checkAllImagesLoaded = () => {
         loadedImages++;
@@ -549,13 +599,35 @@ const showFlightRoute = async (flightId: string) => {
 
       // Create user-specific images with role-based borders
       const createUserImage = (flight: any) => {
-        const imageId = `user-${flight.username}`;
+        const emojiImageId = `user-${flight.username}`;
+        const airplaneImageId = `airplane-${flight.username}`;
 
-        if (map.hasImage(imageId)) {
+        // Create emoji image
+        if (!map.hasImage(emojiImageId)) {
+          createEmojiImage(flight, emojiImageId);
+        } else {
           checkAllImagesLoaded();
-          return;
         }
 
+        // Create airplane image if airplane mode is enabled
+        if (showAirplanes && !map.hasImage(airplaneImageId)) {
+          const airplaneCanvas = createAirplaneSprite(flight);
+          const airplaneImg = new Image();
+          airplaneImg.onload = () => {
+            try {
+              map.addImage(airplaneImageId, airplaneImg);
+            } catch (error) {
+              console.warn(`Error adding airplane image ${airplaneImageId}:`, error);
+            }
+            checkAllImagesLoaded();
+          };
+          airplaneImg.src = airplaneCanvas.toDataURL();
+        } else if (showAirplanes) {
+          checkAllImagesLoaded();
+        }
+      };
+
+      const createEmojiImage = (flight: any, imageId: string) => {
         if (flight.customImage) {
           // Custom image with border
           const img = new Image();
@@ -614,17 +686,17 @@ const showFlightRoute = async (flightId: string) => {
 
           img.onerror = () => {
             // Fallback to emoji if custom image fails
-            createEmojiWithBorder(flight);
+            createEmojiWithBorder(flight, imageId);
           };
 
           img.src = flight.customImage;
         } else {
           // Create emoji with border
-          createEmojiWithBorder(flight);
+          createEmojiWithBorder(flight, imageId);
         }
       };
 
-      const createEmojiWithBorder = (flight: any) => {
+      const createEmojiWithBorder = (flight: any, imageId: string) => {
         const canvas = document.createElement("canvas");
         canvas.width = canvas.height = 36; // Increased size for border
         const ctx = canvas.getContext("2d");
@@ -664,9 +736,9 @@ const showFlightRoute = async (flightId: string) => {
         const img = new Image();
         img.onload = () => {
           try {
-            map.addImage(`user-${flight.username}`, img);
+            map.addImage(imageId, img);
           } catch (error) {
-            // console.log(`Image user-${flight.username} already exists`);
+            // console.log(`Image ${imageId} already exists`);
           }
           checkAllImagesLoaded();
         };
@@ -704,7 +776,7 @@ const showFlightRoute = async (flightId: string) => {
             emoji: flight.emoji,
             compliment: flight.compliment,
             customImage: flight.customImage,
-            imageId: `user-${flight.username}`,
+            imageId: showAirplanes ? `airplane-${flight.username}` : `user-${flight.username}`,
             aircraftId: flight.aircraftId,
             flightId: flight.flightId,
             heading: flight.heading,
@@ -743,6 +815,109 @@ const showFlightRoute = async (flightId: string) => {
       window.removeEventListener("refreshFlights", handleRefresh);
     };
   }, [displayedFlights, styleUrl]);
+
+  // Handle airplane mode toggle
+  useEffect(() => {
+    if (!mapRef.current || !flights || flights.length === 0) return;
+
+    const map = mapRef.current;
+    
+    // Get unique users for airplane sprites
+    const uniqueUsers = flights.reduce((acc: any[], flight) => {
+      if (!acc.find((f) => f.username === flight.username)) {
+        acc.push(flight);
+      }
+      return acc;
+    }, []);
+
+    const updateMapDataWithMode = () => {
+      const flightFeatures = displayedFlights.map((flight) => {
+        return {
+          type: "Feature" as const,
+          id: `flight-${flight.username}`,
+          geometry: {
+            type: "Point" as const,
+            coordinates: [flight.longitude, flight.latitude] as [
+              number,
+              number
+            ],
+          },
+          properties: {
+            callsign: flight.callsign,
+            username: flight.username,
+            altitude: flight.altitude,
+            speed: flight.speed,
+            emoji: flight.emoji,
+            compliment: flight.compliment,
+            customImage: flight.customImage,
+            imageId: showAirplanes ? `airplane-${flight.username}` : `user-${flight.username}`,
+            aircraftId: flight.aircraftId,
+            flightId: flight.flightId,
+            heading: flight.heading,
+            isConnected: flight.isConnected,
+            lastReport: flight.lastReport,
+            latitude: flight.latitude,
+            longitude: flight.longitude,
+            liveryId: flight.liveryId,
+            pilotState: flight.pilotState,
+            role: flight.role,
+            track: flight.track,
+            userId: flight.userId,
+            verticalSpeed: flight.verticalSpeed,
+            virtualOrganization: flight.virtualOrganization,
+          },
+        };
+      });
+
+      const source = map.getSource("flights") as any;
+      if (source) {
+        source.setData({
+          type: "FeatureCollection",
+          features: flightFeatures,
+        });
+      }
+    };
+
+    if (showAirplanes) {
+      // Create airplane sprites for all users
+      let loadedImages = 0;
+      const totalImages = uniqueUsers.length;
+
+      const checkAllImagesLoaded = () => {
+        loadedImages++;
+        if (loadedImages === totalImages) {
+          updateMapDataWithMode();
+        }
+      };
+
+      if (totalImages === 0) {
+        updateMapDataWithMode();
+        return;
+      }
+
+      uniqueUsers.forEach((flight) => {
+        const airplaneImageId = `airplane-${flight.username}`;
+        if (!map.hasImage(airplaneImageId)) {
+          const airplaneCanvas = createAirplaneSprite(flight);
+          const airplaneImg = new Image();
+          airplaneImg.onload = () => {
+            try {
+              map.addImage(airplaneImageId, airplaneImg);
+            } catch (error) {
+              console.warn(`Error adding airplane image ${airplaneImageId}:`, error);
+            }
+            checkAllImagesLoaded();
+          };
+          airplaneImg.src = airplaneCanvas.toDataURL();
+        } else {
+          checkAllImagesLoaded();
+        }
+      });
+    } else {
+      // Just update the map data immediately when switching back to emoji mode
+      updateMapDataWithMode();
+    }
+  }, [showAirplanes]); // Remove displayedFlights from dependency to prevent infinite loop
 
   // Enhanced clearAllRoutes function - nuclear cleanup
   const clearAllRoutes = () => {
@@ -831,10 +1006,26 @@ const showFlightRoute = async (flightId: string) => {
 
   return (
     <div style={{ position: "relative", width: "100%", height: "100%" }}>
-      <p className="hidden lg:block absolute bottom-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-blue-500 to-purple-500 text-white backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold">
-        <b>IFlytics Users & IF Staff</b> get their IFC avatar on the map!
-      </p>
+      
       <div ref={mapContainerRef} className="w-full h-full" />
+
+      {/* Airplane Mode Switch - Bottom Center */}
+      <div className="absolute left-4 bottom-16 sm:bottom-4 sm:left-1/2 sm:transform sm:-translate-x-1/2 bg-white/20 backdrop-blur-sm rounded-2xl shadow-lg p-3 border border-white/30">
+        <div className="flex items-center space-x-3">
+          <Switch
+            id="airplane-mode"
+            checked={showAirplanes}
+            onCheckedChange={setShowAirplanes}
+          />
+
+          <Label htmlFor="airplane-mode" className="text-sm font-medium cursor-pointer">
+            <span className={`flex items-center gap-2 ${showAirplanes ? "text-blue-500" : "text-[#3eb489]"}`}>
+              {showAirplanes ? <FaPlane /> : <FaRegSmileBeam />}
+              <span className="hidden sm:inline">{showAirplanes ? "Airplane Mode" : "Emoji Mode"}</span> 
+            </span>
+           </Label>
+        </div>
+      </div>
 
       {/* Toggle Button - Always Visible */}
       <NavToggleButton 
