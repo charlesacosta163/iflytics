@@ -523,8 +523,8 @@ const showFlightRoute = async (flightId: string) => {
     };
   }, []);
 
-  // Function to create airplane sprites
-  const createAirplaneSprite = (flight: any) => {
+  // Function to create airplane sprites using SVG files
+  const createAirplaneSprite = (flight: any, callback: (canvas: HTMLCanvasElement) => void) => {
     const canvas = document.createElement("canvas");
     canvas.width = canvas.height = 60;
     const ctx = canvas.getContext("2d");
@@ -533,40 +533,49 @@ const showFlightRoute = async (flightId: string) => {
       // Clear canvas
       ctx.clearRect(0, 0, 60, 60);
 
-      // Set up rotation based on heading
-      const centerX = 30;
-      const centerY = 30;
-      const heading = flight.heading || 0;
-      const rotation = ((heading - 90) * Math.PI) / 180; // Convert to radians, adjust for airplane pointing right
-
-      // Save context and apply rotation
-      ctx.save();
-      ctx.translate(centerX, centerY);
-      ctx.rotate(rotation);
-
-      // Draw airplane character
-      ctx.font = "32px Arial";
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
+      // Determine which SVG to use based on role
+      let svgPath = "/images/sprites/plane.svg"; // default for unregistered users
       
-      // Role-based coloring
       if (flight.role === "staff") {
-        ctx.fillStyle = "#3b82f6"; // blue
+        svgPath = "/images/sprites/staffplane.svg";
       } else if (flight.role === "mod") {
-        ctx.fillStyle = "#8b5cf6"; // purple
+        svgPath = "/images/sprites/modplane.svg";
       } else if (flight.role === "user") {
-        ctx.fillStyle = "#ffd1a8"; // cream
-      } else {
-        ctx.fillStyle = "#536178"; // gray-500
+        svgPath = "/images/sprites/userplane.svg";
       }
+
+      // Load and draw the SVG
+      const img = new Image();
+      img.onload = () => {
+        // Set up rotation based on heading
+        const centerX = 30;
+        const centerY = 30;
+        const heading = flight.heading || 0;
+        const rotation = ((heading - 90) * Math.PI) / 180; // Convert to radians, adjust for SVG pointing east (0°) vs aviation heading (0° = North)
+
+        // Save context and apply rotation
+        ctx.save();
+        ctx.translate(centerX, centerY);
+        ctx.rotate(rotation);
+
+        // Draw the airplane SVG centered (made smaller)
+        ctx.drawImage(img, -12, -12, 24, 24);
+
+        // Restore context
+        ctx.restore();
+        
+        // Call the callback with the completed canvas
+        callback(canvas);
+      };
       
-      ctx.fillText("✈", 0, 0);
-
-      // Restore context
-      ctx.restore();
+      img.onerror = () => {
+        console.warn(`Failed to load airplane sprite: ${svgPath}`);
+        // Still call callback even on error so the loading process continues
+        callback(canvas);
+      };
+      
+      img.src = svgPath;
     }
-
-    return canvas;
   };
 
   // Update flight data when flights change
@@ -611,17 +620,18 @@ const showFlightRoute = async (flightId: string) => {
 
         // Create airplane image if airplane mode is enabled
         if (showAirplanes && !map.hasImage(airplaneImageId)) {
-          const airplaneCanvas = createAirplaneSprite(flight);
-          const airplaneImg = new Image();
-          airplaneImg.onload = () => {
-            try {
-              map.addImage(airplaneImageId, airplaneImg);
-            } catch (error) {
-              console.warn(`Error adding airplane image ${airplaneImageId}:`, error);
-            }
-            checkAllImagesLoaded();
-          };
-          airplaneImg.src = airplaneCanvas.toDataURL();
+          createAirplaneSprite(flight, (canvas) => {
+            const airplaneImg = new Image();
+            airplaneImg.onload = () => {
+              try {
+                map.addImage(airplaneImageId, airplaneImg);
+              } catch (error) {
+                console.warn(`Error adding airplane image ${airplaneImageId}:`, error);
+              }
+              checkAllImagesLoaded();
+            };
+            airplaneImg.src = canvas.toDataURL();
+          });
         } else if (showAirplanes) {
           checkAllImagesLoaded();
         }
@@ -898,17 +908,18 @@ const showFlightRoute = async (flightId: string) => {
       uniqueUsers.forEach((flight) => {
         const airplaneImageId = `airplane-${flight.username}`;
         if (!map.hasImage(airplaneImageId)) {
-          const airplaneCanvas = createAirplaneSprite(flight);
-          const airplaneImg = new Image();
-          airplaneImg.onload = () => {
-            try {
-              map.addImage(airplaneImageId, airplaneImg);
-            } catch (error) {
-              console.warn(`Error adding airplane image ${airplaneImageId}:`, error);
-            }
-            checkAllImagesLoaded();
-          };
-          airplaneImg.src = airplaneCanvas.toDataURL();
+          createAirplaneSprite(flight, (canvas) => {
+            const airplaneImg = new Image();
+            airplaneImg.onload = () => {
+              try {
+                map.addImage(airplaneImageId, airplaneImg);
+              } catch (error) {
+                console.warn(`Error adding airplane image ${airplaneImageId}:`, error);
+              }
+              checkAllImagesLoaded();
+            };
+            airplaneImg.src = canvas.toDataURL();
+          });
         } else {
           checkAllImagesLoaded();
         }
