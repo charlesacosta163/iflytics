@@ -4,10 +4,10 @@ import { getUser, getUserProfile } from "@/lib/supabase/user-actions";
 import Image from "next/image";
 
 import { SiGithubcopilot } from "react-icons/si";
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { FaUser } from "react-icons/fa";
 import { Metadata } from 'next'
+import { customUserImages } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: "Profile - IFlytics | Your Infinite Flight Statistics",
@@ -21,6 +21,8 @@ const ProfilePage = async () => {
   if (!userProfile) {
     return <div>No user profile found</div>;
   }
+
+  const userCustomImage = customUserImages.find((user) => user.username === userProfile?.ifc_username)?.image;
 
   return (
     <main className="flex flex-col items-center justify-center min-h-full w-full">
@@ -38,17 +40,18 @@ const ProfilePage = async () => {
 
         <div className="flex sm:flex-row flex-col gap-6 w-full px-6 py-8 bg-white rounded-xl shadow-lg border border-gray-100">
           <div className="self-center sm:self-start shrink-0">
-            {userProfile?.avatar_url ? (
-              <img
-                src={userProfile?.avatar_url}
-                alt="User avatar"
-                className="rounded-full w-[120px] h-[120px] object-cover border-4 border-gray-100 shadow-md"
-              />
-            ) : (
-              <div className="w-[120px] h-[120px] bg-gradient-to-br from-gray to-dark rounded-full flex items-center justify-center shadow-md">
+            <div 
+              className={`w-[120px] h-[120px] rounded-full flex items-center justify-center shadow-md border-4 border-gray-100 ${
+                userCustomImage 
+                  ? 'bg-cover bg-center bg-no-repeat' 
+                  : 'bg-gradient-to-br from-gray to-dark'
+              }`}
+              style={userCustomImage ? { backgroundImage: `url(${userCustomImage})` } : {}}
+            >
+              {!userCustomImage && (
                 <SiGithubcopilot className="text-5xl text-white" />
-              </div>
-            )}
+              )}
+            </div>
           </div>
 
           <div className="flex-1 flex flex-col gap-5">

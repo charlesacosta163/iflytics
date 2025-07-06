@@ -49,6 +49,8 @@ const FullScreenMap = ({
   flights: any[];
   styleUrl: string;
 }) => {
+
+  // console.log(flights[0])
   const [displayedFlights, setDisplayedFlights] = useState(flights);
   const [activeFilter, setActiveFilter] = useState<string>("all");
   const [popupInfo, setPopupInfo] = useState<any>(null);
@@ -542,6 +544,13 @@ const showFlightRoute = async (flightId: string) => {
         svgPath = "/images/sprites/modplane.svg";
       } else if (flight.role === "user") {
         svgPath = "/images/sprites/userplane.svg";
+      } else if (flight.virtualOrganization) {
+        if (flight.virtualOrganization.includes("IFATC")) {
+          svgPath = "/images/sprites/ifatcplane.svg";
+        }
+      } 
+      else if (flight.pilotState === 1 || flight.pilotState === 2 || flight.pilotState === 3) {
+        svgPath = "/images/sprites/applane.svg";
       }
 
       // Load and draw the SVG

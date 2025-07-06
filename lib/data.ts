@@ -2192,6 +2192,60 @@ export const customUserImages = [
       "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/tintin/288/1540055_2.png"
     )}&w=64&h=64&fit=cover&mask=circle`,
   }, 
+  {
+    // IFLYTICS USER
+    id: 114,
+    role: "user",
+    username: "Rangersrule",
+    image: `https://images.weserv.nl/?url=${encodeURIComponent(
+      "https://avatars.discourse-cdn.com/v4/letter/r/9fc29f/96.png"
+    )}&w=64&h=64&fit=cover&mask=circle`,
+  }, 
+  {
+    // IFLYTICS USER
+    id: 115,
+    role: "user",
+    username: "Madison",
+    image: `https://images.weserv.nl/?url=${encodeURIComponent(
+      "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/madison/288/1509157_2.png"
+    )}&w=64&h=64&fit=cover&mask=circle`,
+  }, 
+  {
+    // IFLYTICS USER
+    id: 116,
+    role: "user",
+    username: "Harrison_Wright",
+    image: `https://images.weserv.nl/?url=${encodeURIComponent(
+      "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/harrison_wright/288/1428535_2.png"
+    )}&w=64&h=64&fit=cover&mask=circle`,
+  }, 
+  {
+    // IFLYTICS USER
+    id: 117,
+    role: "user",
+    username: "sierrahunter",
+    image: `https://images.weserv.nl/?url=${encodeURIComponent(
+      "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/sierrahunter/288/1468480_2.png"
+    )}&w=64&h=64&fit=cover&mask=circle`,
+  }, 
+  {
+    // IFLYTICS USER
+    id: 118,
+    role: "user",
+    username: "Donny_Ng",
+    image: `https://images.weserv.nl/?url=${encodeURIComponent(
+      "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/donny_ng/288/1486988_2.png"
+    )}&w=64&h=64&fit=cover&mask=circle`,
+  }, 
+  {
+    // IFLYTICS USER
+    id: 119,
+    role: "user",
+    username: "adx",
+    image: `https://images.weserv.nl/?url=${encodeURIComponent(
+      "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/adx/288/1314473_2.png"
+    )}&w=64&h=64&fit=cover&mask=circle`,
+  }, 
 ];
 
 // Unknown User Compliments - Maximum Corn Level

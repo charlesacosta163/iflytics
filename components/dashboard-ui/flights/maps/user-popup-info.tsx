@@ -10,8 +10,7 @@ import { BiMessageRoundedDots } from "react-icons/bi";
 import { MdAirplanemodeActive } from "react-icons/md";
 import { cn, getMinutesAgo } from "@/lib/utils";
 import { RiCopilotFill } from "react-icons/ri";
-
-import { CgArrowLongRightC } from "react-icons/cg";
+import { MdOutlineAirlines } from "react-icons/md";
 import { LuPlaneTakeoff, LuPlaneLanding, LuMap, LuPlane } from "react-icons/lu";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -37,25 +36,28 @@ const UserPopupInfo = ({
   const [aircraft, setAircraft] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  console.log(popupInfo)
+
   useEffect(() => {
     const fetchAllFlightData = async () => {
       setIsLoading(true);
-      
+
       try {
         // Add timeout to prevent hanging
-        const timeoutPromise = new Promise((_, reject) => 
-          setTimeout(() => reject(new Error('Request timeout')), 10000) // 10 second timeout
+        const timeoutPromise = new Promise(
+          (_, reject) =>
+            setTimeout(() => reject(new Error("Request timeout")), 10000) // 10 second timeout
         );
 
         // Fetch data with timeout
-        const [flightInfo, flightPlan, aircraft] = await Promise.race([
+        const [flightInfo, flightPlan, aircraft] = (await Promise.race([
           Promise.all([
             getUserFlightInfo(popupInfo.userId, popupInfo.flightId),
             getUserFlightPlan(popupInfo.flightId),
             getAircraftAndLivery(popupInfo.aircraftId, popupInfo.liveryId),
           ]),
-          timeoutPromise
-        ]) as [any, any, any];
+          timeoutPromise,
+        ])) as [any, any, any];
 
         // Set flight info
         setFlightInfo(flightInfo);
@@ -207,10 +209,9 @@ const UserPopupInfo = ({
             </TabsTrigger>
           </TabsList>
 
-          <div id="pilot" className="flex items-center justify-between gap-2">
-            <div>
+          <div id="pilot" className="flex flex-col gap-2">
               <div className="text-gray-500 font-medium flex items-center gap-2">
-                <RiCopilotFill className="text-gray-500 flex-1 text-3xl" />
+                <RiCopilotFill className="text-gray-500 text-3xl" />
                 <div
                   className={`text-gray-700 text-lg font-bold tracking-tight ${
                     popupInfo.role === "staff"
@@ -223,7 +224,10 @@ const UserPopupInfo = ({
                   {popupInfo.username || "Unknown"}{" "}
                 </div>
               </div>
-            </div>
+              <div className="text-sm font-medium text-gray-500 flex items-center gap-1">
+                <MdOutlineAirlines className="text-gray-500 text-2xl" />
+                {popupInfo.virtualOrganization || "Not in a VA"}
+              </div>
           </div>
           <TabsContent value="pilot" className="">
             <div className="space-y-4">
@@ -279,6 +283,12 @@ const UserPopupInfo = ({
                   {popupInfo.compliment}
                 </div>
               </div>
+
+              {
+                popupInfo.pilotState > 0 && popupInfo.pilotState < 4 ? (
+                  <div className="bg-blue-300 text-white text-sm font-medium text-center p-2 rounded-md flex items-center gap-2 justify-center"><div className="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></div> Powered by AP+</div>
+                ) : (<div className="bg-gray-200 text-gray-700 text-sm font-medium text-center flex items-center gap-2 justify-center p-2 rounded-md"> <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div> Currently Active</div>)
+              }
 
               <div className="flex gap-2 flex-col">
                 {/* <div className="flex items-center gap-2">
@@ -387,12 +397,11 @@ const UserPopupInfo = ({
               </section>
 
               <section className="flex flex-col gap-1 text-gray">
-                  <div className="flex items-center gap-1">
-                    <LuPlane className="text-gray" />
-                    <h3 className="text-sm font-semibold">Aircraft</h3>
-                  </div>
+                <div className="flex items-center gap-1">
+                  <LuPlane className="text-gray" />
+                  <h3 className="text-sm font-semibold">Aircraft</h3>
+                </div>
                 <div className="flex justify-between items-center gap-2 py-3 p-2 rounded-lg bg-gradient-to-br from-gray to-dark text-light">
-
                   <header className="flex flex-col gap-[0.125rem]">
                     {isLoading ? (
                       <>
@@ -423,7 +432,6 @@ const UserPopupInfo = ({
                     />
                   )}
                 </div>
-
               </section>
             </div>
           </TabsContent>
