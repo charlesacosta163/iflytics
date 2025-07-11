@@ -13,25 +13,27 @@ export const RouteMap = ({ routes }: { routes: any[] }) => {
   const [loadingAircraft, setLoadingAircraft] = useState(false);
   const mapRef = useRef<Map | null>(null);
 
-  // Function to get route color based on distance
-  const getRouteColor = (distance: number) => {
-    if (distance < 500) {
+  // Function to get route color based on flight time (IATA standards)
+  const getRouteColor = (totalTime: number) => {
+    if (totalTime <= 180) { // ≤3 hours
       return "#10B981"; // green-500 - Short haul
-    } else if (distance < 2000) {
+    } else if (totalTime > 180 && totalTime <= 360) { // 3-6 hours
       return "#F59E0B"; // yellow-500 - Medium haul
-    } else {
+    } else if (totalTime > 360) { // 6+ hours
       return "#EF4444"; // red-500 - Long haul
     }
   };
 
-  // Function to get route category
-  const getRouteCategory = (distance: number) => {
-    if (distance < 500) {
+  // Function to get route category based on flight time (IATA standards)
+  const getRouteCategory = (totalTime: number) => {
+    if (totalTime <= 180) { // ≤3 hours
       return "Short Haul";
-    } else if (distance < 2000) {
+    } else if (totalTime > 180 && totalTime <= 360) { // 3-6 hours
       return "Medium Haul";
-    } else {
+    } else if (totalTime > 360) { // 6+ hours
       return "Long Haul";
+    } else {
+      return "Unknown";
     }
   };
 
@@ -198,22 +200,38 @@ export const RouteMap = ({ routes }: { routes: any[] }) => {
           distance,
           origin,
           destination,
+          totalTime,
         } = route;
-      
+
+        // Skip routes with invalid coordinates (null, undefined, or 0,0)
+        if (
+          !lat1 || !lng1 || !lat2 || !lng2 || 
+          (lat1 === 0 && lng1 === 0) || 
+          (lat2 === 0 && lng2 === 0) ||
+          Math.abs(lat1) > 90 || Math.abs(lat2) > 90 || 
+          Math.abs(lng1) > 180 || Math.abs(lng2) > 180
+        ) {
+          console.warn(`Skipping route ${origin} -> ${destination} due to invalid coordinates:`, {
+            origin: [lat1, lng1],
+            destination: [lat2, lng2]
+          });
+          return; // Skip this route
+        }
+
         const originPoint = turf.point([lng1, lat1]);
         const destinationPoint = turf.point([lng2, lat2]);
-      
+
         const arc = turf.greatCircle(originPoint, destinationPoint, {
           npoints: 100,
           properties: {
             distance,
             origin,
             destination,
-            color: getRouteColor(distance),
-            category: getRouteCategory(distance),
+            color: getRouteColor(totalTime),
+            category: getRouteCategory(totalTime),
           },
         });
-      
+
         arc.id = index;
         arcFeatures.push(arc);
 
