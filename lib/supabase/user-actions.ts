@@ -17,6 +17,28 @@ export async function getUser() {
   return data.user
 }
 
+export async function deleteUser() {
+    const user = await getUser()
+
+    if (!user) {
+        redirect('/auth/login')
+    }
+
+    const supabase = await createClient()
+    
+    // Call the RPC function for self-deletion
+    const { error } = await supabase.rpc('delete_own_account')
+
+    if (error) {
+        console.error("Error deleting user:", error)
+        return { error: "Error deleting user" }
+    }
+
+    // Sign out after successful deletion
+    await supabase.auth.signOut()
+    redirect('/auth/login')
+}
+
 export async function isLoggedIn() {
   const user = await getUser()
   return user !== null

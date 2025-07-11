@@ -1,27 +1,195 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Map } from "maplibre-gl";
 import * as turf from "@turf/turf";
 import * as maplibregl from "maplibre-gl";
 import { getAircraft } from "@/lib/actions";
 import { X } from "lucide-react";
+import { TiZoomInOutline, TiZoomOutOutline } from "react-icons/ti";
 
 export const RouteMap = ({ routes }: { routes: any[] }) => {
   const [popupInfo, setPopupInfo] = useState<any>(null);
   const [aircraftData, setAircraftData] = useState<any>(null);
   const [loadingAircraft, setLoadingAircraft] = useState(false);
+  const mapRef = useRef<Map | null>(null);
+
+  // Function to get route color based on distance
+  const getRouteColor = (distance: number) => {
+    if (distance < 500) {
+      return "#10B981"; // green-500 - Short haul
+    } else if (distance < 2000) {
+      return "#F59E0B"; // yellow-500 - Medium haul
+    } else {
+      return "#EF4444"; // red-500 - Long haul
+    }
+  };
+
+  // Function to get route category
+  const getRouteCategory = (distance: number) => {
+    if (distance < 500) {
+      return "Short Haul";
+    } else if (distance < 2000) {
+      return "Medium Haul";
+    } else {
+      return "Long Haul";
+    }
+  };
+
+  // Zoom functions
+  const zoomIn = () => {
+    if (mapRef.current) {
+      mapRef.current.zoomIn({ duration: 300 });
+    }
+  };
+
+  const zoomOut = () => {
+    if (mapRef.current) {
+      mapRef.current.zoomOut({ duration: 300 });
+    }
+  };
+
+  // Function to create origin and destination sprites (from FullScreenMap)
+  const createRouteSprites = (map: Map) => {
+    const spriteSize = 32;
+
+    // Create takeoff sprite (green circle with plane icon)
+    const createTakeoffSprite = () => {
+      const canvas = document.createElement("canvas");
+      canvas.width = canvas.height = spriteSize;
+      const ctx = canvas.getContext("2d");
+
+      if (ctx) {
+        // Clear canvas
+        ctx.clearRect(0, 0, spriteSize, spriteSize);
+
+        // Draw green circle background
+        ctx.fillStyle = "#10B981"; // green-500
+        ctx.beginPath();
+        ctx.arc(
+          spriteSize / 2,
+          spriteSize / 2,
+          spriteSize / 2 - 2,
+          0,
+          2 * Math.PI
+        );
+        ctx.fill();
+
+        // Draw white border
+        ctx.strokeStyle = "#FFFFFF";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(
+          spriteSize / 2,
+          spriteSize / 2,
+          spriteSize / 2 - 2,
+          0,
+          2 * Math.PI
+        );
+        ctx.stroke();
+
+        // Draw takeoff icon (simplified plane)
+        ctx.fillStyle = "#FFFFFF";
+        ctx.font = "16px Arial";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText("🛫", spriteSize / 2, spriteSize / 2);
+      }
+
+      return canvas;
+    };
+
+    // Create landing sprite (red circle with plane icon)
+    const createLandingSprite = () => {
+      const canvas = document.createElement("canvas");
+      canvas.width = canvas.height = spriteSize;
+      const ctx = canvas.getContext("2d");
+
+      if (ctx) {
+        // Clear canvas
+        ctx.clearRect(0, 0, spriteSize, spriteSize);
+
+        // Draw red circle background
+        ctx.fillStyle = "#EF4444"; // red-500
+        ctx.beginPath();
+        ctx.arc(
+          spriteSize / 2,
+          spriteSize / 2,
+          spriteSize / 2 - 2,
+          0,
+          2 * Math.PI
+        );
+        ctx.fill();
+
+        // Draw white border
+        ctx.strokeStyle = "#FFFFFF";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(
+          spriteSize / 2,
+          spriteSize / 2,
+          spriteSize / 2 - 2,
+          0,
+          2 * Math.PI
+        );
+        ctx.stroke();
+
+        // Draw landing icon (simplified plane)
+        ctx.fillStyle = "#FFFFFF";
+        ctx.font = "16px Arial";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText("🛬", spriteSize / 2, spriteSize / 2);
+      }
+
+      return canvas;
+    };
+
+    // Add sprites to map if they don't exist
+    if (!map.hasImage("takeoff-sprite")) {
+      const takeoffCanvas = createTakeoffSprite();
+      const takeoffImg = new Image();
+      takeoffImg.onload = () => {
+        try {
+          map.addImage("takeoff-sprite", takeoffImg);
+        } catch (error) {
+          console.warn("Error adding takeoff sprite:", error);
+        }
+      };
+      takeoffImg.src = takeoffCanvas.toDataURL();
+    }
+
+    if (!map.hasImage("landing-sprite")) {
+      const landingCanvas = createLandingSprite();
+      const landingImg = new Image();
+      landingImg.onload = () => {
+        try {
+          map.addImage("landing-sprite", landingImg);
+        } catch (error) {
+          console.warn("Error adding landing sprite:", error);
+        }
+      };
+      landingImg.src = landingCanvas.toDataURL();
+    }
+  };
 
   useEffect(() => {
     const map = new Map({
       container: "map",
-      style: "https://demotiles.maplibre.org/style.json",
+      style: "https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json",
       center: [0, 0],
       zoom: 1,
       attributionControl: false
     });
 
+    mapRef.current = map;
+
     map.on("load", () => {
+      // Create route sprites
+      createRouteSprites(map);
+
       const arcFeatures: any[] = [];
+      const originFeatures: any[] = [];
+      const destinationFeatures: any[] = [];
 
       routes.forEach((route: any, index: number) => {
         const {
@@ -41,51 +209,69 @@ export const RouteMap = ({ routes }: { routes: any[] }) => {
             distance,
             origin,
             destination,
+            color: getRouteColor(distance),
+            category: getRouteCategory(distance),
           },
         });
       
         arc.id = index;
-        
         arcFeatures.push(arc);
+
+        // Add origin marker
+        originFeatures.push({
+          type: "Feature",
+          id: `origin-${index}`,
+          geometry: {
+            type: "Point",
+            coordinates: [lng1, lat1],
+          },
+          properties: {
+            type: "origin",
+            airport: origin,
+          },
+        });
+
+        // Add destination marker
+        destinationFeatures.push({
+          type: "Feature",
+          id: `destination-${index}`,
+          geometry: {
+            type: "Point",
+            coordinates: [lng2, lat2],
+          },
+          properties: {
+            type: "destination",
+            airport: destination,
+          },
+        });
       });
 
-      map.on("click", "route-arcs-layer", (e) => {
-        const feature = e.features?.[0];
-        const props = feature?.properties;
-      
-        if (props) {
-          const routeData = routes.find((r: any) => 
-            r.origin === props.origin && r.destination === props.destination
-          );
-          
-          setPopupInfo({
-            origin: props.origin,
-            destination: props.destination,
-            distance: props.distance,
-            aircraftId: routeData?.aircraftId,
-            totalTime: routeData?.totalTime,
-            server: routeData?.server,
-            created: routeData?.created,
-            flightId: routeData?.flightId
-          });
-        }
-      });
-
-      map.on("click", (e) => {
-        if (!map.queryRenderedFeatures(e.point, { layers: ["route-arcs-clickable"] }).length) {
-          setPopupInfo(null);
-          setAircraftData(null);
-        }
-      });
-
+      // Add route arcs
       const featureCollection = turf.featureCollection(arcFeatures);
-
       map.addSource("route-arcs", {
         type: "geojson",
         data: featureCollection,
       });
 
-      // Visible route layer with conditional styling
+      // Add origin markers
+      map.addSource("origin-markers", {
+        type: "geojson",
+        data: {
+          type: "FeatureCollection",
+          features: originFeatures,
+        },
+      });
+
+      // Add destination markers
+      map.addSource("destination-markers", {
+        type: "geojson",
+        data: {
+          type: "FeatureCollection",
+          features: destinationFeatures,
+        },
+      });
+
+      // Visible route layer with distance-based color coding
       map.addLayer({
         id: "route-arcs-layer",
         type: "line",
@@ -95,7 +281,7 @@ export const RouteMap = ({ routes }: { routes: any[] }) => {
           "line-cap": "round",
         },
         paint: {
-          "line-color": "#FF5733",
+          "line-color": ["get", "color"], // Use color from feature properties
           "line-width": [
             "case",
             ["boolean", ["feature-state", "hover"], false],
@@ -108,6 +294,32 @@ export const RouteMap = ({ routes }: { routes: any[] }) => {
             1,   // Opacity when hovered
             0.8  // Default opacity
           ]
+        },
+      });
+
+      // Origin markers layer
+      map.addLayer({
+        id: "origin-markers-layer",
+        type: "symbol",
+        source: "origin-markers",
+        layout: {
+          "icon-image": "takeoff-sprite",
+          "icon-size": 0.5, // Reduced from 0.8 to 0.5
+          "icon-allow-overlap": true,
+          "icon-ignore-placement": true,
+        },
+      });
+
+      // Destination markers layer
+      map.addLayer({
+        id: "destination-markers-layer",
+        type: "symbol",
+        source: "destination-markers",
+        layout: {
+          "icon-image": "landing-sprite",
+          "icon-size": 0.5, // Reduced from 0.8 to 0.5
+          "icon-allow-overlap": true,
+          "icon-ignore-placement": true,
         },
       });
 
@@ -173,6 +385,8 @@ export const RouteMap = ({ routes }: { routes: any[] }) => {
             origin: props.origin,
             destination: props.destination,
             distance: props.distance,
+            category: props.category,
+            color: props.color,
             aircraftId: routeData?.aircraftId,
             totalTime: routeData?.totalTime,
             server: routeData?.server,
@@ -181,9 +395,19 @@ export const RouteMap = ({ routes }: { routes: any[] }) => {
           });
         }
       });
+
+      map.on("click", (e) => {
+        if (!map.queryRenderedFeatures(e.point, { layers: ["route-arcs-clickable"] }).length) {
+          setPopupInfo(null);
+          setAircraftData(null);
+        }
+      });
     });
 
-    return () => map.remove();
+    return () => {
+      map.remove();
+      mapRef.current = null;
+    };
   }, [routes]);
 
   // Fetch aircraft data when popup info changes
@@ -219,8 +443,28 @@ export const RouteMap = ({ routes }: { routes: any[] }) => {
   };
 
   return (
-    <div style={{ position: "relative", width: "100%", height: "100%" }}>
-      <div id="map" style={{ width: "100%", height: "100%" }} />
+    <div style={{ position: "relative", width: "100%", height: "100%", borderRadius: "20px", overflow: "hidden" }}>
+      <div id="map" style={{ width: "100%", height: "100%"}} />
+      
+      {/* Zoom Controls - Top Left */}
+      <div className="absolute top-4 left-4 z-[1000] flex flex-col space-y-2">
+        <button
+          onClick={zoomIn}
+          className="w-10 h-10 bg-white/90 backdrop-blur-sm rounded-lg shadow-lg
+                     hover:bg-white transition-all duration-200
+                     flex items-center justify-center border border-gray-200"
+        >
+          <TiZoomInOutline className="w-6 h-6 text-blue-500" />
+        </button>
+        <button
+          onClick={zoomOut}
+          className="w-10 h-10 bg-white/90 backdrop-blur-sm rounded-lg shadow-lg
+                     hover:bg-white transition-all duration-200
+                     flex items-center justify-center border border-gray-200"
+        >
+          <TiZoomOutOutline className="w-6 h-6 text-red-500" />
+        </button>
+      </div>
       
       {/* Flight Route Information Popup */}
       {popupInfo && (
@@ -247,11 +491,20 @@ export const RouteMap = ({ routes }: { routes: any[] }) => {
                     {popupInfo.origin}
                   </div>
                 </div>
-                
               </div>
               
               <div className="text-blue-300 text-base mt-2 font-medium">
                 to {popupInfo.destination} • {popupInfo.distance} NM
+              </div>
+              
+              {/* Route Category Badge */}
+              <div className="mt-3">
+                <span 
+                  className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold"
+                  style={{ backgroundColor: popupInfo.color + '20', color: popupInfo.color, border: `1px solid ${popupInfo.color}` }}
+                >
+                  {popupInfo.category}
+                </span>
               </div>
             </div>
 

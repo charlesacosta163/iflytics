@@ -146,7 +146,8 @@ export async function getAircraft(aircraftId: string) {
         headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${API_KEY}`
-        }
+        },
+        next: { revalidate: 86400 } // Revalidate 24 hours
     })
 
     const data = await response.json()
@@ -178,6 +179,31 @@ export async function getAirport(airportIcao: string) {
         
     } catch (error) {
         console.error("Error fetching airport data:", error);
+        return null;
+    }
+}
+
+export async function getAirportLocally(airportIcao: string) {
+    // Read airports.json from public folder using fs
+
+    // console.log(airportIcao)
+
+    try {
+        const fs = require('fs').promises;
+        const path = require('path');
+        
+        const filePath = path.join(process.cwd(), 'public', 'airports.json');
+        const fileContent = await fs.readFile(filePath, 'utf8');
+        const data = JSON.parse(fileContent);
+
+        const airport = data.find((airport: any) => airport.ident === airportIcao);
+
+        // console.log(airport)
+
+        return airport || null;
+        
+    } catch (error) {
+        console.error("Error reading airport data:", error);
         return null;
     }
 }

@@ -24,6 +24,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { isoCountryCodes } from "@/lib/data";
 
 // Move the InfoCard component here or import it if it's elsewhere
 const InfoCard = ({
@@ -177,7 +178,8 @@ const FlightsOverview = ({
                   {mostVisitedOriginAndDestinationAirports.topOrigin || "N/A"}
                 </p>
                 <span className="text-sm text-red-700 font-medium flex items-center gap-2">
-                  {mostVisitedOriginAndDestinationAirports.originAirportInfo?.name}, {mostVisitedOriginAndDestinationAirports.originAirportInfo?.city} {mostVisitedOriginAndDestinationAirports.originAirportInfo?.state && `${mostVisitedOriginAndDestinationAirports.originAirportInfo?.state}, `} {mostVisitedOriginAndDestinationAirports.originAirportInfo?.country.name}
+                  {mostVisitedOriginAndDestinationAirports.originAirportInfo?.name}, &nbsp;
+                  {isoCountryCodes.find((code: any) => code.isoCode === mostVisitedOriginAndDestinationAirports.originAirportInfo?.country)?.key}
                 </span>
                 <span className="text-sm text-white font-medium bg-red-500 px-2 py-1 rounded-md self-start">Departed <b>{mostVisitedOriginAndDestinationAirports.originCount}</b> times</span>
               </div>
@@ -202,7 +204,8 @@ const FlightsOverview = ({
                   <b>{mostVisitedOriginAndDestinationAirports.topDestination || "N/A"}</b>
                 </p>
                 <span className="text-sm text-orange-700 font-medium flex items-center gap-2">
-                  {mostVisitedOriginAndDestinationAirports.destinationAirportInfo?.name}, {mostVisitedOriginAndDestinationAirports.destinationAirportInfo?.city} {mostVisitedOriginAndDestinationAirports.destinationAirportInfo?.state && `${mostVisitedOriginAndDestinationAirports.destinationAirportInfo?.state}, `} {mostVisitedOriginAndDestinationAirports.destinationAirportInfo?.country.name}
+                  {mostVisitedOriginAndDestinationAirports.destinationAirportInfo?.name}, &nbsp;
+                  {isoCountryCodes.find((code: any) => code.isoCode === mostVisitedOriginAndDestinationAirports.destinationAirportInfo?.country)?.key}
                 </span>
                 <span className="text-sm text-white font-medium bg-orange-500 px-2 py-1 rounded-md self-start">Arrived <b>{mostVisitedOriginAndDestinationAirports.destinationCount}</b> times</span>
               </div>

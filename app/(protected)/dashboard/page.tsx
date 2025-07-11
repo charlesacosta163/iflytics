@@ -138,7 +138,7 @@ export default async function DashboardPage() {
 
             <div>
               <CardTitle className="text-2xl font-bold tracking-tight">Recent Flight</CardTitle>
-              <CardDescription className="text-gray-200">Your recent flight.</CardDescription>
+              <CardDescription className="text-gray-200">Your most recent flight.</CardDescription>
             </div>
               <Link className='bg-blue-400/30 hover:bg-blue-500/50 py-1 px-4 rounded-full flex items-center justify-center gap-2 duration-200 transition-all' href={`/dashboard/flights/${recentFlight.id}`}>
                 <TbPlaneInflight className="text-2xl" />

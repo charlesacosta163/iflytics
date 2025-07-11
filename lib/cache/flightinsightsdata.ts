@@ -1,5 +1,5 @@
 import { Flight, FlightRoute } from "../types";
-import { getAircraft, getAirport, getAirportCoordinates, getInfiniteFlightAirportCoordinates } from "../actions";
+import { getAircraft, getAirport, getAirportLocally } from "../actions";
 import { aircraftImages } from "../data";
 import { unstable_cache as cache, unstable_cache } from "next/cache";
 import { getAircraftCached } from "./flightdata";
@@ -251,8 +251,11 @@ export async function getMostVisitedOriginAndDestinationAirports(
   const topOrigin = sortedOrigins[0];
   const topDestination = sortedDestinations[0];
 
-  const originAirportInfo = await getAirport(topOrigin[0]);
-  const destinationAirportInfo = await getAirport(topDestination[0]);
+  const originAirportInfo = await getAirportLocally(topOrigin[0]);
+  const destinationAirportInfo = await getAirportLocally(topDestination[0]);
+
+  //console.log(originAirportInfo)
+  //console.log(destinationAirportInfo)
 
   return {
     topOrigin: topOrigin[0],
@@ -312,6 +315,7 @@ function createUserFlightRoutesCache(userId: string) {
       );
 
       // console.log(`✅ Calculated ${routesWithDistances.length} routes for user ${userId}`); --> Debugging
+      // Add also total domestic and international routes
       return routesWithDistances;
     },
     [`flight-routes-${userId}`], // Now userId is in scope!
@@ -469,14 +473,18 @@ export async function calculateDistanceBetweenAirports(
   originAirport: string,
   destinationAirport: string
 ) {
+
+  //console.log(originAirport)
+  //console.log(destinationAirport)
+
   try {
-    const { latitude_deg: originLatitude, longitude_deg: originLongitude, iso_country: originIsoCountry } =
-      await getInfiniteFlightAirportCoordinates(originAirport);
+    const { latitude: originLatitude, longitude: originLongitude, country: originIsoCountry } =
+      await getAirportLocally(originAirport);
     const {
-      latitude_deg: destinationLatitude,
-      longitude_deg: destinationLongitude,
-      iso_country: destinationIsoCountry,
-    } = await getInfiniteFlightAirportCoordinates(destinationAirport);
+      latitude: destinationLatitude,
+      longitude: destinationLongitude,
+      country: destinationIsoCountry,
+    } = await getAirportLocally(destinationAirport);
 
     // In Nautical Miles
     const R = 3959; // Miles
