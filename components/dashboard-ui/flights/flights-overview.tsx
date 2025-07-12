@@ -94,7 +94,7 @@ const FlightsOverview = ({
           value={numberWithCommas(flightOverviewStats.totalFlights)}
           icon={<FaPlaneDeparture />}
           color="blue"
-          subtitle={`Last ${timeframe} days`}
+          subtitle={`Last ${timeframe.includes("flight") ? "50" : timeframe} ${timeframe.includes("flight") ? "Flights" : "Days"}`}
         />
         <InfoCard
           title="Landings"
@@ -131,7 +131,7 @@ const FlightsOverview = ({
               </div>
               <div>
                 <CardTitle className="text-blue-900">Flight Averages</CardTitle>
-                <CardDescription className="text-blue-700">Performance metrics for last {timeframe} days</CardDescription>
+                <CardDescription className="text-blue-700">Performance metrics for last {timeframe.includes("flight") ? "50" : timeframe} {timeframe.includes("flight") ? "Flights" : "Days"}</CardDescription>
               </div>
             </div>
           </CardHeader>
@@ -231,7 +231,7 @@ const FlightsOverview = ({
                 Flight Time Per Day
               </CardTitle>
               <CardDescription className="text-gray-300">
-                Your flight time day by day for the last {timeframe} days
+                Your flight time day by day for the last {timeframe.includes("flight") ? "50" : timeframe} {timeframe.includes("flight") ? "Flights" : "Days"}
               </CardDescription>
             </CardHeader>
             <CardContent className="flex flex-col items-center justify-center py-16">
@@ -265,7 +265,7 @@ const FlightsOverview = ({
                 Aircraft Usage
               </CardTitle>
               <CardDescription className="text-gray-300">
-                Your most used aircraft in the last {timeframe} days
+                Your most used aircraft in the last {timeframe.includes("flight") ? "50" : timeframe} {timeframe.includes("flight") ? "Flights" : "Days"}
               </CardDescription>
             </CardHeader>
             <CardContent className="flex flex-col items-center justify-center py-16">
@@ -288,7 +288,7 @@ const FlightsOverview = ({
               Your Top 3 Aircraft
             </CardTitle>
             <CardDescription className="text-gray-300">
-              Your top 3 most used aircraft in the last {timeframe} days
+              Your top 3 most used aircraft in the last {timeframe.includes("flight") ? "50" : timeframe} {timeframe.includes("flight") ? "Flights" : "Days"}
             </CardDescription>
           </CardHeader>
 

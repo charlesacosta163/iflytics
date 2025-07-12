@@ -40,11 +40,26 @@ const FlightsPage = async ({searchParams}: { searchParams: Promise < {
   
   const {timeframe} = await searchParams || "30"
   
-  if (timeframe !== "1" && timeframe !== "7" && timeframe !== "30") {
-    redirect("/dashboard/flights?timeframe=30");
+  let allFlights;
+  
+  if (typeof timeframe === 'string' && timeframe.startsWith('flight-')) {
+    // Flight-frame logic
+    const flightCount = parseInt(timeframe.replace('flight-', ''));
+    
+    if (![50, 100, 250, 500].includes(flightCount)) {
+      redirect("/dashboard/flights?timeframe=30");
+    }
+    
+    allFlights = await getFlightsTimeFrame(data.ifcUserId, 0, flightCount);
+  } else {
+    // Time-frame logic
+    if (!["1", "7", "30"].includes(timeframe as string)) {
+      redirect("/dashboard/flights?timeframe=30");
+    }
+    
+    allFlights = await getFlightsTimeFrame(data.ifcUserId, parseInt(timeframe as string));
   }
-
-  const allFlights = await getFlightsTimeFrame(data.ifcUserId, parseInt(timeframe));
+  
   const flightOverviewStats = getFlightOverviewStatsPerTimeFrame(allFlights);
   const flightAverages = getFlightAveragesPerTimeFrame(allFlights);
   const flightActivity = getFlightTimePerTimeFrame(allFlights);
@@ -91,7 +106,7 @@ const FlightsPage = async ({searchParams}: { searchParams: Promise < {
           mostVisitedOriginAndDestinationAirports={mostVisitedOriginAndDestinationAirports}
           flightActivity={flightActivity}
           aircraftUsageData={aircraftUsageData}
-          timeframe={timeframe}
+          timeframe={timeframe as string}
         />
       </TabsContent>
 

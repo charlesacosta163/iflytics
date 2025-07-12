@@ -172,7 +172,7 @@ export async function getAllPlayerAircraftUsageData(flights: Flight[]) {
 
               return {
                 name:
-                  aircraft?.name || `Aircraft ${aircraftId.substring(0, 6)}...`,
+                  aircraft?.name || `Unknown Aircraft`,
                 count: aircraftUsageCount[aircraftId],
                 id: aircraftId, // Store the ID for debugging
               };
