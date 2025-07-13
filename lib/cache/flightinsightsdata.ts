@@ -1,9 +1,12 @@
 import { Flight, FlightRoute } from "../types";
-import { getAircraft, getAirport, getAirportLocally } from "../actions";
+import { getAircraft, getAirport } from "../actions";
+import { getAirportLocally } from "../sync-actions";
 import { aircraftImages } from "../data";
 import { unstable_cache as cache, unstable_cache } from "next/cache";
 import { getAircraftCached } from "./flightdata";
 import { isoCountryCodes } from "../data";
+import { airports } from '../airports-lib';
+
 /*
 getAircraftAndLivery(aircraftId: string, liveryId: string)
 sample response:
@@ -252,8 +255,8 @@ export async function getMostVisitedOriginAndDestinationAirports(
   const topOrigin = sortedOrigins[0];
   const topDestination = sortedDestinations[0];
 
-  const originAirportInfo = await getAirportLocally(topOrigin[0]);
-  const destinationAirportInfo = await getAirportLocally(topDestination[0]);
+  const originAirportInfo = getAirportLocally(topOrigin[0]);
+  const destinationAirportInfo = getAirportLocally(topDestination[0]);
 
   //console.log(originAirportInfo)
   //console.log(destinationAirportInfo)
@@ -297,7 +300,7 @@ function createUserFlightRoutesCache(userId: string) {
 
       const routesWithDistances = await Promise.all(
         routePairs.map(async (route) => {
-          const { distance, originCoordinates, destinationCoordinates, originIsoCountry, destinationIsoCountry } = await calculateDistanceBetweenAirports(route.origin, route.destination);
+          const { distance, originCoordinates, destinationCoordinates, originIsoCountry, destinationIsoCountry } = calculateDistanceBetweenAirports(route.origin, route.destination);
           return {
             flightId: route.flightId,
             created: route.created,
@@ -414,7 +417,7 @@ export async function calculateTotalDistance(validFlights: Flight[]) {
   };
 
   for (const flight of validFlights) {
-    const { distance } = await calculateDistanceBetweenAirports(
+    const { distance } = calculateDistanceBetweenAirports(
       flight.originAirport,
       flight.destinationAirport
     );
@@ -470,22 +473,27 @@ export async function calculateTotalDistance(validFlights: Flight[]) {
 
 // Functions Needed: getInfiniteFlightAirportCoordinates
 
-export async function calculateDistanceBetweenAirports(
+export function calculateDistanceBetweenAirports(
   originAirport: string,
   destinationAirport: string
 ) {
-
-  //console.log(originAirport)
-  //console.log(destinationAirport)
-
   try {
-    const { latitude: originLatitude, longitude: originLongitude, country: originIsoCountry } =
-      await getAirportLocally(originAirport);
-    const {
-      latitude: destinationLatitude,
-      longitude: destinationLongitude,
-      country: destinationIsoCountry,
-    } = await getAirportLocally(destinationAirport);
+    // Remove await since getAirportLocally is now synchronous
+    const originData = getAirportLocally(originAirport);
+    const destinationData = getAirportLocally(destinationAirport);
+
+    if (!originData || !destinationData) {
+      return {
+        distance: 0,
+        originCoordinates: { latitude: 0, longitude: 0 },
+        destinationCoordinates: { latitude: 0, longitude: 0 },
+        originIsoCountry: 'US',
+        destinationIsoCountry: 'US'
+      };
+    }
+
+    const { latitude: originLatitude, longitude: originLongitude, country: originIsoCountry } = originData;
+    const { latitude: destinationLatitude, longitude: destinationLongitude, country: destinationIsoCountry } = destinationData;
 
     // In Nautical Miles
     const R = 3959; // Miles
@@ -518,7 +526,6 @@ export async function calculateDistanceBetweenAirports(
       destinationIsoCountry: destinationIsoCountry,
     };
   } catch (error) {
-    // Ensure we always return the expected structure
     return {
       distance: 0,
       originCoordinates: { latitude: 0, longitude: 0 },

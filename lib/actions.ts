@@ -1,6 +1,7 @@
 'use server'
 
 import { revalidateTag } from "next/cache"
+import { airports } from './airports-lib';
 
 const API_KEY = process.env.API_KEY as string
 
@@ -179,31 +180,6 @@ export async function getAirport(airportIcao: string) {
         
     } catch (error) {
         console.error("Error fetching airport data:", error);
-        return null;
-    }
-}
-
-export async function getAirportLocally(airportIcao: string) {
-    // Read airports.json from public folder using fs
-
-    // console.log(airportIcao)
-
-    try {
-        const fs = require('fs').promises;
-        const path = require('path');
-        
-        const filePath = path.join(process.cwd(), 'public', 'airports.json');
-        const fileContent = await fs.readFile(filePath, 'utf8');
-        const data = JSON.parse(fileContent);
-
-        const airport = data.find((airport: any) => airport.ident === airportIcao);
-
-        // console.log(airport)
-
-        return airport || null;
-        
-    } catch (error) {
-        console.error("Error reading airport data:", error);
         return null;
     }
 }
