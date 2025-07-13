@@ -28,7 +28,11 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
+const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+
 export default function FlightActivityAreaChart({flightActivityData, timeframe, className}: {flightActivityData: {date: string, totalTime: number}[], timeframe: string, className?: string}) {
+
+  // console.log(flightActivityData)
 
   return (
     <Card className={cn("w-full bg-gray", className)}>
@@ -38,7 +42,7 @@ export default function FlightActivityAreaChart({flightActivityData, timeframe, 
                 Flight Time Per Day
               </CardTitle>
               <CardDescription className="text-gray-300">
-                Your flight time day by day for the last {timeframe} days
+                Your flight time day by day for the last {timeframe.startsWith("flight-") ? timeframe.split("-")[1] : timeframe} {timeframe.startsWith("flight-") || ["50", "100", "250", "500"].includes(timeframe) ? "flights" : "days"}
               </CardDescription>
             </CardHeader>
       <CardContent>
@@ -81,14 +85,19 @@ export default function FlightActivityAreaChart({flightActivityData, timeframe, 
             <ChartTooltip
               cursor={false}
               content={({ active, payload, label }) => {
+                
                 if (!active || !payload || !payload.length) {
                   return null;
                 }
                 
+                // Parse the MM/DD/YY date string and format as "March 25, 2019"
+                const date = new Date(label);
+                const formattedDate = `${monthNames[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
+                
                 return (
                   <div className="rounded-lg border bg-background p-2 shadow-sm">
                     <div className="flex flex-col">
-                      <span className="font-bold">{label}</span>
+                      <span className="font-bold">{formattedDate}</span>
                       <span className="text-muted-foreground">
                         Flight Time: <b>{convertMinutesToHours(payload[0].value as number)}</b>
                       </span>

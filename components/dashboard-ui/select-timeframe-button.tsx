@@ -2,11 +2,12 @@
 
 import React, { useState, useEffect } from 'react'
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams, usePathname } from 'next/navigation'
 import { FaStar } from 'react-icons/fa6'
 
 const SelectTimeframeButton = () => {
   const router = useRouter();
+  const pathname = usePathname(); // Get current path
   const searchParams = useSearchParams();
   const [timeframe, setTimeframe] = useState(searchParams.get('timeframe') || "30");
 
@@ -18,10 +19,12 @@ const SelectTimeframeButton = () => {
     }
   }, [searchParams]);
 
-  // Add query params to the url
+  // Add query params to the url while preserving current path
   const handleSelect = (value: string) => {
     setTimeframe(value); // Update state
-    router.push(`/dashboard/flights?timeframe=${value}`);
+    
+    // Preserve current pathname and only change timeframe
+    router.push(`${pathname}?timeframe=${value}`);
     // router.refresh();
   }
 

@@ -24,8 +24,6 @@ export const getAggregatedFlights = async (ifcUserId: string) => {
   
       const data = await response.json();
 
-      if (page === 50) // Fetch only 50 pages per performance
-        break
       
       if (data.result?.data) {
         allFlights.push(...data.result.data);
@@ -34,6 +32,8 @@ export const getAggregatedFlights = async (ifcUserId: string) => {
       } else {
         hasMore = false
       }
+      if (page === 51) // Fetch only 50 pages per performance
+        break
     }
 
     return allFlights;

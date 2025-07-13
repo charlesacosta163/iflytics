@@ -26,6 +26,7 @@ import FlightsRoutes from "@/components/dashboard-ui/flights/flights-routes";
 import { FaPlane, FaRoute } from "react-icons/fa";
 import { FaChartLine } from "react-icons/fa";
 import { Metadata } from 'next'
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Flights - IFlytics | Your Infinite Flight Statistics",
@@ -94,8 +95,11 @@ const FlightsPage = async ({searchParams}: { searchParams: Promise < {
           <FaPlane className="w-6 h-6 text-light" />
           Flights</TabsTrigger>
         <TabsTrigger value="routes" className='data-[state=active]:bg-gray-700 data-[state=active]:text-white data-[state=inactive]:bg-transparent data-[state=inactive]:text-gray-300 transition-all duration-200 rounded-full flex gap-2 items-center'>
-          <FaRoute className="w-6 h-6 text-light" />
-          Routes</TabsTrigger>
+          <Link href="/dashboard/flights/routes" className="flex gap-2 items-center w-full justify-center">
+            <FaRoute className="w-6 h-6 text-light" />
+            Routes
+          </Link>
+        </TabsTrigger>
       </TabsList>
       
       <TabsContent value="overview" className="space-y-8">
@@ -116,7 +120,13 @@ const FlightsPage = async ({searchParams}: { searchParams: Promise < {
       </TabsContent>
       
       <TabsContent value="routes" className="space-y-6">
-        <FlightsRoutes flights={allFlights} />
+        <div className="flex flex-col items-center justify-center py-12 space-y-4">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-400"></div>
+          <h1 className="text-2xl font-bold text-gray-700">Loading Routes...</h1>
+          <p className="text-gray-500 text-center max-w-md">
+            Preparing your flight routes visualization. This may take a moment.
+          </p>
+        </div>
       </TabsContent>
     </Tabs>
     </div>

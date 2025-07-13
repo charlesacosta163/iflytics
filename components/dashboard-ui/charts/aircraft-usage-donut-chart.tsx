@@ -69,8 +69,8 @@ export function AircraftUsageDonutChart({ aircraftUsageData, timeframe, classNam
                 <FaPlane className="text-purple-400" />
                 Aircraft Usage
               </CardTitle>
-              <CardDescription className="text-gray-300">
-                Your most used aircraft in the last {timeframe} days
+                <CardDescription className="text-gray-300">
+                  Your most used aircraft in the last {timeframe.startsWith("flight-") ? timeframe.split("-")[1] : timeframe} {timeframe.startsWith("flight-") || ["50", "100", "250", "500"].includes(timeframe) ? "flights" : "days"}
               </CardDescription>
             </CardHeader>
       <CardContent className="flex-1 pb-0">

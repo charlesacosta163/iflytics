@@ -76,8 +76,9 @@ export function getFlightTimePerTimeFrame(flights: Flight[]) {
   return Array.from(dailyTotals.entries())
     .map(([date, totalTime]) => ({
       date: new Date(date).toLocaleDateString("en-US", {
-        month: "short",
-        day: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        year: "2-digit",
       }),
       totalTime,
     }))
