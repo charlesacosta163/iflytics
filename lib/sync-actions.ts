@@ -1,8 +1,6 @@
 import { airports } from "./airports-lib";
 
-export function getAirportLocally(airportIcao: string) {
-    // Direct array lookup - no more file system calls!
-    
+export function getAirportLocally(airportIcao: string) {    
     // console.log(airportIcao)
 
     try {

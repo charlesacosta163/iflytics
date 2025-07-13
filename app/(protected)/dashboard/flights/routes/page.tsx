@@ -27,7 +27,7 @@ const RoutesPage = async ({searchParams}: { searchParams: Promise < {
     // Flight-frame logic
     const flightCount = parseInt(timeframe.replace('flight-', ''));
     
-    if (![50, 100, 250, 500].includes(flightCount)) {
+    if (![10, 50, 100, 250, 500].includes(flightCount)) {
       redirect("/dashboard/flights/routes?timeframe=30");
     }
     

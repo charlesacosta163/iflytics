@@ -47,7 +47,7 @@ const FlightsPage = async ({searchParams}: { searchParams: Promise < {
     // Flight-frame logic
     const flightCount = parseInt(timeframe.replace('flight-', ''));
     
-    if (![50, 100, 250, 500].includes(flightCount)) {
+    if (![10,50, 100, 250, 500].includes(flightCount)) {
       redirect("/dashboard/flights?timeframe=30");
     }
     
@@ -95,10 +95,10 @@ const FlightsPage = async ({searchParams}: { searchParams: Promise < {
           <FaPlane className="w-6 h-6 text-light" />
           Flights</TabsTrigger>
         <TabsTrigger value="routes" className='data-[state=active]:bg-gray-700 data-[state=active]:text-white data-[state=inactive]:bg-transparent data-[state=inactive]:text-gray-300 transition-all duration-200 rounded-full flex gap-2 items-center'>
-          <Link href="/dashboard/flights/routes" className="flex gap-2 items-center w-full justify-center">
+          {/* <Link href="/dashboard/flights/routes" className="flex gap-2 items-center w-full justify-center"> */}
             <FaRoute className="w-6 h-6 text-light" />
             Routes
-          </Link>
+          {/* </Link> */}
         </TabsTrigger>
       </TabsList>
       
@@ -120,13 +120,7 @@ const FlightsPage = async ({searchParams}: { searchParams: Promise < {
       </TabsContent>
       
       <TabsContent value="routes" className="space-y-6">
-        <div className="flex flex-col items-center justify-center py-12 space-y-4">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-400"></div>
-          <h1 className="text-2xl font-bold text-gray-700">Loading Routes...</h1>
-          <p className="text-gray-500 text-center max-w-md">
-            Preparing your flight routes visualization. This may take a moment.
-          </p>
-        </div>
+        <FlightsRoutes flights={allFlights} />
       </TabsContent>
     </Tabs>
     </div>

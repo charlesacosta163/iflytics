@@ -17,11 +17,11 @@ const FlightsDisplay = ({ flights }: { flights: Flight[] }) => {
   return (
     <div className="flex flex-col gap-4">
       <header>
-        <h1 className="text-2xl font-bold">Flights</h1>
+        <h1 className="text-2xl font-bold text-gray-700">Flights ({flights.length})</h1>
       </header>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {flights.length > 0 &&
+        {flights.length > 0 ?
           flights.map((flight: any, index: number) => {
             return (
               <div key={index} className="flex flex-col">
@@ -71,7 +71,11 @@ const FlightsDisplay = ({ flights }: { flights: Flight[] }) => {
                 </Card>
               </div>
             );
-          })}
+          }) : (
+            <div className="flex flex-col items-center justify-center h-full col-span-2">
+              <p className="text-gray-500 font-medium text-left">No flights found</p>
+            </div>
+          )}
       </div>
     </div>
   );
