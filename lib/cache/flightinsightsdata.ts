@@ -304,10 +304,10 @@ function createUserFlightRoutesCache(userId: string) {
           return {
             flightId: route.flightId,
             created: route.created,
-            origin: route.origin,
+            origin: route.origin || "????",
             originIsoCountry: originIsoCountry,
             originCoordinates: originCoordinates,
-            destination: route.destination,
+            destination: route.destination || "????",
             destinationIsoCountry: destinationIsoCountry,
             destinationCoordinates: destinationCoordinates,
             distance: distance,

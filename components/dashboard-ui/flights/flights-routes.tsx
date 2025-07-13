@@ -77,7 +77,7 @@ const FlightsRoutes = async ({ flights }: { flights: Flight[] }) => {
   // Get the flight routes with distances with the user ID for the cache key
 
   // const startTime = Date.now(); --> Debugging
-  const routesWithDistances = await getAllFlightRoutes(validFlights, user.id);
+  const routesWithDistances = await getAllFlightRoutes(flights, user.id);
   // const endTime = Date.now(); --> Debugging
 
   const totalDomesticRoutes = routesWithDistances.filter(
