@@ -5,7 +5,10 @@ import * as turf from "@turf/turf";
 import * as maplibregl from "maplibre-gl";
 import { getAircraft } from "@/lib/actions";
 import { X } from "lucide-react";
+import Link from "next/link";
 import { TiZoomInOutline, TiZoomOutOutline } from "react-icons/ti";
+import { Button } from "@/components/ui/button";
+import { FaInfoCircle } from "react-icons/fa";
 
 export const RouteMap = ({ routes }: { routes: any[] }) => {
   const [popupInfo, setPopupInfo] = useState<any>(null);
@@ -516,13 +519,20 @@ export const RouteMap = ({ routes }: { routes: any[] }) => {
               </div>
               
               {/* Route Category Badge */}
-              <div className="mt-3">
+              <div className="mt-3 flex gap-2 items-center">
                 <span 
                   className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold"
                   style={{ backgroundColor: popupInfo.color + '20', color: popupInfo.color, border: `1px solid ${popupInfo.color}` }}
                 >
                   {popupInfo.category}
                 </span>
+
+                <Link href={`/dashboard/flights/${popupInfo.flightId}`}>
+                  <button className="bg-blue-500 hover:bg-blue-600 rounded-full text-xs py-1 px-4 flex items-center gap-1 border border-blue-500 font-medium transition-all duration-200 cursor-pointer">
+                    <FaInfoCircle className="w-4 h-4" />
+                    <span className="text-xs">Details</span>
+                  </button>
+                </Link>
               </div>
             </div>
 

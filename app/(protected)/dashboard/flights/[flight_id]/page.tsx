@@ -87,7 +87,7 @@ const FlightPage = async ({
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white p-6 rounded-lg">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white p-6 rounded-2xl">
       <div className="max-w-6xl mx-auto space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">
@@ -291,7 +291,7 @@ const FlightPage = async ({
                   ? "Expert"
                   : "Training"}
               </p>
-              <p className="text-blue-300 text-sm">Server Type</p>
+              <p className="text-blue-300 text-sm">Server</p>
             </CardContent>
           </Card>
         </div>
