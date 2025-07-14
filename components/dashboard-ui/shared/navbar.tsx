@@ -15,8 +15,12 @@ import Image from "next/image";
 import iflyticsLogo from "@/public/infinilyticslogo.svg";
 import { BsIncognito } from "react-icons/bs";
 import { LiaGlobeAmericasSolid } from "react-icons/lia";
+import { useTheme } from "next-themes";
+
+import { Moon, Sun } from "lucide-react";
 
 const Navbar = () => {
+  const { theme, setTheme } = useTheme();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
@@ -67,9 +71,20 @@ const Navbar = () => {
             </span>
           </div>
         </div>
-        
-  
-        <LogoutButton className="text-sm !px-4 !py-2 font-semibold rounded-full hover:scale-105 transition-transform duration-200" />
+        <div className="flex items-center gap-2">
+          {/* {
+            theme === "dark" ? (
+              <button className="text-sm !px-4 !py-2 font-semibold rounded-full hover:scale-105 transition-transform duration-200" onClick={() => setTheme("light")}>
+                <Sun size={16} />
+              </button>
+            ) : (
+              <button className="text-sm !px-4 !py-2 font-semibold rounded-full hover:scale-105 transition-transform duration-200" onClick={() => setTheme("dark")}>
+                <Moon size={16} />
+              </button>
+            )
+          } */}
+          <LogoutButton className="text-sm !px-4 !py-2 font-semibold rounded-full hover:scale-105 transition-transform duration-200" />
+        </div>
       </div>
 
       {/* Animated Mobile Menu Overlay */}

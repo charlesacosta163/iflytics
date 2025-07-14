@@ -74,15 +74,47 @@ const Sidebar = () => {
             {/* Special Section - Flight Arena (Coming Soon) */}
             <div className="p-0.5 bg-gradient-to-br from-red-400 to-purple-400 rounded-lg">
               <div 
-                className="flex gap-4 text-gray-400 font-medium items-center px-3 py-2 bg-dark rounded-md cursor-not-allowed opacity-75"
+                className="flex flex-col gap-3 text-gray-400 font-medium px-4 py-4 bg-dark rounded-md cursor-not-allowed opacity-75"
                 title="Coming Soon!"
               >
-                <LuGoal />
-                <div className="flex items-center gap-2">
-                  <span className="font-medium text-white">The Flight Arena</span>
-                  <span className="text-xs bg-gray-600 text-gray-300 px-2 py-1 rounded-full w-fit mt-1">
-                    Premium
-                  </span>
+                {/* Header */}
+                <div className="flex items-center gap-3">
+                  <LuGoal className="text-xl" />
+                  <div className="flex flex-col gap-1">
+                    <span className="font-bold text-white text-lg">The Flight Arena</span>
+                    <span className="text-xs bg-amber-500 text-white px-2 py-0.5 font-bold rounded-full w-fit">
+                      Premium+
+                    </span>
+                  </div>
+                </div>
+
+                {/* Description */}
+                <div className="flex flex-col gap-2 text-sm">
+                  <p className="text-gray-300 leading-relaxed">
+                    Transform your flight data into <strong className="text-white">epic competitions</strong> and challenges.
+                  </p>
+                  
+                  <div className="space-y-1 text-xs text-gray-400">
+                    <div className="flex items-center gap-2">
+                      <span className="w-1.5 h-1.5 bg-red-400 rounded-full"></span>
+                      <span>Pilot tournaments</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="w-1.5 h-1.5 bg-purple-400 rounded-full"></span>
+                      <span>Achievement system</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="w-1.5 h-1.5 bg-pink-400 rounded-full"></span>
+                      <span>Global leaderboards</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Coming Soon Badge */}
+                <div className="mt-auto">
+                  <div className="bg-gradient-to-r from-green-500 to-emerald-600 text-white px-3 py-1.5 rounded-lg text-center text-xs font-bold">
+                    Coming in 2026
+                  </div>
                 </div>
               </div>
             </div>

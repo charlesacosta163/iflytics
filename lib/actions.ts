@@ -511,9 +511,19 @@ export async function getInfiniteFlightRouteDistanceWithCoordinates(originAirpor
 }
 
 
+export async function getUselessFactToday() {
+    const response = await fetch(`https://uselessfacts.jsph.pl/api/v2/facts/today`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        next: { revalidate: 14400 } // 4 hours
+    })
 
-
-
+    const data = await response.json()
+    
+    return data || {text: "Looks like we don't have any facts for today", source: "No Clue", source_url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley"}
+}
 
 
 
