@@ -27,6 +27,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { matchAircraftNameToImage } from "@/lib/cache/flightinsightsdata";
 
@@ -40,7 +41,7 @@ export const metadata: Metadata = {
 
 export default async function DashboardPage() {
   const { user_metadata: data } = await getUser();
-  const uselessFact = await getUselessFactToday();
+  // const uselessFact = await getUselessFactToday();
   // const flights = await getAggregatedFlights(data.ifcUserId)
 
   const userStats = await getUserStats(data.ifcUsername, data.ifcUserId);
@@ -331,31 +332,23 @@ export default async function DashboardPage() {
             </CardContent>
           </Card>
 
-          { /* Useless Fact Card */}
-          <Card className="bg-[#FCD8CD] text-dark backdrop-blur-xl">
-            <CardHeader>
-              <CardTitle className="text-2xl font-bold tracking-tight">
-                Today's Useless Fact
-              </CardTitle>
-              <CardDescription className="text-gray-600">Because why not?</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="flex flex-col gap-2">
-                <blockquote className="text-light font-medium bg-[#ff9d7f] p-2 rounded-lg italic text-sm">
-                  "{uselessFact.text}"
-                </blockquote>
-                <div className="text-gray-600 text-sm">
-                  Source:{" "}
-                  <Link
-                    href={uselessFact.source_url as string}
-                    className="text-gray-600 hover:text-gray-800 underline cursor-pointer"
-                  >
-                    {uselessFact.source}
-                  </Link>
+          <div className="bg-gradient-to-br from-orange-400 via-yellow-400 to-green-500 p-1 rounded-lg">
+            <Card className="bg-[url('/findthepilotimg.png')] bg-cover bg-top-left text-white rounded-lg !h-full px-1">
+              <CardHeader className="flex flex-col items-center gap-1 justify-center bg-black/35 backdrop-blur-sm py-1 rounded-full px-8">
+                <div className="text-2xl font-black tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-orange-300 via-yellow-300 to-green-400">
+                  Find The Pilot
                 </div>
-              </div>
-            </CardContent>
-          </Card>
+                <div className="text-gray-200 text-sm">A game for the analysts 🧐</div>
+              </CardHeader>
+              <CardContent className="h-full flex justify-center items-end">
+                <Link href="/map/game" className="p-1 bg-gradient-to-br from-orange-400 via-yellow-400 to-green-500 rounded-full animate-bounce">
+                  <Button className="bg-blue-600 hover:bg-blue-700 text-white rounded-full !font-bold cursor-pointer text-xl border-none tracking-tight">
+                    Play Game
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </div>
     </div>
