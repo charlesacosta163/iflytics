@@ -88,28 +88,6 @@ const Sidebar = () => {
                   </div>
                 </div>
 
-                {/* Description */}
-                <div className="flex flex-col gap-2 text-sm">
-                  <p className="text-gray-300 leading-relaxed">
-                    Transform your flight data into <strong className="text-white">epic competitions</strong> and challenges.
-                  </p>
-                  
-                  <div className="space-y-1 text-xs text-gray-400">
-                    <div className="flex items-center gap-2">
-                      <span className="w-1.5 h-1.5 bg-red-400 rounded-full"></span>
-                      <span>Pilot tournaments</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="w-1.5 h-1.5 bg-purple-400 rounded-full"></span>
-                      <span>Achievement system</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="w-1.5 h-1.5 bg-pink-400 rounded-full"></span>
-                      <span>Global leaderboards</span>
-                    </div>
-                  </div>
-                </div>
-
                 {/* Coming Soon Badge */}
                 <div className="mt-auto">
                   <div className="bg-gradient-to-r from-green-500 to-emerald-600 text-white px-3 py-1.5 rounded-lg text-center text-xs font-bold">

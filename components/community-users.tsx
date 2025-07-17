@@ -100,7 +100,7 @@ const CommunityUsers = ({ users }: CommunityUsersProps) => {
               placeholder="Search pilots by name or username..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-10 py-3 bg-gray-600 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+              className="w-full pl-10 pr-10 py-2 font-medium bg-gray-600 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 text-sm focus:ring-blue-500 focus:border-transparent transition-all duration-200"
             />
             {searchQuery && (
               <button
