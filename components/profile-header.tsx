@@ -4,6 +4,7 @@ import MostRecentFlightCard from "./most-recent-flight-card";
 import UserNavigation from "./user-navigation";
 
 import { getPilotServerSessions, getUserFlights } from "@/lib/actions";
+import { customUserImages } from "@/lib/data";
 
 const ProfileHeader = async ({
   id,
@@ -43,6 +44,9 @@ const ProfileHeader = async ({
 
   mostRecentFlight = { ...mostRecentFlight, session: pilotServerSession }
 
+  const userRoleColor = customUserImages.find(user => user.username.toLowerCase() === name.toLowerCase())?.role === "staff" ? "bg-blue-500" : customUserImages.find(user => user.username.toLowerCase() === name.toLowerCase())?.role === "mod" ? "bg-purple-500" : "bg-gray";
+  const userRole = customUserImages.find(user => user.username.toLowerCase() === name.toLowerCase())?.role;
+
   const gradeColor: string =
     grade === 5
       ? "bg-yellow-500"
@@ -57,7 +61,16 @@ const ProfileHeader = async ({
     <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 px-4 mt-4">
       <div className="flex flex-col justify-end gap-4 sm:gap-8 h-full">
         <div className="flex gap-4 sm:gap-8 items-center">
-          <GoCopilot className="text-[4rem]" />
+          {customUserImages.find(user => user.username.toLowerCase() === name.toLowerCase()) ? (
+            <div className={`p-1 rounded-full ${userRoleColor} relative`}>
+              <img src={customUserImages.find(user => user.username.toLowerCase() === name.toLowerCase())?.image} alt={name} className="w-16 h-16 rounded-full" />
+              <div className={`absolute -bottom-4 left-1/2 -translate-x-1/2 text-light ${userRoleColor} rounded-full px-3 py-0.5 text-xs font-semibold whitespace-nowrap text-center`}>
+                {userRole === "staff" ? "IF Staff" : userRole === "mod" ? "IF Mod" : "IFlytics User"}
+              </div>
+            </div>
+          ) : (
+            <GoCopilot className="text-[4rem]" />
+          )}
           <div className="flex flex-col text-left">
             <div
               className={`font-semibold text-xs ${gradeColor} px-2 py-0.5 rounded-full self-start text-white`}
