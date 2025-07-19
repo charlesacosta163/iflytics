@@ -60,7 +60,7 @@ const ProfileHeader = async ({
   return (
     <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 px-4 mt-4">
       <div className="flex flex-col justify-end gap-4 sm:gap-8 h-full">
-        <div className="flex gap-4 sm:gap-8 items-center">
+        <div className="flex gap-4 sm:gap-8 items-center pb-2 sm:pb-0">
           {customUserImages.find(user => user.username.toLowerCase() === name.toLowerCase()) ? (
             <div className={`p-1 rounded-full ${userRoleColor} relative`}>
               <img src={customUserImages.find(user => user.username.toLowerCase() === name.toLowerCase())?.image} alt={name} className="w-16 h-16 rounded-full" />
