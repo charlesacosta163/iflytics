@@ -393,31 +393,6 @@ export async function getAirportATIS(airportIcao: string) {
     }
 }
 
-export async function matchATCRankToTitle(atcRank: string) {
-    switch (atcRank) {
-        case "0":
-            return "Observer"
-        case "1":
-            return "Trainee"
-        case "2":
-            return "Apprentice"
-        case "3":
-            return "Specialist"
-        case "4":
-            return "Officer"
-        case "4":
-            return "Recruiter"
-        case "5":
-            return "Supervisor"
-        case "6":
-            return "Recruiter"
-        case "7":
-            return "Manager"
-        default:
-            return "Unknown"
-    }
-}
-
 export async function matchATCTypeToTitle(atcType: string) {
 
     // Turn to 3 letter code

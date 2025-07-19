@@ -6,19 +6,21 @@ import {
   getUserFlights,
   getUserStats,
 } from "@/lib/actions";
+import { matchATCRankToTitle } from "@/lib/sync-actions";
 import { Metadata } from "next";
 import Image from "next/image";
 
 // Icons
-import { LuPlaneLanding } from "react-icons/lu";
+import { LuPlaneLanding, LuTowerControl } from "react-icons/lu";
 import { TfiMedall } from "react-icons/tfi";
-import { MdOutlineAirlines } from "react-icons/md";
+import { MdOutlineAirlines, MdOutlineLibraryBooks } from "react-icons/md";
 import { PiShootingStarBold } from "react-icons/pi";
-import { FaPlane, FaMapMarkerAlt, FaUsers } from "react-icons/fa";
+import { FaPlane, FaMapMarkerAlt, FaUsers, FaLightbulb } from "react-icons/fa";
 import { HiOutlineStatusOnline } from "react-icons/hi";
 import { TbPlaneInflight, TbClock } from "react-icons/tb";
 import { GoServer } from "react-icons/go";
 import { PiMapPinBold } from "react-icons/pi";
+import { HiOutlineGlobeAsiaAustralia } from "react-icons/hi2";
 
 import {
   Card,
@@ -30,6 +32,9 @@ import {
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { matchAircraftNameToImage } from "@/lib/cache/flightinsightsdata";
+import { FaTowerBroadcast } from "react-icons/fa6";
+import { BsPersonWorkspace } from "react-icons/bs";
+import { SlActionUndo } from "react-icons/sl";
 
 export const metadata: Metadata = {
   title: "Dashboard - IFlytics | Your Infinite Flight Statistics",
@@ -41,7 +46,7 @@ export const metadata: Metadata = {
 
 export default async function DashboardPage() {
   const { user_metadata: data } = await getUser();
-  // const uselessFact = await getUselessFactToday();
+  const uselessFact = await getUselessFactToday();
   // const flights = await getAggregatedFlights(data.ifcUserId)
 
   const userStats = await getUserStats(data.ifcUsername, data.ifcUserId);
@@ -71,6 +76,7 @@ export default async function DashboardPage() {
       ? "bg-gradient-to-r from-blue-500/50 to-blue-600/60"
       : "bg-gradient-to-r from-gray-600/50 to-dark/50";
 
+  const atcRank = matchATCRankToTitle(userData.atcRank.toString() || "Unknown");
   return (
     <div className="relative">
       {/* Liquid Glass Background */}
@@ -103,7 +109,7 @@ export default async function DashboardPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {/* Welcome Card - Large */}
-          <Card className="lg:col-span-2 bg-[#687FE5] text-white backdrop-blur-xl">
+          <Card className="md:col-span-1 lg:col-span-2 bg-[#687FE5] text-white backdrop-blur-xl">
             <CardHeader>
               <CardTitle className="text-2xl font-bold tracking-tight">
                 Profile Overview
@@ -113,49 +119,106 @@ export default async function DashboardPage() {
               </CardDescription>
             </CardHeader>
 
-            <CardContent className="grid grid-cols-2 gap-4">
+            <CardContent className="grid grid-cols-2 lg:grid-cols-3 gap-4">
               <div
                 className={`bg-white/15 ${gradeColorClass} rounded-xl p-4 backdrop-blur-md relative overflow-hidden`}
               >
                 <div className="text-2xl font-bold">{userData.grade}</div>
-                <div className="text-blue-100 text-sm">Grade</div>
+                <div className="text-blue-100 text-sm flex items-center gap-1">
+                  <TfiMedall /> Grade
+                </div>
                 <div className="absolute top-4 right-4 opacity-10">
                   <TfiMedall className="text-[6rem]" />
                 </div>
               </div>
               <div className="bg-white/15 rounded-xl p-4 backdrop-blur-md relative overflow-hidden">
                 <div className="text-2xl font-bold">
-                  {convertMinutesToHours(userData.flightTime)}
+                  {userData.onlineFlights}
                 </div>
-                <div className="text-blue-100 text-sm">Total Flight Time</div>
+                <div className="text-blue-100 text-sm flex items-center gap-1">
+                  <HiOutlineStatusOnline /> Online Flights
+                </div>
                 <div className="absolute top-0 right-4 opacity-10">
-                  <TbClock className="text-[8rem]" />
+                  <HiOutlineStatusOnline className="text-[8rem]" />
                 </div>
               </div>
               <div className="bg-white/15 rounded-xl p-4 backdrop-blur-md relative overflow-hidden">
                 <div className="text-2xl font-bold">
                   {userData.landingCount}
                 </div>
-                <div className="text-blue-100 text-sm">Landings</div>
+                <div className="text-blue-100 text-sm flex items-center gap-1">
+                  <LuPlaneLanding /> Landings
+                </div>
                 <div className="absolute top-0 right-4 opacity-10">
                   <LuPlaneLanding className="text-[8rem]" />
                 </div>
               </div>
+              <div
+                className={`bg-white/15 rounded-xl p-4 backdrop-blur-md relative overflow-hidden`}
+              >
+                <div className="text-2xl font-bold">{userData.xp}</div>
+                <div className="text-blue-100 text-sm flex items-center gap-1">
+                  <PiShootingStarBold /> XP
+                </div>
+                <div className="absolute top-4 right-4 opacity-10">
+                  <PiShootingStarBold className="text-[6rem]" />
+                </div>
+              </div>
               <div className="bg-white/15 rounded-xl p-4 backdrop-blur-md relative overflow-hidden">
                 <div className="text-2xl font-bold">
-                  {userData.onlineFlights}
+                  {convertMinutesToHours(userData.flightTime)}
                 </div>
-                <div className="text-blue-100 text-sm">Online Flights</div>
+                <div className="text-blue-100 text-sm flex items-center gap-1">
+                  <TbClock /> Flight Time
+                </div>
                 <div className="absolute top-0 right-4 opacity-10">
-                  <HiOutlineStatusOnline className="text-[8rem]" />
+                  <TbClock className="text-[8rem]" />
+                </div>
+              </div>
+              <div className="bg-white/15 rounded-xl p-4 !pb-0 backdrop-blur-md relative overflow-hidden md:row-span-2">
+                {/* Small screens - simplified view */}
+                <div className="lg:hidden flex flex-col">
+                  <span className="text-2xl font-bold">
+                    {userData.atcOperations || 0}
+                  </span>
+                  <span className="text-sm flex items-center gap-1"><LuTowerControl/> {atcRank}</span>
+                </div>
+
+                {/* Large screens - detailed view */}
+                <div className="hidden lg:block">
+                  <div className="flex items-center gap-1">
+                    <LuTowerControl className="text-2xl" />
+                    <div className="text-light text-sm font-bold tracking-tight">
+                      ATC Summary
+                    </div>
+                  </div>
+
+                  <div className="h-full flex flex-col justify-between !py-2">
+                    <div className="flex flex-col">
+                      <span className="text-2xl font-bold">
+                        {userData.atcOperations || 0}
+                      </span>
+                      <span className="text-blue-100 text-sm flex items-center gap-1">
+                        <BsPersonWorkspace /> Operations
+                      </span>
+                    </div>
+
+                    <span className="self-end font-bold text-light lg:text-3xl tracking-tight mt-4">
+                      {atcRank}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="absolute lg:-bottom-4 top-0 lg:top-auto right-0 opacity-10">
+                  <LuTowerControl className="text-[8rem]" />
                 </div>
               </div>
               <div className="bg-white/15 rounded-xl p-4 backdrop-blur-md col-span-2 relative overflow-hidden">
                 <div className="text-2xl font-bold">
                   {userData.virtualOrganization}
                 </div>
-                <div className="text-blue-100 text-sm">
-                  Virtual Organization
+                <div className="text-blue-100 text-sm flex items-center gap-1">
+                  <MdOutlineAirlines /> Virtual Organization
                 </div>
                 <div className="absolute top-0 right-4 opacity-10">
                   <MdOutlineAirlines className="text-[8rem]" />
@@ -165,7 +228,7 @@ export default async function DashboardPage() {
           </Card>
 
           {/* Recent Flight */}
-          <Card className="lg:col-span-2 xl:col-span-2 !pb-0 bg-[#FEEBF6] text-dark backdrop-blur-xl">
+          <Card className="md:col-span-1 lg:col-span-2 !pb-0 bg-[#FEEBF6] text-dark backdrop-blur-xl">
             <CardHeader className="flex justify-between gap-2 items-center">
               <div>
                 <CardTitle className="text-2xl font-bold tracking-tight">
@@ -251,42 +314,42 @@ export default async function DashboardPage() {
           </Card>
 
           {/* Quick Actions */}
-        <Card className="md:col-span-2 bg-[#FCD8CD] text-dark backdrop-blur-xl">
+          <Card className=" bg-[#FCD8CD] text-dark backdrop-blur-xl">
             <CardHeader>
-              <CardTitle className="text-2xl font-bold tracking-tight">
-                Quick Actions
+              <CardTitle className="text-2xl font-bold tracking-tight flex items-center gap-2 text-light bg-amber-700 px-4 py-1 rounded-full justify-center">
+                <SlActionUndo className="text-2xl" /> Quick Actions
               </CardTitle>
-              <CardDescription className="text-gray-600">
+              <CardDescription className="text-gray-600 text-center">
                 Quick actions to help you get started.
               </CardDescription>
             </CardHeader>
 
             <CardContent>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-light">
+              <div className="grid grid-cols-2 gap-2 text-light">
                 <Link href="/dashboard/flights">
-                  <div className="bg-[#9dbe7f] hover:bg-[#B1D690]/80 rounded-xl p-4 text-center transition-all duration-200 cursor-pointer hover:scale-105">
-                    <TbPlaneInflight className="text-2xl mx-auto mb-2" />
+                  <div className="bg-[#9dbe7f] hover:bg-[#B1D690]/80 rounded-xl p-2 py-3 text-center transition-all duration-200 cursor-pointer hover:scale-105">
+                    <TbPlaneInflight className="text-2xl mx-auto mb-1" />
                     <div className="text-sm font-medium">View Flights</div>
                   </div>
                 </Link>
 
                 <Link href="/map">
-                  <div className="bg-red-400 hover:bg-red-400/80 rounded-xl p-4 text-center transition-all duration-200 cursor-pointer hover:scale-105">
-                    <PiMapPinBold className="text-2xl mx-auto mb-2" />
+                  <div className="bg-blue-400 hover:bg-blue-400/80 rounded-xl p-2 py-3 text-center transition-all duration-200 cursor-pointer hover:scale-105">
+                    <HiOutlineGlobeAsiaAustralia className="text-2xl mx-auto mb-1" />
                     <div className="text-sm font-medium">Live Map</div>
                   </div>
                 </Link>
 
                 <Link href="/dashboard/profile">
-                  <div className="bg-[#FFA24C] hover:bg-[#FFA24C]/80 rounded-xl p-4 text-center transition-all duration-200 cursor-pointer hover:scale-105">
-                    <FaUsers className="text-2xl mx-auto mb-2" />
+                  <div className="bg-[#FFA24C] hover:bg-[#FFA24C]/80 rounded-xl p-2 py-3 text-center transition-all duration-200 cursor-pointer hover:scale-105">
+                    <FaUsers className="text-2xl mx-auto mb-1" />
                     <div className="text-sm font-medium">Profile</div>
                   </div>
                 </Link>
 
                 <Link href="/directory">
-                  <div className="bg-[#FF77B7] hover:bg-[#FF77B7]/80 rounded-xl p-4 text-center transition-all duration-200 cursor-pointer hover:scale-105">
-                    <FaMapMarkerAlt className="text-2xl mx-auto mb-2" />
+                  <div className="bg-[#FF77B7] hover:bg-[#FF77B7]/80 rounded-xl p-2 py-3 text-center transition-all duration-200 cursor-pointer hover:scale-105">
+                    <MdOutlineLibraryBooks className="text-2xl mx-auto mb-1" />
                     <div className="text-sm font-medium">Directory</div>
                   </div>
                 </Link>
@@ -295,12 +358,10 @@ export default async function DashboardPage() {
           </Card>
 
           {/* Flight Arena Coming Soon */}
-          <Card className="bg-gradient-to-br from-gray-800 to-gray-900 text-white backdrop-blur-xl shadow-lg overflow-hidden">
-          
-            
+          <Card className="md:col-span-1 bg-gradient-to-br from-gray-800 to-gray-900 text-white backdrop-blur-xl shadow-lg overflow-hidden">
             {/* Background accent */}
             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-orange-400 via-pink-400 to-purple-400"></div>
-            
+
             <CardHeader className="">
               <div className="flex items-center gap-2">
                 <span className="text-lg">🏆</span>
@@ -317,38 +378,108 @@ export default async function DashboardPage() {
                     Coming in 2026
                   </span>
                 </div>
-                
+
                 <p className="text-gray-300 text-sm leading-relaxed">
-                  <strong className="text-white">Compete with pilots</strong> with gamified Infinite Flight Stats, earn badges, and climb the leaderboard.
+                  <strong className="text-white">Compete with pilots</strong>{" "}
+                  with gamified Infinite Flight Stats, earn badges, and climb
+                  the leaderboard.
                 </p>
-                
+
                 {/* Mini feature indicators */}
                 <div className="flex gap-1 mt-1">
                   <div className="w-2 h-2 bg-orange-400 rounded-full animate-pulse"></div>
-                  <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse" style={{animationDelay: '0.2s'}}></div>
-                  <div className="w-2 h-2 bg-pink-400 rounded-full animate-pulse" style={{animationDelay: '0.4s'}}></div>
+                  <div
+                    className="w-2 h-2 bg-purple-400 rounded-full animate-pulse"
+                    style={{ animationDelay: "0.2s" }}
+                  ></div>
+                  <div
+                    className="w-2 h-2 bg-pink-400 rounded-full animate-pulse"
+                    style={{ animationDelay: "0.4s" }}
+                  ></div>
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          <div className="bg-gradient-to-br from-orange-400 via-yellow-400 to-green-500 p-1 rounded-lg">
-            <Card className="bg-[url('/findthepilotimg.png')] bg-cover bg-top-left text-white rounded-lg !h-full px-1">
-              <CardHeader className="flex flex-col items-center gap-1 justify-center bg-black/35 backdrop-blur-sm py-1 rounded-full px-8">
-                <div className="text-2xl font-black tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-orange-300 via-yellow-300 to-green-400">
-                  Find The Pilot
+          <div className="md:col-span-1 relative group">
+            {/* Animated gradient border */}
+            <div className="absolute inset-0 bg-gradient-to-br from-orange-400 via-pink-400 to-green-500 rounded-lg blur-sm opacity-75 group-hover:opacity-100 transition-opacity duration-300 animate-pulse"></div>
+            <div className="absolute inset-0 bg-gradient-to-br from-orange-400 via-yellow-400 to-green-500 rounded-lg"></div>
+
+            <div className="p-1 h-full">
+              <Card className="relative bg-[url('/findthepilotimg.png')] bg-cover bg-top-left text-white rounded-lg !h-full overflow-hidden">
+                {/* Dark overlay with animated gradient */}
+                <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-purple-900/40 to-black/60"></div>
+
+                <div className="relative z-10 h-full flex flex-col justify-between">
+                  {/* Header section */}
+                  <div className="text-center mt-4">
+                    <div className="inline-flex flex-col items-center gap-2 bg-black/40 backdrop-blur-md py-3 px-6 rounded-2xl border border-white/20 shadow-2xl">
+                      <div className="text-3xl font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-yellow-300 via-orange-300 to-pink-300 drop-shadow-lg">
+                        Find The Pilot
+                      </div>
+                      <div className="text-gray-200 text-sm font-medium">
+                        A game for the analysts 🧐
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Button section */}
+                  <div className="flex justify-center pb-4 hover:scale-105">
+                    <Link href="/map/game" className="group/btn">
+                      <div className="relative">
+                        {/* Button glow effect */}
+                        <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full blur-md opacity-70 group-hover/btn:opacity-100 transition-opacity duration-300"></div>
+
+                        {/* Animated border */}
+                        <div className="relative p-0.5 bg-gradient-to-r from-orange-400 via-yellow-400 to-green-500 rounded-full animate-bounce">
+                          <Button className="relative bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white rounded-full !font-bold text-lg px-8 py-3 border-none tracking-tight shadow-xl transform transition-transform duration-200">
+                            <span className="flex items-center gap-2">
+                              Play Game
+                            </span>
+                          </Button>
+                        </div>
+                      </div>
+                    </Link>
+                  </div>
                 </div>
-                <div className="text-gray-200 text-sm">A game for the analysts 🧐</div>
-              </CardHeader>
-              <CardContent className="h-full flex justify-center items-end">
-                <Link href="/map/game" className="p-1 bg-gradient-to-br from-orange-400 via-yellow-400 to-green-500 rounded-full animate-bounce">
-                  <Button className="bg-blue-600 hover:bg-blue-700 text-white rounded-full !font-bold cursor-pointer text-xl border-none tracking-tight">
-                    Play Game
-                  </Button>
-                </Link>
-              </CardContent>
-            </Card>
-          </div>
+              </Card>
+            </div>
+                      </div>
+
+          {/* Useless Fact Card */}
+          <Card className="bg-gradient-to-br from-purple-500 to-pink-500 text-white backdrop-blur-xl relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-yellow-400 via-orange-400 to-red-400"></div>
+            
+            <CardHeader>
+              <div className="flex items-center gap-2">
+                <FaLightbulb className="text-2xl text-yellow-300" />
+                <CardTitle className="text-2xl font-bold tracking-tight">
+                 Useless Fact Thing
+                </CardTitle>
+              </div>
+              <CardDescription className="text-purple-100">
+                Because why not?
+              </CardDescription>
+            </CardHeader>
+
+            <CardContent>
+              <div className="bg-white/15 rounded-xl p-4 backdrop-blur-md relative overflow-hidden">
+                <p className="text-white text-lg leading-relaxed font-medium">
+                  {uselessFact?.text || "Did you know? The Boeing 747 has enough wiring to stretch from New York to Boston!"}
+                </p>
+
+                <span className="text-gray-300 text-sm mt-2">
+                  Source: <a href={uselessFact?.source_url || "No Clue"} className="underlinetext-gray-300 hover:text-gray-200 transition-colors">{uselessFact?.source || "No Clue"}</a>
+                </span>
+                
+                {/* Decorative elements */}
+                <div className="absolute top-2 right-2 opacity-20">
+                  <FaLightbulb className="text-6xl text-yellow-300" />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </div>
