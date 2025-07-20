@@ -306,8 +306,8 @@ export const RouteMap = ({ routes }: { routes: any[] }) => {
           "line-width": [
             "case",
             ["boolean", ["feature-state", "hover"], false],
-            5, // Width when hovered
-            3  // Default width
+            3, // Width when hovered (reduced from 5)
+            2  // Default width (reduced from 3)
           ],
           "line-opacity": [
             "case", 
@@ -325,7 +325,7 @@ export const RouteMap = ({ routes }: { routes: any[] }) => {
         source: "origin-markers",
         layout: {
           "icon-image": "takeoff-sprite",
-          "icon-size": 0.5, // Reduced from 0.8 to 0.5
+          "icon-size": 0.4, // Further reduced from 0.5 to 0.3
           "icon-allow-overlap": true,
           "icon-ignore-placement": true,
         },
@@ -338,7 +338,7 @@ export const RouteMap = ({ routes }: { routes: any[] }) => {
         source: "destination-markers",
         layout: {
           "icon-image": "landing-sprite",
-          "icon-size": 0.5, // Reduced from 0.8 to 0.5
+          "icon-size": 0.4, // Further reduced from 0.5 to 0.3
           "icon-allow-overlap": true,
           "icon-ignore-placement": true,
         },
