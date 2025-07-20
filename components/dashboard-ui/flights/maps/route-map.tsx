@@ -9,11 +9,13 @@ import Link from "next/link";
 import { TiZoomInOutline, TiZoomOutOutline } from "react-icons/ti";
 import { Button } from "@/components/ui/button";
 import { FaInfoCircle } from "react-icons/fa";
+import { FiMaximize2, FiMinimize2 } from "react-icons/fi";
 
 export const RouteMap = ({ routes }: { routes: any[] }) => {
   const [popupInfo, setPopupInfo] = useState<any>(null);
   const [aircraftData, setAircraftData] = useState<any>(null);
   const [loadingAircraft, setLoadingAircraft] = useState(false);
+  const [isFullScreen, setIsFullScreen] = useState(false);
   const mapRef = useRef<Map | null>(null);
 
   // Function to get route color based on flight time (IATA standards)
@@ -52,6 +54,26 @@ export const RouteMap = ({ routes }: { routes: any[] }) => {
       mapRef.current.zoomOut({ duration: 300 });
     }
   };
+
+  // Toggle fullscreen function
+  const toggleFullScreen = () => {
+    setIsFullScreen(!isFullScreen);
+    // Trigger map resize after state update and DOM changes
+    setTimeout(() => {
+      if (mapRef.current) {
+        // Force invalidate size and resize
+        mapRef.current.resize();
+        // Additional resize call to ensure proper fitting
+        requestAnimationFrame(() => {
+          if (mapRef.current) {
+            mapRef.current.resize();
+          }
+        });
+      }
+    }, 150);
+  };
+
+
 
   // Function to create origin and destination sprites (from FullScreenMap)
   const createRouteSprites = (map: Map) => {
@@ -431,6 +453,16 @@ export const RouteMap = ({ routes }: { routes: any[] }) => {
     };
   }, [routes]);
 
+  // Handle map resize when fullscreen state changes
+  useEffect(() => {
+    if (mapRef.current) {
+      const timer = setTimeout(() => {
+        mapRef.current?.resize();
+      }, 200);
+      return () => clearTimeout(timer);
+    }
+  }, [isFullScreen]);
+
   // Fetch aircraft data when popup info changes
   useEffect(() => {
     if (popupInfo?.aircraftId) {
@@ -464,7 +496,18 @@ export const RouteMap = ({ routes }: { routes: any[] }) => {
   };
 
   return (
-    <div style={{ position: "relative", width: "100%", height: "100%", borderRadius: "20px", overflow: "hidden" }}>
+    <div id="route-map-container" className={`
+      ${isFullScreen 
+        ? 'fixed inset-0 z-[9999] bg-white' 
+        : 'relative'
+      }
+    `} style={{ 
+      width: "100%",
+      height: isFullScreen ? "100vh" : "100%",
+      maxHeight: isFullScreen ? "100vh" : "600px",
+      borderRadius: isFullScreen ? "0" : "20px", 
+      overflow: "hidden" 
+    }}>
       <div id="map" style={{ width: "100%", height: "100%"}} />
       
       {/* Zoom Controls - Top Left */}
@@ -484,6 +527,14 @@ export const RouteMap = ({ routes }: { routes: any[] }) => {
                      flex items-center justify-center border border-gray-200"
         >
           <TiZoomOutOutline className="w-6 h-6 text-red-500" />
+        </button>
+        <button
+          onClick={toggleFullScreen}
+          className="w-10 h-10 bg-white/90 backdrop-blur-sm rounded-lg shadow-lg
+                     hover:bg-white transition-all duration-200
+                     flex items-center justify-center border border-gray-200"
+        >
+          {isFullScreen ? <FiMinimize2 /> : <FiMaximize2 />}
         </button>
       </div>
       
