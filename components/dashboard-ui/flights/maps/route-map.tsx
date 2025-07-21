@@ -8,8 +8,21 @@ import { X } from "lucide-react";
 import Link from "next/link";
 import { TiZoomInOutline, TiZoomOutOutline } from "react-icons/ti";
 import { Button } from "@/components/ui/button";
-import { FaInfoCircle } from "react-icons/fa";
+import { FaInfoCircle, FaRoute } from "react-icons/fa";
 import { FiMaximize2, FiMinimize2 } from "react-icons/fi";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableCaption } from "@/components/ui/table";
+import { convertMinutesToHours } from "@/lib/utils";
+import { LuNotebookTabs } from "react-icons/lu";
+
+
+let maintenanceMode = false;
 
 export const RouteMap = ({ routes }: { routes: any[] }) => {
   const [popupInfo, setPopupInfo] = useState<any>(null);
@@ -17,7 +30,7 @@ export const RouteMap = ({ routes }: { routes: any[] }) => {
   const [loadingAircraft, setLoadingAircraft] = useState(false);
   const [isFullScreen, setIsFullScreen] = useState(false);
   const mapRef = useRef<Map | null>(null);
-
+  
   // Function to get route color based on flight time (IATA standards)
   const getRouteColor = (totalTime: number) => {
     if (totalTime <= 180) { // ≤3 hours
@@ -536,6 +549,250 @@ export const RouteMap = ({ routes }: { routes: any[] }) => {
         >
           {isFullScreen ? <FiMinimize2 /> : <FiMaximize2 />}
         </button>
+      </div>
+
+      <div className="absolute bottom-4 right-4 z-[1000] flex flex-col space-y-2">
+      <Dialog>
+
+<DialogTrigger className="text-light !text-lg tracking-tight py-1 px-4 font-semibold bg-gray-700 rounded-full hover:bg-gray-800 transition-all duration-300 cursor-pointer self-start flex items-center gap-2">
+  <LuNotebookTabs className="w-4 h-4" />
+  View All Routes
+</DialogTrigger>
+
+<DialogContent className="min-h-[500px] max-h-[90svh] max-w-3xl overflow-y-auto bg-[#FFD6BA] !border-none z-[9999]">
+  <DialogHeader>
+    <DialogTitle className="text-xl font-bold">
+      All Flight Routes
+    </DialogTitle>
+    <p className="text-gray-500 text-sm">
+      Complete overview of your unique flight routes and
+      distances
+    </p>
+
+    {/* Legend */}
+    <div className="flex flex-col items-center gap-2 mt-4 p-3 bg-[#fbe4d4] rounded-lg">
+      <h3 className="text-lg font-bold tracking-tight text-orange-700 flex gap-2 items-center">
+        <FaRoute className="w-4 h-4" /> Route Types (IATA)
+      </h3>
+      <div className="flex justify-center items-center gap-6 font-medium">
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
+            <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+            <span className="text-xs text-gray-600">
+              Short (≤3h)
+            </span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+            <span className="text-xs text-gray-600">
+              Medium (3-6h)
+            </span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+            <span className="text-xs text-gray-600">
+              Long (6h+)
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </DialogHeader>
+
+  <div className="mt-4">
+    <Table>
+      <TableCaption>
+        Total of {routes.length} unique routes flown
+      </TableCaption>
+      <TableHeader>
+        <TableRow className="!rounded-lg border-b border-orange-300/50">
+          <TableHead className="w-[120px]">Origin</TableHead>
+          <TableHead className="w-[120px]">
+            Destination
+          </TableHead>
+          <TableHead className="text-center">Time</TableHead>
+          <TableHead className="text-right">Distance</TableHead>
+          <TableHead className="text-center w-[80px]">
+            Type
+          </TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {routes.map((route, index) => {
+          // Calculate route type based on time
+          const getRouteType = (totalTime: number) => {
+            if (totalTime <= 180)
+              return {
+                label: "Short Haul",
+                color: "bg-green-500",
+                dotColor: "bg-green-500",
+              };
+            if (totalTime <= 360 && totalTime > 180)
+              return {
+                label: "Medium Haul",
+                color: "bg-yellow-500",
+                dotColor: "bg-yellow-500",
+              };
+            return {
+              label: "Long Haul",
+              color: "bg-red-500",
+              dotColor: "bg-red-500",
+            };
+          };
+
+          const routeType = getRouteType(route.totalTime || 0);
+
+          return (
+            <TableRow
+              key={index}
+              className="hover:bg-[#fbe4d4] !rounded-lg border-b border-orange-300/50"
+            >
+              <TableCell className="font-mono font-medium text-blue-600">
+                {route.origin}
+              </TableCell>
+              <TableCell className="font-mono font-medium text-blue-600">
+                {route.destination}
+              </TableCell>
+              <TableCell className="text-center">
+                {route.totalTime ? (
+                  <div className="flex flex-col">
+                    <span className="font-medium">
+                      {convertMinutesToHours(route.totalTime)}
+                    </span>
+                  </div>
+                ) : (
+                  <span className="text-gray-400 italic">
+                    {maintenanceMode
+                      ? "Under Maintenance"
+                      : route.totalTime}
+                  </span>
+                )}
+              </TableCell>
+              <TableCell className="text-right">
+                {route.distance ? (
+                  <div className="flex flex-col">
+                    <span className="font-medium">
+                      {Math.round(
+                        route.distance
+                      ).toLocaleString()}{" "}
+                      nm
+                    </span>
+                    <span className="text-xs text-gray-500">
+                      {Math.round(
+                        route.distance * 1.852
+                      ).toLocaleString()}{" "}
+                      km
+                    </span>
+                  </div>
+                ) : (
+                  <span className="text-gray-400 italic">
+                    {maintenanceMode
+                      ? "Under Maintenance"
+                      : route.distance || "N/A"}
+                  </span>
+                )}
+              </TableCell>
+              <TableCell className="text-center">
+                {/* Colored Circle instead of text badge */}
+                <div className="flex justify-center">
+                  <div
+                    className={`w-4 h-4 ${routeType.dotColor} rounded-full`}
+                    title={routeType.label} // Tooltip on hover
+                  ></div>
+                </div>
+              </TableCell>
+            </TableRow>
+          );
+        })}
+      </TableBody>
+    </Table>
+
+    {/* Updated Summary Stats - using circles too */}
+    <div className="mt-6 p-4 bg-[#fbe4d4] rounded-lg">
+      <h4 className="font-semibold text-gray-900 mb-3">
+        Route Summary
+      </h4>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+        <div className="text-center">
+          <div className="text-xl font-bold text-blue-600">
+            {routes.length}
+          </div>
+          <div className="text-gray-600">Total Routes</div>
+        </div>
+        <div className="text-center">
+          <div className="flex items-center justify-center gap-2 mb-1">
+            <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+            <div className="text-xl font-bold text-green-600">
+              {
+                routes.filter(
+                  (r) => (r.totalTime || 0) <= 180
+                ).length
+              }
+            </div>
+          </div>
+          <div className="text-gray-600">Short Haul</div>
+        </div>
+        <div className="text-center">
+          <div className="flex items-center justify-center gap-2 mb-1">
+            <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+            <div className="text-xl font-bold text-yellow-600">
+              {
+                routes.filter(
+                  (r) =>
+                    (r.totalTime || 0) > 180 &&
+                    (r.totalTime || 0) <= 360
+                ).length
+              }
+            </div>
+          </div>
+          <div className="text-gray-600">Medium Haul</div>
+        </div>
+        <div className="text-center">
+          <div className="flex items-center justify-center gap-2 mb-1">
+            <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+            <div className="text-xl font-bold text-red-600">
+              {
+                routes.filter(
+                  (r) => (r.totalTime || 0) > 360
+                ).length
+              }
+            </div>
+          </div>
+          <div className="text-gray-600">Long Haul</div>
+        </div>
+      </div>
+
+      {/* Total Distance */}
+      <div className="mt-4 pt-4 border-t border-gray-200">
+        <div className="text-center">
+          <div className="text-2xl font-bold text-purple-600">
+            {routes
+              .reduce(
+                (total, route) => total + (route.distance || 0),
+                0
+              )
+              .toLocaleString()}{" "}
+            nm
+          </div>
+          <div className="text-gray-600">
+            Total Distance Covered
+          </div>
+          <div className="text-xs text-gray-500 mt-1">
+            {Math.round(
+              routes.reduce(
+                (total, route) => total + (route.distance || 0),
+                0
+              ) * 1.852
+            ).toLocaleString()}{" "}
+            km
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</DialogContent>
+</Dialog>
+
       </div>
       
       {/* Flight Route Information Popup */}

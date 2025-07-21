@@ -44,10 +44,10 @@ export function FlightTimeCategorizerBarChart({
       <CardHeader>
         <CardTitle className="text-2xl font-bold text-white flex items-center gap-3">
           <FaClock className="text-blue-400" />
-          Flight Time Distribution
+          Hourly Flight Time Distribution
         </CardTitle>
         <CardDescription className="text-gray-300">
-          Flights categorized by flight time duration
+          Flights categorized by flight time duration by each hour
         </CardDescription>
       </CardHeader>
       <CardContent className="overflow-x-auto p-2">

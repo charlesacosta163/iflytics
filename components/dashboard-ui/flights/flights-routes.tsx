@@ -13,7 +13,7 @@ import { GiPathDistance } from "react-icons/gi";
 import { RiCopilotFill, RiPinDistanceLine } from "react-icons/ri";
 
 import { getUser } from "@/lib/supabase/user-actions";
-import { customUserImages } from "@/lib/data";
+import { customUserImages, continentCodes } from "@/lib/data";
 
 import {
   Dialog,
@@ -46,11 +46,16 @@ import { Progress } from "@/components/ui/progress";
 import { FlightTimeCategorizerBarChart } from "../charts/flight-time-categorizer-barchart";
 import { RevalidateRoutesButton } from "@/components/revalidate-routes-btn";
 
+import { FlightHaulsPieChart } from "../charts/route-pies/flight-hauls-pie";
+import { FlightContinentsPieChart } from "../charts/route-pies/flight-continents-pie";
+import { FlightDomesticIntlPieChart } from "../charts/route-pies/flight-domestic-intl-pie";
+
 let maintenanceMode = false;
 
 const FlightsRoutes = async ({ flights }: { flights: Flight[] }) => {
   // console.log(`🔄 FlightsRoutes called at ${new Date().toISOString()}`); --> Debugging
 
+  // Based on THIS Data for user flights
   const validFlights = flights.filter((flight) => {
     return (
       flight.totalTime > 10 && flight.originAirport && flight.destinationAirport
@@ -80,30 +85,108 @@ const FlightsRoutes = async ({ flights }: { flights: Flight[] }) => {
   const routesWithDistances = await getAllFlightRoutes(flights, user.id);
   // const endTime = Date.now(); --> Debugging
 
-  const totalDomesticRoutes = routesWithDistances.filter(
-    (route) => route.originIsoCountry === route.destinationIsoCountry
-  ).length;
-  const totalInternationalRoutes = routesWithDistances.filter(
-    (route) => route.originIsoCountry !== route.destinationIsoCountry
-  ).length;
-
+  
   // console.log(`⏱️ Route calculation took ${endTime - startTime}ms`); --> Debugging
-
+  
   const uniqueRoutes = getUniqueRoutes(
     routesWithDistances.map((route) => ({
       ...route,
       originIsoCountry: route.originIsoCountry || "US",
       destinationIsoCountry: route.destinationIsoCountry || "US",
+      originContinent: route.originContinent || "NA",
+      destinationContinent: route.destinationContinent || "NA",
     }))
   );
+
+  // console.log(routesWithDistances[0])
+  
+  const totalDomesticRoutes = uniqueRoutes.filter(
+    (route) => route.originIsoCountry === route.destinationIsoCountry
+  ).length;
+  const totalInternationalRoutes = uniqueRoutes.filter(
+    (route) => route.originIsoCountry !== route.destinationIsoCountry
+  ).length;
 
   const { totalDistanceTraveled, longestRouteInfo } =
     await calculateTotalDistance(validFlights);
 
-  const top5Countries = getTop5Countries(uniqueRoutes);
+  // Use ALL Flights Data
+  const top5Countries = getTop5Countries(routesWithDistances);
 
   const flightTimeCategorizerData = getFlightTimeCategorizerData(validFlights);
 
+  function getFlightHaulCategorizerData () {
+    // Short Haul = <= 180
+    // Medium Haul = > 180 && <=360
+    // Long Haul = > 360
+
+    const shortHaul = flights.filter((flight) => flight.totalTime <= 180);
+    const mediumHaul = flights.filter((flight) => flight.totalTime > 180 && flight.totalTime <= 360);
+    const longHaul = flights.filter((flight) => flight.totalTime > 360);
+
+    return [{ 
+       label: "Short Haul",
+       value: shortHaul.length,
+       fill: "#77DD77"
+     }, {
+       label: "Medium Haul",
+       value: mediumHaul.length,
+       fill: "#FDFD96"
+     }, {
+       label: "Long Haul",
+       value: longHaul.length,
+       fill: "#FF6961"
+     }];
+  }
+
+  function getFlightContinentsFlewToData () {
+    // Sample Flight Route data:
+    // {
+    //   flightId: '931999ef-911f-4a42-8f65-f7ec060dd1b8',
+    //   created: '2025-07-21T02:41:02.727818Z',
+    //   aircraftId: '64568366-b72c-47bd-8bf6-6fdb81b683f9',
+    //   server: 'Expert',
+    //   origin: 'KLAX',
+    //   originIsoCountry: 'US',
+    //   originContinent: 'NA',
+    //   originCoordinates: { latitude: 33.942501, longitude: -118.407997 },
+    //   destination: 'PHKO',
+    //   destinationIsoCountry: 'US',
+    //   destinationContinent: 'NA',
+    //   destinationCoordinates: { latitude: 19.738783, longitude: -156.045603 },
+    //   distance: 2173,
+    //   totalTime: 295.57333
+    // }
+
+    const pastelFillColors = ["#87abff", "#ff8799", "#FDFD96", "#C3B1E1", "#77DD77", "#FFB347", "#FFD1DC", "#E4C692", "#92E1C0", "#D49CD0"]
+    // Return array of unique continents flown to [{label: "EU", amount: 10},...]
+    const continents = routesWithDistances.map((route) => route.destinationContinent).filter((continent) => continent !== undefined)
+    const uniqueContinents = [...new Set(continents)];
+    return uniqueContinents.map((continent) => ({
+      label: continent,
+      amount: continents.filter((c) => c === continent).length,
+      fill: pastelFillColors[uniqueContinents.indexOf(continent)],
+    }))
+  }
+
+  function getDomesticInternationalAmountsData () {
+    // Return [{label: "Domestic", amount: 10}, {label: "International", amount: 10}]
+
+    const domesticRoutes = routesWithDistances.filter((route) => route.originIsoCountry === route.destinationIsoCountry)
+    const internationalRoutes = routesWithDistances.filter((route) => route.originIsoCountry !== route.destinationIsoCountry)
+
+    return [{
+      label: "Domestic",
+      amount: domesticRoutes.length,
+      fill: "#BB9AB1"
+    }, {
+      label: "International",
+      amount: internationalRoutes.length,
+      fill: "#EECEB9"
+    }]
+  }
+
+  // console.log(getFlightContinentsFlewToData())
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
       <div className="lg:col-span-3 border-2 border-yellow-200 bg-yellow-50 p-6 rounded-lg flex items-center gap-2">
@@ -146,244 +229,6 @@ const FlightsRoutes = async ({ flights }: { flights: Flight[] }) => {
 
             <div className="bg-gray-200 rounded-xl p-4 text-gray-700 flex flex-col gap-2 items-center justify-center h-full">
               <FaRoute className="w-12 h-12" />
-              <Dialog>
-                <DialogTrigger className="text-light !text-xs py-1 px-2 font-medium bg-gray-700 rounded-full hover:bg-gray-800 transition-all duration-300 cursor-pointer self-start">
-                  View All
-                </DialogTrigger>
-
-                <DialogContent className="min-h-[500px] max-h-[90svh] max-w-3xl overflow-y-auto bg-[#FFD6BA] !border-none">
-                  <DialogHeader>
-                    <DialogTitle className="text-xl font-bold">
-                      All Flight Routes
-                    </DialogTitle>
-                    <p className="text-gray-500 text-sm">
-                      Complete overview of your unique flight routes and
-                      distances
-                    </p>
-
-                    {/* Legend */}
-                    <div className="flex flex-col items-center gap-2 mt-4 p-3 bg-[#fbe4d4] rounded-lg">
-                      <h3 className="text-lg font-bold tracking-tight text-orange-700 flex gap-2 items-center">
-                        <FaRoute className="w-4 h-4" /> Route Types (IATA)
-                      </h3>
-                      <div className="flex justify-center items-center gap-6 font-medium">
-                        <div className="flex items-center gap-4">
-                          <div className="flex items-center gap-2">
-                            <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                            <span className="text-xs text-gray-600">
-                              Short (≤3h)
-                            </span>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-                            <span className="text-xs text-gray-600">
-                              Medium (3-6h)
-                            </span>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                            <span className="text-xs text-gray-600">
-                              Long (6h+)
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </DialogHeader>
-
-                  <div className="mt-4">
-                    <Table>
-                      <TableCaption>
-                        Total of {uniqueRoutes.length} unique routes flown
-                      </TableCaption>
-                      <TableHeader>
-                        <TableRow className="!rounded-lg border-b border-orange-300/50">
-                          <TableHead className="w-[120px]">Origin</TableHead>
-                          <TableHead className="w-[120px]">
-                            Destination
-                          </TableHead>
-                          <TableHead className="text-center">Time</TableHead>
-                          <TableHead className="text-right">Distance</TableHead>
-                          <TableHead className="text-center w-[80px]">
-                            Type
-                          </TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {uniqueRoutes.map((route, index) => {
-                          // Calculate route type based on time
-                          const getRouteType = (totalTime: number) => {
-                            if (totalTime <= 180)
-                              return {
-                                label: "Short Haul",
-                                color: "bg-green-500",
-                                dotColor: "bg-green-500",
-                              };
-                            if (totalTime <= 360 && totalTime > 180)
-                              return {
-                                label: "Medium Haul",
-                                color: "bg-yellow-500",
-                                dotColor: "bg-yellow-500",
-                              };
-                            return {
-                              label: "Long Haul",
-                              color: "bg-red-500",
-                              dotColor: "bg-red-500",
-                            };
-                          };
-
-                          const routeType = getRouteType(route.totalTime || 0);
-
-                          return (
-                            <TableRow
-                              key={index}
-                              className="hover:bg-[#fbe4d4] !rounded-lg border-b border-orange-300/50"
-                            >
-                              <TableCell className="font-mono font-medium text-blue-600">
-                                {route.origin}
-                              </TableCell>
-                              <TableCell className="font-mono font-medium text-blue-600">
-                                {route.destination}
-                              </TableCell>
-                              <TableCell className="text-center">
-                                {route.totalTime ? (
-                                  <div className="flex flex-col">
-                                    <span className="font-medium">
-                                      {convertMinutesToHours(route.totalTime)}
-                                    </span>
-                                  </div>
-                                ) : (
-                                  <span className="text-gray-400 italic">
-                                    {maintenanceMode
-                                      ? "Under Maintenance"
-                                      : route.totalTime}
-                                  </span>
-                                )}
-                              </TableCell>
-                              <TableCell className="text-right">
-                                {route.distance ? (
-                                  <div className="flex flex-col">
-                                    <span className="font-medium">
-                                      {Math.round(
-                                        route.distance
-                                      ).toLocaleString()}{" "}
-                                      nm
-                                    </span>
-                                    <span className="text-xs text-gray-500">
-                                      {Math.round(
-                                        route.distance * 1.852
-                                      ).toLocaleString()}{" "}
-                                      km
-                                    </span>
-                                  </div>
-                                ) : (
-                                  <span className="text-gray-400 italic">
-                                    {maintenanceMode
-                                      ? "Under Maintenance"
-                                      : route.distance || "N/A"}
-                                  </span>
-                                )}
-                              </TableCell>
-                              <TableCell className="text-center">
-                                {/* Colored Circle instead of text badge */}
-                                <div className="flex justify-center">
-                                  <div
-                                    className={`w-4 h-4 ${routeType.dotColor} rounded-full`}
-                                    title={routeType.label} // Tooltip on hover
-                                  ></div>
-                                </div>
-                              </TableCell>
-                            </TableRow>
-                          );
-                        })}
-                      </TableBody>
-                    </Table>
-
-                    {/* Updated Summary Stats - using circles too */}
-                    <div className="mt-6 p-4 bg-[#fbe4d4] rounded-lg">
-                      <h4 className="font-semibold text-gray-900 mb-3">
-                        Route Summary
-                      </h4>
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                        <div className="text-center">
-                          <div className="text-xl font-bold text-blue-600">
-                            {uniqueRoutes.length}
-                          </div>
-                          <div className="text-gray-600">Total Routes</div>
-                        </div>
-                        <div className="text-center">
-                          <div className="flex items-center justify-center gap-2 mb-1">
-                            <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                            <div className="text-xl font-bold text-green-600">
-                              {
-                                uniqueRoutes.filter(
-                                  (r) => (r.totalTime || 0) <= 180
-                                ).length
-                              }
-                            </div>
-                          </div>
-                          <div className="text-gray-600">Short Haul</div>
-                        </div>
-                        <div className="text-center">
-                          <div className="flex items-center justify-center gap-2 mb-1">
-                            <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-                            <div className="text-xl font-bold text-yellow-600">
-                              {
-                                uniqueRoutes.filter(
-                                  (r) =>
-                                    (r.totalTime || 0) > 180 &&
-                                    (r.totalTime || 0) <= 360
-                                ).length
-                              }
-                            </div>
-                          </div>
-                          <div className="text-gray-600">Medium Haul</div>
-                        </div>
-                        <div className="text-center">
-                          <div className="flex items-center justify-center gap-2 mb-1">
-                            <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                            <div className="text-xl font-bold text-red-600">
-                              {
-                                uniqueRoutes.filter(
-                                  (r) => (r.totalTime || 0) > 360
-                                ).length
-                              }
-                            </div>
-                          </div>
-                          <div className="text-gray-600">Long Haul</div>
-                        </div>
-                      </div>
-
-                      {/* Total Distance */}
-                      <div className="mt-4 pt-4 border-t border-gray-200">
-                        <div className="text-center">
-                          <div className="text-2xl font-bold text-purple-600">
-                            {uniqueRoutes
-                              .reduce(
-                                (total, route) => total + (route.distance || 0),
-                                0
-                              )
-                              .toLocaleString()}{" "}
-                            nm
-                          </div>
-                          <div className="text-gray-600">
-                            Total Distance Covered
-                          </div>
-                          <div className="text-xs text-gray-500 mt-1">
-                            {Math.round(
-                              uniqueRoutes.reduce(
-                                (total, route) => total + (route.distance || 0),
-                                0
-                              ) * 1.852
-                            ).toLocaleString()}{" "}
-                            km
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </DialogContent>
-              </Dialog>
             </div>
           </div>
           <div className="flex justify-between items-center">
@@ -512,6 +357,31 @@ const FlightsRoutes = async ({ flights }: { flights: Flight[] }) => {
           </div>
         </CardContent>
       </Card>
+
+      <div className="lg:col-span-3 rounded-xl bg-transparent shadow-none">
+        <div>
+          <div className="text-xl font-bold text-gray-700">
+            Flight Route Metrics
+          </div>
+          <div className="text-sm text-gray-500">
+            Your flight route metrics by flight duration, continents, and domestic vs international flights
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+
+        <div className="bg-transparent w-full">
+          <FlightHaulsPieChart chartData={getFlightHaulCategorizerData()} />
+        </div>
+        <div className="bg-transparent w-full">
+          <FlightContinentsPieChart chartData={getFlightContinentsFlewToData()} />
+        </div>
+        <div className="bg-transparent w-full">
+          <FlightDomesticIntlPieChart chartData={getDomesticInternationalAmountsData()} />  
+        </div>
+
+        </div>
+      </div>
 
       <div className="lg:col-span-3">
         <FlightTimeCategorizerBarChart

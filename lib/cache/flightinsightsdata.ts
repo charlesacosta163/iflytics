@@ -300,15 +300,17 @@ function createUserFlightRoutesCache(userId: string) {
 
       const routesWithDistances = await Promise.all(
         routePairs.map(async (route) => {
-          const { distance, originCoordinates, destinationCoordinates, originIsoCountry, destinationIsoCountry } = calculateDistanceBetweenAirports(route.origin, route.destination);
+          const { distance, originCoordinates, destinationCoordinates, originIsoCountry, destinationIsoCountry, originContinent, destinationContinent } = calculateDistanceBetweenAirports(route.origin, route.destination);
           return {
             flightId: route.flightId,
             created: route.created,
             origin: route.origin || "????",
             originIsoCountry: originIsoCountry,
+            originContinent: originContinent,
             originCoordinates: originCoordinates,
             destination: route.destination || "????",
             destinationIsoCountry: destinationIsoCountry,
+            destinationContinent: destinationContinent,
             destinationCoordinates: destinationCoordinates,
             distance: distance,
             totalTime: route.totalTime,
@@ -375,12 +377,14 @@ export function getUniqueRoutes(routesWithDistances: {
   created: string;
   origin: string;
   originIsoCountry: string;
+  originContinent: string;
   originCoordinates: {
     latitude: number;
     longitude: number;
   };
   destination: string;
   destinationIsoCountry: string;
+  destinationContinent: string;
   destinationCoordinates: {
     latitude: number;
     longitude: number;
@@ -390,22 +394,36 @@ export function getUniqueRoutes(routesWithDistances: {
   aircraftId: string;
   server: string;
 }[]) {
-  return [...new Set(routesWithDistances.map(route => {
-    return {
-      flightId: route.flightId,
-      created: route.created,
-      aircraftId: route.aircraftId,
-      server: route.server,
-      origin: route.origin,
-      originIsoCountry: route.originIsoCountry,
-      originCoordinates: route.originCoordinates,
-      destination: route.destination,
-      destinationIsoCountry: route.destinationIsoCountry,
-      destinationCoordinates: route.destinationCoordinates,
-      distance: route.distance,
-      totalTime: route.totalTime,
+  // Create a Map to store unique route combinations
+  const uniqueRoutesMap = new Map<string, any>();
+  
+  routesWithDistances.forEach(route => {
+    // Create a unique key for each route combination (origin-destination)
+    const routeKey = `${route.origin}-${route.destination}`;
+    
+    // Only keep the first occurrence of each unique route
+    if (!uniqueRoutesMap.has(routeKey)) {
+      uniqueRoutesMap.set(routeKey, {
+        flightId: route.flightId,
+        created: route.created,
+        aircraftId: route.aircraftId,
+        server: route.server,
+        origin: route.origin,
+        originIsoCountry: route.originIsoCountry,
+        originContinent: route.originContinent,
+        originCoordinates: route.originCoordinates,
+        destination: route.destination,
+        destinationIsoCountry: route.destinationIsoCountry,
+        destinationContinent: route.destinationContinent,
+        destinationCoordinates: route.destinationCoordinates,
+        distance: route.distance,
+        totalTime: route.totalTime,
+      });
     }
-  }))].filter(route => route.origin !== route.destination);
+  });
+  
+  // Convert Map values to array and filter out same origin-destination routes
+  return Array.from(uniqueRoutesMap.values()).filter(route => route.origin !== route.destination);
 }
 
 export async function calculateTotalDistance(validFlights: Flight[]) {
@@ -492,8 +510,8 @@ export function calculateDistanceBetweenAirports(
       };
     }
 
-    const { latitude: originLatitude, longitude: originLongitude, country: originIsoCountry } = originData;
-    const { latitude: destinationLatitude, longitude: destinationLongitude, country: destinationIsoCountry } = destinationData;
+    const { latitude: originLatitude, longitude: originLongitude, country: originIsoCountry, continent: originContinent } = originData;
+    const { latitude: destinationLatitude, longitude: destinationLongitude, country: destinationIsoCountry, continent: destinationContinent } = destinationData;
 
     // In Nautical Miles
     const R = 3959; // Miles
@@ -524,6 +542,8 @@ export function calculateDistanceBetweenAirports(
       },
       originIsoCountry: originIsoCountry,
       destinationIsoCountry: destinationIsoCountry,
+      originContinent: originContinent,
+      destinationContinent: destinationContinent,
     };
   } catch (error) {
     return {
@@ -531,7 +551,9 @@ export function calculateDistanceBetweenAirports(
       originCoordinates: { latitude: 0, longitude: 0 },
       destinationCoordinates: { latitude: 0, longitude: 0 },
       originIsoCountry: 'US',
-      destinationIsoCountry: 'US'
+      destinationIsoCountry: 'US',
+      originContinent: 'NA',
+      destinationContinent: 'NA'
     };
   }
 }
