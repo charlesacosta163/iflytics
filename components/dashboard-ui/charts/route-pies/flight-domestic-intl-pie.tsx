@@ -45,7 +45,7 @@ export function FlightDomesticIntlPieChart({ chartData }: {
 
   return (
     <Card className="flex flex-col shadow-none bg-transparent">
-      <CardHeader className="items-center pb-0 bg-amber-500 text-light py-4 rounded-xl">
+      <CardHeader className="items-center pb-0 bg-[#BB9AB1] text-light py-4 rounded-xl">
         <CardTitle className="text-2xl font-bold tracking-tight flex items-center gap-2"><LuEarth className="text-2xl" /> Flight Types</CardTitle>
         <CardDescription className="text-gray-200">Domestic vs International flights</CardDescription>
       </CardHeader>
@@ -95,7 +95,7 @@ export function FlightDomesticIntlPieChart({ chartData }: {
                           y={(viewBox.cy || 0) + 24}
                           className="fill-muted-foreground"
                         >
-                          Total Flights
+                          Valid Flights
                         </tspan>
                       </text>
                     )
@@ -122,7 +122,7 @@ export function FlightDomesticIntlPieChart({ chartData }: {
         </div>
       </CardContent>
       <CardFooter className="flex-col gap-2 text-sm">
-        <div className="flex items-center gap-2 leading-none font-medium px-4 py-1 rounded-full bg-amber-500 text-light">
+        <div className="flex items-center gap-2 leading-none font-medium px-4 py-1 rounded-full bg-[#BB9AB1] text-light">
           Flight destination analysis <Plane className="h-4 w-4" />
         </div>
       </CardFooter>

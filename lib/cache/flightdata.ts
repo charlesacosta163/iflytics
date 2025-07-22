@@ -1,7 +1,7 @@
 
 
 // Convert to use Next.js built-in fetch caching
-export const getAggregatedFlights = async (ifcUserId: string) => {
+export const getAggregatedFlights = async (ifcUserId: string, maxPages: number = 51) => {
     let allFlights = [];
     let page = 1;
     let hasMore = true;
@@ -32,7 +32,8 @@ export const getAggregatedFlights = async (ifcUserId: string) => {
       } else {
         hasMore = false
       }
-      if (page === 51) // Fetch only 50 pages per performance
+      // Use the passed maxPages parameter instead of hardcoded 51
+      if (page === maxPages + 1) // +1 because we increment page after processing
         break
     }
 
@@ -75,8 +76,17 @@ export const getAircraftCached = async (aircraftId: string) => {
   }
 };
 
+// Modified getFlightsTimeFrame to determine appropriate page limit
 export async function getFlightsTimeFrame(ifcUserId: string, days: number, flightsFrame?: number) {
-    const flights = await getAggregatedFlights(ifcUserId)
+    // Determine how many pages to fetch based on requested flights
+    let maxPages = 51; // default
+    
+    if (flightsFrame && flightsFrame >= 800) {
+        maxPages = 81; // For 800+ flights
+    }
+    // else keep default 51 for all other cases
+
+    const flights = await getAggregatedFlights(ifcUserId, maxPages)
 
     // If flightsFrame is provided, prioritize it over days
     if (flightsFrame) {

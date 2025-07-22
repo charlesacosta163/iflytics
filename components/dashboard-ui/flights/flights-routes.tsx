@@ -52,18 +52,17 @@ import { FlightDomesticIntlPieChart } from "../charts/route-pies/flight-domestic
 
 let maintenanceMode = false;
 
-const FlightsRoutes = async ({ flights }: { flights: Flight[] }) => {
+const FlightsRoutes = async ({ flights, user }: { flights: Flight[], user: any}) => {
   // console.log(`🔄 FlightsRoutes called at ${new Date().toISOString()}`); --> Debugging
 
   // Based on THIS Data for user flights
+  // Criteria: Flight has a totalTime > 10, originAirport, destinationAirport must be non-empty
   const validFlights = flights.filter((flight) => {
     return (
       flight.totalTime > 10 && flight.originAirport && flight.destinationAirport
     );
   });
 
-  // Get the user ID for the cache key
-  const user = await getUser();
   const userMetadata = user.user_metadata;
 
   const shortenNumber = (number: number) => {
@@ -82,7 +81,7 @@ const FlightsRoutes = async ({ flights }: { flights: Flight[] }) => {
   // Get the flight routes with distances with the user ID for the cache key
 
   // const startTime = Date.now(); --> Debugging
-  const routesWithDistances = await getAllFlightRoutes(flights, user.id);
+  const routesWithDistances = await getAllFlightRoutes(validFlights, user.id);
   // const endTime = Date.now(); --> Debugging
 
   
@@ -120,9 +119,9 @@ const FlightsRoutes = async ({ flights }: { flights: Flight[] }) => {
     // Medium Haul = > 180 && <=360
     // Long Haul = > 360
 
-    const shortHaul = flights.filter((flight) => flight.totalTime <= 180);
-    const mediumHaul = flights.filter((flight) => flight.totalTime > 180 && flight.totalTime <= 360);
-    const longHaul = flights.filter((flight) => flight.totalTime > 360);
+    const shortHaul = validFlights.filter((flight) => flight.totalTime <= 180);
+    const mediumHaul = validFlights.filter((flight) => flight.totalTime > 180 && flight.totalTime <= 360);
+    const longHaul = validFlights.filter((flight) => flight.totalTime > 360);
 
     return [{ 
        label: "Short Haul",

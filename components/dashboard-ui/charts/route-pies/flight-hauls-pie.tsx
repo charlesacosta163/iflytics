@@ -97,7 +97,7 @@ export function FlightHaulsPieChart({ chartData }: { chartData: { label: string,
                           y={(viewBox.cy || 0) + 24}
                           className="fill-muted-foreground"
                         >
-                          Total Flights
+                          Valid Flights
                         </tspan>
                       </text>
                     )

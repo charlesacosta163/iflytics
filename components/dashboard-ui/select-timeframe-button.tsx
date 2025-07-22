@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react'
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select'
 import { useRouter, useSearchParams, usePathname } from 'next/navigation'
 import { FaStar } from 'react-icons/fa6'
+import { IoWarningOutline } from 'react-icons/io5'
 
 const SelectTimeframeButton = () => {
   const router = useRouter();
@@ -44,6 +45,7 @@ const SelectTimeframeButton = () => {
             <SelectItem value="flight-100">Last 100 Flights</SelectItem>
             <SelectItem value="flight-250">Last 250 Flights</SelectItem>
             <SelectItem value="flight-500">Last 500 Flights</SelectItem>
+            <SelectItem value="flight-800" className="flex items-center gap-1">Last 800 Flights <IoWarningOutline className="text-yellow-500" /></SelectItem>
             
         </SelectContent>
     </Select>
