@@ -59,7 +59,7 @@ const FlightsRoutes = async ({ flights, user }: { flights: Flight[], user: any})
   // Criteria: Flight has a totalTime > 10, originAirport, destinationAirport must be non-empty
   const validFlights = flights.filter((flight) => {
     return (
-      flight.totalTime > 10 && flight.originAirport && flight.destinationAirport
+      flight.totalTime > 5 && flight.originAirport && flight.destinationAirport
     );
   });
 

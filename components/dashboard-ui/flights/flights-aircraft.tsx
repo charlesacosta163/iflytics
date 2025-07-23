@@ -72,7 +72,7 @@ const FlightsAircraft = async ({ flights, user }: { flights: Flight[], user: any
   // Based on THIS Data for user flights
   const validFlights = flights.filter((flight) => {
     return (
-      flight.totalTime > 10 && flight.originAirport && flight.destinationAirport
+      flight.totalTime > 5 && flight.originAirport && flight.destinationAirport
     );
   });
 
