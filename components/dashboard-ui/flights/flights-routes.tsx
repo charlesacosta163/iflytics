@@ -188,9 +188,9 @@ const FlightsRoutes = async ({ flights, user }: { flights: Flight[], user: any})
   // console.log(getFlightContinentsFlewToData())
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-      <div className="lg:col-span-3 border-2 border-yellow-200 bg-yellow-50 p-6 rounded-lg flex items-center gap-2">
+      <div className="lg:col-span-3 border-2 border-yellow-200 dark:border-yellow-700 bg-yellow-50 dark:bg-yellow-900/50 p-6 rounded-lg flex items-center gap-2">
         <VscCopilotWarning className="w-6 h-6 text-yellow-500" />
-        <p className="text-sm sm:text-lg font-medium text-yellow-700">
+        <p className="text-sm sm:text-lg font-medium dark:text-yellow-300 text-yellow-700">
           Note: The route analysis and summary stats are a{" "}
           <b>premium feature</b>. Currently free to use during development/early
           alpha
@@ -198,7 +198,7 @@ const FlightsRoutes = async ({ flights, user }: { flights: Flight[], user: any})
       </div>
       <RevalidateRoutesButton userId={user.id} />
 
-      <div className="grid grid-cols-1 lg:col-span-3 bg-white rounded-xl  p-4">
+      <div className="grid grid-cols-1 lg:col-span-3 bg-white dark:bg-gray-800 rounded-xl  p-4">
         <section className="grid grid-cols-1 lg:grid-cols-[1fr_2fr_2fr_2fr] gap-4">
           <div className="border bg-gray-700 rounded-xl p-4 text-white flex flex-col gap-2 items-center justify-center h-full">
             {
@@ -214,19 +214,19 @@ const FlightsRoutes = async ({ flights, user }: { flights: Flight[], user: any})
           <div className="flex justify-between items-center">
             <div className="flex flex-col gap-1">
               <h2 className="text-4xl font-bold tracking-tight">
-                {uniqueRoutes.length} <span className="text-sm text-gray-500">Unique Routes</span>
+                {uniqueRoutes.length} <span className="text-sm dark:text-gray-300 text-gray-500">Unique Routes</span>
               </h2>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm dark:text-gray-300 text-gray-500">
                 <b className="text-lg font-bold">{totalDomesticRoutes}</b>{" "}
                 Domestic
               </p>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm dark:text-gray-300 text-gray-500">
                 <b className="text-lg font-bold">{totalInternationalRoutes}</b>{" "}
                 International
               </p>
             </div>
 
-            <div className="bg-gray-200 rounded-xl p-4 text-gray-700 flex flex-col gap-2 items-center justify-center h-full">
+            <div className="bg-gray-200 dark:bg-gray-700 dark:text-light rounded-xl p-4 text-gray-700 flex flex-col gap-2 items-center justify-center h-full">
               <FaRoute className="w-12 h-12" />
             </div>
           </div>
@@ -234,29 +234,29 @@ const FlightsRoutes = async ({ flights, user }: { flights: Flight[], user: any})
             <div className="flex flex-col gap-1">
               <h2 className="text-4xl font-bold tracking-tight">{maintenanceMode
                   ? "Under Maintenance"
-                  : shortenNumber(totalDistanceTraveled)} <span className="text-sm text-gray-500">Nautical Miles</span></h2>
-              <p className="text-sm text-gray-500"><b className="text-lg font-bold">{shortenNumber(totalDistanceTraveled * 1.1508)}</b> Miles</p>
-              <p className="text-sm text-gray-500"><b className="text-lg font-bold">{shortenNumber(totalDistanceTraveled * 1.852)}</b> Kilometers</p>
+                  : shortenNumber(totalDistanceTraveled)} <span className="text-sm dark:text-gray-300 text-gray-500">Nautical Miles</span></h2>
+              <p className="text-sm dark:text-gray-300 text-gray-500"><b className="text-lg font-bold">{shortenNumber(totalDistanceTraveled * 1.1508)}</b> Miles</p>
+              <p className="text-sm dark:text-gray-300 text-gray-500"><b className="text-lg font-bold">{shortenNumber(totalDistanceTraveled * 1.852)}</b> Kilometers</p>
             </div>
 
-            <div className="bg-gray-200 rounded-xl p-4 text-gray-700 flex flex-col gap-2 items-center justify-center h-full">
+            <div className="bg-gray-200 dark:bg-gray-700 dark:text-light rounded-xl p-4 text-gray-700 flex flex-col gap-2 items-center justify-center h-full">
               <GiPathDistance className="w-12 h-12" />
             </div>
           </div>
 
           <div className="flex gap-4 flex-col">
-            <div className="bg-gray-200 rounded-xl px-4 py-2 text-gray-700 flex gap-4 items-center justify-center h-full">
+            <div className="bg-gray-200 dark:bg-gray-700 dark:text-light rounded-xl px-4 py-2 text-gray-700 flex gap-4 items-center justify-center h-full">
               {/* Average Route Length */}
-              <span className="text-sm text-gray-500">Average Route Length</span>
-              <div className="text-xs text-gray-500 font-medium flex flex-col flex-1 text-right"><b className="text-2xl font-bold">{Math.round((totalDistanceTraveled / uniqueRoutes.length) || 0) }</b> Nautical Miles</div>
+              <span className="text-sm dark:text-gray-300 text-gray-500">Average Route Length</span>
+              <div className="text-xs dark:text-gray-300 text-gray-500 font-medium flex flex-col flex-1 text-right"><b className="text-2xl font-bold">{Math.round((totalDistanceTraveled / uniqueRoutes.length) || 0) }</b> Nautical Miles</div>
         
             </div>
-            <div className="bg-gray-200 rounded-xl px-4 py-2 text-gray-700 flex gap-4 items-center justify-center h-full">
+            <div className="bg-gray-200 dark:bg-gray-700 dark:text-light rounded-xl px-4 py-2 text-gray-700 flex gap-4 items-center justify-center h-full">
               {/* Longest Route */}
-              <span className="text-sm text-gray-500">Longest Route</span>
+              <span className="text-sm dark:text-gray-300 text-gray-500">Longest Route</span>
               <div className="flex flex-col gap-1 flex-1 text-right">
                 <div><b>{longestRouteInfo.origin || "N/A"}</b> → <b>{longestRouteInfo.destination || "N/A"}</b></div>
-                <div className="text-xs text-gray-500 font-medium"><b>{longestRouteInfo.distance || 0}</b> Nm</div>
+                <div className="text-xs dark:text-gray-300 text-gray-500 font-medium"><b>{longestRouteInfo.distance || 0}</b> Nm</div>
               </div>
             </div>
           </div>
@@ -271,7 +271,7 @@ const FlightsRoutes = async ({ flights, user }: { flights: Flight[], user: any})
       </div>
 
       {/* Top 5 Countries List */}
-      <Card className="bg-gradient-to-br from-gray-700 to-gray-800 rounded-xl shadow-sm border border-gray-200">
+      <Card className="bg-gradient-to-br from-gray-700 to-gray-800 rounded-xl shadow-sm">
         <CardHeader>
           <CardTitle className="text-xl font-bold text-light">
             Top 5 Countries
@@ -359,10 +359,10 @@ const FlightsRoutes = async ({ flights, user }: { flights: Flight[], user: any})
 
       <div className="lg:col-span-3 rounded-xl bg-transparent shadow-none">
         <div>
-          <div className="text-xl font-bold text-gray-700">
+          <div className="text-xl font-bold dark:text-light text-gray-700">
             Flight Route Metrics
           </div>
-          <div className="text-sm text-gray-500">
+          <div className="text-sm dark:text-gray-300 text-gray-500">
             Your flight route metrics by flight duration, continents, and domestic vs international flights
           </div>
         </div>

@@ -49,7 +49,7 @@ const InfoCard = ({
   };
 
   return (
-    <div className="bg-[#FFD6BA] rounded-xl p-6 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+    <div className="dark:bg-gray dark:text-light bg-[#FFD6BA] rounded-xl p-6 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
       <div className="flex items-center justify-between">
         <div className="flex-1">
           <div className={`inline-flex p-3 rounded-lg bg-gradient-to-r ${colorClasses[color].split(' ').slice(0, 2).join(' ')} mb-4`}>
@@ -57,9 +57,9 @@ const InfoCard = ({
               {icon}
             </div>
           </div>
-          <h3 className="text-sm font-semibold text-gray-600 uppercase tracking-wide">{title}</h3>
-          <p className="text-3xl font-bold text-gray-800 mt-1">{value}</p>
-          {subtitle && <p className="text-xs text-gray-500 mt-1">{subtitle}</p>}
+          <h3 className="text-sm font-semibold dark:text-gray-300 text-gray-600 uppercase tracking-wide">{title}</h3>
+          <p className="text-3xl font-bold dark:text-gray-300 text-gray-800 mt-1">{value}</p>
+          {subtitle && <p className="text-xs dark:text-gray-300 text-gray-500 mt-1">{subtitle}</p>}
         </div>
       </div>
     </div>
@@ -88,7 +88,7 @@ const FlightsOverview = ({
   return (
     <>
       {/* Quick Stats Grid */}
-      <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <section className="grid grid-cols-2 lg:grid-cols-4 gap-6">
         <InfoCard
           title="Total Flights"
           value={numberWithCommas(flightOverviewStats.totalFlights)}
@@ -123,35 +123,35 @@ const FlightsOverview = ({
       <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
         {/* Flight Averages */}
-        <Card className="lg:col-span-1 bg-blue-100 !shadow-none">
+        <Card className="lg:col-span-1 bg-blue-100 dark:bg-blue-900/20 !shadow-none border border-blue-200 dark:border-blue-800/30">
           <CardHeader className="pb-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-blue-500 rounded-lg">
+              <div className="p-2 bg-blue-500 dark:bg-blue-600 rounded-lg">
                 <BiTrendingUp className="text-white text-xl" />
               </div>
               <div>
-                <CardTitle className="text-blue-900">Flight Averages</CardTitle>
-                <CardDescription className="text-blue-700">Performance metrics for last {timeframe.startsWith("flight-") ? timeframe.split("-")[1] : timeframe} {timeframe.startsWith("flight-") || ["10", "50", "100", "250", "500"].includes(timeframe) ? "flights" : "days"}</CardDescription>
+                <CardTitle className="text-blue-900 dark:text-blue-100">Flight Averages</CardTitle>
+                <CardDescription className="text-blue-700 dark:text-blue-300">Performance metrics for last {timeframe.startsWith("flight-") ? timeframe.split("-")[1] : timeframe} {timeframe.startsWith("flight-") || ["10", "50", "100", "250", "500"].includes(timeframe) ? "flights" : "days"}</CardDescription>
               </div>
             </div>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
-              <div className="bg-white p-4 rounded-lg ">
-                <p className="text-sm font-medium text-gray-600">Avg Flight Time</p>
-                <p className="text-2xl font-bold text-blue-600">{convertMinutesToHours(flightAverages.avgFlightTime)}</p>
+              <div className="bg-white dark:bg-gray-800/50 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Avg Flight Time</p>
+                <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">{convertMinutesToHours(flightAverages.avgFlightTime)}</p>
               </div>
-              <div className="bg-white p-4 rounded-lg ">
-                <p className="text-sm font-medium text-gray-600">Landings/Flight</p>
-                <p className="text-2xl font-bold text-green-600">{Math.round(flightAverages.avgLandingsPerFlight)}</p>
+              <div className="bg-white dark:bg-gray-800/50 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Landings/Flight</p>
+                <p className="text-2xl font-bold text-green-600 dark:text-green-400">{Math.round(flightAverages.avgLandingsPerFlight)}</p>
               </div>
-              <div className="bg-white p-4 rounded-lg ">
-                <p className="text-sm font-medium text-gray-600">Avg XP/Flight</p>
-                <p className="text-2xl font-bold text-purple-600">{flightAverages.avgXpPerFlight}</p>
+              <div className="bg-white dark:bg-gray-800/50 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Avg XP/Flight</p>
+                <p className="text-2xl font-bold text-purple-600 dark:text-purple-400">{flightAverages.avgXpPerFlight}</p>
               </div>
-              <div className="bg-white p-4 rounded-lg ">
-                <p className="text-sm font-medium text-gray-600">XP/Landing</p>
-                <p className="text-2xl font-bold text-orange-600">{flightAverages.avgXpPerLanding}</p>
+              <div className="bg-white dark:bg-gray-800/50 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">XP/Landing</p>
+                <p className="text-2xl font-bold text-orange-600 dark:text-orange-400">{flightAverages.avgXpPerLanding}</p>
               </div>
             </div>
           </CardContent>
@@ -159,55 +159,55 @@ const FlightsOverview = ({
 
         {/* Airport Stats */}
         <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
-          <Card className="bg-gradient-to-br bg-[#FFDCDC] !shadow-none">
+          <Card className="bg-[#FFDCDC] dark:bg-red-900/20 !shadow-none border border-red-200 dark:border-red-800/30">
             <CardHeader className="pb-4">
               <div className="flex items-center gap-3">
-                <div className="p-2 bg-red-500 rounded-lg">
+                <div className="p-2 bg-red-500 dark:bg-red-600 rounded-lg">
                   <FaMapMarkerAlt className="text-white text-lg" />
                 </div>
                 <div>
-                  <CardTitle className="text-red-900">Top Origin</CardTitle>
-                  <CardDescription className="text-red-700">Most departed from</CardDescription>
+                  <CardTitle className="text-red-900 dark:text-red-100">Top Origin</CardTitle>
+                  <CardDescription className="text-red-700 dark:text-red-300">Most departed from</CardDescription>
                 </div>
               </div>
             </CardHeader>
 
             <CardContent className="h-full flex items-end justify-start">
               <div className="flex flex-col gap-2">
-                <p className="text-7xl font-black text-red-800">
+                <p className="text-7xl font-black text-red-800 dark:text-red-200">
                   {mostVisitedOriginAndDestinationAirports.topOrigin || "N/A"}
                 </p>
-                <span className="text-sm text-red-700 font-medium flex items-center gap-2">
+                <span className="text-sm text-red-700 dark:text-red-300 font-medium flex items-center gap-2">
                   {mostVisitedOriginAndDestinationAirports.originAirportInfo?.name}, &nbsp;
                   {isoCountryCodes.find((code: any) => code.isoCode === mostVisitedOriginAndDestinationAirports.originAirportInfo?.country)?.key}
                 </span>
-                <span className="text-sm text-white font-medium bg-red-500 px-2 py-1 rounded-md self-start">Departed <b>{mostVisitedOriginAndDestinationAirports.originCount}</b> times</span>
+                <span className="text-sm text-white font-medium bg-red-500 dark:bg-red-600 px-2 py-1 rounded-md self-start">Departed <b>{mostVisitedOriginAndDestinationAirports.originCount}</b> times</span>
               </div>
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br bg-[#FFE8CD] !shadow-none">
+          <Card className="bg-[#FFE8CD] dark:bg-orange-900/20 !shadow-none border border-orange-200 dark:border-orange-800/30">
             <CardHeader className="pb-4">
               <div className="flex items-center gap-3">
-                <div className="p-2 bg-orange-500 rounded-lg">
+                <div className="p-2 bg-orange-500 dark:bg-orange-600 rounded-lg">
                   <FaMapMarkerAlt className="text-white text-lg" />
                 </div>
                 <div>
-                  <CardTitle className="text-orange-900">Top Destination</CardTitle>
-                  <CardDescription className="text-orange-700">Most arrived at</CardDescription>
+                  <CardTitle className="text-orange-900 dark:text-orange-100">Top Destination</CardTitle>
+                  <CardDescription className="text-orange-700 dark:text-orange-300">Most arrived at</CardDescription>
                 </div>
               </div>
             </CardHeader>
             <CardContent className="h-full flex items-end justify-start">
               <div className="flex flex-col gap-2">
-                <p className="text-7xl font-black text-orange-800">
+                <p className="text-7xl font-black text-orange-800 dark:text-orange-200">
                   <b>{mostVisitedOriginAndDestinationAirports.topDestination || "N/A"}</b>
                 </p>
-                <span className="text-sm text-orange-700 font-medium flex items-center gap-2">
+                <span className="text-sm text-orange-700 dark:text-orange-300 font-medium flex items-center gap-2">
                   {mostVisitedOriginAndDestinationAirports.destinationAirportInfo?.name}, &nbsp;
                   {isoCountryCodes.find((code: any) => code.isoCode === mostVisitedOriginAndDestinationAirports.destinationAirportInfo?.country)?.key}
                 </span>
-                <span className="text-sm text-white font-medium bg-orange-500 px-2 py-1 rounded-md self-start">Arrived <b>{mostVisitedOriginAndDestinationAirports.destinationCount}</b> times</span>
+                <span className="text-sm text-white font-medium bg-orange-500 dark:bg-orange-600 px-2 py-1 rounded-md self-start">Arrived <b>{mostVisitedOriginAndDestinationAirports.destinationCount}</b> times</span>
               </div>
             </CardContent>
           </Card>

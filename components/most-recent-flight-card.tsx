@@ -6,7 +6,7 @@ import { formatDate } from '@/lib/utils';
 
 const MostRecentFlightCard = ({flight}: {flight: any}) => {
   return (
-    <Card className="self-center md:self-start flex max-w-[400px] w-full rounded-[25px] text-gray shadow-none bg-gray-50">
+    <Card className="self-center md:self-start flex max-w-[400px] w-full rounded-[25px] text-gray shadow-none bg-gray-50 dark:bg-gray-700/50 dark:text-light">
     <CardHeader className="text-xl font-bold flex items-center justify-between gap-2">
         <div className="flex items-center gap-2">
             <TbPlaneInflight className="text-2xl" />

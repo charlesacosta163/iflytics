@@ -13,6 +13,7 @@ import { LuGoal } from "react-icons/lu";
 import Link from "next/link";
 import Image from "next/image";
 import iflyticsLogo from "@/public/infinilyticslogo.svg";
+import iflyticsLogoLight from "@/public/iflyticslight.svg";
 import { BsIncognito } from "react-icons/bs";
 import { LiaGlobeAmericasSolid } from "react-icons/lia";
 import { useTheme } from "next-themes";
@@ -26,7 +27,7 @@ const Navbar = () => {
   return (
     <div className="relative">
       {/* Main Navbar */}
-      <div className="flex justify-between items-center px-4 py-2 sticky top-0 bg-[#FAF0E6] z-50 shadow-lg rounded-b-lg">
+      <div className="flex justify-between items-center px-4 py-2 sticky top-0 bg-[#FAF0E6] dark:bg-gray-900 z-50 shadow-lg rounded-b-lg">
         <div className="flex items-center gap-3">
           {/* Animated Hamburger Button */}
           <button
@@ -57,9 +58,18 @@ const Navbar = () => {
               href="/dashboard"
               className="text-2xl font-bold tracking-tighter flex gap-2 items-center"
             >
+
               <Image
                 src={iflyticsLogo}
-                alt="Infinilytics Logo"
+                className="dark:hidden"
+                alt="IFlytics Logo"
+                width={32}
+                height={32}
+              />
+              <Image
+                src={iflyticsLogoLight}
+                className="hidden dark:block"
+                alt="IFlytics Logo"
                 width={32}
                 height={32}
               />

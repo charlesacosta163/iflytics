@@ -88,7 +88,7 @@ const MapDarkPage = () => {
       {/* Loading overlay */}
       {isLoading && flights.length === 0 && (
         <div className="absolute inset-0 bg-black/20 flex items-center justify-center z-50">
-          <div className="bg-white px-4 py-2 rounded-lg shadow-lg">
+          <div className="bg-white dark:bg-gray-700 dark:text-light px-4 py-2 rounded-lg shadow-lg">
             Loading flights...
           </div>
         </div>
@@ -96,7 +96,7 @@ const MapDarkPage = () => {
 
 
       {/* Live indicator */}
-      <div className="absolute bottom-4 left-4 z-40 bg-[#FFEFD5]/50 backdrop-blur-sm px-3 py-2 rounded-lg ">
+      <div className="absolute bottom-4 left-4 z-40 bg-[#FFEFD5]/50 dark:bg-gray-700/50 dark:text-light backdrop-blur-sm px-3 py-2 rounded-lg ">
         <div className="flex items-center gap-2 w-[200px]">
           <div
             className={`w-2 h-2 rounded-full ${

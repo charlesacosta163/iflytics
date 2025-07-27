@@ -4,6 +4,7 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import iflyticsLogo from "@/public/infinilyticslogo.svg";
+import iflyticsLogoLight from "@/public/iflyticslight.svg";
 const Pathname = () => {
   return (
     <div className="relative">
@@ -16,8 +17,17 @@ const Pathname = () => {
           alt="Infinilytics Logo"
           width={32}
           height={32}
+          className="dark:hidden"
         />
-        <span className="bg-gradient-to-r from-gray-600 via-dark to-gray-600 bg-clip-text text-transparent animate-gradient-x bg-[length:200%_auto] pr-0.5">
+
+        <Image
+          src={iflyticsLogoLight}
+          alt="IFlytics Logo Light"
+          width={32}
+          height={32}
+          className="hidden dark:block"
+        />
+        <span className="dark:text-light bg-gradient-to-r from-gray-600 via-dark to-gray-600 bg-clip-text text-transparent animate-gradient-x bg-[length:200%_auto] pr-0.5">
           IFlytics
         </span>
       </Link>

@@ -9,12 +9,6 @@ export function numberWithCommas(x: number) {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
-export function convertMinutesToHours(minutes: number) {
-  const hours = Math.floor(minutes / 60);
-  const minutesFormatted = minutes % 60;
-  return `${hours}h ${minutesFormatted.toFixed(0)}m`;
-}
-
 export function formatDate(dateString: string) {
   const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
@@ -25,6 +19,12 @@ export function formatDate(dateString: string) {
 
   return `${day} ${months[month - 1]} ${year}`;
 
+}
+
+export function convertMinutesToHours(minutes: number) {
+  const hours = Math.floor(minutes / 60)
+  const mins = minutes % 60
+  return `${hours}h ${Math.round(mins)}m`
 }
 
 /**

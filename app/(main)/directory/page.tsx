@@ -173,7 +173,7 @@ const DirectoryPage = async ({
 
   return (
     <div className="p-4 max-w-[1000px] w-full mx-auto">
-      <h1 className="text-5xl sm:text-6xl font-bold tracking-tight bg-gradient-to-r from-gray-600 to-dark py-0.5 bg-clip-text text-transparent flex gap-2 items-center">
+      <h1 className="text-5xl sm:text-6xl font-bold tracking-tight dark:text-light bg-gradient-to-r from-gray-600 to-dark py-0.5 bg-clip-text text-transparent flex gap-2 items-center">
         Directory
       </h1>
 

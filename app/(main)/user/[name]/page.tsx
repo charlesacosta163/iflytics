@@ -83,7 +83,7 @@ const UserPage = async ({ params }: { params: Promise<{ name: string }> }) => {
   return (
     <div className="p-4 flex flex-col gap-4">
 
-      <h2 className="text-5xl font-black bg-gradient-to-r from-gray-600 to-dark py-0.5 bg-clip-text text-transparent">
+      <h2 className="text-5xl font-black dark:text-light bg-gradient-to-r from-gray-600 to-dark py-0.5 bg-clip-text text-transparent">
         General
       </h2>
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4">
@@ -159,7 +159,7 @@ const UserPage = async ({ params }: { params: Promise<{ name: string }> }) => {
         />
 
         {/* Powered by Infinite Flight Live API Card*/}
-        <Card className="flex flex-col gap-2 h-[150px] p-4 rounded-[25px] relative tracking-tighter text-light bg-gradient-to-r from-[#09203F] to-[#537895]">
+        <Card className="flex flex-col gap-2 h-[150px] p-4 rounded-[25px] relative tracking-tighter text-light bg-gradient-to-r from-[#09203F] to-[#537895] overflow-hidden">
           <div className="flex flex-col">
             <span
               id="value"

@@ -44,7 +44,7 @@ const ProfileHeader = async ({
 
   mostRecentFlight = { ...mostRecentFlight, session: pilotServerSession }
 
-  const userRoleColor = customUserImages.find(user => user.username.toLowerCase() === name.toLowerCase())?.role === "staff" ? "bg-blue-500" : customUserImages.find(user => user.username.toLowerCase() === name.toLowerCase())?.role === "mod" ? "bg-purple-500" : "bg-gray";
+  const userRoleColor = customUserImages.find(user => user.username.toLowerCase() === name.toLowerCase())?.role === "staff" ? "bg-blue-500" : customUserImages.find(user => user.username.toLowerCase() === name.toLowerCase())?.role === "mod" ? "bg-purple-500" : "bg-gray-700/50";
   const userRole = customUserImages.find(user => user.username.toLowerCase() === name.toLowerCase())?.role;
 
   const gradeColor: string =

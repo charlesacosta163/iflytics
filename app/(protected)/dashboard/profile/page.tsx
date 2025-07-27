@@ -84,16 +84,16 @@ const ProfilePage = () => {
       <div className="w-full max-w-2xl space-y-6">
 
         <div className="flex flex-col gap-2 w-full items-center">
-            <span className="text-4xl font-bold bg-gradient-to-r from-gray-600 to-dark bg-clip-text text-transparent tracking-tight">
+            <span className="text-4xl font-bold dark:text-light bg-gradient-to-r from-gray-600 to-dark bg-clip-text text-transparent tracking-tight">
             Your Profile
             </span>
-            <span className="text-gray-600 flex items-center gap-2">
+            <span className="text-gray-600 dark:text-gray-300 flex items-center gap-2">
             <FaUser className="text-gray-500" />
             Your profile and settings
             </span>
         </div>
 
-        <div className="flex sm:flex-row flex-col gap-6 w-full px-6 py-8 bg-white rounded-xl shadow-lg border border-gray-100">
+        <div className="flex sm:flex-row flex-col gap-6 w-full px-6 py-8 bg-white dark:bg-gray-800 rounded-xl shadow-lg dark:text-light">
           <div className="self-center sm:self-start shrink-0">
             <div 
               className={`w-[120px] h-[120px] rounded-full flex items-center justify-center shadow-md border-4 border-gray-100 ${
@@ -111,16 +111,16 @@ const ProfilePage = () => {
 
           <div className="flex-1 flex flex-col gap-5">
             <header className="text-center sm:text-left">
-              <h3 className="text-3xl font-bold text-gray-800">
+              <h3 className="text-3xl font-bold text-gray-800 dark:text-light">
                 {userProfile?.display_name}
               </h3>
-              <p className="text-sm text-gray-500 font-medium mt-1">
+              <p className="text-sm text-gray-500 dark:text-gray-300 font-medium mt-1">
                 @{userProfile?.ifc_username}
               </p>
             </header>
 
-            <section className="p-5 rounded-xl bg-gradient-to-r from-gray-50 to-blue-50 border border-gray-200">
-              <p className="text-gray-700 font-medium leading-relaxed">
+            <section className="p-5 rounded-xl dark:bg-gray-700 bg-gray-200">
+              <p className="text-gray-700 dark:text-gray-300 font-medium leading-relaxed">
                 {userProfile?.bio ||
                   "No bio added yet. Tell us about yourself! ✈️"}
               </p>
@@ -138,7 +138,7 @@ const ProfilePage = () => {
                 <p className="text-xs text-gray-400 font-medium">
                   Member since
                 </p>
-                <p className="text-sm text-gray-600 font-semibold">
+                <p className="text-sm text-gray-600 dark:text-gray-300 font-semibold">
                   {new Date(userProfile?.created_at).toLocaleDateString(
                     "en-US",
                     {
@@ -151,13 +151,13 @@ const ProfilePage = () => {
               </div>
             </div>
             {/* Danger Zone */}
-        <div className="w-full py-4 px-6 bg-red-50 rounded-xl ">
+        <div className="w-full py-4 px-6 bg-red-50 dark:bg-gray-700 rounded-xl ">
           <div className="flex items-center gap-2 mb-2">
-            <FaExclamationTriangle className="text-red-500 text-xl" />
-            <h3 className="text-xl font-bold text-red-700">Danger Zone</h3>
+            <FaExclamationTriangle className="dark:text-red-300 text-red-500 text-xl" />
+            <h3 className="text-xl font-bold text-red-700 dark:text-red-400">Danger Zone</h3>
           </div>
           
-          <p className="text-red-600 text-sm mb-4 leading-relaxed">
+          <p className="text-red-600 dark:text-red-200 text-sm mb-4 leading-relaxed">
             This action cannot be undone, it will permanently delete your account and all associated data.
           </p>
 
@@ -168,30 +168,30 @@ const ProfilePage = () => {
             <DialogTrigger asChild>
               <Button 
                 variant="destructive" 
-                className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-lg text-xs font-semibold transition-all duration-200 flex items-center gap-2"
+                className="bg-red-600 hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-600 text-white px-3 py-1 rounded-lg text-xs font-semibold transition-all duration-200 flex items-center gap-2"
               >
                 <FaTrash className="text-xs" />
                 Delete Account
               </Button>
             </DialogTrigger>
             
-            <DialogContent className="sm:max-w-md bg-white border border-gray-200">
+            <DialogContent className="sm:max-w-md bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
               <DialogHeader>
-                <DialogTitle className="flex items-center gap-2 text-red-700">
-                  <FaExclamationTriangle className="text-red-500" />
+                <DialogTitle className="flex items-center gap-2 text-red-700 dark:text-red-300">
+                  <FaExclamationTriangle className="text-red-500 dark:text-red-500" />
                   Delete Account
                 </DialogTitle>
               </DialogHeader>
               
               <div className="space-y-4">
-                <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-                  <p className="text-red-700 text-sm font-medium">
+                <div className="bg-red-50 dark:bg-gray-700 border border-red-200 dark:border-red-400 rounded-lg p-4">
+                  <p className="text-red-700 dark:text-red-300 text-sm font-medium">
                     ⚠️ This action cannot be undone. This will permanently delete your account and all associated data.
                   </p>
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">
+                  <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
                     Type your username <span className="font-mono bg-gray-100 px-1 rounded text-gray-900">{userProfile.ifc_username}</span> to confirm:
                   </label>
                   <input
@@ -218,7 +218,7 @@ const ProfilePage = () => {
                     variant="outline"
                     onClick={() => setIsDeleteDialogOpen(false)}
                     disabled={isDeleting}
-                    className="flex-1"
+                    className="flex-1 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-light"
                   >
                     Cancel
                   </Button>
@@ -226,7 +226,7 @@ const ProfilePage = () => {
                     variant="destructive"
                     onClick={handleDeleteAccount}
                     disabled={!isDeleteButtonEnabled}
-                    className={`flex-1 bg-red-600 hover:bg-red-700 disabled:bg-gray-300 disabled:cursor-not-allowed ${
+                    className={`flex-1 bg-red-600 hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-600 dark:text-light disabled:bg-gray-300 disabled:cursor-not-allowed ${
                       isDeleting ? 'animate-pulse' : ''
                     }`}
                   >

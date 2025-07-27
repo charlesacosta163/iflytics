@@ -92,7 +92,7 @@ export default async function DashboardPage() {
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-gray-600 to-gray-800 bg-clip-text text-transparent tracking-tight">
+            <h1 className="text-4xl font-bold dark:text-light bg-gradient-to-r from-gray-600 to-gray-800 bg-clip-text text-transparent tracking-tight">
               Welcome back, {data.ifcUsername}!
             </h1>
             <p className="text-gray-400 mt-2 flex items-center gap-2">
@@ -265,7 +265,7 @@ export default async function DashboardPage() {
                 <div className="flex items-center justify-between">
                   <span className="text-gray-600 font-medium">Duration</span>
                   <span className="font-bold text-blue-500">
-                    {convertMinutesToHours(recentFlight.totalTime) || "???"}
+                    {convertMinutesToHours(Math.round(recentFlight.totalTime)) || "???"}
                   </span>
                 </div>
 

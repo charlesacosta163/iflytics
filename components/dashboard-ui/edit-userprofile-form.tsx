@@ -11,7 +11,7 @@ const EditUserProfileForm = ({id, display_name, bio, avatar_url}: {id: string, d
   return (
     <div className="flex flex-col gap-4">
       <form 
-        className="flex flex-col gap-4 bg-white rounded-lg p-4 max-w-[500px] w-full"
+        className="flex flex-col gap-4 bg-white dark:bg-gray-800 rounded-lg p-4 max-w-[500px] w-full"
         action={async (formData) => {
             'use server'
             const displayName = formData.get('display-name')

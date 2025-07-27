@@ -71,9 +71,9 @@ export default function RootLayout({
         <link rel="shortcut icon" href="/favicon.ico?v=2" />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#FAF0E6]`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased dark:bg-gray-950 bg-[#FAF0E6]`}
       >
-        <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           {children}
         </ThemeProvider>
           <Analytics />

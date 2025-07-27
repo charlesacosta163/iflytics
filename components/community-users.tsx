@@ -54,10 +54,10 @@ const CommunityUsers = ({ users }: CommunityUsersProps) => {
       <div className="flex flex-col gap-6">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-gray-600 to-dark bg-clip-text text-transparent tracking-tight">
+            <h1 className="text-4xl font-bold dark:text-light bg-gradient-to-r from-gray-600 to-dark bg-clip-text text-transparent tracking-tight">
               IFlytics Community
             </h1>
-            <p className="text-gray-600 mt-2 flex items-center gap-2">
+            <p className="text-gray-600 dark:text-gray-300 mt-2 flex items-center gap-2">
               <FaUsers className="text-gray-500" />
               Discover fellow pilots and their flying journeys
             </p>

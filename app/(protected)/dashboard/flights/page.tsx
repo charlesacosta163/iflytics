@@ -23,12 +23,14 @@ import FlightsOverview from "@/components/dashboard-ui/flights/flights-overview"
 import { getAirportCoordinates } from "@/lib/actions";
 import FlightsDisplay from "@/components/dashboard-ui/flights/flights-display";
 import FlightsRoutes from "@/components/dashboard-ui/flights/flights-routes";
-import { FaPlane, FaRoute } from "react-icons/fa";
+import { FaHistory, FaPlane, FaRoute } from "react-icons/fa";
 import { FaChartLine } from "react-icons/fa";
 import { Metadata } from 'next'
 import Link from "next/link";
-// import FlightsAircraft from "@/components/dashboard-ui/flights/flights-aircraft";
+import FlightsAircraft from "@/components/dashboard-ui/flights/flights-aircraft";
 import { MdOutlineFlightTakeoff } from "react-icons/md";
+
+let aircraftAnalysisMaintainance = false
 
 export const metadata: Metadata = {
   title: "Flights - IFlytics | Your Infinite Flight Statistics",
@@ -77,10 +79,10 @@ const FlightsPage = async ({searchParams}: { searchParams: Promise < {
       {/* Header Section */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-gray-600 to-dark bg-clip-text text-transparent tracking-tight">
+          <h1 className="text-4xl font-bold dark:text-light bg-gradient-to-r from-gray-600 to-dark bg-clip-text text-transparent tracking-tight">
             Your Flight Activity
           </h1>
-          <p className="text-gray-600 mt-2 flex items-center gap-2">
+          <p className="text-gray-600 dark:text-gray-300 mt-2 flex items-center gap-2">
             <ImStatsDots className="text-gray-500" />
             Your flight statistics and insights
           </p>
@@ -89,7 +91,7 @@ const FlightsPage = async ({searchParams}: { searchParams: Promise < {
       </div>
 
       {/* Tabs */}
-      <Tabs defaultValue="overview" className="w-full">
+      <Tabs defaultValue="aircraft" className="w-full">
       <TabsList className="w-full bg-gray-500 p-1 rounded-full mb-2">
         <TabsTrigger value="overview" className="data-[state=active]:bg-gray-700 data-[state=active]:text-white data-[state=inactive]:bg-transparent data-[state=inactive]:text-gray-300 transition-all duration-200 rounded-full flex flex-col sm:flex-row gap-1 sm:gap-2 items-center px-2 sm:px-4">
           <FaChartLine className="w-4 h-4 sm:w-5 sm:h-5 text-light" />
@@ -97,8 +99,8 @@ const FlightsPage = async ({searchParams}: { searchParams: Promise < {
         </TabsTrigger>
         
         <TabsTrigger value="flights" className="data-[state=active]:bg-gray-700 data-[state=active]:text-white data-[state=inactive]:bg-transparent data-[state=inactive]:text-gray-300 transition-all duration-200 rounded-full flex flex-col sm:flex-row gap-1 sm:gap-2 items-center px-2 sm:px-4">
-          <MdOutlineFlightTakeoff className="w-4 h-4 sm:w-5 sm:h-5 text-light" />
-          <span className="hidden sm:inline text-xs sm:text-sm">Flights</span>
+          <FaHistory className="w-4 h-4 sm:w-5 sm:h-5 text-light" />
+          <span className="hidden sm:inline text-xs sm:text-sm">Flight History</span>
         </TabsTrigger>
         
         <TabsTrigger value="routes" className="data-[state=active]:bg-gray-700 data-[state=active]:text-white data-[state=inactive]:bg-transparent data-[state=inactive]:text-gray-300 transition-all duration-200 rounded-full flex flex-col sm:flex-row gap-1 sm:gap-2 items-center px-2 sm:px-4">
@@ -106,10 +108,12 @@ const FlightsPage = async ({searchParams}: { searchParams: Promise < {
           <span className="hidden sm:inline text-xs sm:text-sm">Routes</span>
         </TabsTrigger>
         
-        {/* <TabsTrigger value="aircraft" className="data-[state=active]:bg-gray-700 data-[state=active]:text-white data-[state=inactive]:bg-transparent data-[state=inactive]:text-gray-300 transition-all duration-200 rounded-full flex flex-col sm:flex-row gap-1 sm:gap-2 items-center px-2 sm:px-4">
-          <FaPlane className="w-4 h-4 sm:w-5 sm:h-5 text-light" />
-          <span className="hidden sm:inline text-xs sm:text-sm">Aircraft</span>
-        </TabsTrigger> */}
+        {!aircraftAnalysisMaintainance && (
+          <TabsTrigger value="aircraft" className="data-[state=active]:bg-gray-700 data-[state=active]:text-white data-[state=inactive]:bg-transparent data-[state=inactive]:text-gray-300 transition-all duration-200 rounded-full flex flex-col sm:flex-row gap-1 sm:gap-2 items-center px-2 sm:px-4">
+            <FaPlane className="w-4 h-4 sm:w-5 sm:h-5 text-light" />
+            <span className="hidden sm:inline text-xs sm:text-sm">Aircraft</span>
+          </TabsTrigger>
+        )}
       </TabsList>
       
       <TabsContent value="overview" className="space-y-8">
@@ -133,9 +137,11 @@ const FlightsPage = async ({searchParams}: { searchParams: Promise < {
         <FlightsRoutes flights={allFlights} user={user} />
       </TabsContent>
 
-      {/* <TabsContent value="aircraft" className="space-y-6">
-        <FlightsAircraft flights={allFlights} user={user} />
-      </TabsContent> */}
+      {!aircraftAnalysisMaintainance && (
+        <TabsContent value="aircraft" className="space-y-6">
+          <FlightsAircraft flights={allFlights} user={user} />
+        </TabsContent>
+      )}
     </Tabs>
     </div>
   );

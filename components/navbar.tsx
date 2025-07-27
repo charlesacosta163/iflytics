@@ -67,7 +67,7 @@ const Navbar = () => {
         </Link>
           <Link
             href="/directory"
-            className="flex group gap-2 items-center px-3 py-2 bg-transparent text-gray rounded-full font-semibold transition-all duration-200 hover:scale-105"
+            className="flex group gap-2 items-center px-3 py-2 bg-transparent dark:text-light text-gray rounded-full font-semibold transition-all duration-200 hover:scale-105"
           >
             <FaBook className="group-hover:rotate-12 transition-transform duration-200" />
             <span>Directory</span>
@@ -84,7 +84,7 @@ const Navbar = () => {
           {!isLoading ? (
             <button
               onClick={handleAuthClick}
-              className="group flex gap-2 items-center px-3 py-2 text-sm text-gray-700 hover:text-gray-900 border-2 border-gray-700 hover:border-gray-900 rounded-full font-bold transition-all duration-200 hover:scale-105 hover:bg-gray-50"
+              className="group flex gap-2 items-center px-3 py-2 text-sm dark:text-light dark:hover:text-gray-700 text-gray-700 hover:text-gray-900 border-2 dark:border-light dark:hover:border-gray-200 border-gray-700 hover:border-gray-900 rounded-full font-bold transition-all duration-200 hover:scale-105 hover:bg-gray-50"
             >
               <FaSignInAlt className="group-hover:translate-x-1 transition-transform duration-200" />
               <span>{isLoggedIn ? "Dashboard" : "Login"}</span>

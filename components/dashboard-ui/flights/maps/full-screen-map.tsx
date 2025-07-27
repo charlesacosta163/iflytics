@@ -1030,7 +1030,7 @@ const showFlightRoute = async (flightId: string) => {
       <div ref={mapContainerRef} className="w-full h-full" />
 
       {/* Airplane Mode Switch - Bottom Center */}
-      <div className="absolute left-4 bottom-16 sm:bottom-4 sm:left-1/2 sm:transform sm:-translate-x-1/2 bg-white/20 backdrop-blur-sm rounded-2xl shadow-lg p-3 border border-white/30">
+      <div className="absolute left-4 bottom-16 sm:bottom-4 sm:left-1/2 sm:transform sm:-translate-x-1/2 bg-white/20 dark:bg-gray-700/20 dark:text-light backdrop-blur-sm rounded-2xl shadow-lg p-3 border border-white/30">
         <div className="flex items-center space-x-3">
           <Switch
             id="airplane-mode"
@@ -1039,7 +1039,7 @@ const showFlightRoute = async (flightId: string) => {
           />
 
           <Label htmlFor="airplane-mode" className="text-sm font-medium cursor-pointer">
-            <span className={`flex items-center gap-2 ${showAirplanes ? "text-blue-500" : "text-[#3eb489]"}`}>
+            <span className={`flex items-center gap-2 ${showAirplanes ? "text-blue-500 dark:text-blue-400" : "text-[#3eb489] dark:text-[#126d4b]"}`}>
               {showAirplanes ? <FaPlane /> : <FaRegSmileBeam />}
               <span className="hidden sm:inline">{showAirplanes ? "Airplane Mode" : "Emoji Mode"}</span> 
             </span>
@@ -1172,7 +1172,7 @@ const FloatingRightNav = ({
         transition: 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease-in-out'
       }}
     >
-      <div className="bg-white/20 backdrop-blur-sm rounded-2xl shadow-lg p-2 space-y-2 border border-white/30">
+      <div className="bg-white/20 dark:bg-gray-700/20 backdrop-blur-sm rounded-2xl shadow-lg p-2 space-y-2 border border-white/30">
         {/* Zoom Controls */}
         <div className="flex flex-col space-y-2">
           <button
@@ -1405,13 +1405,13 @@ const SearchButton = ({
             </div>
 
             <div className="relative text-sm font-medium mb-4">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 dark:text-gray-300 text-gray-400" />
               <input
                 type="text"
                 placeholder="👨‍✈️ Search pilots..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full pl-10 pr-4 py-2 bg-white dark:text-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
               {searchQuery && (
                 <button

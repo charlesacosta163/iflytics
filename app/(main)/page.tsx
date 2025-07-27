@@ -1,7 +1,8 @@
 import Image from "next/image";
 import { TbSearch } from "react-icons/tb";
 import { redirect } from "next/navigation";
-import infinilyticsLogo from '@/public/infinilyticslogo.svg'
+import iflyticsLogo from '@/public/infinilyticslogo.svg'
+import iflyticsLogoLight from '@/public/iflyticslight.svg'
 import { IoStatsChartSharp } from "react-icons/io5";
 import { LuHistory, LuCalendarClock, LuChartPie } from "react-icons/lu";
 import { SearchUserButton } from "@/components/searchuser-btn";
@@ -33,27 +34,38 @@ export default function Home() {
         <div className="container w-full flex flex-col lg:flex-row items-center gap-8 lg:gap-12 p-4 lg:p-6 relative z-10">
           <div className="flex-1 flex flex-col gap-4 lg:gap-8">
             <header className="flex flex-col items-center lg:items-start gap-4 lg:gap-6">
-              {/* Logo with Animation */}
+              {/* Logo with Animation - Conditional based on theme */}
               <div className="relative group animate-fade-in-up">
                 <div className="absolute -inset-2 bg-gradient-to-r from-blue-400/15 to-purple-400/15 rounded-full blur-lg opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
+                
+                {/* Dark mode logo (default) */}
                 <Image 
-                  src={infinilyticsLogo} 
-                  alt="Infinilytics Logo" 
+                  src={iflyticsLogoLight} 
+                  alt="IFlytics Logo" 
                   width={200} 
                   height={200}
-                  className="relative w-[150px] h-[150px] lg group-hover:scale-105 transition-transform duration-300 animate-hover-float"
+                  className="relative w-[150px] h-[150px] lg group-hover:scale-105 transition-transform duration-300 animate-hover-float dark:block hidden opacity-75"
+                />
+                
+                {/* Light mode logo */}
+                <Image 
+                  src={iflyticsLogo} 
+                  alt="IFlytics Logo Light" 
+                  width={200} 
+                  height={200}
+                  className="relative w-[150px] h-[150px] lg group-hover:scale-105 transition-transform duration-300 animate-hover-float dark:hidden block"
                 />
               </div>
               
               {/* Title with Gradient Animation */}
               <div className="text-center lg:text-left animate-fade-in-up delay-200">
                 <h1 className="text-5xl lg:text-6xl font-black tracking-tight mb-3 lg:mb-4 relative">
-                  <span className="bg-gradient-to-r from-gray-600 via-dark to-gray-600 bg-clip-text text-transparent animate-gradient-x bg-[length:200%_auto]">
+                  <span className="bg-gradient-to-r from-gray-800 via-gray-900 to-gray-800 dark:from-gray-200 dark:via-white dark:to-gray-200 bg-clip-text text-transparent animate-gradient-x bg-[length:200%_auto]">
                     IFlytics
                   </span>
 
                 </h1>
-                <p className="text-gray-500 text-lg sm:text-xl font-semibold animate-fade-in-up delay-300">
+                <p className="text-gray-600 dark:text-gray-300 text-lg sm:text-xl font-semibold animate-fade-in-up delay-300">
                   Your home to your stats of Infinite Flight!
                 </p>
               </div>
@@ -62,25 +74,25 @@ export default function Home() {
             {/* Enhanced Feature Points - Desktop Only */}
             <section className="hidden lg:flex flex-col gap-4 animate-slide-in-left delay-500">
               {/* Feature 1 */}
-              <div className="group flex gap-4 items-center p-3 rounded-xl hover:bg-gray-50/30 transition-all duration-300 hover:scale-105">
+              <div className="group flex gap-4 items-center p-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-all duration-300 hover:scale-105">
                 <div className="relative">
                   <div className="absolute -inset-1 bg-gradient-to-r from-blue-400 to-blue-600 rounded-full blur opacity-0 group-hover:opacity-40 transition-all duration-500"></div>
                   <span className="relative flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 shadow-lg group-hover:shadow-blue-500/20 transition-all duration-300">
-                    <IoStatsChartSharp className="text-white text-lg animate-pulse"/>
+                    <IoStatsChartSharp className="text-white text-lg"/>
                 </span>
                 </div>
                 <div className="flex-1">
-                  <h3 className="font-bold text-gray-700 text-base mb-1 group-hover:text-blue-600 transition-colors duration-300">
+                  <h3 className="font-bold text-gray-800 dark:text-light text-base mb-1 group-hover:text-blue-600 transition-colors duration-300">
                     Real-time Analytics Dashboard
                   </h3>
-                  <p className="text-gray-600 text-sm group-hover:text-gray-700 transition-colors duration-300">
+                  <p className="text-gray-600 dark:text-gray-300 text-sm group-hover:text-gray-700 dark:group-hover:text-gray-200 transition-colors duration-300">
                     Get instant insights into your flight performance
                   </p>
                 </div>
               </div>
 
               {/* Feature 2 */}
-              <div className="group flex gap-4 items-center p-3 rounded-xl hover:bg-gray-50/30 transition-all duration-300 hover:scale-105">
+              <div className="group flex gap-4 items-center p-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-all duration-300 hover:scale-105">
                 <div className="relative">
                   <div className="absolute -inset-1 bg-gradient-to-r from-purple-400 to-purple-600 rounded-full blur opacity-0 group-hover:opacity-40 transition-all duration-500"></div>
                   <span className="relative flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-purple-500 to-purple-600 shadow-lg group-hover:shadow-purple-500/20 transition-all duration-300">
@@ -88,10 +100,10 @@ export default function Home() {
                 </span>
                 </div>
                 <div className="flex-1">
-                  <h3 className="font-bold text-gray-700 text-base mb-1 group-hover:text-purple-600 transition-colors duration-300">
+                  <h3 className="font-bold text-gray-800 dark:text-light text-base mb-1 group-hover:text-purple-600 transition-colors duration-300">
                     Complete Flight Journey
                   </h3>
-                  <p className="text-gray-600 text-sm group-hover:text-gray-700 transition-colors duration-300">
+                  <p className="text-gray-600 dark:text-gray-300 text-sm group-hover:text-gray-700 dark:group-hover:text-gray-200 transition-colors duration-300">
                     Explore detailed history with routes and aircraft
                   </p>
                 </div>
@@ -103,16 +115,16 @@ export default function Home() {
           <div className="flex-1 flex flex-col gap-4 lg:gap-6 items-center animate-slide-in-right delay-300 w-full">
             {/* Form with Enhanced Styling */}
             <div className="relative group w-full max-w-[500px]">
-              <div className="absolute -inset-1 bg-gradient-to-r from-gray-400 via-blue-400 to-gray-400 rounded-[24px] blur opacity-15 group-hover:opacity-30 transition-all duration-1000 animate-gradient-x bg-[length:200%_auto]"></div>
+              {/* <div className="absolute -inset-1 bg-gradient-to-r from-gray-400 via-blue-400 to-gray-400 rounded-[24px] blur opacity-15 group-hover:opacity-30 transition-all duration-1000 animate-gradient-x bg-[length:200%_auto]"></div> */}
 
             <form action={async (formData: FormData) => {
               'use server'
               redirect(`/user/${formData.get("name") as string}`)
-              }} className="relative px-4 py-6 lg:px-8 lg:py-10 rounded-[23px] bg-gray shadow-xl border border-gray-600/20 backdrop-blur-sm">
+              }} className="relative px-4 py-6 lg:px-8 lg:py-10 rounded-[23px] bg-[#ffe3d0] dark:bg-gray shadow-xl backdrop-blur-sm">
                 
                 {/* Form Header */}
                 <div className="text-center mb-6 lg:mb-8">
-                  <h2 className="text-light text-2xl lg:text-3xl tracking-tight font-black mb-2 lg:mb-3 text-balance">
+                  <h2 className="text-gray-900 dark:text-light text-2xl lg:text-3xl tracking-tight font-black mb-2 lg:mb-3 text-balance">
                     Find your Infinite Flight Stats
                   </h2>
                   <div className="w-12 lg:w-16 h-1 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full mx-auto"></div>
@@ -122,15 +134,15 @@ export default function Home() {
                   {/* Enhanced Input */}
                   <div className="relative group/input">
                     <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-400 to-purple-400 rounded-xl blur opacity-0 group-hover/input:opacity-25 transition-all duration-500"></div>
-                    <div className="relative text-white">
+                    <div className="relative text-gray-900 dark:text-white">
                       <input 
                         type="text" 
                         name="name" 
-                        className="relative bg-gray-700/80 backdrop-blur-sm pl-10 lg:pl-12 pr-4 py-2 lg:py-3 font-medium rounded-xl outline-none w-full border border-gray-600/50 focus:border-blue-400 transition-all duration-300 text-base placeholder:text-gray-400" 
+                        className="relative bg-light dark:bg-gray-700/80 backdrop-blur-sm pl-10 lg:pl-12 pr-4 py-2 lg:py-3 font-medium rounded-xl outline-none w-full focus:border-blue-400 transition-all duration-300 text-base placeholder:text-gray-500 dark:placeholder:text-gray-400 text-gray-900 dark:text-white" 
                         placeholder="Enter your IFC Username" 
                         required
                       />
-                      <TbSearch className="absolute left-3 lg:left-4 top-[12px] lg:top-[18px] font-bold text-lg lg:text-xl text-gray-400 group-hover/input:text-blue-400 transition-colors duration-300"/>
+                      <TbSearch className="absolute left-3 lg:left-4 top-[12px] lg:top-[16px] font-bold text-lg lg:text-xl text-gray-500 dark:text-gray-400 group-hover/input:text-blue-400 transition-colors duration-300"/>
                     </div>
                   </div>
                   
@@ -143,12 +155,12 @@ export default function Home() {
                   {/* Login Option */}
                   <div className="animate-slide-in-up delay-400 self-center">
                     <div className="text-center">
-                      <span className="text-gray-400 text-lg font-medium">or</span>
+                      <span className="text-gray-500 dark:text-gray-400 text-lg font-medium">or</span>
                     </div>
                     <div className="mt-4">
                       <Link href="/auth/login" className="group/login relative inline-block">
                         <div className="absolute -inset-0.5 bg-gradient-to-r from-gray-500/30 to-gray-600/30 rounded-xl blur opacity-0 group-hover/login:opacity-50 transition-all duration-500"></div>
-                        <div className="relative bg-gray/20 backdrop-blur-sm text-white px-8 py-3 rounded-xl border border-gray-600/50 hover:border-gray-400/60 transition-all duration-300 font-semibold hover:scale-105">
+                        <div className="relative bg-[#ff8f45] dark:bg-indigo-500 dark:hover:bg-indigo-600 backdrop-blur-sm text-light px-8 py-3 rounded-xl transition-all duration-300 font-semibold hover:scale-105">
                           Create an account now
                         </div>
                       </Link>
@@ -157,12 +169,12 @@ export default function Home() {
                   
                   {/* Enhanced Footer Links */}
                   <div className="space-y-2 lg:space-y-3">
-                    <span className="text-gray-300 text-xs lg:text-sm text-center font-medium block hover:text-gray-200 transition-colors duration-300">
-                      No account? Join the <a href="https://community.infiniteflight.com/" className="text-blue-400 hover:text-blue-300 transition-colors duration-300">Infinite Flight Community</a> today!
+                    <span className="text-gray-600 dark:text-gray-300 text-xs lg:text-sm text-center font-medium block hover:text-gray-700 dark:hover:text-gray-200 transition-colors duration-300">
+                      No account? Join the <a href="https://community.infiniteflight.com/" className="text-blue-500 dark:text-blue-400 hover:text-blue-600 dark:hover:text-blue-300 transition-colors duration-300">Infinite Flight Community</a> today!
                     </span>
                     
                     <div className="flex items-center justify-center gap-2">
-                      <span className="text-gray-300 text-xs lg:text-sm text-center font-medium">Currently on <b className="text-orange-400">Guest Mode</b></span>
+                      <span className="text-gray-600 dark:text-gray-300 text-xs lg:text-sm text-center font-medium">Currently on <b className="text-orange-500 dark:text-orange-400">Guest Mode</b></span>
                     </div>
                   </div>
                 </div>
@@ -170,7 +182,7 @@ export default function Home() {
             </div>
             
             {/* Enhanced Copyright */}
-            <p className="text-xs lg:text-sm font-medium text-gray-400 animate-fade-in-up delay-600 hover:text-gray-300 transition-colors duration-300 text-center">
+            <p className="text-xs lg:text-sm font-medium text-gray-500 dark:text-gray-400 animate-fade-in-up delay-600 hover:text-gray-600 dark:hover:text-gray-300 transition-colors duration-300 text-center">
               © 2025 IFlytics | Not affiliated with Infinite Flight
             </p>
           </div>
@@ -178,110 +190,99 @@ export default function Home() {
       </section>
 
       {/* Features Section - Beautified */}
-      <section className="relative w-full bg-transparent py-32 overflow-hidden max-w-[1000px] mx-auto">
-        {/* Animated Background Elements */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute top-20 left-10 w-64 h-64 bg-[#FFD6BA]/20 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute bottom-20 right-10 w-80 h-80 bg-[#FFD6BA]/15 rounded-full blur-3xl animate-pulse delay-1000"></div>
-          <div className="absolute top-1/3 right-1/4 w-48 h-48 bg-[#FFD6BA]/10 rounded-full blur-2xl animate-bounce delay-700"></div>
-          <div className="absolute bottom-1/3 left-1/3 w-56 h-56 bg-orange-200/10 rounded-full blur-2xl animate-float"></div>
-        </div>
+      <section className="w-full bg-transparent py-32 overflow-hidden max-w-[1000px] mx-auto">
 
         <div className="container mx-auto px-4 max-w-6xl relative z-10">
           {/* Header Section */}
           <div className="text-center mb-20">
             <div className="inline-block mb-6">
-              <h2 className="text-5xl font-black text-gray mb-6 animate-fade-in-up relative">
+              <h2 className="text-5xl font-black text-gray-900 dark:text-gray-100 mb-6 animate-fade-in-up relative">
                 Powerful Flight Analytics
                 <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-[#FFD6BA] to-orange-300 rounded-full animate-scale-in delay-500"></div>
               </h2>
             </div>
-            <p className="text-gray-500 text-xl font-medium animate-fade-in-up delay-200">
+            <p className="text-gray-600 dark:text-gray-400 text-xl font-medium animate-fade-in-up delay-200">
               Everything you need to track and improve your flying
             </p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
             {/* Feature 1 - Detailed Statistics */}
-            <div className="group relative animate-slide-in-up delay-100">
-              <div className="absolute -inset-1 bg-gradient-to-r from-[#FFD6BA] to-orange-300 rounded-2xl blur opacity-20 group-hover:opacity-60 transition duration-1000 group-hover:duration-200"></div>
-              <div className="relative bg-[#FFD6BA] p-10 rounded-2xl hover:scale-105 transition-all duration-500 shadow-lg hover:shadow-2xl border border-orange-200/50 group-hover:border-orange-300/80">
+            <div className="group animate-slide-in-up delay-100">
+
+              <div className="relative bg-[#FFD6BA] dark:bg-gray-700/15 dark:text-light p-10 rounded-2xl hover:scale-105 transition-all duration-500 shadow-lg hover:shadow-2xl ">
                 {/* Floating Decoration */}
                 <div className="absolute top-4 right-4 w-6 h-6 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full opacity-20 animate-float"></div>
                 
                 <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mb-8 shadow-lg group-hover:scale-110 transition-transform duration-300 group-hover:shadow-blue-500/25">
                   <IoStatsChartSharp className="text-white text-3xl " />
                 </div>
-                <h3 className="text-gray text-2xl font-bold mb-6 group-hover:text-blue-700 transition-colors duration-300">
+                <h3 className="text-gray-900 dark:text-light text-2xl font-bold mb-6 group-hover:text-blue-700 transition-colors duration-300">
                   Detailed Statistics
                 </h3>
-                <p className="text-gray-500 leading-relaxed">
+                <p className="text-gray-600 dark:text-gray-200 leading-relaxed">
                   Track your flight time, landings, XP earnings, and performance metrics different all timeframes.
                 </p>
               </div>
             </div>
 
             {/* Feature 2 - Flight History */}
-            <div className="group relative animate-slide-in-up delay-200">
-              <div className="absolute -inset-1 bg-gradient-to-r from-[#FFD6BA] to-orange-300 rounded-2xl blur opacity-20 group-hover:opacity-60 transition duration-1000 group-hover:duration-200"></div>
-              <div className="relative bg-[#FFD6BA] p-10 rounded-2xl hover:scale-105 transition-all duration-500 shadow-lg hover:shadow-2xl border border-orange-200/50 group-hover:border-orange-300/80">
+            <div className="group animate-slide-in-up delay-200">
+              <div className="relative bg-[#FFD6BA] dark:bg-gray-700/15 dark:text-light p-10 rounded-2xl hover:scale-105 transition-all duration-500 shadow-lg hover:shadow-2xl ">
                 {/* Floating Decoration */}
                 <div className="absolute top-4 right-4 w-6 h-6 bg-gradient-to-r from-green-500 to-green-600 rounded-full opacity-20 animate-float delay-500"></div>
                 
                 <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-green-600 rounded-2xl flex items-center justify-center mb-8 shadow-lg group-hover:scale-110 transition-transform duration-300 group-hover:shadow-green-500/25">
                   <LuHistory className="text-white text-3xl animate-spin-slow" />
                 </div>
-                <h3 className="text-gray text-2xl font-bold mb-6 group-hover:text-green-700 transition-colors duration-300">
+                <h3 className="text-gray-900 dark:text-light text-2xl font-bold mb-6 group-hover:text-green-700 transition-colors duration-300">
                   Flight History
                 </h3>
-                <p className="text-gray-500 leading-relaxed">
+                <p className="text-gray-600 dark:text-gray-200 leading-relaxed">
                   Browse your complete flight history with detailed route information and aircraft usage patterns.
                 </p>
               </div>
             </div>
 
             {/* Feature 3 - Airport Directory */}
-            <div className="group relative animate-slide-in-up delay-300">
-              <div className="absolute -inset-1 bg-gradient-to-r from-[#FFD6BA] to-orange-300 rounded-2xl blur opacity-20 group-hover:opacity-60 transition duration-1000 group-hover:duration-200"></div>
-              <div className="relative bg-[#FFD6BA] p-10 rounded-2xl hover:scale-105 transition-all duration-500 shadow-lg hover:shadow-2xl border border-orange-200/50 group-hover:border-orange-300/80">
+            <div className="group animate-slide-in-up delay-300">
+              <div className="relative bg-[#FFD6BA] dark:bg-gray-700/15 dark:text-light p-10 rounded-2xl hover:scale-105 transition-all duration-500 shadow-lg hover:shadow-2xl ">
                 {/* Floating Decoration */}
                 <div className="absolute top-4 right-4 w-6 h-6 bg-gradient-to-r from-purple-500 to-purple-600 rounded-full opacity-20 animate-float delay-1000"></div>
                 
                 <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mb-8 shadow-lg group-hover:scale-110 transition-transform duration-300 group-hover:shadow-purple-500/25">
                   <TbSearch className="text-white text-3xl" />
                 </div>
-                <h3 className="text-gray text-2xl font-bold mb-6 group-hover:text-purple-700 transition-colors duration-300">
+                <h3 className="text-gray-900 dark:text-light text-2xl font-bold mb-6 group-hover:text-purple-700 transition-colors duration-300">
                   Airport Directory
                 </h3>
-                <p className="text-gray-500 leading-relaxed">
+                <p className="text-gray-600 dark:text-gray-200 leading-relaxed">
                   Search airports worldwide with real-time Expert Server status, frequencies, and runway information.
                 </p>
               </div>
             </div>
 
             {/* Feature 4 - Visual Charts */}
-            <div className="group relative animate-slide-in-up delay-400">
-              <div className="absolute -inset-1 bg-gradient-to-r from-[#FFD6BA] to-orange-300 rounded-2xl blur opacity-20 group-hover:opacity-60 transition duration-1000 group-hover:duration-200"></div>
-              <div className="relative bg-[#FFD6BA] p-10 rounded-2xl hover:scale-105 transition-all duration-500 shadow-lg hover:shadow-2xl border border-orange-200/50 group-hover:border-orange-300/80">
+            <div className="group animate-slide-in-up delay-400">
+              <div className="relative bg-[#FFD6BA] dark:bg-gray-700/15 dark:text-light p-10 rounded-2xl hover:scale-105 transition-all duration-500 shadow-lg hover:shadow-2xl ">
                 {/* Floating Decoration */}
                 <div className="absolute top-4 right-4 w-6 h-6 bg-gradient-to-r from-orange-500 to-orange-600 rounded-full opacity-20 animate-float delay-300"></div>
                 
                 <div className="w-16 h-16 bg-gradient-to-r from-orange-500 to-orange-600 rounded-2xl flex items-center justify-center mb-8 shadow-lg group-hover:scale-110 transition-transform duration-300 group-hover:shadow-orange-500/25">
                   <LuChartPie className="text-white text-3xl" />
                 </div>
-                <h3 className="text-gray text-2xl font-bold mb-6 group-hover:text-orange-700 transition-colors duration-300">
+                <h3 className="text-gray-900 dark:text-light text-2xl font-bold mb-6 group-hover:text-orange-700 transition-colors duration-300">
                   Visual Charts
                 </h3>
-                <p className="text-gray-500 leading-relaxed">
+                <p className="text-gray-600 dark:text-gray-200 leading-relaxed">
                   Beautiful interactive charts showing your flight activity, aircraft usage, and performance trends, as well as route analysis and maps.
                 </p>
               </div>
             </div>
 
             {/* Feature 5 - Live Tracking */}
-            <div className="group relative animate-slide-in-up delay-500">
-              <div className="absolute -inset-1 bg-gradient-to-r from-[#FFD6BA] to-orange-300 rounded-2xl blur opacity-20 group-hover:opacity-60 transition duration-1000 group-hover:duration-200"></div>
-              <div className="relative bg-[#FFD6BA] p-10 rounded-2xl hover:scale-105 transition-all duration-500 shadow-lg hover:shadow-2xl border border-orange-200/50 group-hover:border-orange-300/80">
+            <div className="group animate-slide-in-up delay-500">
+              <div className="relative bg-[#FFD6BA] dark:bg-gray-700/15 dark:text-light p-10 rounded-2xl hover:scale-105 transition-all duration-500 shadow-lg hover:shadow-2xl ">
                 {/* Floating Decoration */}
                 <div className="absolute top-4 right-4 w-6 h-6 bg-gradient-to-r from-red-500 to-red-600 rounded-full opacity-20 animate-float delay-700"></div>
                 
@@ -289,29 +290,28 @@ export default function Home() {
                   <TbLiveView className="text-white text-3xl" />
                   <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-400 rounded-full animate-ping"></div>
                 </div>
-                <h3 className="text-gray text-2xl font-bold mb-6 group-hover:text-red-700 transition-colors duration-300">
+                <h3 className="text-gray-900 dark:text-light text-2xl font-bold mb-6 group-hover:text-red-700 transition-colors duration-300">
                   Live Tracking
                 </h3>
-                <p className="text-gray-500 leading-relaxed">
+                <p className="text-gray-600 dark:text-gray-200 leading-relaxed">
                   Monitor pilots currently flying on Expert Server with real-time position and flight data.
                 </p>
               </div>
             </div>
 
             {/* Feature 6 - Community Features */}
-            <div className="group relative animate-slide-in-up delay-600">
-              <div className="absolute -inset-1 bg-gradient-to-r from-[#FFD6BA] to-orange-300 rounded-2xl blur opacity-20 group-hover:opacity-60 transition duration-1000 group-hover:duration-200"></div>
-              <div className="relative bg-[#FFD6BA] p-10 rounded-2xl hover:scale-105 transition-all duration-500 shadow-lg hover:shadow-2xl border border-orange-200/50 group-hover:border-orange-300/80">
+            <div className="group animate-slide-in-up delay-600">
+              <div className="relative bg-[#FFD6BA] dark:bg-gray-700/15 dark:text-light p-10 rounded-2xl hover:scale-105 transition-all duration-500 shadow-lg hover:shadow-2xl ">
                 {/* Floating Decoration */}
                 <div className="absolute top-4 right-4 w-6 h-6 bg-gradient-to-r from-indigo-500 to-indigo-600 rounded-full opacity-20 animate-float delay-200"></div>
                 
                 <div className="w-16 h-16 bg-gradient-to-r from-indigo-500 to-indigo-600 rounded-2xl flex items-center justify-center mb-8 shadow-lg group-hover:scale-110 transition-transform duration-300 group-hover:shadow-indigo-500/25">
                   <TbUsersGroup className="text-white text-3xl animate-hover-float" />
                 </div>
-                <h3 className="text-gray text-2xl font-bold mb-6 group-hover:text-indigo-700 transition-colors duration-300">
+                <h3 className="text-gray-900 dark:text-light text-2xl font-bold mb-6 group-hover:text-indigo-700 transition-colors duration-300">
                   Community Features
                 </h3>
-                <p className="text-gray-500 leading-relaxed">
+                <p className="text-gray-600 dark:text-gray-200 leading-relaxed">
                   Connect with other pilots, view their flight stats, and overall have fun!
                 </p>
               </div>
@@ -320,9 +320,9 @@ export default function Home() {
 
           {/* Bottom Decoration */}
           <div className="mt-20 text-center">
-            <div className="inline-flex items-center gap-2 px-8 py-4 bg-[#FFD6BA]/30 backdrop-blur-sm rounded-full border border-orange-200/50 animate-fade-in-up delay-700">
+            <div className="inline-flex items-center gap-2 px-8 py-4 bg-[#FFD6BA]/30 dark:bg-gray-700/15 dark:text-light backdrop-blur-sm rounded-full border border-orange-200/50 dark:border-white/10 animate-fade-in-up delay-700">
               <span className="w-2 h-2 bg-green-400 rounded-full animate-ping"></span>
-              <span className="text-gray-600 font-medium">Real-time data updates</span>
+              <span className="text-gray-600 dark:text-gray-200 font-medium">Real-time data updates</span>
               <span className="w-2 h-2 bg-blue-400 rounded-full animate-ping delay-500"></span>
             </div>
           </div>
@@ -512,7 +512,7 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               { number: "10K+", label: "Flights Tracked", gradient: "from-blue-400 to-blue-600", icon: <TbPlaneInflight className="text-blue-400"/>, delay: "delay-100" },
-              { number: "100+", label: "Active Pilots", gradient: "from-green-400 to-green-600", icon: <RiCopilotFill className="text-green-400"/>, delay: "delay-200" },
+              { number: "150+", label: "Active Users", gradient: "from-green-400 to-green-600", icon: <RiCopilotFill className="text-green-400"/>, delay: "delay-200" },
               { number: "24/7", label: "Live Updates", gradient: "from-orange-400 to-orange-600", icon: <LuCalendarClock className="text-orange-400"/>, delay: "delay-400" }
             ].map((stat, index) => (
               <div key={index} className={`group text-center p-8 bg-gradient-to-br from-gray/30 to-gray/50 backdrop-blur-xl rounded-2xl border border-gray-600/30 hover:border-gray-400/50 transition-all duration-500 hover:scale-105 animate-slide-in-up ${stat.delay} relative overflow-hidden flex flex-col items-center justify-center`}>

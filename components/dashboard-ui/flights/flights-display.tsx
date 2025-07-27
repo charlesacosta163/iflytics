@@ -17,7 +17,7 @@ const FlightsDisplay = ({ flights }: { flights: Flight[] }) => {
   return (
     <div className="flex flex-col gap-4">
       <header>
-        <h1 className="text-2xl font-bold text-gray-700">Flights ({flights.length})</h1>
+        <h1 className="text-2xl font-bold dark:text-light text-gray-700">Flights ({flights.length})</h1>
       </header>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -63,7 +63,7 @@ const FlightsDisplay = ({ flights }: { flights: Flight[] }) => {
                   </div>
 
                   <Link className="cursor-pointer" href={`/dashboard/flights/${flight.id}`}>
-                    <Button className="bg-gray-800 hover:bg-gray-700">
+                    <Button className="bg-gray-800 hover:bg-gray-700 dark:text-light">
                       <FaInfoCircle className="w-6 h-6" />
                       More Details
                     </Button>

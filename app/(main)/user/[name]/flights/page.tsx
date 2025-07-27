@@ -50,7 +50,7 @@ const FlightsPage = async ({
         <div className='p-4 flex flex-col gap-4'>
             
             <div className="flex items-center justify-between gap-2">
-                <h2 className='text-5xl font-black bg-gradient-to-r from-gray-600 to-dark bg-clip-text text-transparent py-0.5'>Flights</h2>
+                <h2 className='text-5xl font-black dark:text-light bg-gradient-to-r from-gray-600 to-dark bg-clip-text text-transparent py-0.5'>Flights</h2>
                 <div className="text-sm text-muted-foreground">
                     <span className="sm:block hidden">Showing page {pageIndex} of {totalPages} ({totalCount} total flights)</span>
                     <span className="sm:hidden">Page {pageIndex} of {totalPages}</span>

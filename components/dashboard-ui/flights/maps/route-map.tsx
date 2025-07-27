@@ -559,38 +559,38 @@ export const RouteMap = ({ routes }: { routes: any[] }) => {
   View All Routes
 </DialogTrigger>
 
-<DialogContent className="min-h-[500px] max-h-[90svh] max-w-3xl overflow-y-auto bg-[#FFD6BA] !border-none z-[9999]">
+<DialogContent className="min-h-[500px] max-h-[90svh] max-w-3xl overflow-y-auto bg-[#FFD6BA] dark:bg-gray-800 !border-none z-[9999]">
   <DialogHeader>
     <DialogTitle className="text-xl font-bold">
       All Flight Routes
     </DialogTitle>
-    <p className="text-gray-500 text-sm">
+    <p className="text-gray-500 dark:text-gray-300 text-sm">
       Complete overview of your unique flight routes and
       distances
     </p>
 
     {/* Legend */}
-    <div className="flex flex-col items-center gap-2 mt-4 p-3 bg-[#fbe4d4] rounded-lg">
-      <h3 className="text-lg font-bold tracking-tight text-orange-700 flex gap-2 items-center">
+    <div className="flex flex-col items-center gap-2 mt-4 p-3 bg-[#fbe4d4] dark:bg-gray-700 rounded-lg">
+      <h3 className="text-lg font-bold tracking-tight text-orange-700 dark:text-orange-300 flex gap-2 items-center">
         <FaRoute className="w-4 h-4" /> Route Types (IATA)
       </h3>
       <div className="flex justify-center items-center gap-6 font-medium">
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
             <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-            <span className="text-xs text-gray-600">
+            <span className="text-xs dark:text-gray-300 text-gray-600">
               Short (≤3h)
             </span>
           </div>
           <div className="flex items-center gap-2">
             <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-            <span className="text-xs text-gray-600">
+            <span className="text-xs dark:text-gray-300 text-gray-600">
               Medium (3-6h)
             </span>
           </div>
           <div className="flex items-center gap-2">
             <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-            <span className="text-xs text-gray-600">
+            <span className="text-xs dark:text-gray-300 text-gray-600">
               Long (6h+)
             </span>
           </div>
@@ -645,12 +645,12 @@ export const RouteMap = ({ routes }: { routes: any[] }) => {
           return (
             <TableRow
               key={index}
-              className="hover:bg-[#fbe4d4] !rounded-lg border-b border-orange-300/50"
+              className="hover:bg-[#fbe4d4] dark:hover:bg-gray-700 !rounded-lg dark:border-b dark:border-orange-300/50 border-b border-orange-300/50"
             >
-              <TableCell className="font-mono font-medium text-blue-600">
+              <TableCell className="font-mono font-medium text-blue-600 dark:text-blue-400">
                 {route.origin}
               </TableCell>
-              <TableCell className="font-mono font-medium text-blue-600">
+              <TableCell className="font-mono font-medium text-blue-600 dark:text-blue-400">
                 {route.destination}
               </TableCell>
               <TableCell className="text-center">
@@ -661,7 +661,7 @@ export const RouteMap = ({ routes }: { routes: any[] }) => {
                     </span>
                   </div>
                 ) : (
-                  <span className="text-gray-400 italic">
+                  <span className="text-gray-400 dark:text-gray-300 italic">
                     {maintenanceMode
                       ? "Under Maintenance"
                       : route.totalTime}
@@ -685,7 +685,7 @@ export const RouteMap = ({ routes }: { routes: any[] }) => {
                     </span>
                   </div>
                 ) : (
-                  <span className="text-gray-400 italic">
+                  <span className="text-gray-400 dark:text-gray-300 italic">
                     {maintenanceMode
                       ? "Under Maintenance"
                       : route.distance || "N/A"}
@@ -708,8 +708,8 @@ export const RouteMap = ({ routes }: { routes: any[] }) => {
     </Table>
 
     {/* Updated Summary Stats - using circles too */}
-    <div className="mt-6 p-4 bg-[#fbe4d4] rounded-lg">
-      <h4 className="font-semibold text-gray-900 mb-3">
+    <div className="mt-6 p-4 bg-[#fbe4d4] dark:bg-gray-700 rounded-lg">
+      <h4 className="font-semibold text-gray-900 dark:text-gray-300 mb-3">
         Route Summary
       </h4>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
@@ -717,7 +717,7 @@ export const RouteMap = ({ routes }: { routes: any[] }) => {
           <div className="text-xl font-bold text-blue-600">
             {routes.length}
           </div>
-          <div className="text-gray-600">Total Routes</div>
+          <div className="text-gray-600 dark:text-gray-300">Total Routes</div>
         </div>
         <div className="text-center">
           <div className="flex items-center justify-center gap-2 mb-1">
@@ -730,7 +730,7 @@ export const RouteMap = ({ routes }: { routes: any[] }) => {
               }
             </div>
           </div>
-          <div className="text-gray-600">Short Haul</div>
+          <div className="text-gray-600 dark:text-gray-300">Short Haul</div>
         </div>
         <div className="text-center">
           <div className="flex items-center justify-center gap-2 mb-1">
@@ -745,7 +745,7 @@ export const RouteMap = ({ routes }: { routes: any[] }) => {
               }
             </div>
           </div>
-          <div className="text-gray-600">Medium Haul</div>
+          <div className="text-gray-600 dark:text-gray-300">Medium Haul</div>
         </div>
         <div className="text-center">
           <div className="flex items-center justify-center gap-2 mb-1">
@@ -758,14 +758,14 @@ export const RouteMap = ({ routes }: { routes: any[] }) => {
               }
             </div>
           </div>
-          <div className="text-gray-600">Long Haul</div>
+          <div className="text-gray-600 dark:text-gray-300">Long Haul</div>
         </div>
       </div>
 
       {/* Total Distance */}
       <div className="mt-4 pt-4 border-t border-gray-200">
         <div className="text-center">
-          <div className="text-2xl font-bold text-purple-600">
+          <div className="text-2xl font-bold dark:text-purple-400 text-purple-600">
             {routes
               .reduce(
                 (total, route) => total + (route.distance || 0),
@@ -774,10 +774,10 @@ export const RouteMap = ({ routes }: { routes: any[] }) => {
               .toLocaleString()}{" "}
             nm
           </div>
-          <div className="text-gray-600">
+          <div className="text-gray-600 dark:text-gray-300">
             Total Distance Covered
           </div>
-          <div className="text-xs text-gray-500 mt-1">
+          <div className="text-xs text-gray-500 dark:text-gray-300 mt-1">
             {Math.round(
               routes.reduce(
                 (total, route) => total + (route.distance || 0),

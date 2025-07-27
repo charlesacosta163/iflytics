@@ -96,10 +96,10 @@ const ViewUserPage = async ({
   return (
     <main className="flex flex-col items-center gap-4 min-h-full w-full py-6">
       <header className="flex flex-col items-center gap-2">
-        <h1 className="text-4xl font-bold bg-gradient-to-r from-gray-600 to-dark py-0.5 bg-clip-text text-transparent tracking-tight">
+        <h1 className="text-4xl font-bold dark:text-light bg-gradient-to-r from-gray-600 to-dark py-0.5 bg-clip-text text-transparent tracking-tight">
           {userProfile.display_name}'s Profile
         </h1>
-        <p className="text-gray-600">
+        <p className="text-gray-600 dark:text-gray-300">
           View their flight statistics and profile information
         </p>
       </header>
@@ -108,7 +108,7 @@ const ViewUserPage = async ({
         <section className="col-span-2 flex justify-center items-center h-full w-full">
           <div className="flex flex-col md:flex-row gap-4 max-w-[1000px] w-full">
             <div className="flex-1 flex flex-col gap-4">
-              <div className="self-start flex-1 flex flex-col gap-4 max-w-[500px] w-full px-4 bg-white rounded-lg shadow p-8">
+              <div className="self-start flex-1 flex flex-col gap-4 max-w-[500px] w-full px-4 bg-white dark:bg-gray-800 rounded-lg shadow p-8">
                 <div className="flex gap-4 items-center">
                   <div className="p-1 bg-gray rounded-full flex items-center justify-center text-2xl shadow-lg">
                     {userImage ? (
@@ -124,16 +124,16 @@ const ViewUserPage = async ({
                     )}
                   </div>
                   <header>
-                    <h2 className="text-4xl font-bold bg-gradient-to-r from-gray-600 to-dark py-0.5 bg-clip-text text-transparent tracking-tight">
+                    <h2 className="text-4xl font-bold dark:text-light bg-gradient-to-r from-gray-600 to-dark py-0.5 bg-clip-text text-transparent tracking-tight">
                       {userProfile.display_name}
                     </h2>
-                    <span className="text-gray-500 text-xs font-medium">
+                    <span className="text-gray-500 dark:text-gray-300 text-xs font-medium">
                       @{userProfile.ifc_username}
                     </span>
                   </header>
                 </div>
 
-                <p className="p-4 bg-gray-100 rounded-lg text-gray-700 font-medium">
+                <p className="p-4 bg-gray-100 dark:bg-gray-700 rounded-lg text-gray-700 dark:text-gray-300 font-medium">
                   {userProfile.bio ? userProfile.bio : "No bio for me 🤷‍♂️"}
                 </p>
 
@@ -144,14 +144,14 @@ const ViewUserPage = async ({
 
                 <Link
                   href="/dashboard/users"
-                  className="text-light text-xs font-semibold bg-gray-800 rounded-lg px-4 py-2 text-center flex items-center justify-center gap-2 self-start"
+                  className="text-light dark:text-light text-xs font-semibold bg-gray-800 dark:bg-gray-700 rounded-lg px-4 py-2 text-center flex items-center justify-center gap-2 self-start"
                 >
                   <FaArrowLeft className="w-4 h-4" />
                   Back to Users
                 </Link>
               </div>
 
-              <div className="flex-1 flex flex-col gap-4 max-w-[500px] w-full px-4 bg-white rounded-lg shadow p-8">
+              <div className="flex-1 flex flex-col gap-4 max-w-[500px] w-full px-4 bg-white dark:bg-gray-800 rounded-lg shadow p-8">
                 {pilotServerSession ? (
                   <div className="space-y-4">
                     {/* Live Flight Status */}
@@ -213,10 +213,10 @@ const ViewUserPage = async ({
                 ) : (
                   <div className="text-center py-8">
                     <div className="text-4xl mb-3">🛬</div>
-                    <h3 className="text-lg font-semibold text-gray-600">
+                    <h3 className="text-lg font-semibold text-gray-600 dark:text-gray-300">
                       Not Flying
                     </h3>
-                    <p className="text-sm text-gray-500">
+                    <p className="text-sm text-gray-500 dark:text-gray-300">
                       User is not currently on Expert Server
                     </p>
                   </div>

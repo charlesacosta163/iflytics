@@ -1,7 +1,6 @@
 'use server'
 
 import { revalidateTag } from "next/cache"
-import { airports } from './airports-lib';
 
 const API_KEY = process.env.API_KEY as string
 

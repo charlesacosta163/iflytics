@@ -1,3 +1,71 @@
+export const aircraftBrands = {
+  "Airbus": ["A220", "A318", "A319", "A320", "A321", "A330", "A340", "A350", "A380"],
+  "Boeing": ["717", "737", "747", "757", "767", "777", "787"],
+  "Embraer": ["E175", "E190"],
+  "Bombardier": ["CRJ", "Dash 8"],
+  "General Aviation": ["Cessna", "Cirrus", "TBM", "CubCrafters"],
+  "Military": ["F-14", "F-16", "F-22", "F/A-18", "A-10", "C-130", "C-17"],
+  "Legacy": ["DC-10", "MD-11"],
+  "Special": ["Space Shuttle"]
+}
+
+export const aircraftBrandsCompliments = {
+  "Airbus": [
+    "European engineering at its finest! ✈️",
+    "You appreciate innovative design and comfort!",
+    "Wide-body expertise shows your taste for luxury travel!",
+    "Fly-by-wire technology enthusiast detected! 🛩️"
+  ],
+  "Boeing": [
+    "Classic American aviation excellence! 🇺🇸",
+    "You trust the most reliable workhorses of the sky!",
+    "Boeing pilot = experienced aviator! ✈️",
+    "From 737s to Dreamliners, you know quality!"
+  ],
+  "Embraer": [
+    "Regional jet connoisseur! Perfect for efficiency! 🌟",
+    "You appreciate Brazilian engineering brilliance!",
+    "Short-haul specialist with great taste!",
+    "E-Jets expertise shows your smart route planning!"
+  ],
+  "Bombardier/Canadair": [
+    "CRJ master! You love efficient regional operations! 🍁",
+    "Canadian precision meets your flying style!",
+    "Regional route expertise is your specialty!",
+    "Bombardier pilot = versatility champion!"
+  ],
+  "General Aviation": [
+    "From grass strips to glass cockpits! 🛩️",
+    "True aviation spirit - every aircraft matters!",
+    "General aviation lover = pure pilot passion!",
+    "Small aircraft, big adventures! ✈️"
+  ],
+  "Military": [
+    "Tactical flying excellence! Respect! 🫡",
+    "From fighters to cargo - you do it all!",
+    "Military precision in every flight!",
+    "Defense aviator with serious skills! ✈️"
+  ],
+  "Legacy": [
+    "Classic aircraft appreciation! Vintage vibes! ✨",
+    "You honor aviation history beautifully!",
+    "Legacy aircraft expertise is rare and valuable!",
+    "Old school cool meets modern skills!"
+  ],
+  "Special": [
+    "Space Shuttle pilot?! That's legendary! 🚀",
+    "Pushing the boundaries of flight itself!",
+    "Special aircraft = special pilot!",
+    "You're literally out of this world! 🌌"
+  ],
+  "Other": [
+    "Unique aircraft explorer! 🌟",
+    "You find aviation gems others miss!",
+    "Diverse flying experience shows adaptability!",
+    "Aviation variety specialist!"
+  ]
+};
+
 export const aircraftImages = [
   { key: "a220", image: "a220.png" },
   { key: "a319", image: "a319.png" },
@@ -2535,6 +2603,133 @@ export const customUserImages = [
       "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/julesjolito7/288/1551316_2.png"
     )}&w=64&h=64&fit=cover&mask=circle`,
   },
+  {
+    // IFLYTICS USER
+    id: 152,
+    role: "user",
+    username: "Lwando_Somhlahlo",
+    image: `https://images.weserv.nl/?url=${encodeURIComponent(
+      "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/lwando_somhlahlo/288/1263003_2.png"
+    )}&w=64&h=64&fit=cover&mask=circle`,
+  },
+  {
+    // IFLYTICS USER
+    id: 153,
+    role: "user",
+    username: "Pontso",
+    image: `https://images.weserv.nl/?url=${encodeURIComponent(
+      "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/Pontso/288/1263003_2.png"
+    )}&w=64&h=64&fit=cover&mask=circle`,
+  },
+  {
+    // IFLYTICS USER
+    id: 154,
+    role: "user",
+    username: "lornevlittlejohn2003",
+    image: `https://images.weserv.nl/?url=${encodeURIComponent(
+      "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/lornevlittlejohn2003/288/1395276_2.png"
+    )}&w=64&h=64&fit=cover&mask=circle`,
+  },
+  {
+    // IFLYTICS USER
+    id: 155,
+    role: "user",
+    username: "AxolotlsMaster",
+    image: `https://images.weserv.nl/?url=${encodeURIComponent(
+      "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/AxolotlsMaster/288/1395276_2.png"
+    )}&w=64&h=64&fit=cover&mask=circle`,
+  },
+  {
+    // IFLYTICS USER
+    id: 156,
+    role: "user",
+    username: "Stan035",
+    image: `https://images.weserv.nl/?url=${encodeURIComponent(
+      "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/stan035/288/1352826_2.png"
+    )}&w=64&h=64&fit=cover&mask=circle`,
+  },
+  {
+    // IFLYTICS USER
+    id: 157,
+    role: "user",
+    username: "danii",
+    image: `https://images.weserv.nl/?url=${encodeURIComponent(
+      "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/danii/288/1486430_2.png"
+    )}&w=64&h=64&fit=cover&mask=circle`,
+  },
+  {
+    // IFLYTICS USER
+    id: 158,
+    role: "user",
+    username: "drl",
+    image: `https://images.weserv.nl/?url=${encodeURIComponent(
+      "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/drl/288/1096841_2.png"
+    )}&w=64&h=64&fit=cover&mask=circle`,
+  },
+  {
+    // IFLYTICS USER
+    id: 159,
+    role: "user",
+    username: "QFA_12",
+    image: `https://images.weserv.nl/?url=${encodeURIComponent(
+      "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/qfa_12/288/1451767_2.png"
+    )}&w=64&h=64&fit=cover&mask=circle`,
+  },
+  {
+    // IFLYTICS USER
+    id: 160,
+    role: "user",
+    username: "WestJet1515",
+    image: `https://images.weserv.nl/?url=${encodeURIComponent(
+      "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/westjet1515/288/1367592_2.png"
+    )}&w=64&h=64&fit=cover&mask=circle`,
+  },
+  {
+    // IFLYTICS USER
+    id: 161,
+    role: "user",
+    username: "xhamstar10",
+    image: `https://images.weserv.nl/?url=${encodeURIComponent(
+      "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/xhamstar10/288/1481721_2.png"
+    )}&w=64&h=64&fit=cover&mask=circle`,
+  },
+  {
+    // IFLYTICS USER
+    id: 162,
+    role: "user",
+    username: "Kaiya_0501",
+    image: `https://images.weserv.nl/?url=${encodeURIComponent(
+      "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/kaiya_0501/288/1152275_2.png"
+    )}&w=64&h=64&fit=cover&mask=circle`,
+  },
+  {
+    // IFLYTICS USER
+    id: 163,
+    role: "user",
+    username: "TUN2907",
+    image: `https://images.weserv.nl/?url=${encodeURIComponent(
+      "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/tun2907/288/1424267_2.png"
+    )}&w=64&h=64&fit=cover&mask=circle`,
+  },
+  {
+    // IFLYTICS USER
+    id: 164,
+    role: "user",
+    username: "AviatorSimon",
+    image: `https://images.weserv.nl/?url=${encodeURIComponent(
+      "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/aviatorsimon/288/1368035_2.png"
+    )}&w=64&h=64&fit=cover&mask=circle`,
+  },
+  {
+    // IFLYTICS USER    
+    id: 165,
+    role: "user",
+    username: "Ezzor_85",
+    image: `https://images.weserv.nl/?url=${encodeURIComponent(
+      "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/Ezzor_85/288/1368035_2.png"
+    )}&w=64&h=64&fit=cover&mask=circle`,
+  },
+  
 ];
 
 // Unknown User Compliments - Maximum Corn Level

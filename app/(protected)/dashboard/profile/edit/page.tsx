@@ -34,7 +34,7 @@ const EditProfilePage = async () => {
         <div className="flex items-center gap-4">
           <Link 
             href="/dashboard/profile" 
-            className="flex items-center gap-2 text-gray-600 hover:text-gray-800 transition-colors"
+            className="flex items-center gap-2 text-gray-600 dark:text-gray-300 hover:text-gray-800 transition-colors"
           >
             <ArrowLeft className="w-5 h-5" />
             Back to Profile
@@ -42,14 +42,14 @@ const EditProfilePage = async () => {
         </div>
 
         <div className="text-center">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-gray-600 to-dark py-0.5 bg-clip-text text-transparent tracking-tight">
+          <h1 className="text-4xl font-bold dark:text-light bg-gradient-to-r from-gray-600 to-dark py-0.5 bg-clip-text text-transparent tracking-tight">
             Edit Your Profile
           </h1>
-          <p className="text-gray-600 mt-2">Update your personal information and bio</p>
+          <p className="text-gray-600 dark:text-gray-300 mt-2">Update your personal information and bio</p>
         </div>
 
         {/* Form container with matching styling */}
-        <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 p-6">
           <EditUserProfileForm 
             id={userProfile.ifc_user_id} 
             display_name={userProfile.display_name} 

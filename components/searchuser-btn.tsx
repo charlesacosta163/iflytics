@@ -17,7 +17,7 @@ export function SearchUserButton({ className }: SearchUserButtonProps) {
     <Button 
       type="submit" 
       disabled={pending}
-      className={`w-full ${className}`}
+      className={`w-full ${className} dark:text-light`}
     >
       {pending ? (
         <span className="flex items-center gap-2">
