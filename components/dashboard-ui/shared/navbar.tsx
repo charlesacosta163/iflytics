@@ -37,7 +37,7 @@ const Navbar = () => {
             <div className="relative w-6 h-6">
               <Menu
                 size={24}
-                className={`absolute inset-0 transition-all duration-300 ${
+                className={`absolute inset-0 transition-all duration-300 dark:text-light ${
                   isMenuOpen
                     ? "opacity-0 rotate-180 scale-50"
                     : "opacity-100 rotate-0 scale-100"
@@ -45,7 +45,7 @@ const Navbar = () => {
               />
               <X
                 size={24}
-                className={`absolute inset-0 transition-all duration-300 ${
+                className={`absolute inset-0 transition-all duration-300 dark:text-light ${
                   isMenuOpen
                     ? "opacity-100 rotate-0 scale-100"
                     : "opacity-0 -rotate-180 scale-50"

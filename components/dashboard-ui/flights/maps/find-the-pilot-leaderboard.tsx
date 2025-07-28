@@ -248,14 +248,14 @@ const FindThePilotLeaderboard: React.FC<FindThePilotLeaderboardProps> = ({ isOpe
         <div className="flex-1 overflow-y-auto">
           <Tabs defaultValue="today" className="w-full h-full flex flex-col">
             <TabsList className={`grid w-full ${isUserLoggedIn ? 'grid-cols-3' : 'grid-cols-2'} bg-[#f9ddbd] flex-shrink-0`}>
-              <TabsTrigger value="today" className="flex items-center gap-2 [data-state=active]:bg-[#ffdfbb] text-orange-600">
+              <TabsTrigger value="today" className="flex items-center gap-2 [data-state=active]:bg-[#ffdfbb] text-orange-600 dark:text-gray-500">
                 <MdOutlineLeaderboard /> Today
               </TabsTrigger>
-              <TabsTrigger value="alltime" className="flex items-center gap-2 [data-state=active]:bg-[#ffdfbb] text-orange-600">
+              <TabsTrigger value="alltime" className="flex items-center gap-2 [data-state=active]:bg-[#ffdfbb] text-orange-600 dark:text-gray-500">
                 <PiLightning /> All-Time
               </TabsTrigger>
               {isUserLoggedIn && (
-                <TabsTrigger value="history" className="flex items-center gap-2 [data-state=active]:bg-[#ffdfbb] text-orange-600">
+                <TabsTrigger value="history" className="flex items-center gap-2 [data-state=active]:bg-[#ffdfbb] text-orange-600 dark:text-gray-500">
                   <LuHistory /> History
                 </TabsTrigger>
               )}

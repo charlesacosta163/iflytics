@@ -151,15 +151,11 @@ const ProfilePage = () => {
               </div>
             </div>
             {/* Danger Zone */}
-        <div className="w-full py-4 px-6 bg-red-50 dark:bg-gray-700 rounded-xl ">
-          <div className="flex items-center gap-2 mb-2">
+        <div className="w-full flex justify-between gap-2 items-center py-4 px-6 bg-red-50 dark:bg-gray-700 rounded-xl ">
+          <div className="flex items-center gap-2">
             <FaExclamationTriangle className="dark:text-red-300 text-red-500 text-xl" />
             <h3 className="text-xl font-bold text-red-700 dark:text-red-400">Danger Zone</h3>
           </div>
-          
-          <p className="text-red-600 dark:text-red-200 text-sm mb-4 leading-relaxed">
-            This action cannot be undone, it will permanently delete your account and all associated data.
-          </p>
 
           <Dialog open={isDeleteDialogOpen} onOpenChange={(open) => {
             setIsDeleteDialogOpen(open);

@@ -42,7 +42,7 @@ const MobileNav = ({ isLoggedIn, isLoading, onAuthClick }: MobileNavProps) => {
 
       {/* Mobile Dropdown Menu */}
       <div
-        className={`md:hidden absolute top-12 right-0 w-64 bg-[#FAF0E6] rounded-lg shadow-2xl transition-all duration-300 ease-out transform origin-top-right !z-[9999] ${
+        className={`md:hidden absolute top-12 right-0 w-64 dark:bg-gray bg-[#FAF0E6] rounded-lg shadow-2xl transition-all duration-300 ease-out transform origin-top-right !z-[9999] ${
           isOpen
             ? 'opacity-100 scale-100 translate-y-0'
             : 'opacity-0 scale-95 -translate-y-2 pointer-events-none'
@@ -53,7 +53,7 @@ const MobileNav = ({ isLoggedIn, isLoading, onAuthClick }: MobileNavProps) => {
         
         {/* Navigation Header */}
         <div className="p-4">
-          <h3 className="font-bold tracking-tight text-gray-600 text-lg">
+          <h3 className="font-bold tracking-tight dark:text-gray-200 text-gray-600 text-lg">
             Where we going?
           </h3>
         </div>
@@ -65,24 +65,24 @@ const MobileNav = ({ isLoggedIn, isLoading, onAuthClick }: MobileNavProps) => {
           <nav className="space-y-2">
             <Link
               href="/directory"
-              className="group flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition-all duration-200 hover:translate-x-1"
+              className="group flex items-center gap-3 p-3 rounded-lg hover:bg-light transition-all duration-200 hover:translate-x-1"
               onClick={closeMenu}
             >
               <div className="p-2 bg-gray-100 rounded-lg group-hover:bg-gray-200 transition-colors duration-200">
                 <FaBook className="w-4 h-4 text-gray-600" />
               </div>
-              <span className="font-medium text-gray-700">Directory</span>
+              <span className="font-medium dark:text-gray-200 text-gray-700 group-hover:text-gray-700 dark:group-hover:text-gray-700">Directory</span>
             </Link>
 
             <Link
               href="/"
-              className="group flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition-all duration-200 hover:translate-x-1"
+              className="group flex items-center gap-3 p-3 rounded-lg hover:bg-light transition-all duration-200 hover:translate-x-1"
               onClick={closeMenu}
             >
               <div className="p-2 bg-gray-100 rounded-lg group-hover:bg-gray-200 transition-colors duration-200">
                 <FaSearch className="w-4 h-4 text-gray-600" />
               </div>
-              <span className="font-medium text-gray-700">Search</span>
+              <span className="font-medium dark:text-gray-200 text-gray-700 group-hover:text-gray-700 dark:group-hover:text-gray-700">Search</span>
             </Link>
 
             {/* Divider */}
@@ -95,12 +95,12 @@ const MobileNav = ({ isLoggedIn, isLoading, onAuthClick }: MobileNavProps) => {
                   onAuthClick()
                   closeMenu()
                 }}
-                className="group w-full flex items-center gap-3 px-3 py-2 hover:bg-gray-100 transition-all duration-200 hover:translate-x-1 border-2 border-gray-600 rounded-full"
+                className="group w-full flex items-center gap-3 px-3 py-2 hover:bg-gray-100 dark:hover:bg-light transition-all duration-200 hover:translate-x-1 border-2 border-gray-600 dark:border-gray-200 rounded-full"
               >
                 <div className="p-2 bg-gray-100 rounded-lg transition-colors duration-200">
                   <FaSignInAlt className="w-4 h-4 text-gray" />
                 </div>
-                <span className="font-semibold text-gray">
+                <span className="font-semibold dark:text-gray-200 text-gray">
                   {isLoggedIn ? 'Dashboard' : 'Login'}
                 </span>
               </button>
