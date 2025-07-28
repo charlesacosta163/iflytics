@@ -88,7 +88,7 @@ const FlightsOverview = ({
   return (
     <>
       {/* Quick Stats Grid */}
-      <section className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+      <section className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <InfoCard
           title="Total Flights"
           value={numberWithCommas(flightOverviewStats.totalFlights)}
@@ -120,7 +120,7 @@ const FlightsOverview = ({
       </section>
 
       {/* Main Analytics Grid */}
-      <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <section className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         
         {/* Flight Averages */}
         <Card className="lg:col-span-1 bg-blue-100 dark:bg-blue-900/20 !shadow-none border border-blue-200 dark:border-blue-800/30">

@@ -74,6 +74,15 @@ const FlightsPage = async ({searchParams}: { searchParams: Promise < {
     await getMostVisitedOriginAndDestinationAirports(allFlights);
   const aircraftUsageData = await getAllPlayerAircraftUsageData(allFlights);
 
+
+  // allFlights.forEach((flight, index) => {
+    
+  //   if (flight.violations.length > 0) {
+  //     console.log(`Violation ${index + 1}: `, flight.violations, "\n");
+  //   }
+
+  // })
+ 
   return (
     <div className="space-y-8 pb-8">
       {/* Header Section */}
