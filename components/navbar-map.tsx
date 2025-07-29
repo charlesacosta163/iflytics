@@ -54,60 +54,63 @@ const NavbarMap = () => {
         <Pathname />
 
 
-        {/* Navigation Buttons */}
-        <div className="hidden md:flex gap-3 items-center">
-          {/* Search Button */}
-          <Link
-          href="/map"
-          className="flex flex-col group gap-1 items-center bg-transparent text-gray rounded-full font-semibold transition-all duration-200 hover:scale-105 w-fit relative"
-        >
-          <LiaGlobeAmericasSolid className="group-hover:rotate-12 transition-transform duration-200 text-2xl text-blue-500" />
-          <span className="bg-blue-500 text-white rounded-full px-2 py-[0.5] text-[0.6rem] absolute -bottom-2 left-[50%] -translate-x-[50%] font-semibold">
-            Map
-          </span>
-        </Link>
-          <Link
-            href="/directory"
-            className="flex group gap-2 items-center px-3 py-2 bg-transparent dark:text-light text-gray rounded-full font-semibold transition-all duration-200 hover:scale-105"
-          >
-            <FaBook className="group-hover:rotate-12 transition-transform duration-200" />
-            <span>Directory</span>
-          </Link>
-          <Link
-            href="/"
-            className="hidden md:flex group gap-2 items-center px-3 py-2 text-sm bg-gray-700 hover:bg-gray-800 text-white rounded-full font-semibold transition-all duration-200 hover:scale-105 shadow-md hover:shadow-lg"
-          >
-            <FaSearch className="group-hover:rotate-12 transition-transform duration-200" />
-            <span>Search</span>
-          </Link>
+                 {/* Navigation Buttons */}
+         <div className="hidden md:flex gap-2 items-center">
+           {/* Map Button */}
+           <Link
+             href="/map/dark"
+             className="relative group flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-all duration-200"
+           >
+             <LiaGlobeAmericasSolid className="w-4 h-4 group-hover:rotate-12 transition-transform duration-200" />
+             <span>Map</span>
+             <div className="absolute -top-1 -right-1 w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+           </Link>
+           
+           {/* Directory Button */}
+           <Link
+             href="/directory"
+             className="group flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-all duration-200"
+           >
+             <FaBook className="w-4 h-4 group-hover:rotate-12 transition-transform duration-200" />
+             <span>Directory</span>
+           </Link>
+           
+           {/* Search Button */}
+           <Link
+             href="/"
+              className="group flex items-center gap-2 px-3 py-2 text-sm font-medium bg-gray-900 text-white hover:bg-gray-800 rounded-full transition-all duration-200 shadow-sm"
+           >
+             <FaSearch className="w-4 h-4 group-hover:rotate-12 transition-transform duration-200" />
+             <span>Search</span>
+           </Link>
 
-          {/* Dynamic Auth Button */}
+                    </div>
+
+          {/* Auth Button */}
           {!isLoading ? (
             <button
               onClick={handleAuthClick}
-              className="group flex gap-2 items-center px-3 py-2 text-sm dark:text-light dark:hover:text-gray-700 text-gray-700 hover:text-gray-900 border-2 dark:border-light border-gray-700 hover:border-gray-900 rounded-full font-bold transition-all duration-200 hover:scale-105 hover:bg-gray-50"
+              className="group hidden md:flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white border-2 border-gray-600 dark:border-gray-300 hover:border-gray-400 dark:hover:border-gray-500 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-full transition-all duration-200"
             >
-              <FaSignInAlt className="group-hover:translate-x-1 transition-transform duration-200" />
+              <FaSignInAlt className="w-4 h-4 group-hover:translate-x-0.5 transition-transform duration-200" />
               <span>{isLoggedIn ? "Dashboard" : "Login"}</span>
             </button>
           ) : (
-            <div className="flex gap-2 items-center px-3 py-2 text-sm text-gray-700 border-2 border-gray-700 rounded-full font-bold">
-              <FaSignInAlt />
-              <span>...</span>
+            <div className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-400 border-2 border-gray-200 dark:border-gray-700 rounded-full">
+              <FaSignInAlt className="w-4 h-4" />
+              <span>Loading...</span>
             </div>
           )}
-        </div>
 
-        <div className="md:hidden flex gap-6 items-center">
-        <Link
-          href="/map"
-          className="flex flex-col group gap-1 items-center bg-transparent text-gray rounded-full font-semibold transition-all duration-200 hover:scale-105 w-fit relative"
-        >
-          <LiaGlobeAmericasSolid className="group-hover:rotate-12 transition-transform duration-200 text-2xl text-blue-500" />
-          <span className="bg-blue-500 text-white rounded-full px-2 py-[0.5] text-[0.6rem] absolute -bottom-2 left-[50%] -translate-x-[50%] font-semibold">
-            Map
-          </span>
-        </Link>
+        {/* Mobile Navigation */}
+        <div className="md:hidden flex gap-3 items-center">
+          <Link
+            href="/map/dark"
+            className="relative group flex items-center justify-center w-10 h-10 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-all duration-200"
+          >
+            <LiaGlobeAmericasSolid className="w-5 h-5 group-hover:rotate-12 transition-transform duration-200" />
+            <div className="absolute -top-1 -right-1 w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+          </Link>
           <MobileNav
             isLoggedIn={isLoggedIn}
             isLoading={isLoading}

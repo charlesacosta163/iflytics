@@ -27,7 +27,7 @@ const Navbar = () => {
   return (
     <div className="relative">
       {/* Main Navbar */}
-      <div className="flex justify-between items-center px-4 py-2 sticky top-0 bg-[#FAF0E6] dark:bg-gray-900 z-50 shadow-lg rounded-b-lg">
+      <div className="flex justify-between items-center px-4 py-2 sticky top-0 bg-transparent z-50 border-b-2 border-gray-200 dark:border-gray-800">
         <div className="flex items-center gap-3">
           {/* Animated Hamburger Button */}
           <button
@@ -174,7 +174,7 @@ const Navbar = () => {
               </Link>
 
               <Link
-                href="/map"
+                href="/map/dark"
                 className="group flex items-center gap-4 p-4 rounded-lg transition-all duration-200 hover:translate-x-2 bg-blue-500/[.2] hover:bg-blue-500/[0.3]"
                 onClick={() => setIsMenuOpen(false)}
               >

@@ -558,7 +558,7 @@ const GameMapPage = () => {
   return (
     <div className="relative w-full h-screen">
       {/* Test Mode Badge */}
-      <Link href="/map" className="absolute bottom-4 text-sm font-bold left-4 z-50 bg-blue-500 hover:bg-blue-600 text-light px-4 py-2 rounded-lg shadow-lg flex items-center gap-2">
+      <Link href="/map/dark" className="absolute bottom-4 text-sm font-bold left-4 z-50 bg-blue-500 hover:bg-blue-600 text-light px-4 py-2 rounded-lg shadow-lg flex items-center gap-2">
         <FaGlobeAsia className="text-light" /> <span className="hidden sm:block">Map</span>
       </Link>
 

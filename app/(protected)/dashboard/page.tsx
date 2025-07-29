@@ -314,12 +314,12 @@ export default async function DashboardPage() {
           </Card>
 
           {/* Quick Actions */}
-          <Card className=" bg-[#FCD8CD] text-dark backdrop-blur-xl">
+          <Card className=" dark:bg-[#381f17]/50 bg-[#FCD8CD] text-dark backdrop-blur-xl">
             <CardHeader>
-              <CardTitle className="text-2xl font-bold tracking-tight flex items-center gap-2 text-light bg-amber-700 px-4 py-1 rounded-full justify-center">
+              <CardTitle className="text-2xl font-bold tracking-tight flex items-center gap-2 text-light dark:bg-amber-700 bg-amber-500 px-4 py-1 rounded-full justify-center">
                 <SlActionUndo className="text-2xl" /> Quick Actions
               </CardTitle>
-              <CardDescription className="text-gray-600 text-center">
+              <CardDescription className="text-gray-600 dark:text-gray-400 text-center">
                 Quick actions to help you get started.
               </CardDescription>
             </CardHeader>
@@ -333,7 +333,7 @@ export default async function DashboardPage() {
                   </div>
                 </Link>
 
-                <Link href="/map">
+                <Link href="/map/dark">
                   <div className="bg-blue-400 hover:bg-blue-400/80 rounded-xl p-2 py-3 text-center transition-all duration-200 cursor-pointer hover:scale-105">
                     <HiOutlineGlobeAsiaAustralia className="text-2xl mx-auto mb-1" />
                     <div className="text-sm font-medium">Live Map</div>
@@ -366,7 +366,7 @@ export default async function DashboardPage() {
               <div className="flex items-center gap-2">
                 <span className="text-lg">🏆</span>
                 <CardTitle className="text-xl font-bold tracking-tight bg-gradient-to-r from-orange-400 to-purple-400 bg-clip-text text-transparent">
-                  Flight Arena
+                 The Flight Arena
                 </CardTitle>
               </div>
             </CardHeader>

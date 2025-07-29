@@ -2945,6 +2945,24 @@ export const customUserImages = [
       "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/renegadetmto/288/690441_2.png"
     )}&w=64&h=64&fit=cover&mask=circle`,
   },
+  {
+    // IFLYTICS USER
+    id: 190,
+    role: "user",
+    username: "Connor",
+    image: `https://images.weserv.nl/?url=${encodeURIComponent(
+      "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/connor/288/1321075_2.png"
+    )}&w=64&h=64&fit=cover&mask=circle`,
+  },
+  {
+    // IFLYTICS USER
+    id: 191,
+    role: "user",
+    username: "pete",
+    image: `https://images.weserv.nl/?url=${encodeURIComponent(
+      "https://www.ajournalofmusicalthings.com/wp-content/uploads/Rick-Astley1.jpg"
+    )}&w=64&h=64&fit=cover&mask=circle`,
+  },
 ];
 
 // Unknown User Compliments - Maximum Corn Level

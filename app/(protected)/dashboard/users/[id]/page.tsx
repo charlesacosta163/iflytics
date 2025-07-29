@@ -169,30 +169,30 @@ const ViewUserPage = async ({
 
                     {/* Infinite Flight Flight Info */}
                     <div className="grid grid-cols-2 gap-4">
-                      <div className="text-center p-3 bg-blue-50 rounded-lg">
-                        <p className="text-xs text-gray-600">Callsign</p>
-                        <p className="font-bold text-blue-600">
+                      <div className="text-center p-3 dark:bg-blue-500/10 bg-blue-50 rounded-lg">
+                        <p className="text-xs text-gray-600 dark:text-gray-400">Callsign</p>
+                        <p className="font-bold text-blue-600 dark:text-blue-400">
                           {pilotServerSession.callsign}
                         </p>
                       </div>
-                      <div className="text-center p-3 bg-green-50 rounded-lg">
-                        <p className="text-xs text-gray-600">Altitude</p>
-                        <p className="font-bold text-green-600">
+                      <div className="text-center p-3 dark:bg-green-500/10 bg-green-50 rounded-lg">
+                        <p className="text-xs text-gray-600 dark:text-gray-400">Altitude</p>
+                        <p className="font-bold text-green-600 dark:text-green-400">
                           {Math.round(
                             pilotServerSession.altitude
                           ).toLocaleString()}{" "}
                           ft
                         </p>
                       </div>
-                      <div className="text-center p-3 bg-purple-50 rounded-lg">
-                        <p className="text-xs text-gray-600">Speed</p>
-                        <p className="font-bold text-purple-600">
+                      <div className="text-center p-3 dark:bg-purple-500/10 bg-purple-50 rounded-lg">
+                        <p className="text-xs text-gray-600 dark:text-gray-400">Speed</p>
+                        <p className="font-bold text-purple-600 dark:text-purple-400">
                           {Math.round(pilotServerSession.speed)} kts
                         </p>
                       </div>
-                      <div className="text-center p-3 bg-orange-50 rounded-lg">
-                        <p className="text-xs text-gray-600">Heading</p>
-                        <p className="font-bold text-orange-600">
+                      <div className="text-center p-3 dark:bg-orange-500/10 bg-orange-50 rounded-lg">
+                        <p className="text-xs text-gray-600 dark:text-gray-400">Heading</p>
+                        <p className="font-bold text-orange-600 dark:text-orange-400">
                           {Math.round(pilotServerSession.heading)}°
                         </p>
                       </div>
@@ -227,7 +227,7 @@ const ViewUserPage = async ({
             <div className="flex-1 max-w-[500px] w-full px-4 bg-gray-800 rounded-lg shadow p-8">
               {userStats ? (
                 <div className="flex flex-col gap-4">
-                  <h3 className="text-4xl font-bold text-white mb-4 tracking-tight text-center flex items-center justify-center gap-2">
+                  <h3 className="text-4xl font-bold text-white mb-4 tracking-tight text-center flex items-center flex-wrap justify-center gap-2">
                     <FaChartLine className="text-amber-400" /> Infinite Flight{" "}
                     <span className="text-amber-400">Stats</span>
                   </h3>
