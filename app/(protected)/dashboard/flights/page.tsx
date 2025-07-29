@@ -44,26 +44,18 @@ const FlightsPage = async ({searchParams}: { searchParams: Promise < {
   const user = await getUser();
   const data = user.user_metadata;
   
-  const {timeframe} = await searchParams || "30"
+  const {timeframe} = await searchParams || "day-30"
   
   let allFlights;
   
-  if (typeof timeframe === 'string' && timeframe.startsWith('flight-')) {
-    // Flight-frame logic
-    const flightCount = parseInt(timeframe.replace('flight-', ''));
-    
-    if (![10,50, 100, 250, 500, 800].includes(flightCount)) {
-      redirect("/dashboard/flights?timeframe=30");
-    }
-    
-    allFlights = await getFlightsTimeFrame(data.ifcUserId, 0, flightCount);
+  const [ frameType, value ] = (Array.isArray(timeframe) ? timeframe[0] : timeframe || "day-30").split('-');
+
+  if (frameType === "day" && ["1", "7", "30", "90"].includes(value)) {
+    allFlights = await getFlightsTimeFrame(data.ifcUserId, parseInt(value));
+  } else if (frameType == "flight" && ["10", "50", "100", "250", "500", "800"].includes(value)) {
+    allFlights = await getFlightsTimeFrame(data.ifcUserId, 0, parseInt(value));
   } else {
-    // Time-frame logic
-    if (!["1", "7", "30"].includes(timeframe as string)) {
-      redirect("/dashboard/flights?timeframe=30");
-    }
-    
-    allFlights = await getFlightsTimeFrame(data.ifcUserId, parseInt(timeframe as string));
+    redirect("/dashboard/flights?timeframe=day-30");
   }
   
   const flightOverviewStats = getFlightOverviewStatsPerTimeFrame(allFlights);

@@ -2972,6 +2972,51 @@ export const customUserImages = [
       "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/galacticaviationyt/288/895803_2.png"
     )}&w=64&h=64&fit=cover&mask=circle`,
   },
+  {
+    // IFLYTICS USER
+    id: 193,
+    role: "user",
+    username: "lingxi520",
+    image: `https://images.weserv.nl/?url=${encodeURIComponent(
+      "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/lingxi520/288/1322008_2.png"
+    )}&w=64&h=64&fit=cover&mask=circle`,
+  },
+  {
+    // IFLYTICS USER
+    id: 194,
+    role: "user",
+    username: "cuifeng_hao",
+    image: `https://images.weserv.nl/?url=${encodeURIComponent(
+      "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/cuifeng_hao/288/1322008_2.png"
+    )}&w=64&h=64&fit=cover&mask=circle`,
+  },
+  {
+    // IFLYTICS USER
+    id: 195,
+    role: "user",
+    username: "LuoTianyi",
+    image: `https://images.weserv.nl/?url=${encodeURIComponent(
+      "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/luotianyi/288/1493140_2.png"
+    )}&w=64&h=64&fit=cover&mask=circle`,
+  },
+  {
+    // IFLYTICS USER
+    id: 196,
+    role: "user",
+    username: "Canton_HK",
+    image: `https://images.weserv.nl/?url=${encodeURIComponent(
+      "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/canton_hk/288/1509137_2.png"
+    )}&w=64&h=64&fit=cover&mask=circle`,
+  },
+  {
+    // IFLYTICS USER
+    id: 197,
+    role: "user",
+    username: "Aditya_Bangera",
+    image: `https://images.weserv.nl/?url=${encodeURIComponent(
+      "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/aditya_bangera/288/1544289_2.png"
+    )}&w=64&h=64&fit=cover&mask=circle`,
+  },
 ];
 
 // Unknown User Compliments - Maximum Corn Level

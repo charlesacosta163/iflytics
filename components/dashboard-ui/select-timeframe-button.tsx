@@ -36,9 +36,10 @@ const SelectTimeframeButton = () => {
         </SelectTrigger>
         <SelectContent className="font-medium">
         <div className="text-xs text-gray-500 font-semibold bg-gray-100 px-2 py-1 rounded-md text-center">Time Frames</div>
-            <SelectItem value="1">Last 24 Hours</SelectItem>
-            <SelectItem value="7">Last 7 Days</SelectItem>
-            <SelectItem value="30">Last 30 Days</SelectItem>
+            <SelectItem value="day-1">Last 24 Hours</SelectItem>
+            <SelectItem value="day-7">Last 7 Days</SelectItem>
+            <SelectItem value="day-30">Last 30 Days</SelectItem>
+            <SelectItem value="day-90">Last 90 Days</SelectItem>
             <div className="text-xs text-gray-500 font-semibold bg-amber-200 px-2 py-1 rounded-md text-center flex items-center justify-center gap-2">Flight Frames <FaStar className="text-yellow-500" /></div>
             <SelectItem value="flight-10">Last 10 Flights</SelectItem>
             <SelectItem value="flight-50">Last 50 Flights</SelectItem>

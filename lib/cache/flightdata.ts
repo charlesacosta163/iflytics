@@ -77,13 +77,54 @@ export const getAircraftCached = async (aircraftId: string) => {
 };
 
 // Modified getFlightsTimeFrame to determine appropriate page limit
+/*
+
+MONTHLY TIMEFRAME PLANS
+
+>> Required Params:
+ - ifcUserId (string) - Infinite Flight User ID
+ - days (number) - Number of days to fetch flights for
+
+ - flightsFrame (number) - Number of flights to fetch
+      --> Must retrieve data from the last 800 flights, then filter out
+
+ - monthAndYear (number) - month and year to fetch flights for
+    e.g  2-2022 (February 2022)
+
+ - currentYear (number) - Whether to fetch flights for the current year
+    e.g. 2025
+
+
+  
+  Search Params structure:
+
+  1. Day-based timeframe
+     --> ?timeframe=day-30 (30 days)
+     --> ?timeframe=day-7 (7 days)
+     --> ?timeframe=day-1 (24 hours)
+
+  
+  2. Flight-based timeframe
+    --> ?timeframe=flight-10 (last 10 flights)
+    --> ?timeframe=flight-50 (last 50 flights)
+    --> ?timeframe=flight-100 (last 100 flights)
+    --> ?timeframe=flight-250 (last 250 flights)
+    --> ?timeframe=flight-500 (last 500 flights)
+    --> ?timeframe=flight-800 (last 800 flights)
+
+
+  3. Year-based timeframe
+    --> ?timeframe=year-2025 (2025)
+
+  
+  4. Month-based timeframe
+    --> ?timeframe=month-5-2025 (May 2025)
+*/ 
 export async function getFlightsTimeFrame(ifcUserId: string, days: number, flightsFrame?: number) {
     // Determine how many pages to fetch based on requested flights
-    let maxPages = 51; // default
-    
-    if (flightsFrame && flightsFrame >= 800) {
-        maxPages = 81; // For 800+ flights
-    }
+   
+    let maxPages = 81; // For 800+ flights
+  
     // else keep default 51 for all other cases
 
     const flights = await getAggregatedFlights(ifcUserId, maxPages)
