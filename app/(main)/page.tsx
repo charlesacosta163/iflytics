@@ -13,10 +13,18 @@ import { MdOutlineAccountCircle } from "react-icons/md";
 import { BsDatabaseCheck } from "react-icons/bs";
 import { TbPlaneInflight, TbUsersGroup, TbLiveView, TbBrandFunimation } from "react-icons/tb";
 import { RiCopilotFill } from "react-icons/ri";
+import { LiaGlobeAmericasSolid } from "react-icons/lia";
 import { GrTrophy } from "react-icons/gr";
 import { PiArrowFatLineUp } from "react-icons/pi";
 import { SlBadge } from "react-icons/sl";
 
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel"
 
 
 export default function Home() {
@@ -221,7 +229,7 @@ export default function Home() {
                   Detailed Statistics
                 </h3>
                 <p className="text-gray-600 dark:text-gray-200 leading-relaxed">
-                  Track your flight time, landings, XP earnings, and performance metrics different all timeframes.
+                  Comprehensive flight analytics with total flights, landings, flight time, XP earned, nautical miles, and unique routes across multiple timeframes.
                 </p>
               </div>
             </div>
@@ -239,7 +247,7 @@ export default function Home() {
                   Flight History
                 </h3>
                 <p className="text-gray-600 dark:text-gray-200 leading-relaxed">
-                  Browse your complete flight history with detailed route information and aircraft usage patterns.
+                  Detailed flight logs with departure/arrival airports, aircraft types, flight duration, timestamps, and comprehensive route tracking.
                 </p>
               </div>
             </div>
@@ -275,7 +283,7 @@ export default function Home() {
                   Visual Charts
                 </h3>
                 <p className="text-gray-600 dark:text-gray-200 leading-relaxed">
-                  Beautiful interactive charts showing your flight activity, aircraft usage, and performance trends, as well as route analysis and maps.
+                  Interactive pie charts for aircraft usage, area charts for flight activity trends, route visualization maps, and comprehensive performance analytics.
                 </p>
               </div>
             </div>
@@ -294,7 +302,7 @@ export default function Home() {
                   Live Tracking
                 </h3>
                 <p className="text-gray-600 dark:text-gray-200 leading-relaxed">
-                  Monitor pilots currently flying on Expert Server with real-time position and flight data.
+                  Real-time Expert Server tracking with live aircraft positions, flight routes, pilot information, and active ATC frequencies.
                 </p>
               </div>
             </div>
@@ -312,7 +320,7 @@ export default function Home() {
                   Community Features
                 </h3>
                 <p className="text-gray-600 dark:text-gray-200 leading-relaxed">
-                  Connect with other pilots, view their flight stats, and overall have fun!
+                  Discover fellow pilots in the community, explore their profiles, compare flight statistics, and connect with other aviation enthusiasts.
                 </p>
               </div>
             </div>
@@ -325,6 +333,170 @@ export default function Home() {
               <span className="text-gray-600 dark:text-gray-200 font-medium">Real-time data updates</span>
               <span className="w-2 h-2 bg-blue-400 rounded-full animate-ping delay-500"></span>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Expert Server Map Section */}
+      <section className="relative w-full py-32 overflow-hidden">
+        {/* Background Image with Overlay */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ 
+            backgroundImage: 'url(/themap.png)',
+            imageRendering: 'pixelated'
+          }}
+        >
+          <div className="absolute inset-0 bg-black/60"></div>
+        </div>
+
+        {/* Animated Background Elements */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-20 left-20 w-64 h-64 bg-gradient-to-r from-blue-400/10 to-cyan-400/10 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-20 right-20 w-80 h-80 bg-gradient-to-r from-green-400/10 to-blue-400/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        </div>
+
+        <div className="container mx-auto px-4 max-w-6xl relative z-10">
+          {/* Header Section */}
+          <div className="text-center mb-20">
+            <div className="inline-block mb-6">
+              <h2 className="text-5xl font-black text-white mb-6 animate-fade-in-up relative">
+                Expert Server Live Map
+                <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-blue-400 to-cyan-400 rounded-full animate-scale-in delay-500"></div>
+              </h2>
+            </div>
+            <p className="text-gray-200 text-xl font-medium animate-fade-in-up delay-200 max-w-3xl mx-auto">
+              Track live flights on Infinite Flight's Expert Server with real-time aircraft positions, routes, and pilot information
+            </p>
+          </div>
+          
+          {/* Features Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+            
+            {/* Feature 1 - Live Flight Tracking */}
+            <div className="group animate-slide-in-up delay-100">
+              <div className="relative bg-white/10 dark:bg-gray-900/30 backdrop-blur-xl p-8 rounded-2xl hover:scale-105 transition-all duration-500 shadow-lg hover:shadow-2xl border border-white/20">
+                {/* Floating Decoration */}
+                <div className="absolute top-4 right-4 w-6 h-6 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full opacity-30 animate-float"></div>
+                
+                <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300 group-hover:shadow-blue-500/25 relative">
+                  <TbLiveView className="text-white text-3xl" />
+                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full animate-ping"></div>
+                </div>
+                <h3 className="text-white text-xl font-bold mb-4 group-hover:text-cyan-400 transition-colors duration-300">
+                  Live Flight Tracking
+                </h3>
+                <p className="text-gray-200 leading-relaxed text-sm">
+                  Watch pilots fly in real-time across the Expert Server with live aircraft positions and flight paths.
+                </p>
+              </div>
+            </div>
+
+            {/* Feature 2 - Interactive Search */}
+            <div className="group animate-slide-in-up delay-200">
+              <div className="relative bg-white/10 dark:bg-gray-900/30 backdrop-blur-xl p-8 rounded-2xl hover:scale-105 transition-all duration-500 shadow-lg hover:shadow-2xl border border-white/20">
+                {/* Floating Decoration */}
+                <div className="absolute top-4 right-4 w-6 h-6 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full opacity-30 animate-float delay-500"></div>
+                
+                <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300 group-hover:shadow-purple-500/25">
+                  <TbSearch className="text-white text-3xl" />
+                </div>
+                <h3 className="text-white text-xl font-bold mb-4 group-hover:text-pink-400 transition-colors duration-300">
+                  Smart Pilot Search
+                </h3>
+                <p className="text-gray-200 leading-relaxed text-sm">
+                  Find specific pilots, aircraft types, or callsigns with intelligent search and filtering options.
+                </p>
+              </div>
+            </div>
+
+            {/* Feature 3 - ATC Information */}
+            <div className="group animate-slide-in-up delay-300">
+              <div className="relative bg-white/10 dark:bg-gray-900/30 backdrop-blur-xl p-8 rounded-2xl hover:scale-105 transition-all duration-500 shadow-lg hover:shadow-2xl border border-white/20">
+                {/* Floating Decoration */}
+                <div className="absolute top-4 right-4 w-6 h-6 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full opacity-30 animate-float delay-1000"></div>
+                
+                <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-emerald-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300 group-hover:shadow-green-500/25">
+                  <RiCopilotFill className="text-white text-3xl" />
+                </div>
+                <h3 className="text-white text-xl font-bold mb-4 group-hover:text-emerald-400 transition-colors duration-300">
+                  Active ATC Centers
+                </h3>
+                <p className="text-gray-200 leading-relaxed text-sm">
+                  View all active ATC positions with frequencies and coverage areas across the Expert Server.
+                </p>
+              </div>
+            </div>
+
+            {/* Feature 4 - Flight Routes */}
+            <div className="group animate-slide-in-up delay-400">
+              <div className="relative bg-white/10 dark:bg-gray-900/30 backdrop-blur-xl p-8 rounded-2xl hover:scale-105 transition-all duration-500 shadow-lg hover:shadow-2xl border border-white/20">
+                {/* Floating Decoration */}
+                <div className="absolute top-4 right-4 w-6 h-6 bg-gradient-to-r from-orange-500 to-red-500 rounded-full opacity-30 animate-float delay-300"></div>
+                
+                <div className="w-16 h-16 bg-gradient-to-r from-orange-500 to-red-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300 group-hover:shadow-orange-500/25">
+                  <TbPlaneInflight className="text-white text-3xl" />
+                </div>
+                <h3 className="text-white text-xl font-bold mb-4 group-hover:text-red-400 transition-colors duration-300">
+                  Interactive Routes
+                </h3>
+                <p className="text-gray-200 leading-relaxed text-sm">
+                  Click on any aircraft to see their complete flight path with departure and arrival airports.
+                </p>
+              </div>
+            </div>
+
+            {/* Feature 5 - Multiple Map Themes */}
+            <div className="group animate-slide-in-up delay-500">
+              <div className="relative bg-white/10 dark:bg-gray-900/30 backdrop-blur-xl p-8 rounded-2xl hover:scale-105 transition-all duration-500 shadow-lg hover:shadow-2xl border border-white/20">
+                {/* Floating Decoration */}
+                <div className="absolute top-4 right-4 w-6 h-6 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full opacity-30 animate-float delay-700"></div>
+                
+                <div className="w-16 h-16 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300 group-hover:shadow-indigo-500/25">
+                  <LiaGlobeAmericasSolid className="text-white text-3xl" />
+                </div>
+                <h3 className="text-white text-xl font-bold mb-4 group-hover:text-purple-400 transition-colors duration-300">
+                  Multiple Themes
+                </h3>
+                <p className="text-gray-200 leading-relaxed text-sm">
+                  Choose from various map themes including dark mode, light mode, and seasonal special themes.
+                </p>
+              </div>
+            </div>
+
+            {/* Feature 6 - User Interaction */}
+            <div className="group animate-slide-in-up delay-600">
+              <div className="relative bg-white/10 dark:bg-gray-900/30 backdrop-blur-xl p-8 rounded-2xl hover:scale-105 transition-all duration-500 shadow-lg hover:shadow-2xl border border-white/20">
+                {/* Floating Decoration */}
+                <div className="absolute top-4 right-4 w-6 h-6 bg-gradient-to-r from-yellow-500 to-amber-500 rounded-full opacity-30 animate-float delay-200"></div>
+                
+                <div className="w-16 h-16 bg-gradient-to-r from-yellow-500 to-amber-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300 group-hover:shadow-yellow-500/25">
+                  <TbUsersGroup className="text-white text-3xl" />
+                </div>
+                <h3 className="text-white text-xl font-bold mb-4 group-hover:text-amber-400 transition-colors duration-300">
+                  Pilot Information
+                </h3>
+                <p className="text-gray-200 leading-relaxed text-sm">
+                  Get detailed pilot stats, flight progress, and aircraft information with interactive popups.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* CTA Section */}
+          <div className="text-center">
+            <div className="relative group inline-block">
+              <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-2xl blur opacity-50 group-hover:opacity-100 transition duration-700"></div>
+              <Link href="/map/dark" className="relative bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white px-8 py-4 rounded-2xl font-bold text-lg transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-blue-500/25 inline-flex items-center gap-3">
+                <LiaGlobeAmericasSolid className="text-2xl" />
+                <span>Explore Live Map</span>
+                <div className="w-2 h-2 bg-green-400 rounded-full animate-ping"></div>
+              </Link>
+            </div>
+            
+            <p className="text-gray-300 text-sm font-medium mt-4 animate-fade-in-up delay-700">
+              Updated every 30 seconds with live Expert Server data
+            </p>
           </div>
         </div>
       </section>
@@ -460,8 +632,8 @@ export default function Home() {
             <div className="relative group inline-block">
               <div className="absolute -inset-1 bg-gradient-to-r from-red-400 to-purple-400 rounded-2xl blur opacity-50 group-hover:opacity-100 transition duration-700"></div>
               <div className="relative bg-gradient-to-r from-red-500 to-purple-500 p-8 rounded-2xl cursor-pointer group-hover:scale-105 transition-transform duration-300">
-                <h3 className="text-white text-3xl font-black mb-3">Work In Progress</h3>
-                <p className="text-gray-100 font-medium mb-4">Expected to be ready by 2026</p>
+                <h3 className="text-white text-3xl font-black mb-3">Coming in 2026</h3>
+                <p className="text-gray-100 font-medium mb-4">Turn your flight data into games and challenges</p>
                 
                 {/* Quick Stats
                 <div className="flex justify-center gap-8 text-sm">
@@ -511,8 +683,8 @@ export default function Home() {
           {/* Stats Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
-              { number: "10K+", label: "Flights Tracked", gradient: "from-blue-400 to-blue-600", icon: <TbPlaneInflight className="text-blue-400"/>, delay: "delay-100" },
-              { number: "150+", label: "Active Users", gradient: "from-green-400 to-green-600", icon: <RiCopilotFill className="text-green-400"/>, delay: "delay-200" },
+              { number: "30K+", label: "Flights Tracked", gradient: "from-blue-400 to-blue-600", icon: <TbPlaneInflight className="text-blue-400"/>, delay: "delay-100" },
+              { number: "170+", label: "Active Users", gradient: "from-green-400 to-green-600", icon: <RiCopilotFill className="text-green-400"/>, delay: "delay-200" },
               { number: "24/7", label: "Live Updates", gradient: "from-orange-400 to-orange-600", icon: <LuCalendarClock className="text-orange-400"/>, delay: "delay-400" }
             ].map((stat, index) => (
               <div key={index} className={`group text-center p-8 bg-gradient-to-br from-gray/30 to-gray/50 backdrop-blur-xl rounded-2xl border border-gray-600/30 hover:border-gray-400/50 transition-all duration-500 hover:scale-105 animate-slide-in-up ${stat.delay} relative overflow-hidden flex flex-col items-center justify-center`}>
@@ -544,6 +716,216 @@ export default function Home() {
               <span className="text-gray-300 font-medium text-sm">Real-time analytics updated every minute</span>
               <span className="w-2 h-2 bg-blue-400 rounded-full animate-ping delay-500"></span>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials Section */}
+      {/* <section className="relative w-full bg-gradient-to-br from-gray-50 via-white to-gray-50 dark:from-gray-800 dark:via-gray-900 dark:to-gray-800 py-20 overflow-hidden"> */}
+        {/* Animated Background Elements */}
+        {/* <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-10 left-10 w-64 h-64 bg-gradient-to-r from-blue-400/5 to-purple-400/5 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-10 right-10 w-80 h-80 bg-gradient-to-r from-green-400/5 to-blue-400/5 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        </div> */}
+
+        {/* <div className="container mx-auto px-4 max-w-[1000px] relative z-10"> */}
+          {/* Header Section */}
+          {/* <div className="text-center mb-16">
+            <h2 className="text-4xl font-black text-gray-900 dark:text-white mb-6 animate-fade-in-up relative">
+              What Pilots Are Saying
+              <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-20 h-1 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full animate-scale-in delay-300"></div>
+            </h2>
+            <p className="text-gray-600 dark:text-gray-300 text-lg font-medium animate-fade-in-up delay-200">
+              Real feedback from the Infinite Flight community
+            </p>
+          </div> */}
+
+          {/* Testimonials Carousel */}
+          {/* <div className="relative px-12">
+            <Carousel 
+              opts={{
+                align: "start",
+                loop: true,
+              }}
+              className="w-full"
+            >
+              <CarouselContent className="-ml-2 md:-ml-4"> */}
+                {/* Testimonial 1 */}
+                {/* <CarouselItem className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3">
+                  <div className="group bg-white dark:bg-gray-800/50 p-6 rounded-2xl border border-gray-200 dark:border-gray-700 transition-all duration-500 shadow-lg hover:shadow-xl h-full flex flex-col"> 
+                    <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-6 flex-1">
+                      "Finally found the perfect companion app for Infinite Flight! This is a great website that will track all my flights!"
+                    </p>
+                    <div className="flex items-center gap-3">
+                      <img src={`https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/veloist/288/1509072_2.png`} alt="Veloist" width={40} height={40} className="rounded-full" />
+                      <div>
+                        <p className="font-semibold text-gray-900 dark:text-white">Veloist</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">Emirates Pilot</p>
+                      </div>
+                    </div>
+                  </div>
+                </CarouselItem> */}
+
+                  
+              {/* </CarouselContent> */}
+
+              {/* <CarouselPrevious className="text-gray-600 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700" />
+              <CarouselNext className="text-gray-600 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700" />
+            </Carousel>
+          </div>   */}
+
+          {/* Bottom Decoration */}
+          {/* <div className="mt-16 text-center">
+            <div className="inline-flex items-center gap-2 px-6 py-3 bg-gray-100/50 dark:bg-gray-700/15 backdrop-blur-sm rounded-full border border-gray-200/50 dark:border-gray-600/30 animate-fade-in-up delay-500">
+              <span className="w-2 h-2 bg-blue-400 rounded-full animate-ping"></span>
+              <span className="text-gray-600 dark:text-gray-300 font-medium text-sm">Join thousands of satisfied pilots</span>
+              <span className="w-2 h-2 bg-green-400 rounded-full animate-ping delay-500"></span>
+            </div>
+          </div>
+        </div>
+      </section> */}
+
+      {/* Subscription Tiers Section */}
+      <section className="relative w-full bg-gradient-to-br bg-[#FAF0E6] dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-24 overflow-hidden">
+        {/* Animated Background Elements */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-20 left-20 w-64 h-64 bg-gradient-to-r from-blue-400/8 to-purple-400/8 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-20 right-20 w-80 h-80 bg-gradient-to-r from-green-400/8 to-blue-400/8 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        </div>
+
+        <div className="container mx-auto px-4 max-w-[1200px] relative z-10">
+          {/* Header Section */}
+          <div className="text-center mb-16">
+            <h2 className="text-5xl font-black text-gray-900 dark:text-white mb-6 animate-fade-in-up relative">
+              Choose Your Plan
+              <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full animate-scale-in delay-500"></div>
+            </h2>
+            <p className="text-gray-600 dark:text-gray-300 text-xl font-medium animate-fade-in-up delay-200">
+              Unlock powerful features to enhance your flight tracking experience
+            </p>
+          </div>
+
+          {/* Pricing Cards */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            
+            {/* Free Tier */}
+            <div className="group animate-slide-in-up delay-100">
+              <div className="relative bg-[#ffe1ce] dark:bg-gray-800/50 p-8 rounded-2xl border border-gray-200 dark:border-gray-700 hover:scale-105 transition-all duration-500 shadow-lg hover:shadow-2xl h-full flex flex-col">
+                <div className="text-center mb-8">
+                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Free</h3>
+                  <div className="text-4xl font-black text-gray-900 dark:text-white mb-2">$0</div>
+                  <p className="text-gray-600 dark:text-gray-400">Forever</p>
+                </div>
+                
+                <div className="flex-1 space-y-4 mb-8">
+                  <div className="flex items-start gap-3">
+                    <FaCheck className="text-green-500 mt-1 flex-shrink-0"/>
+                    <span className="text-gray-700 dark:text-gray-300">Basic flight tracking and statistics</span>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <FaCheck className="text-green-500 mt-1 flex-shrink-0"/>
+                    <span className="text-gray-700 dark:text-gray-300">Time-based frames of flight history and analysis (1, 7, 30 days)</span>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <FaCheck className="text-green-500 mt-1 flex-shrink-0"/>
+                    <span className="text-gray-700 dark:text-gray-300">Simple dashboard with core metrics (Flights, Landings, XP, etc...)</span>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <FaCheck className="text-green-500 mt-1 flex-shrink-0"/>
+                    <span className="text-gray-700 dark:text-gray-300">The Expert Server Map</span>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <FaCheck className="text-green-500 mt-1 flex-shrink-0"/>
+                    <span className="text-gray-700 dark:text-gray-300">Access to the IFlytics Discord Server</span>
+                  </div>
+                </div>
+
+                <button className="w-full bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 py-3 rounded-xl font-semibold hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-300 italic">
+                  Open Beta - Premium Access
+                </button>
+              </div>
+            </div>
+
+            {/* Premium Tier */}
+            <div className="group animate-slide-in-up delay-200">
+              <div className="relative bg-[#ffe1ce] dark:bg-gray-800/50 p-8 rounded-2xl border border-gray-200 dark:border-gray-700 hover:scale-105 transition-all duration-500 shadow-lg hover:shadow-2xl h-full flex flex-col">
+                <div className="text-center mb-8">
+                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Premium</h3>
+                  <div className="text-4xl font-black text-gray-900 dark:text-white mb-2">$1.99</div>
+                  <p className="text-gray-600 dark:text-gray-400">per month</p>
+                  <div className="mt-3">
+                    <span className="text-green-600 dark:text-green-400 text-sm font-semibold">or Lifetime $49.99</span>
+                    <span className="block text-xs text-gray-500 dark:text-gray-400">Save money after 25 months</span>
+                  </div>
+                </div>
+                
+                <div className="flex-1 space-y-4 mb-8">
+                  <div className="flex items-start gap-3">
+                    <FaCheck className="text-green-500 mt-1 flex-shrink-0"/>
+                    <div>
+                      <span className="text-gray-700 dark:text-gray-300 font-semibold">Route Analysis</span>
+                      <span className="text-gray-600 dark:text-gray-400 text-sm block">Interactive maps, distance calculations, route categorization</span>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <FaCheck className="text-green-500 mt-1 flex-shrink-0"/>
+                    <div>
+                      <span className="text-gray-700 dark:text-gray-300 font-semibold">Aircraft Analysis</span>
+                      <span className="text-gray-600 dark:text-gray-400 text-sm block">Top aircraft usage, fleet statistics, performance tracking</span>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <FaCheck className="text-green-500 mt-1 flex-shrink-0"/>
+                    <div>
+                      <span className="text-gray-700 dark:text-gray-300 font-semibold">Flight-Frame Analysis</span>
+                      <span className="text-gray-600 dark:text-gray-400 text-sm block">Analyze your last 10, 50, 100, 250, 500 or 800 flights</span>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <FaCheck className="text-green-500 mt-1 flex-shrink-0"/>
+                    <span className="text-gray-700 dark:text-gray-300 font-semibold">Extended flight history (based on Flight Frames)</span>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <FaCheck className="text-green-500 mt-1 flex-shrink-0"/>
+                    <div>
+                      <span className="text-gray-700 dark:text-gray-300 font-semibold">Advanced charts and analytics</span>
+                      <span className="text-gray-600 dark:text-gray-400 text-sm block">Aircraft usage charts, flight duration categorization, more route-based charts</span>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <FaCheck className="text-green-500 mt-1 flex-shrink-0"/>
+                    <span className="text-gray-700 dark:text-gray-300 font-semibold">Priority user support</span>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <div className="w-5 h-5 mt-1 flex-shrink-0 relative">
+                      <div className="absolute inset-0 bg-gradient-to-r from-red-400 to-purple-400 rounded-full animate-pulse"></div>
+                      <div className="absolute inset-0.5 bg-white dark:bg-gray-800 rounded-full"></div>
+                      <div className="absolute inset-1 bg-gradient-to-r from-red-400 to-purple-400 rounded-full"></div>
+                    </div>
+                    <div>
+                      <span className="text-gray-700 dark:text-gray-300 font-semibold">The Flight Arena</span>
+                      <span className="text-gray-600 dark:text-gray-400 text-sm block">Turn your Infinite Flight statistics into games and challenges and climb up the leaderboard.</span>
+                      <div className="mt-2 inline-block">
+                        <button className="bg-gray-100 dark:bg-gray-900/30 text-gray-600 dark:text-gray-400 px-2 py-1 rounded-full text-xs font-bold" disabled>
+                          Coming in 2026
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <button className="w-full bg-gradient-to-r from-blue-500 to-purple-500 text-white py-3 rounded-xl font-semibold hover:from-blue-600 hover:to-purple-600 transition-all duration-300 shadow-lg hover:shadow-blue-500/25">
+                  Available on Official Release
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom Note */}
+          <div className="mt-16 text-center">
+            <p className="text-gray-600 dark:text-gray-400 text-sm">
+              All plans include access to your complete flight history and Expert Server live tracking
+            </p>
           </div>
         </div>
       </section>
@@ -664,6 +1046,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-      </div>
+    </div>
   );
 }

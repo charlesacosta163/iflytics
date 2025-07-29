@@ -2963,6 +2963,15 @@ export const customUserImages = [
       "https://www.ajournalofmusicalthings.com/wp-content/uploads/Rick-Astley1.jpg"
     )}&w=64&h=64&fit=cover&mask=circle`,
   },
+  {
+    // IFLYTICS USER
+    id: 192,
+    role: "user",
+    username: "GalacticAviationYT",
+    image: `https://images.weserv.nl/?url=${encodeURIComponent(
+      "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/galacticaviationyt/288/895803_2.png"
+    )}&w=64&h=64&fit=cover&mask=circle`,
+  },
 ];
 
 // Unknown User Compliments - Maximum Corn Level
