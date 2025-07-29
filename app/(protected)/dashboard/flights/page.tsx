@@ -50,9 +50,12 @@ const FlightsPage = async ({searchParams}: { searchParams: Promise < {
   
   const [ frameType, value ] = (Array.isArray(timeframe) ? timeframe[0] : timeframe || "day-30").split('-');
 
-  if (frameType === "day" && ["1", "7", "30", "90"].includes(value)) {
-    allFlights = await getFlightsTimeFrame(data.ifcUserId, parseInt(value));
-  } else if (frameType == "flight" && ["10", "50", "100", "250", "500", "800"].includes(value)) {
+  if (!frameType || !value) {
+    redirect("/dashboard/flights?timeframe=day-30");
+  }
+  if (frameType && frameType === "day" && ["1", "7", "30", "90"].includes(value as string)) {
+    allFlights = await getFlightsTimeFrame(data.ifcUserId, parseInt(value as string));
+  } else if (frameType && frameType == "flight" && ["10", "50", "100", "250", "500", "800"].includes(value as string)) {
     allFlights = await getFlightsTimeFrame(data.ifcUserId, 0, parseInt(value));
   } else {
     redirect("/dashboard/flights?timeframe=day-30");

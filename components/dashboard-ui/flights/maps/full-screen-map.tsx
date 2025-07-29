@@ -1701,7 +1701,7 @@ const ComplimentButton = ({ flights }: { flights: any[] }) => {
           <div className="animate-ping absolute -top-1 -right-1 w-2 h-2 bg-orange-500 rounded-full"></div>
         )}
         <FaRegFaceGrinWink className="w-5 h-5 text-white" />
-        <span className="text-[0.5rem] text-white font-bold">Doritos</span>
+        <span className="text-[0.5rem] text-white font-bold">Cheese</span>
       </button>
 
       {/* Panel - NO BLUR EFFECT */}

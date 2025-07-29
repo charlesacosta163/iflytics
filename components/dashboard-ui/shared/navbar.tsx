@@ -141,7 +141,7 @@ const Navbar = () => {
               </Link>
 
               <Link
-                href="/dashboard/flights"
+                href="/dashboard/flights?timeframe=day-30"
                 className="group flex items-center gap-4 p-4 rounded-lg hover:bg-gray-700 transition-all duration-200 hover:translate-x-2"
                 onClick={() => setIsMenuOpen(false)}
               >

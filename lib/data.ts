@@ -3017,6 +3017,15 @@ export const customUserImages = [
       "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/aditya_bangera/288/1544289_2.png"
     )}&w=64&h=64&fit=cover&mask=circle`,
   },
+  {
+    // IFLYTICS USER
+    id: 198,
+    role: "user",
+    username: "Rayviator",
+    image: `https://images.weserv.nl/?url=${encodeURIComponent(
+      "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/rayviator/288/1319036_2.png"
+    )}&w=64&h=64&fit=cover&mask=circle`,
+  },
 ];
 
 // Unknown User Compliments - Maximum Corn Level

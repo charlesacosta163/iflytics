@@ -43,7 +43,7 @@ const Sidebar = () => {
 
             <div className="flex flex-col">
               <span className="text-gray-900 dark:text-white">IFlytics</span>
-              <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">Advanced Infinite Flight Analytics</span>
+              <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">AInfinite Flight Analytics</span>
             </div>
             
             </Link>
@@ -60,7 +60,7 @@ const Sidebar = () => {
                 Dashboard
             </Link>
 
-            <Link href="/dashboard/flights" className={cn("flex gap-3 text-gray-700 dark:text-gray-300 font-medium items-center hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white rounded-lg px-3 py-2.5 transition-all duration-200 group", pathname === "/dashboard/flights" && "bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 font-semibold")}>
+            <Link href="/dashboard/flights?timeframe=day-30" className={cn("flex gap-3 text-gray-700 dark:text-gray-300 font-medium items-center hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white rounded-lg px-3 py-2.5 transition-all duration-200 group", pathname === "/dashboard/flights" && "bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 font-semibold")}>
                 <TiPlaneOutline className="w-4 h-4 group-hover:scale-110 transition-transform duration-200" />
                 Flights
             </Link>

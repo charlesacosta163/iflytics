@@ -36,7 +36,6 @@ const FlightsDisplay = ({ flights }: { flights: Flight[] }) => {
     }
   });
 
-  console.log(violations);
   return (
     <div className="flex flex-col gap-4">
       <header className="flex justify-between items-center">
