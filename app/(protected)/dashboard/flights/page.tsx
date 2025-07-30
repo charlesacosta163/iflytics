@@ -53,6 +53,7 @@ const FlightsPage = async ({searchParams}: { searchParams: Promise < {
   if (!frameType || !value) {
     redirect("/dashboard/flights?timeframe=day-30");
   }
+
   if (frameType && frameType === "day" && ["1", "7", "30", "90"].includes(value as string)) {
     allFlights = await getFlightsTimeFrame(data.ifcUserId, parseInt(value as string));
   } else if (frameType && frameType == "flight" && ["10", "50", "100", "250", "500", "800"].includes(value as string)) {

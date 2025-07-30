@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Pathname from "./pathname";
 import { LogoutButton } from "@/components/logout-button";
+import { getUser } from "@/lib/supabase/user-actions";
 import { Menu, X } from "lucide-react";
 
 import { TiPlaneOutline } from "react-icons/ti";
@@ -17,12 +18,30 @@ import iflyticsLogoLight from "@/public/iflyticslight.svg";
 import { BsIncognito } from "react-icons/bs";
 import { LiaGlobeAmericasSolid } from "react-icons/lia";
 import { useTheme } from "next-themes";
+import { customUserImages } from "@/lib/data";
 
-import { Moon, Sun } from "lucide-react";
+import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
+import { InlineThemeSwitcher } from "@/components/inline-theme-switcher";
+import { RiCopilotFill } from "react-icons/ri";
+
 
 const Navbar = () => {
   const { theme, setTheme } = useTheme();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [user, setUser] = useState<any>(null);
+  const [userObj, setUserObj] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const user = await getUser();
+      setUser(user);
+      const userObj = customUserImages.find((entry) => entry.username === user?.user_metadata?.ifcUsername) || null
+      setUserObj(userObj);
+      console.log(userObj);
+    }
+    fetchUser();
+  }, []);
+
 
   return (
     <div className="relative">
@@ -53,7 +72,7 @@ const Navbar = () => {
               />
             </div>
           </button>
-          <div className="relative">
+          <div className="relative block lg:hidden">
             <Link
               href="/dashboard"
               className="text-2xl font-bold tracking-tighter flex gap-2 items-center"
@@ -80,6 +99,13 @@ const Navbar = () => {
               Early Alpha
             </span>
           </div>
+
+          <div className="hidden lg:block">
+            <Link href="/dashboard" className="text-xl font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors duration-200 tracking-tight">
+              Hello <b>{user?.user_metadata?.ifcUsername}</b>!
+            </Link>
+          </div>
+
         </div>
         <div className="flex items-center gap-2">
           {/* {
@@ -93,7 +119,55 @@ const Navbar = () => {
               </button>
             )
           } */}
-          <LogoutButton className="text-sm !px-4 !py-2 font-semibold rounded-full hover:scale-105 transition-transform duration-200" />
+          
+          <Popover>
+            <PopoverTrigger>
+              {userObj ? (
+                <div className="p-0.5 bg-gray-700 hover:bg-gray-400 transition-colors duration-200 rounded-full cursor-pointer">
+                  <img src={userObj?.image} alt={userObj?.username} className="w-10 h-10 rounded-full" />
+                </div>
+              ) : (
+                <div className="p-1 bg-gray-700 hover:bg-gray-400 transition-colors duration-200 rounded-full cursor-pointer">
+                  <RiCopilotFill size={24} className="text-light" />
+                </div>
+              )}
+            </PopoverTrigger>
+            <PopoverContent>
+              <section className="flex flex-col gap-4">
+
+                <div className="flex gap-2 items-center">
+
+                  {userObj ? (
+                    <div className="p-0.5 bg-gray-700 hover:bg-gray-400 transition-colors duration-200 rounded-full cursor-pointer">
+                      <img src={userObj?.image} alt={userObj?.username} className="w-10 h-10 rounded-full" />
+                    </div>
+                    ) : (
+                      <div className="p-1 bg-gray-700 hover:bg-gray-400 transition-colors duration-200 rounded-full cursor-pointer">
+                        <RiCopilotFill size={24} className="text-light" />
+                      </div>
+                  )}
+
+                  <div className="flex flex-col gap-[0.1rem] text-sm font-semibold self-start">
+                    {userObj?.username ? userObj?.username : user?.user_metadata?.ifcUsername}
+                    <span className="text-[0.5rem] text-light bg-blue-700 px-2 py-[0.1rem] rounded-full self-start">Free</span>
+                  </div>
+                </div>
+
+                <div className="flex px-4 py-2 rounded-md gap-2 items-center bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 transition-colors duration-200 cursor-pointer text-sm">
+                  <div>
+                    <FaUser className="w-4 h-4 text-dark dark:text-light" />
+                  </div>
+                  <span className="font-medium">Go to Profile</span>
+                </div>
+
+                <div className="flex justify-between gap-2">
+                  <InlineThemeSwitcher />
+                  <LogoutButton className="text-sm !px-4 !py-2 font-semibold rounded-full hover:scale-105 transition-transform duration-200" />
+                </div>
+
+              </section>
+            </PopoverContent>
+          </Popover>
         </div>
       </div>
 

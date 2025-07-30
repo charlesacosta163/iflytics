@@ -38,6 +38,8 @@ interface User {
 //   keywords: "infinite flight, flight tracking, aviation analytics, pilot statistics, flight data, expert server, flight simulator, aviation dashboard, pilot leaderboards, flight history, iflytics profile",
 // }
 
+const ENABLE_SUBSCRIPTIONS = false;
+
 const ProfilePage = () => {
   const [userProfile, setUserProfile] = useState<User | null>(null);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
@@ -198,7 +200,7 @@ const ProfilePage = () => {
                   Settings
                 </h2>
               </div>
-              {/* <SubscribeButton /> */}
+              {ENABLE_SUBSCRIPTIONS && <SubscribeButton />}
               {/* Danger Zone */}
               <div className="w-full flex justify-between gap-2 items-center py-4 px-6 bg-red-50 dark:bg-gray-700 rounded-xl ">
                 <div className="flex items-center gap-2">

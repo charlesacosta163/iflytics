@@ -43,7 +43,7 @@ const Sidebar = () => {
 
             <div className="flex flex-col">
               <span className="text-gray-900 dark:text-white">IFlytics</span>
-              <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">AInfinite Flight Analytics</span>
+              <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">Your Delicious French Toast</span>
             </div>
             
             </Link>
