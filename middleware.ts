@@ -6,6 +6,9 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
+  api: {
+    bodyParser: false
+  },
   matcher: [
     /*
      * Match all request paths except for the ones starting with:
