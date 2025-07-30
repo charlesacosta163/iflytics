@@ -37,7 +37,6 @@ const Navbar = () => {
       setUser(user);
       const userObj = customUserImages.find((entry) => entry.username === user?.user_metadata?.ifcUsername) || null
       setUserObj(userObj);
-      console.log(userObj);
     }
     fetchUser();
   }, []);
