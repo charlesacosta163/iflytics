@@ -32,14 +32,6 @@ const mapThemes = {
     name: "Dark",
     icon: <LuMoon className="w-6 h-6" />,
   },
-  "/map/party": {
-    name: "Party",
-    icon: <LuPartyPopper className="w-6 h-6" />,
-  },
-  "/map/winter": {
-    name: "Winter",
-    icon: <LuSnowflake className="w-6 h-6" />,
-  },
 };
 
 const FullScreenMap = ({
@@ -1815,13 +1807,7 @@ const MapThemeButton = () => {
             "w-12 h-12 backdrop-blur-sm rounded-xl shadow-lg transition-all duration-300 flex flex-col items-center justify-center group relative hover:scale-105",
             pathname === "/map"
               ? "bg-light text-gray-700 hover:bg-gray-100"
-              : pathname === "/map/dark"
-              ? "bg-gray-700 text-light hover:bg-gray-600"
-              : pathname === "/map/party"
-              ? "bg-indigo-600 text-light hover:bg-indigo-700"
-              : pathname === "/map/winter"
-              ? "bg-blue-300 text-light hover:bg-blue-400"
-              : "bg-light text-gray-700 hover:bg-gray-100"
+              : "bg-gray-700 text-light hover:bg-gray-600"
           )}
         >
           <span className="text-lg group-hover:scale-110 transition-transform duration-300">

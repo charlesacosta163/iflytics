@@ -1248,6 +1248,58 @@ export const alternator = [
   "🧩",
 ];
 
+export const captionThing = [
+  "Your In-Flight Snack for Data",
+  "Your delicious French toast of flight data.",
+  "Your autopilot for nerdy stats cravings.",
+  "Your personal flight chef—serving hot stats daily.",
+  "Your favorite airline snack, but with numbers.",
+  "Your co-pilot that never complains.",
+  "Your dashboard of dopamine and departures.",
+  "Your jet-fueled boost of analytics joy.",
+  "Your flight stats, now with extra legroom.",
+  "Your favorite seat in the data cabin.",
+  "Your passport to nerdy aviation bliss.",
+  "Your emergency slide of statistical comfort.",
+  "Your inflight squirrel tracker (beta).",
+  "Your cupholder for runaway analytics.",
+  "Your imaginary co-pilot named Greg.",
+  "Your sky baguette of performance feedback.",
+  "Your unicorn-powered fuel gauge.",
+  "Your autopilot that only flies in dreams.",
+  "Your potato chip of aviation clarity.",
+  "Your last known location: cloud sandwich.",
+  "Your overcooked lasagna of flight logs.",
+  "Your stat-filled briefcase of invisible charts.",
+  "Your moonwalking flight inspector.",
+  "Your oddly specific turbulence detector.",
+  "Your penguin-approved flight recorder.",
+  "Your cruise altitude for existential dread.",
+  "Your luggage full of bar graphs and bees.",
+  "Your friendly ghost that graphs your descent.",
+  "Your espresso shot of airspeed analysis.",
+  "Your favorite kind of numerical turbulence.",
+  "Your nonsensical nav beacon of delight.",
+  "Your in-flight nap interrupted by data.",
+  "Your imaginary friend who loves METARs.",
+  "Your flamingo’s guide to vertical speed.",
+  "Your sky-high scorecard, zero turbulence.",
+  "Your go-to inflight entertainment (but nerdier).",
+  "Your quirky co-captain in stat land.",
+  "Your airline peanuts… but make it data.",
+  "Your cockpit view of everything weirdly useful.",
+  "Your virtual black box, minus the crash.",
+  "Your airline loyalty tracker—if loyalty meant fun.",
+  "Your secret stash of aviation trivia.",
+  "Your stat-fueled mile-high breakfast club.",
+  "Your quirky terminal for digital takeoffs.",
+  "Your high-altitude horoscope for pilots.",
+  "Your logbook with a funky personality.",
+  "Your snack-sized nuggets of flight truth.",
+  "Your buddy who graphs your landing rate.",
+  "Your altimeter of vibes and charts."
+];
+
 export const customUserImages = [
   {
     // IFLYTICS USER
@@ -3042,6 +3094,33 @@ export const customUserImages = [
     username: "m_m_aatifulla_baig",
     image: `https://images.weserv.nl/?url=${encodeURIComponent(
       "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/m_m_aatifulla_baig/288/1487253_2.png"
+    )}&w=64&h=64&fit=cover&mask=circle`,
+  },
+  {
+    // IFLYTICS USER
+    id: 201,
+    role: "user",
+    username: "Nevin",
+    image: `https://images.weserv.nl/?url=${encodeURIComponent(
+      "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/nevin/288/1474197_2.png"
+    )}&w=64&h=64&fit=cover&mask=circle`,
+  },
+  {
+    // IFLYTICS USER
+    id: 202,
+    role: "user",
+    username: "MyGoal_isNASA",
+    image: `https://images.weserv.nl/?url=${encodeURIComponent(
+      "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/mygoal_isnasa/288/1554659_2.png"
+    )}&w=64&h=64&fit=cover&mask=circle`,
+  },
+  {
+    // IFLYTICS USER
+    id: 203,
+    role: "user",
+    username: "Asfer_CX",
+    image: `https://images.weserv.nl/?url=${encodeURIComponent(
+      "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/asfer_cx/288/1527674_2.png"
     )}&w=64&h=64&fit=cover&mask=circle`,
   },
 ];

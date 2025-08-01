@@ -205,7 +205,7 @@ const DirectoryPage = async ({
         <TabsContent value="aircraft">
           <div className="flex gap-2 items-center mt-4 mb-6">
             <FaPlane className="w-6 h-6 text-gray-700" />
-            <h2 className="text-gray-700 text-xl font-bold">All Aircraft ({aircraft.result.length})</h2>
+            <h2 className="text-gray-700 dark:text-gray-300 text-xl font-bold">All Aircraft ({aircraft.result.length})</h2>
           </div>
 
           {aircraft && aircraft.result && aircraft.result.length > 0 ? (

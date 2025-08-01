@@ -544,7 +544,7 @@ export const RouteMap = ({ routes }: { routes: any[] }) => {
         <button
           onClick={toggleFullScreen}
           className="w-10 h-10 bg-white/90 backdrop-blur-sm rounded-lg shadow-lg
-                     hover:bg-white transition-all duration-200
+                     hover:bg-white transition-all duration-200 text-gray
                      flex items-center justify-center border border-gray-200"
         >
           {isFullScreen ? <FiMinimize2 /> : <FiMaximize2 />}

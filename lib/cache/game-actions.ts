@@ -108,38 +108,21 @@ export async function getTodaysLeaderboard() {
 }
 
 export async function getAllTimeLeaderboard() {
-    const supabase = await createClient()
-    
+    const supabase = await createClient();
+  
     const { data, error } = await supabase
-        .from('pilot_game_results')
-        .select('username, points')
-
+      .from('all_time_leaderboard')
+      .select('*')
+      .limit(100); // Optional
+  
     if (error) {
-        console.error('Error fetching all-time leaderboard:', error)
-        return []
+      console.error('Error fetching all-time leaderboard:', error);
+      return [];
     }
-
-    // Aggregate points by username
-    const aggregated = (data || []).reduce((acc: any[], curr) => {
-        const existing = acc.find(item => item.username === curr.username);
-        if (existing) {
-            existing.total_points += curr.points;
-            existing.games_played += 1;
-        } else {
-            acc.push({
-                username: curr.username,
-                total_points: curr.points,
-                games_played: 1
-            });
-        }
-        return acc;
-    }, []);
-
-    // Sort by total points descending
-    return aggregated
-        .sort((a, b) => b.total_points - a.total_points)
-        .slice(0, 100);
-}
+  
+    return data || [];
+  }
+  
 
 export async function getUserGameHistory() {
     const user = await getUser()

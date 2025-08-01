@@ -11,7 +11,7 @@ const AirportWithATCCard = ({groupedAirports, atisDataByAirport}: {groupedAirpor
                 <div className="flex items-center gap-2">
 
               <TbBuildingBroadcastTower className="w-6 h-6 text-green-600 animate-pulse" />
-              <h3 className="text-xl font-bold text-gray-700">
+              <h3 className="text-xl font-bold text-gray-700 dark:text-gray-300">
                 Active ATC
               </h3>
                 </div>

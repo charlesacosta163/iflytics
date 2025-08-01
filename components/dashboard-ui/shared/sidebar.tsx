@@ -1,6 +1,6 @@
 'use client'
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import iflyticsLogo from "@/public/iflyticslight.svg";
 import Image from "next/image";
@@ -18,20 +18,26 @@ import { GoCopilot } from "react-icons/go";
 import { LuGoal } from "react-icons/lu";
 import { BsIncognito } from "react-icons/bs";
 import { LiaGlobeAmericasSolid } from "react-icons/lia";
-
+import { getRandomCaption } from "@/lib/foo.js";
 
 const Sidebar = () => {
   const pathname = usePathname();
+  const [randomCaption, setRandomCaption] = useState("");
+  
+  useEffect(() => {
+    setRandomCaption(getRandomCaption());
+  }, []);
+
   return (
     <section className="hidden lg:block max-w-[280px] w-full bg-white dark:bg-gray-900 rounded-r-[40px] text-gray-900 dark:text-gray-100">
       <div className="flex flex-col h-full">
 
-        <header className="p-6 border-b border-gray-200 dark:border-gray-800">
+        <header className="px-6 py-4 border-b border-gray-200 dark:border-gray-800">
             <Link
             href="/dashboard"
             className="text-xl font-bold tracking-tight flex gap-3 items-center group hover:scale-105 transition-transform duration-200"
             >
-            <div className="p-2 bg-gray rounded-xl shadow-lg group-hover:shadow-blue-500/25 transition-shadow duration-200">
+            <div className="p-2 bg-amber-500 rounded-xl shadow-lg group-hover:shadow-blue-500/25 transition-shadow duration-200">
               <Image
                   src={iflyticsLogo}
                   alt="Iflytics Logo"
@@ -42,8 +48,8 @@ const Sidebar = () => {
             </div>
 
             <div className="flex flex-col">
-              <span className="text-gray-900 dark:text-white">IFlytics</span>
-              <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">Your Delicious French Toast</span>
+              <span className="text-gray-900 dark:text-white"><span className="text-amber-500 dark:text-amber-300">IF</span>lytics</span>
+              <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">{randomCaption}</span>
             </div>
             
             </Link>
@@ -90,7 +96,7 @@ const Sidebar = () => {
                     <div className="flex flex-col">
                       <span className="font-bold text-white text-sm">The Flight Arena</span>
                       <span className="text-xs bg-amber-400 text-amber-900 px-2 py-0.5 font-bold rounded-full w-fit">
-                        Premium+
+                        Premium
                       </span>
                     </div>
                   </div>

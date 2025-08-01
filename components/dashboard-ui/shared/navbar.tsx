@@ -26,7 +26,6 @@ import { RiCopilotFill } from "react-icons/ri";
 
 
 const Navbar = () => {
-  const { theme, setTheme } = useTheme();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [user, setUser] = useState<any>(null);
   const [userObj, setUserObj] = useState<any>(null);
@@ -91,17 +90,17 @@ const Navbar = () => {
                 width={32}
                 height={32}
               />
-              IFlytics
+              <span className="text-gray-700 dark:text-gray-100"><span className="text-amber-500 dark:text-amber-300">IF</span>lytics</span>
             </Link>
 
-            <span className="text-[10px] font-semibold text-white bg-red-400 rounded-full absolute -bottom-4 left-5 px-2 py-0.10 shadow-lg z-100">
-              Early Alpha
+            <span className="text-[10px] font-semibold text-white bg-amber-500 rounded-full absolute -bottom-4 left-5 px-2 py-0.10 shadow-lg z-100">
+              Open Beta
             </span>
           </div>
 
-          <div className="hidden lg:block">
-            <Link href="/dashboard" className="text-xl font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors duration-200 tracking-tight">
-              Hello <b>{user?.user_metadata?.ifcUsername}</b>!
+          <div className="hidden lg:block border-b-2 border-gray-700 dark:border-gray-300 hover:border-gray-800 dark:hover:border-gray-50 transition-colors duration-200">
+            <Link href="/dashboard" className="text-xl font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors duration-200 tracking-tight">
+              {user?.user_metadata?.ifcUsername ? <span>Hello <b>{user?.user_metadata?.ifcUsername}</b>!</span> : "Loading..."}
             </Link>
           </div>
 
@@ -152,12 +151,12 @@ const Navbar = () => {
                   </div>
                 </div>
 
-                <div className="flex px-4 py-2 rounded-md gap-2 items-center bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 transition-colors duration-200 cursor-pointer text-sm">
+                <Link href="/dashboard/profile" className="flex px-4 py-2 rounded-md gap-2 items-center bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 transition-colors duration-200 cursor-pointer text-sm">
                   <div>
                     <FaUser className="w-4 h-4 text-dark dark:text-light" />
                   </div>
                   <span className="font-medium">Go to Profile</span>
-                </div>
+                </Link>
 
                 <div className="flex justify-between gap-2">
                   <InlineThemeSwitcher />

@@ -68,13 +68,13 @@ export default function Home() {
               {/* Title with Gradient Animation */}
               <div className="text-center lg:text-left animate-fade-in-up delay-200">
                 <h1 className="text-5xl lg:text-6xl font-black tracking-tight mb-3 lg:mb-4 relative">
-                  <span className="bg-gradient-to-r from-gray-800 via-gray-900 to-gray-800 dark:from-gray-200 dark:via-white dark:to-gray-200 bg-clip-text text-transparent animate-gradient-x bg-[length:200%_auto]">
-                    IFlytics
+                  <span className="text-gray-900 dark:text-gray-100">
+                  <span className="text-amber-500 dark:text-amber-300">IF</span>lytics
                   </span>
 
                 </h1>
                 <p className="text-gray-600 dark:text-gray-300 text-lg sm:text-xl font-semibold animate-fade-in-up delay-300">
-                  Your home to your stats of Infinite Flight!
+                Professional-grade flight analytics and journey history for Infinite Flight enthusiasts.
                 </p>
               </div>
             </header>
@@ -109,7 +109,7 @@ export default function Home() {
                 </div>
                 <div className="flex-1">
                   <h3 className="font-bold text-gray-800 dark:text-light text-base mb-1 group-hover:text-purple-600 transition-colors duration-300">
-                    Complete Flight Journey
+                    Extensive Flight Journey
                   </h3>
                   <p className="text-gray-600 dark:text-gray-300 text-sm group-hover:text-gray-700 dark:group-hover:text-gray-200 transition-colors duration-300">
                     Explore detailed history with routes and aircraft
@@ -128,7 +128,7 @@ export default function Home() {
             <form action={async (formData: FormData) => {
               'use server'
               redirect(`/user/${formData.get("name") as string}`)
-              }} className="relative px-4 py-6 lg:px-8 lg:py-10 rounded-[23px] bg-[#ffe3d0] dark:bg-gray shadow-xl backdrop-blur-sm">
+              }} className="relative px-4 py-6 lg:px-8 lg:py-10 rounded-[23px] bg-[#ffe3d0] dark:bg-dark shadow-xl backdrop-blur-sm">
                 
                 {/* Form Header */}
                 <div className="text-center mb-6 lg:mb-8">
@@ -146,7 +146,7 @@ export default function Home() {
                       <input 
                         type="text" 
                         name="name" 
-                        className="relative bg-light dark:bg-gray-700/80 backdrop-blur-sm pl-10 lg:pl-12 pr-4 py-2 lg:py-3 font-medium rounded-xl outline-none w-full focus:border-blue-400 transition-all duration-300 text-base placeholder:text-gray-500 dark:placeholder:text-gray-400 text-gray-900 dark:text-white" 
+                        className="relative bg-light dark:bg-gray-900/80 backdrop-blur-sm pl-10 lg:pl-12 pr-4 py-2 lg:py-3 font-medium rounded-xl outline-none w-full focus:border-blue-400 transition-all duration-300 text-base placeholder:text-gray-500 dark:placeholder:text-gray-400 text-gray-900 dark:text-white" 
                         placeholder="Enter your IFC Username" 
                         required
                       />
@@ -924,7 +924,7 @@ export default function Home() {
           {/* Bottom Note */}
           <div className="mt-16 text-center">
             <p className="text-gray-600 dark:text-gray-400 text-sm">
-              All plans include access to your complete flight history and Expert Server live tracking
+              All plans include access to your extensive flight history and Expert Server live tracking
             </p>
           </div>
         </div>
