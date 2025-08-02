@@ -1,6 +1,6 @@
 import React from "react";
 
-import { getUser } from "@/lib/supabase/user-actions";
+import { getUser, getUserProfile } from "@/lib/supabase/user-actions";
 import {
   getFlightTimePerTimeFrame,
   getFlightOverviewStatsPerTimeFrame,
@@ -43,6 +43,9 @@ const FlightsPage = async ({searchParams}: { searchParams: Promise < {
 }>}) => {
   const user = await getUser();
   const data = user.user_metadata;
+
+  const userProfile = await getUserProfile();
+  // console.log(userProfile)
   
   const {timeframe} = await searchParams || "day-30"
   
@@ -56,8 +59,13 @@ const FlightsPage = async ({searchParams}: { searchParams: Promise < {
 
   if (frameType && frameType === "day" && ["1", "7", "30", "90"].includes(value as string)) {
     allFlights = await getFlightsTimeFrame(data.ifcUserId, parseInt(value as string));
-  } else if (frameType && frameType == "flight" && ["10", "50", "100", "250", "500", "800"].includes(value as string)) {
-    allFlights = await getFlightsTimeFrame(data.ifcUserId, 0, parseInt(value));
+  } else if (frameType === "flight") {
+    const flightCount = parseInt(value);
+    if (!isNaN(flightCount) && flightCount > 0 && flightCount <= 800) {
+      allFlights = await getFlightsTimeFrame(data.ifcUserId, 0, flightCount);
+    } else {
+      redirect("/dashboard/flights?timeframe=day-30");
+    }
   } else {
     redirect("/dashboard/flights?timeframe=day-30");
   }
@@ -92,11 +100,11 @@ const FlightsPage = async ({searchParams}: { searchParams: Promise < {
             Your flight statistics and insights
           </p>
         </div>
-        <SelectTimeframeButton />
+        <SelectTimeframeButton role={userProfile.role}/>
       </div>
 
       {/* Tabs */}
-      <Tabs defaultValue="aircraft" className="w-full">
+      <Tabs defaultValue="overview" className="w-full">
       <TabsList className="w-full bg-gray-500 p-1 rounded-full mb-2">
         <TabsTrigger value="overview" className="data-[state=active]:bg-gray-700 data-[state=active]:text-white data-[state=inactive]:bg-transparent data-[state=inactive]:text-gray-300 transition-all duration-200 rounded-full flex flex-col sm:flex-row gap-1 sm:gap-2 items-center px-2 sm:px-4">
           <FaChartLine className="w-4 h-4 sm:w-5 sm:h-5 text-light" />
@@ -139,7 +147,7 @@ const FlightsPage = async ({searchParams}: { searchParams: Promise < {
       </TabsContent>
       
       <TabsContent value="routes" className="space-y-6">
-        <FlightsRoutes flights={allFlights} user={user} />
+        <FlightsRoutes flights={allFlights} user={user} role={userProfile.role}/>
       </TabsContent>
 
       {!aircraftAnalysisMaintainance && (

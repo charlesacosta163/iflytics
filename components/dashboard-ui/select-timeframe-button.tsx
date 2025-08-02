@@ -1,54 +1,116 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
 import { useRouter, useSearchParams, usePathname } from 'next/navigation'
 import { FaStar } from 'react-icons/fa6'
 import { IoWarningOutline } from 'react-icons/io5'
 
-const SelectTimeframeButton = () => {
+let ENABLE_CUSTOM_FLIGHT_FRAME = false;
+
+const SelectTimeframeButton = ({role}: {role: string}) => {
   const router = useRouter();
-  const pathname = usePathname(); // Get current path
+  const pathname = usePathname();
   const searchParams = useSearchParams();
   const [timeframe, setTimeframe] = useState(searchParams.get('timeframe') || "30");
+  const [customFlights, setCustomFlights] = useState("");
+  const [error, setError] = useState("");
 
-  // Update state when URL params change
-  useEffect(() => {
-    const currentTimeframe = searchParams.get('timeframe');
-    if (currentTimeframe) {
-      setTimeframe(currentTimeframe);
+  const handleCustomFlights = () => {
+    const flights = parseInt(customFlights);
+    if (isNaN(flights) || flights <= 0 || flights > 800) {
+      setError("Please enter a number between 1 and 800");
+      return;
     }
-  }, [searchParams]);
+    handleSelect(`flight-${flights}`);
+    setError("");
+    setCustomFlights("");
+  };
 
-  // Add query params to the url while preserving current path
   const handleSelect = (value: string) => {
-    setTimeframe(value); // Update state
-    
-    // Preserve current pathname and only change timeframe
+    setTimeframe(value);
     router.push(`${pathname}?timeframe=${value}`);
-    // router.refresh();
   }
+
+  // Helper function to format display text
+  const getDisplayText = (value: string) => {
+    const [type, count] = value.split('-');
+    if (type === 'day') {
+      return count === '1' ? 'Last 24 Hours' : `Last ${count} Days`;
+    }
+    return `Last ${count} Flights`;
+  };
 
   return (
     <Select value={timeframe} onValueChange={handleSelect}>
-        <SelectTrigger className="bg-white font-semibold border-none">
-        <SelectValue placeholder="Select a time frame" />
-        </SelectTrigger>
-        <SelectContent className="font-medium">
+      <SelectTrigger className="bg-white font-semibold border-none">
+        <SelectValue>
+          {timeframe && getDisplayText(timeframe)}
+        </SelectValue>
+      </SelectTrigger>
+      <SelectContent className="font-medium">
         <div className="text-xs text-gray-500 font-semibold bg-gray-100 px-2 py-1 rounded-md text-center">Time Frames</div>
-            <SelectItem value="day-1">Last 24 Hours</SelectItem>
-            <SelectItem value="day-7">Last 7 Days</SelectItem>
-            <SelectItem value="day-30">Last 30 Days</SelectItem>
-            <SelectItem value="day-90">Last 90 Days</SelectItem>
-            <div className="text-xs text-gray-500 font-semibold bg-amber-200 px-2 py-1 rounded-md text-center flex items-center justify-center gap-2">Flight Frames <FaStar className="text-yellow-500" /></div>
-            <SelectItem value="flight-10">Last 10 Flights</SelectItem>
-            <SelectItem value="flight-50">Last 50 Flights</SelectItem>
-            <SelectItem value="flight-100">Last 100 Flights</SelectItem>
-            <SelectItem value="flight-250">Last 250 Flights</SelectItem>
-            <SelectItem value="flight-500">Last 500 Flights</SelectItem>
-            <SelectItem value="flight-800" className="flex items-center gap-1">Last 800 Flights <IoWarningOutline className="text-yellow-500" /></SelectItem>
-            
-        </SelectContent>
+        <SelectItem value="day-1">Last 24 Hours</SelectItem>
+        <SelectItem value="day-7">Last 7 Days</SelectItem>
+        <SelectItem value="day-30">Last 30 Days</SelectItem>
+        <SelectItem value="day-90">Last 90 Days</SelectItem>
+        
+        <div className="text-xs text-gray-500 font-semibold bg-amber-200 px-2 py-1 rounded-md text-center flex items-center justify-center gap-2">
+          Flight Frames <FaStar className="text-yellow-500" />
+        </div>
+        
+        <SelectItem value="flight-10">Last 10 Flights</SelectItem>
+        <SelectItem value="flight-50">Last 50 Flights</SelectItem>
+        <SelectItem value="flight-100">Last 100 Flights</SelectItem>
+        <SelectItem value="flight-250">Last 250 Flights</SelectItem>
+        <SelectItem value="flight-500">Last 500 Flights</SelectItem>
+        <SelectItem value="flight-800" className="flex items-center gap-1">
+          Last 800 Flights <IoWarningOutline className="text-yellow-500" />
+        </SelectItem>
+
+        {( ENABLE_CUSTOM_FLIGHT_FRAME || role === "tester" || role === "admin") && (
+        
+        <Dialog>
+          <DialogTrigger asChild>
+            <div className="relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none hover:bg-accent hover:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50">
+              Custom Flight Frame
+            </div>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Custom Flight Frame</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4">
+              <div>
+                <label className="text-sm text-gray-500">Enter number of flights (1-800)</label>
+                <Input
+                  type="number"
+                  min="1"
+                  max="800"
+                  value={customFlights}
+                  onChange={(e) => {
+                    setCustomFlights(e.target.value);
+                    setError("");
+                  }}
+                  placeholder="Enter number of flights"
+                  className="mt-1"
+                />
+                {error && <p className="text-sm text-red-500 mt-1">{error}</p>}
+              </div>
+              <Button 
+                onClick={handleCustomFlights}
+                className="w-full"
+              >
+                Apply
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
+        )}
+      </SelectContent>
     </Select>
   )
 }

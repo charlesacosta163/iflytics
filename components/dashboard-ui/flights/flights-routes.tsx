@@ -10,30 +10,10 @@ import {
 } from "@/lib/cache/flightinsightsdata";
 import { FaRoute } from "react-icons/fa";
 import { GiPathDistance } from "react-icons/gi";
-import { RiCopilotFill, RiPinDistanceLine } from "react-icons/ri";
+import { RiCopilotFill } from "react-icons/ri";
 
-import { getUser } from "@/lib/supabase/user-actions";
-import { customUserImages, continentCodes } from "@/lib/data";
+import { customUserImages } from "@/lib/data";
 
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import {
-  Table,
-  TableHead,
-  TableRow,
-  TableHeader,
-  TableCaption,
-  TableBody,
-  TableCell,
-} from "@/components/ui/table";
-import { convertMinutesToHours } from "@/lib/utils";
 import { RouteMap } from "./maps/route-map";
 import {
   Card,
@@ -49,10 +29,11 @@ import { RevalidateRoutesButton } from "@/components/revalidate-routes-btn";
 import { FlightHaulsPieChart } from "../charts/route-pies/flight-hauls-pie";
 import { FlightContinentsPieChart } from "../charts/route-pies/flight-continents-pie";
 import { FlightDomesticIntlPieChart } from "../charts/route-pies/flight-domestic-intl-pie";
+import ExportFlightsCSVBtn from "../export-flights-csv-btn";
 
 let maintenanceMode = false;
 
-const FlightsRoutes = async ({ flights, user }: { flights: Flight[], user: any}) => {
+const FlightsRoutes = async ({ flights, user , role}: { flights: Flight[], user: any, role: string}) => {
   // console.log(`🔄 FlightsRoutes called at ${new Date().toISOString()}`); --> Debugging
 
   // Based on THIS Data for user flights
@@ -195,7 +176,16 @@ const FlightsRoutes = async ({ flights, user }: { flights: Flight[], user: any})
           <b>premium feature</b>. Currently <b className="underline">FREE ON OPEN BETA</b>.
         </p>
       </div>
-      <RevalidateRoutesButton userId={user.id} />
+
+      <div className="flex gap-4 items-center">
+        <RevalidateRoutesButton userId={user.id} />
+
+        {
+          (role === "tester" || role === "admin") && (
+            <ExportFlightsCSVBtn routesWithDistances={routesWithDistances} />
+          )
+        }
+      </div>
 
       <div className="grid grid-cols-1 lg:col-span-3 bg-white dark:bg-gray-800 rounded-xl  p-4">
         <section className="grid grid-cols-1 lg:grid-cols-[1fr_2fr_2fr_2fr] gap-4">
