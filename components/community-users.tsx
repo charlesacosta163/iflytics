@@ -3,7 +3,7 @@
 import React, { useState, useMemo } from 'react'
 import { Card } from '@/components/ui/card'
 import Link from 'next/link'
-import { FaUsers, FaCalendarAlt, FaEye, FaSearch } from 'react-icons/fa'
+import { FaUsers, FaCalendarAlt, FaEye, FaSearch, FaExternalLinkAlt } from 'react-icons/fa'
 import { Minimize2, Maximize2, LayoutGrid, List, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { customUserImages } from '@/lib/data'
@@ -233,13 +233,22 @@ const UserCard = ({
           </div>
 
           {/* View Profile Button */}
-          <Link 
-            href={`/dashboard/users/${user.ifc_user_id}`} 
-            className='flex items-center gap-1 bg-gray-700 hover:bg-gray-600 text-white text-xs px-3 py-2 rounded-lg font-semibold transition-all duration-200 shadow-md hover:shadow-lg border border-gray-600 w-full justify-center'
-          >
-            <FaEye className="text-xs" />
-            View
-          </Link>
+          <div className="flex items-center gap-2 w-full"> 
+            <Link 
+              href={`/dashboard/users/${user.ifc_user_id}`} 
+              className='flex items-center gap-1 bg-gray-700 hover:bg-gray-600 text-white text-xs px-3 py-2 rounded-lg font-semibold transition-all duration-200 shadow-md hover:shadow-lg border border-gray-600 w-full justify-center flex-1'
+            >
+              <FaEye className="text-xs" />
+            </Link>
+
+            <Link 
+              target="_blank"
+              href={`https://community.infiniteflight.com/u/${user.ifc_username}/summary`} 
+              className='flex items-center gap-1 bg-blue-500 hover:bg-blue-600 text-white text-xs px-3 py-2 rounded-lg font-semibold transition-all duration-200 shadow-md hover:shadow-lg w-full justify-center flex-1'
+            >
+              <FaExternalLinkAlt className="text-xs" />
+            </Link>
+          </div>
         </div>
       </Card>
     )
@@ -303,13 +312,22 @@ const UserCard = ({
             </span>
           </div>
           
+          <div className="flex items-center gap-2">
           <Link 
             href={`/dashboard/users/${user.ifc_user_id}`} 
             className='group/btn flex items-center gap-2 bg-gray-700 hover:bg-gray-600 text-white text-sm px-4 py-2 rounded-lg font-semibold transition-all duration-200 shadow-md hover:shadow-lg border border-gray-600'
           >
             <FaEye className="text-xs group-hover/btn:scale-110 transition-transform" />
-            View Profile
+              View
           </Link>
+          <Link 
+            href={`https://community.infiniteflight.com/u/${user.ifc_username}/summary`} 
+            className='group/btn flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white text-sm px-4 py-2 rounded-lg font-semibold transition-all duration-200 shadow-md hover:shadow-lg hover:scale-105'
+          >
+            <FaExternalLinkAlt className="text-xs group-hover/btn:scale-110 transition-transform" />
+            IFC
+          </Link>
+          </div>
         </div>
       </div>
     </Card>

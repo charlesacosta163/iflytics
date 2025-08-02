@@ -13,6 +13,7 @@ import {
   FaArrowLeft,
   FaPlus,
   FaChartLine,
+  FaExternalLinkAlt,
 } from "react-icons/fa";
 import { BiSolidPlaneLand } from "react-icons/bi";
 import { FaLocationDot } from "react-icons/fa6";
@@ -142,13 +143,23 @@ const ViewUserPage = async ({
                   {new Date(userProfile.created_at).toLocaleDateString()}
                 </span>
 
-                <Link
-                  href="/dashboard/users"
-                  className="text-light dark:text-light text-xs font-semibold bg-gray-800 dark:bg-gray-700 rounded-lg px-4 py-2 text-center flex items-center justify-center gap-2 self-start"
-                >
-                  <FaArrowLeft className="w-4 h-4" />
-                  Back to Users
-                </Link>
+                <div className="flex justify-between">
+                  <Link
+                    href="/dashboard/users"
+                    className="text-light dark:text-light text-xs font-semibold bg-gray-800 dark:bg-gray-700 rounded-lg px-4 py-2 text-center flex items-center justify-center gap-2 self-start"
+                  >
+                    <FaArrowLeft className="w-4 h-4" />
+                    Back to Users
+                  </Link>
+                  <Link
+                    target="_blank"
+                    href={`https://community.infiniteflight.com/u/${userProfile.ifc_username}/summary`}
+                    className="text-light dark:text-light text-xs font-semibold bg-blue-500 dark:bg-blue-700 hover:bg-blue-600 dark:hover:bg-blue-800 rounded-lg px-4 py-2 text-center flex items-center justify-center gap-2 self-start"
+                  >
+                    <FaExternalLinkAlt className="w-4 h-4" />
+                    View on IFC
+                  </Link>
+                </div>
               </div>
 
               <div className="flex-1 flex flex-col gap-4 max-w-[500px] w-full px-4 bg-white dark:bg-gray-800 rounded-lg shadow p-8">

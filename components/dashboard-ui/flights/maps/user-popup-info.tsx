@@ -22,6 +22,7 @@ import {
   getAircraftAndLivery,
 } from "@/lib/actions";
 import { matchAircraftNameToImage } from "@/lib/cache/flightinsightsdata";
+import { FaExternalLinkAlt, FaEye } from "react-icons/fa";
 
 const UserPopupInfo = ({
   popupInfo,
@@ -437,7 +438,7 @@ const UserPopupInfo = ({
           </TabsContent>
 
           <div className="flex justify-between">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1">
               <span className="text-gray-500 text-sm font-medium">
                 Last Seen:
               </span>
@@ -447,12 +448,22 @@ const UserPopupInfo = ({
             </div>
 
             {popupInfo.username && (
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-3">
                 <Link
+                  target="_blank"
                   href={`/user/${popupInfo.username}`}
-                  className="text-light text-xs px-3 py-0.5 rounded-full bg-blue-500 hover:bg-blue-600 transition-colors cursor-pointer font-semibold"
+                  className="text-light text-xs px-3 py-0.5 rounded-full bg-gray-500 hover:bg-gray-600 transition-colors cursor-pointer font-semibold flex items-center gap-1"
                 >
-                  📔 Profile
+                  <FaEye className="w-4 h-4" />
+                  Stats
+                </Link>
+                <Link
+                  target="_blank"
+                  href={`https://community.infiniteflight.com/u/${popupInfo.username}/summary`}
+                  className=" text-xs rounded-full text-blue-500 hover:text-blue-600 transition-colors cursor-pointer font-semibold flex items-center gap-1"
+                >
+                  <FaExternalLinkAlt className="w-4 h-4" />
+                  IFC
                 </Link>
               </div>
             )}

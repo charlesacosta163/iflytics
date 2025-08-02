@@ -32,7 +32,11 @@ const Sidebar = () => {
     <section className="hidden lg:block max-w-[280px] w-full bg-white dark:bg-gray-900 rounded-r-[40px] text-gray-900 dark:text-gray-100">
       <div className="flex flex-col h-full">
 
-        <header className="px-6 py-4 border-b border-gray-200 dark:border-gray-800">
+        <header className="px-6 py-4 border-b border-gray-200 dark:border-gray-800 relative">
+            <span className="text-xs font-medium absolute -bottom-2.5 left-1/2 -translate-x-1/2 bg-amber-500 text-white px-2 py-0.5 rounded-full">
+              v0.9.1-beta
+            </span>
+
             <Link
             href="/dashboard"
             className="text-xl font-bold tracking-tight flex gap-3 items-center group hover:scale-105 transition-transform duration-200"

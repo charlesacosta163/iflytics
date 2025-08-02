@@ -9,7 +9,7 @@ import { Menu, X } from "lucide-react";
 import { TiPlaneOutline } from "react-icons/ti";
 import { GoCopilot } from "react-icons/go";
 import { FaHome, FaUser } from "react-icons/fa";
-import { LuGoal } from "react-icons/lu";
+import { LuGoal, LuUser } from "react-icons/lu";
 
 import Link from "next/link";
 import Image from "next/image";
@@ -94,12 +94,13 @@ const Navbar = () => {
             </Link>
 
             <span className="text-[10px] font-semibold text-white bg-amber-500 rounded-full absolute -bottom-4 left-5 px-2 py-0.10 shadow-lg z-100">
-              Open Beta
+              v0.9.1-beta
             </span>
           </div>
 
-          <div className="hidden lg:block border-b-2 border-gray-700 dark:border-gray-300 hover:border-gray-800 dark:hover:border-gray-50 transition-colors duration-200">
-            <Link href="/dashboard" className="text-xl font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors duration-200 tracking-tight">
+          <div className="hidden lg:flex dark:border-gray-300 hover:border-gray-800 dark:hover:border-gray-50 transition-colors duration-200 items-center gap-2">
+            <LuUser className="w-6 h-6 text-gray-600 dark:text-gray-300" />
+            <Link href="/dashboard" className="text-xl font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors duration-200 tracking-tight border-b-2 border-gray-700">
               {user?.user_metadata?.ifcUsername ? <span>Hello <b>{user?.user_metadata?.ifcUsername}</b>!</span> : "Loading..."}
             </Link>
           </div>

@@ -42,7 +42,7 @@ export default function FlightActivityAreaChart({flightActivityData, timeframe, 
                 Flight Time Per Day
               </CardTitle>
               <CardDescription className="text-gray-300">
-                Your flight time day by day for the last {timeframe.startsWith("flight-") ? timeframe.split("-")[1] : timeframe} {timeframe.startsWith("flight-") || ["10", "50", "100", "250", "500"].includes(timeframe) ? "flights" : "days"}
+                Your flight time day by day for the last {`${timeframe.split('-')[1]} ${timeframe.startsWith('flight-') ? 'flights' : Number(timeframe.split('-')[1]) > 1 ? 'days' : 'day'}`}
               </CardDescription>
             </CardHeader>
       <CardContent>

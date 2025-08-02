@@ -192,8 +192,7 @@ const FlightsRoutes = async ({ flights, user }: { flights: Flight[], user: any})
         <VscCopilotWarning className="w-6 h-6 text-yellow-500" />
         <p className="text-sm sm:text-lg font-medium dark:text-yellow-300 text-yellow-700">
           Note: The route analysis and summary stats are a{" "}
-          <b>premium feature</b>. Currently free to use during development/early
-          alpha
+          <b>premium feature</b>. Currently <b className="underline">FREE ON OPEN BETA</b>.
         </p>
       </div>
       <RevalidateRoutesButton userId={user.id} />

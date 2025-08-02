@@ -70,7 +70,7 @@ export function AircraftUsageDonutChart({ aircraftUsageData, timeframe, classNam
                 Aircraft Usage
               </CardTitle>
                 <CardDescription className="text-gray-300">
-                  Your most used aircraft in the last {timeframe.startsWith("flight-") ? timeframe.split("-")[1] : timeframe} {timeframe.startsWith("flight-") || ["10", "50", "100", "250", "500"].includes(timeframe) ? "flights" : "days"}
+                  Your most used aircraft in the last {timeframe.split('-')[1]} {timeframe.startsWith('flight-') ? 'flights' : Number(timeframe.split('-')[1]) > 1 ? 'days' : 'day'}
               </CardDescription>
             </CardHeader>
       <CardContent className="flex-1 pb-0">

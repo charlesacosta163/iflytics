@@ -201,8 +201,7 @@ const FlightsAircraft = async ({ flights, user }: { flights: Flight[], user: any
         <VscCopilotWarning className="w-6 h-6 text-yellow-500" />
         <p className="text-sm sm:text-lg font-medium dark:text-yellow-300 text-yellow-700">
           Note: The aircraft analysis is a{" "}
-          <b>premium feature</b>. Currently free to use during development/early
-          alpha
+          <b>premium feature</b>. Currently <b className="underline">FREE ON OPEN BETA</b>.
         </p>
       </div>
 
