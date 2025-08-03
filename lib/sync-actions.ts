@@ -1,4 +1,5 @@
 import { airports } from "./airports-lib.js";
+import { aircraftIcaoCodes } from "./data.js";
 
 export function getAirportLocally(airportIcao: string): any {
     try {

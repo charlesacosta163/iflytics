@@ -1,6 +1,7 @@
 'use server'
 
 import { revalidateTag } from "next/cache"
+import { aircraftIcaoCodes } from "./data"
 
 const API_KEY = process.env.API_KEY as string
 
@@ -524,7 +525,22 @@ export async function getUselessFactToday() {
     return data || {text: "Looks like we don't have any facts for today", source: "No Clue", source_url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley"}
 }
 
+export async function aircraftIdToIcao(aircraftId: string) {
 
+    let aircraftArray = await getAllAircraft();
+    aircraftArray = aircraftArray.result;
+    // Logic: Match Id to name in aircraftArray
+    // Then use name to find icao in aircraftIcaoCodes
+    const aircraftObj = aircraftArray.find((aircraft: any) => aircraft.id === aircraftId);
+    if (!aircraftObj) return "";
+
+    // Use string.includes to find the aircraft name in the aircraftIcaoCodes array
+    const icao = aircraftIcaoCodes.find((aircraft: any) => aircraft.name.includes(aircraftObj.name));
+    return {
+        icao: icao?.icao || "",
+        name: aircraftObj.name || ""
+    };
+ }  
 
 
 

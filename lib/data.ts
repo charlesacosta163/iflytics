@@ -3132,6 +3132,131 @@ export const customUserImages = [
       "https://avatars.discourse-cdn.com/v4/letter/a/3e96dc/288.png"
     )}&w=64&h=64&fit=cover&mask=circle`,
   },
+  {
+    // IFLYTICS USER
+    id: 205,
+    role: "user",
+    username: "Mort",
+    image: `https://images.weserv.nl/?url=${encodeURIComponent(
+      "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/mort/288/1540135_2.png"
+    )}&w=64&h=64&fit=cover&mask=circle`,
+  },
+  { 
+    // IFLYTICS USER
+    id: 206,
+    role: "user",
+    username: "JulietTango",
+    image: `https://images.weserv.nl/?url=${encodeURIComponent(
+      "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/juliettango/288/1517680_2.png"
+    )}&w=64&h=64&fit=cover&mask=circle`,
+  },
+  {
+    // IFLYTICS USER
+    id: 207,
+    role: "user",
+    username: "Cheeto",
+    image: `https://images.weserv.nl/?url=${encodeURIComponent(
+      "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/cheeto/288/1418567_2.png"
+    )}&w=64&h=64&fit=cover&mask=circle`,
+  },
+  {
+    // IFLYTICS USER
+    id: 208,
+    role: "user",
+    username: "comadante_lucas",
+    image: `https://images.weserv.nl/?url=${encodeURIComponent(
+      "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/comadante_lucas/288/1555778_2.png"
+    )}&w=64&h=64&fit=cover&mask=circle`,
+  },
+];
+
+export const aircraftIcaoCodes = [
+  // Airbus Commercial
+  { icao: "BCS1", name: "Airbus A220-100" },
+  { icao: "BCS3", name: "Airbus A220-300" },
+  { icao: "A318", name: "Airbus A318" },
+  { icao: "A319", name: "Airbus A319" },
+  { icao: "A19N", name: "Airbus A319neo" },
+  { icao: "A320", name: "Airbus A320" },
+  { icao: "A20N", name: "Airbus A320neo" },
+  { icao: "A321", name: "Airbus A321" },
+  { icao: "A21N", name: "Airbus A321neo" },
+  { icao: "A332", name: "Airbus A330-200" },
+  { icao: "A333", name: "Airbus A330-300" },
+  { icao: "A338", name: "Airbus A330-800neo" },
+  { icao: "A339", name: "Airbus A330-900neo" },
+  { icao: "A342", name: "Airbus A340-200" },
+  { icao: "A343", name: "Airbus A340-300" },
+  { icao: "A345", name: "Airbus A340-500" },
+  { icao: "A346", name: "Airbus A340-600" },
+  { icao: "A359", name: "Airbus A350-900" },
+  { icao: "A35K", name: "Airbus A350-1000" },
+  { icao: "A380", name: "Airbus A380-800" },
+
+  // Boeing Commercial
+  { icao: "B712", name: "Boeing 717-200" },
+  { icao: "B737", name: "Boeing 737-700" },
+  { icao: "B738", name: "Boeing 737-800" },
+  { icao: "B739", name: "Boeing 737-900" },
+  { icao: "B37M", name: "Boeing 737-7 MAX" },
+  { icao: "B38M", name: "Boeing 737-8 MAX" },
+  { icao: "B39M", name: "Boeing 737-9 MAX" },
+  { icao: "B3XM", name: "Boeing 737-10 MAX" },
+  { icao: "B741", name: "Boeing 747-100" },
+  { icao: "B742", name: "Boeing 747-200" },
+  { icao: "B743", name: "Boeing 747-300" },
+  { icao: "B744", name: "Boeing 747-400" },
+  { icao: "B748", name: "Boeing 747-8" },
+  { icao: "B752", name: "Boeing 757-200" },
+  { icao: "B753", name: "Boeing 757-300" },
+  { icao: "B762", name: "Boeing 767-200" },
+  { icao: "B763", name: "Boeing 767-300" },
+  { icao: "B764", name: "Boeing 767-400" },
+  { icao: "B772", name: "Boeing 777-200ER" },
+  { icao: "B77L", name: "Boeing 777-200LR" },
+  { icao: "B773", name: "Boeing 777-300" },
+  { icao: "B77W", name: "Boeing 777-300ER" },
+  { icao: "B788", name: "Boeing 787-8" },
+  { icao: "B789", name: "Boeing 787-9" },
+  { icao: "B78X", name: "Boeing 787-10" },
+
+  // Regional Jets
+  { icao: "CRJ7", name: "CRJ-700" },
+  { icao: "CRJ9", name: "CRJ-900" },
+  { icao: "CRJX", name: "CRJ-1000" },
+  { icao: "E170", name: "E170" },
+  { icao: "E175", name: "E175" },
+  { icao: "E190", name: "E190" },
+  { icao: "E195", name: "E195" },
+
+  // Business Jets
+  { icao: "C750", name: "Cessna Citation X" },
+
+  // General Aviation
+  { icao: "C152", name: "Cessna 152" },
+  { icao: "C172", name: "Cessna 172" },
+  { icao: "C182", name: "Cessna 182" },
+  { icao: "C208", name: "Cessna 208 Caravan" },
+  { icao: "PA28", name: "Piper Cherokee" },
+  { icao: "PA44", name: "Piper Seminole" },
+  { icao: "BE20", name: "Beechcraft King Air 200" },
+  { icao: "BE9L", name: "Beechcraft King Air 350" },
+  { icao: "TBM9", name: "TBM 930" },
+
+  // Cargo Aircraft
+  { icao: "MD11", name: "McDonnell Douglas MD-11" },
+  { icao: "A306", name: "Airbus A300-600ST Beluga" },
+  { icao: "B74F", name: "Boeing 747-400F" },
+  { icao: "B77F", name: "Boeing 777F" },
+
+  // Military (Common)
+  { icao: "DC10", name: "DC-10" },
+  { icao: "A400", name: "Airbus A400M Atlas" },
+  { icao: "C130", name: "Lockheed C-130 Hercules" },
+  { icao: "C17A", name: "Boeing C-17 Globemaster III" },
+  { icao: "KC10", name: "McDonnell Douglas KC-10" },
+  { icao: "KC46", name: "Boeing KC-46 Pegasus" },
+  { icao: "F22", name: "F-22"}
 ];
 
 // Unknown User Compliments - Maximum Corn Level

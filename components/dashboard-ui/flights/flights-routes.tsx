@@ -30,6 +30,7 @@ import { FlightHaulsPieChart } from "../charts/route-pies/flight-hauls-pie";
 import { FlightContinentsPieChart } from "../charts/route-pies/flight-continents-pie";
 import { FlightDomesticIntlPieChart } from "../charts/route-pies/flight-domestic-intl-pie";
 import ExportFlightsCSVBtn from "../export-flights-csv-btn";
+import { aircraftIdToIcao, getAllAircraft } from "@/lib/actions";
 
 let maintenanceMode = false;
 
@@ -166,6 +167,10 @@ const FlightsRoutes = async ({ flights, user , role}: { flights: Flight[], user:
     }]
   }
 
+  const aircraftArray = await getAllAircraft();
+
+  // console.log(routesWithDistancesWithAircraftIcao[0])
+
   // console.log(getFlightContinentsFlewToData())
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -182,7 +187,7 @@ const FlightsRoutes = async ({ flights, user , role}: { flights: Flight[], user:
 
         {
           (role === "tester" || role === "admin") && (
-            <ExportFlightsCSVBtn routesWithDistances={routesWithDistances} />
+            <ExportFlightsCSVBtn routesWithDistances={routesWithDistances} aircraftArray={aircraftArray.result} />
           )
         }
       </div>

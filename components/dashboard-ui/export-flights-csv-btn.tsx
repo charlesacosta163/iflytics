@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { FaFileExport, FaDownload, FaDesktop } from 'react-icons/fa'
 import Papa from 'papaparse'
+import { aircraftIdToIcaoWithArray } from '@/lib/foo'
 
 interface RouteWithDistance {
   flightId: string;
@@ -22,13 +23,23 @@ interface RouteWithDistance {
   totalTime: number;
   aircraftId: string;
   server: string;
+  aircraftIcao: any;
 }
 
 interface ExportFlightsCSVBtnProps {
-  routesWithDistances: RouteWithDistance[];
+  routesWithDistances: any[];
+  aircraftArray: any[];
 }
 
-const ExportFlightsCSVBtn: React.FC<ExportFlightsCSVBtnProps> = ({ routesWithDistances }) => {
+const ExportFlightsCSVBtn: React.FC<ExportFlightsCSVBtnProps> = ({ routesWithDistances, aircraftArray }) => {
+
+   routesWithDistances = routesWithDistances.map((route) => {
+    const aircraftIcao = aircraftIdToIcaoWithArray(route.aircraftId, aircraftArray);
+    return { ...route, aircraftIcao };
+  });
+
+  console.log(routesWithDistances[0])
+
   const [selectedFields, setSelectedFields] = useState({
     flightId: false,
     created: true, // Mandatory
@@ -43,8 +54,9 @@ const ExportFlightsCSVBtn: React.FC<ExportFlightsCSVBtnProps> = ({ routesWithDis
     destinationLatitude: false,
     destinationLongitude: false,
     distance: false,
-    totalTime: false,
-    aircraftId: false,
+    totalTime: true, // Mandatory
+    aircraftIcao: false, // Change from aircraftId to aircraftIcao
+    aircraftName: false,
     server: false,
   });
 
@@ -64,12 +76,13 @@ const ExportFlightsCSVBtn: React.FC<ExportFlightsCSVBtnProps> = ({ routesWithDis
     destinationLatitude: 'Destination Latitude',
     destinationLongitude: 'Destination Longitude',
     distance: 'Distance (nm)',
-    totalTime: 'Flight Time (minutes)',
-    aircraftId: 'Aircraft ID',
+    totalTime: 'Duration (mins)* (Required)',
+    aircraftIcao: 'Aircraft (ICAO)',
+    aircraftName: 'Aircraft Name',
     server: 'Server',
   };
 
-  const mandatoryFields = ['created', 'origin', 'destination'];
+  const mandatoryFields = ['created', 'origin', 'destination', 'totalTime'];
 
   const handleFieldToggle = (field: string, checked: boolean) => {
     if (mandatoryFields.includes(field)) return; // Don't allow unchecking mandatory fields
@@ -90,19 +103,20 @@ const ExportFlightsCSVBtn: React.FC<ExportFlightsCSVBtnProps> = ({ routesWithDis
       
       if (selectedFields.flightId) row['Flight ID'] = route.flightId;
       if (selectedFields.created) row['Date'] = formatDate(route.created);
-      if (selectedFields.origin) row['Origin'] = route.origin;
+      if (selectedFields.origin) row['From'] = route.origin;
       if (selectedFields.originIsoCountry) row['Origin Country'] = route.originIsoCountry;
       if (selectedFields.originContinent) row['Origin Continent'] = route.originContinent;
       if (selectedFields.originLatitude) row['Origin Latitude'] = route.originCoordinates.latitude;
       if (selectedFields.originLongitude) row['Origin Longitude'] = route.originCoordinates.longitude;
-      if (selectedFields.destination) row['Destination'] = route.destination;
+      if (selectedFields.destination) row['To'] = route.destination;
       if (selectedFields.destinationIsoCountry) row['Destination Country'] = route.destinationIsoCountry;
       if (selectedFields.destinationContinent) row['Destination Continent'] = route.destinationContinent;
       if (selectedFields.destinationLatitude) row['Destination Latitude'] = route.destinationCoordinates.latitude;
       if (selectedFields.destinationLongitude) row['Destination Longitude'] = route.destinationCoordinates.longitude;
-      if (selectedFields.distance) row['Distance (nm)'] = route.distance;
-      if (selectedFields.totalTime) row['Flight Time (minutes)'] = Math.round(route.totalTime);
-      if (selectedFields.aircraftId) row['Aircraft ID'] = route.aircraftId;
+      if (selectedFields.distance) row['Distance'] = route.distance;
+      if (selectedFields.totalTime) row['Duration'] = Math.round(route.totalTime);
+      if (selectedFields.aircraftIcao) row['Aircraft'] = route.aircraftIcao.icao;
+      if (selectedFields.aircraftName) row['Aircraft Name'] = route.aircraftIcao.name;
       if (selectedFields.server) row['Server'] = route.server;
       
       return row;
@@ -128,19 +142,20 @@ const ExportFlightsCSVBtn: React.FC<ExportFlightsCSVBtnProps> = ({ routesWithDis
       
       if (selectedFields.flightId) row['Flight ID'] = route.flightId;
       if (selectedFields.created) row['Date'] = formatDate(route.created);
-      if (selectedFields.origin) row['Origin'] = route.origin;
+      if (selectedFields.origin) row['From'] = route.origin;
       if (selectedFields.originIsoCountry) row['Origin Country'] = route.originIsoCountry;
       if (selectedFields.originContinent) row['Origin Continent'] = route.originContinent;
       if (selectedFields.originLatitude) row['Origin Latitude'] = route.originCoordinates.latitude;
       if (selectedFields.originLongitude) row['Origin Longitude'] = route.originCoordinates.longitude;
-      if (selectedFields.destination) row['Destination'] = route.destination;
+      if (selectedFields.destination) row['To'] = route.destination;
       if (selectedFields.destinationIsoCountry) row['Destination Country'] = route.destinationIsoCountry;
       if (selectedFields.destinationContinent) row['Destination Continent'] = route.destinationContinent;
       if (selectedFields.destinationLatitude) row['Destination Latitude'] = route.destinationCoordinates.latitude;
       if (selectedFields.destinationLongitude) row['Destination Longitude'] = route.destinationCoordinates.longitude;
-      if (selectedFields.distance) row['Distance (nm)'] = route.distance;
-      if (selectedFields.totalTime) row['Flight Time (minutes)'] = Math.round(route.totalTime);
-      if (selectedFields.aircraftId) row['Aircraft ID'] = route.aircraftId;
+      if (selectedFields.distance) row['Distance'] = route.distance;
+      if (selectedFields.totalTime) row['Duration'] = Math.round(route.totalTime);
+      if (selectedFields.aircraftIcao) row['Aircraft'] = route.aircraftIcao.icao;
+      if (selectedFields.aircraftName) row['Aircraft Name'] = route.aircraftIcao.name;
       if (selectedFields.server) row['Server'] = route.server;
       
       return row;
