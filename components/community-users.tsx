@@ -3,7 +3,7 @@
 import React, { useState, useMemo } from 'react'
 import { Card } from '@/components/ui/card'
 import Link from 'next/link'
-import { FaUsers, FaCalendarAlt, FaEye, FaSearch, FaExternalLinkAlt } from 'react-icons/fa'
+import { FaUsers, FaCalendarAlt, FaEye, FaSearch, FaExternalLinkAlt, FaArrowUp } from 'react-icons/fa'
 import { Minimize2, Maximize2, LayoutGrid, List, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { customUserImages } from '@/lib/data'
@@ -49,9 +49,10 @@ const CommunityUsers = ({ users }: CommunityUsersProps) => {
   }
 
   return (
+    <>
     <div className='space-y-8'>
       {/* Enhanced Header */}
-      <div className="flex flex-col gap-6">
+      <div id="top-bar" className="flex flex-col gap-6">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
             <h1 className="text-4xl font-bold dark:text-light bg-gradient-to-r from-gray-600 to-dark bg-clip-text text-transparent tracking-tight">
@@ -166,6 +167,16 @@ const CommunityUsers = ({ users }: CommunityUsersProps) => {
         </div>
       )}
     </div>
+    <div className="flex justify-center mt-8">
+      <a href="#top-bar" className="text-center">
+        <Button variant="outline" className="bg-dark border-gray-600 text-white hover:bg-gray-700 flex items-center gap-2">
+          <FaArrowUp className="w-4 h-4 text-white" />
+          Back to Top
+        </Button>
+      </a>
+    </div>
+  
+    </>
   )
 }
 

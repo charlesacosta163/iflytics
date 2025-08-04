@@ -20,6 +20,7 @@ import {
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableCaption } from "@/components/ui/table";
 import { convertMinutesToHours } from "@/lib/utils";
 import { LuNotebookTabs } from "react-icons/lu";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 
 let maintenanceMode = false;
@@ -30,6 +31,7 @@ export const RouteMap = ({ routes }: { routes: any[] }) => {
   const [loadingAircraft, setLoadingAircraft] = useState(false);
   const [isFullScreen, setIsFullScreen] = useState(false);
   const mapRef = useRef<Map | null>(null);
+  const [selectedYear, setSelectedYear] = useState<string>("all");
   
   // Function to get route color based on flight time (IATA standards)
   const getRouteColor = (totalTime: number) => {
@@ -212,6 +214,26 @@ export const RouteMap = ({ routes }: { routes: any[] }) => {
     }
   };
 
+  // Get available years from routes data
+  const getAvailableYears = () => {
+    const years = routes
+      .map(route => new Date(route.created).getFullYear())
+      .filter(year => !isNaN(year))
+      .sort((a, b) => b - a); // Sort descending (newest first)
+    
+    return [...new Set(years)]; // Remove duplicates
+  };
+
+  // Filter routes based on selected year
+  const getFilteredRoutes = () => {
+    if (selectedYear === "all") return routes;
+    
+    return routes.filter(route => {
+      const routeYear = new Date(route.created).getFullYear();
+      return routeYear === parseInt(selectedYear);
+    });
+  };
+
   useEffect(() => {
     const map = new Map({
       container: "map",
@@ -231,7 +253,9 @@ export const RouteMap = ({ routes }: { routes: any[] }) => {
       const originFeatures: any[] = [];
       const destinationFeatures: any[] = [];
 
-      routes.forEach((route: any, index: number) => {
+      const filteredRoutes = getFilteredRoutes();
+
+      filteredRoutes.forEach((route: any, index: number) => {
         const {
           originCoordinates: { latitude: lat1, longitude: lng1 },
           destinationCoordinates: { latitude: lat2, longitude: lng2 },
@@ -464,7 +488,7 @@ export const RouteMap = ({ routes }: { routes: any[] }) => {
       map.remove();
       mapRef.current = null;
     };
-  }, [routes]);
+  }, [routes, selectedYear]); // Add selectedYear here
 
   // Handle map resize when fullscreen state changes
   useEffect(() => {
@@ -527,7 +551,7 @@ export const RouteMap = ({ routes }: { routes: any[] }) => {
       <div className="absolute top-4 left-4 z-[1000] flex flex-col space-y-2">
         <button
           onClick={zoomIn}
-          className="w-10 h-10 bg-white/90 backdrop-blur-sm rounded-lg shadow-lg
+          className="w-10 h-10 dark:bg-gray-800 dark:hover:bg-gray-700 bg-white/90 backdrop-blur-sm rounded-lg shadow-lg
                      hover:bg-white transition-all duration-200
                      flex items-center justify-center border border-gray-200"
         >
@@ -535,7 +559,7 @@ export const RouteMap = ({ routes }: { routes: any[] }) => {
         </button>
         <button
           onClick={zoomOut}
-          className="w-10 h-10 bg-white/90 backdrop-blur-sm rounded-lg shadow-lg
+          className="w-10 h-10 dark:bg-gray-800 dark:hover:bg-gray-700 bg-white/90 backdrop-blur-sm rounded-lg shadow-lg
                      hover:bg-white transition-all duration-200
                      flex items-center justify-center border border-gray-200"
         >
@@ -543,12 +567,29 @@ export const RouteMap = ({ routes }: { routes: any[] }) => {
         </button>
         <button
           onClick={toggleFullScreen}
-          className="w-10 h-10 bg-white/90 backdrop-blur-sm rounded-lg shadow-lg
+          className="w-10 h-10 dark:bg-gray-800 dark:hover:bg-gray-700 bg-white/90 backdrop-blur-sm rounded-lg shadow-lg
                      hover:bg-white transition-all duration-200 text-gray
                      flex items-center justify-center border border-gray-200"
         >
-          {isFullScreen ? <FiMinimize2 /> : <FiMaximize2 />}
+          {isFullScreen ? <FiMinimize2  className="text-gray-500 dark:text-gray-300"/> : <FiMaximize2 className="text-gray-500 dark:text-gray-300"/>}
         </button>
+      </div>
+
+      {/* Year Filter - Top Right */}
+      <div className="absolute top-4 right-4 z-[1000]">
+        <Select value={selectedYear} onValueChange={setSelectedYear}>
+          <SelectTrigger className="w-32 dark:bg-gray-800 dark:text-light dark:hover:bg-gray-700 bg-white/90 backdrop-blur-sm border border-gray-200 shadow-lg">
+            <SelectValue placeholder="Year" />
+          </SelectTrigger>
+          <SelectContent className="z-[10001]">
+            <SelectItem value="all">All Years</SelectItem>
+            {getAvailableYears().map(year => (
+              <SelectItem key={year} value={year.toString()}>
+                {year}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
 
       <div className="absolute bottom-4 right-4 z-[1000] flex flex-col space-y-2">

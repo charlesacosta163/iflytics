@@ -30,7 +30,7 @@ import { FlightHaulsPieChart } from "../charts/route-pies/flight-hauls-pie";
 import { FlightContinentsPieChart } from "../charts/route-pies/flight-continents-pie";
 import { FlightDomesticIntlPieChart } from "../charts/route-pies/flight-domestic-intl-pie";
 import ExportFlightsCSVBtn from "../export-flights-csv-btn";
-import { aircraftIdToIcao, getAllAircraft } from "@/lib/actions";
+import { getAllAircraft } from "@/lib/actions";
 
 let maintenanceMode = false;
 
@@ -41,7 +41,7 @@ const FlightsRoutes = async ({ flights, user , role}: { flights: Flight[], user:
   // Criteria: Flight has a totalTime > 10, originAirport, destinationAirport must be non-empty
   const validFlights = flights.filter((flight) => {
     return (
-      flight.totalTime > 5 && flight.originAirport && flight.destinationAirport
+      flight.totalTime > 5 && flight.originAirport && flight.destinationAirport && flight.originAirport !== flight.destinationAirport
     );
   });
 

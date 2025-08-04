@@ -9,17 +9,17 @@ import {
 import { matchATCRankToTitle } from "@/lib/sync-actions";
 import { Metadata } from "next";
 import Image from "next/image";
+import Link from "next/link";
 
 // Icons
 import { LuPlaneLanding, LuTowerControl } from "react-icons/lu";
 import { TfiMedall } from "react-icons/tfi";
 import { MdOutlineAirlines, MdOutlineLibraryBooks } from "react-icons/md";
 import { PiShootingStarBold } from "react-icons/pi";
-import { FaPlane, FaMapMarkerAlt, FaUsers, FaLightbulb } from "react-icons/fa";
+import { FaPlane, FaMapMarkerAlt, FaUsers, FaLightbulb, FaExternalLinkAlt } from "react-icons/fa";
 import { HiOutlineStatusOnline } from "react-icons/hi";
-import { TbPlaneInflight, TbClock } from "react-icons/tb";
+import { TbPlaneInflight, TbClock, TbBuildingAirport, TbBuildingStadium, TbBrandDiscord } from "react-icons/tb";
 import { GoServer } from "react-icons/go";
-import { PiMapPinBold } from "react-icons/pi";
 import { HiOutlineGlobeAsiaAustralia } from "react-icons/hi2";
 
 import {
@@ -30,9 +30,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import { matchAircraftNameToImage } from "@/lib/cache/flightinsightsdata";
-import { FaTowerBroadcast } from "react-icons/fa6";
 import { BsPersonWorkspace } from "react-icons/bs";
 import { SlActionUndo } from "react-icons/sl";
 
@@ -46,7 +44,7 @@ export const metadata: Metadata = {
 
 export default async function DashboardPage() {
   const { user_metadata: data } = await getUser();
-  const uselessFact = await getUselessFactToday();
+  // const uselessFact = await getUselessFactToday();
   // const flights = await getAggregatedFlights(data.ifcUserId)
 
   const userStats = await getUserStats(data.ifcUsername, data.ifcUserId);
@@ -181,7 +179,9 @@ export default async function DashboardPage() {
                   <span className="text-2xl font-bold">
                     {userData.atcOperations || 0}
                   </span>
-                  <span className="text-sm flex items-center gap-1"><LuTowerControl/> {atcRank}</span>
+                  <span className="text-sm flex items-center gap-1">
+                    <LuTowerControl /> {atcRank}
+                  </span>
                 </div>
 
                 {/* Large screens - detailed view */}
@@ -265,7 +265,9 @@ export default async function DashboardPage() {
                 <div className="flex items-center justify-between">
                   <span className="text-gray-600 font-medium">Duration</span>
                   <span className="font-bold text-blue-500">
-                    {convertMinutesToHours(Math.round(recentFlight.totalTime)) || "???"}
+                    {convertMinutesToHours(
+                      Math.round(recentFlight.totalTime)
+                    ) || "???"}
                   </span>
                 </div>
 
@@ -364,26 +366,23 @@ export default async function DashboardPage() {
 
             <CardHeader className="">
               <div className="flex items-center gap-2">
-                <span className="text-lg">🏆</span>
-                <CardTitle className="text-xl font-bold tracking-tight bg-gradient-to-r from-orange-400 to-purple-400 bg-clip-text text-transparent">
-                 The Flight Arena
+              <TbBuildingStadium className="text-2xl text-amber-500" />
+                <CardTitle className="text-xl font-bold tracking-tight bg-gradient-to-r from-orange-400 to-purple-400 bg-clip-text text-transparent flex flex-col gap-1 ">
+                  The Flight Arena
+                  <span className="bg-gradient-to-r from-green-500 to-emerald-600 text-white px-2 py-0.5 rounded-full text-xs font-semibold self-start">
+                    Coming in 2026
+                  </span>
                 </CardTitle>
               </div>
             </CardHeader>
 
-            <CardContent>
-              <div className="flex flex-col gap-2">
-                <div className="flex items-center gap-1">
-                  <span className="bg-gradient-to-r from-green-500 to-emerald-600 text-white px-2 py-0.5 rounded-full text-xs font-semibold">
-                    Coming in 2026
-                  </span>
-                </div>
+            <CardContent className="flex flex-col gap-2 justify-between">
 
-                <p className="text-gray-300 text-sm leading-relaxed">
+                <span className="text-gray-300 text-sm leading-relaxed">
                   <strong className="text-white">Compete with pilots</strong>{" "}
                   with gamified Infinite Flight Stats, earn badges, and climb
                   the leaderboard.
-                </p>
+                </span>
 
                 {/* Mini feature indicators */}
                 <div className="flex gap-1 mt-1">
@@ -397,7 +396,12 @@ export default async function DashboardPage() {
                     style={{ animationDelay: "0.4s" }}
                   ></div>
                 </div>
-              </div>
+
+                  <Link href="https://youtu.be/dQw4w9WgXcQ?si=g_taiME19X9XZnzo" target="_blank" className="self-start mt-2 cursor-pointer">
+                    <Button className="flex items-center gap-2 text-light bg-[#424549] hover:bg-[#424549]/80 rounded-full !px-5">
+                      <TbBrandDiscord className="text-2xl" /> IFlytics Discord Soon
+                    </Button>
+                  </Link>
             </CardContent>
           </Card>
 
@@ -445,39 +449,35 @@ export default async function DashboardPage() {
                 </div>
               </Card>
             </div>
-                      </div>
+          </div>
 
-          {/* Useless Fact Card */}
-          <Card className="bg-gradient-to-br from-purple-500 to-pink-500 text-white backdrop-blur-xl relative overflow-hidden">
-            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-yellow-400 via-orange-400 to-red-400"></div>
-            
-            <CardHeader>
-              <div className="flex items-center gap-2">
-                <FaLightbulb className="text-2xl text-yellow-300" />
-                <CardTitle className="text-2xl font-bold tracking-tight">
-                 Useless Fact Thing
-                </CardTitle>
-              </div>
-              <CardDescription className="text-purple-100">
-                Because why not?
+          <Card className="dark:bg-gray-900 bg-gray-100 text-dark backdrop-blur-xl relative overflow-hidden">
+
+          <TbBuildingAirport className="text-[20rem] absolute top-8 left-0 text-amber-500 opacity-10" />
+          
+            <CardHeader className="">
+              <CardTitle className="text-2xl font-bold tracking-tight text-gray dark:text-white">
+                Infinite Flight Community
+              </CardTitle>
+              <CardDescription className="text-gray-700 dark:text-gray-400">
+                Connect with pilots worldwide
               </CardDescription>
             </CardHeader>
 
-            <CardContent>
-              <div className="bg-white/15 rounded-xl p-4 backdrop-blur-md relative overflow-hidden">
-                <p className="text-white text-lg leading-relaxed font-medium">
-                  {uselessFact?.text || "Did you know? The Boeing 747 has enough wiring to stretch from New York to Boston!"}
-                </p>
+            <CardContent className="flex flex-col gap-4">
+              <span className="text-gray-700 dark:text-white tracking-tight leading-relaxed font-medium">
+                Join thousands of virtual pilots sharing their passion for
+                aviation!
+              </span>
 
-                <span className="text-gray-300 text-sm mt-2">
-                  Source: <a href={uselessFact?.source_url || "No Clue"} className="underlinetext-gray-300 hover:text-gray-200 transition-colors">{uselessFact?.source || "No Clue"}</a>
-                </span>
-                
-                {/* Decorative elements */}
-                <div className="absolute top-2 right-2 opacity-20">
-                  <FaLightbulb className="text-6xl text-yellow-300" />
-                </div>
-              </div>
+              <Link
+                href="https://community.infiniteflight.com/"
+                target="_blank"
+                className="bg-blue-500 hover:bg-blue-600 text-white rounded-full px-4 py-2 flex items-center gap-2 text-center text-sm font-bold self-start z-[1]" 
+              >
+                  Visit Community
+                  <FaExternalLinkAlt/>
+              </Link>
             </CardContent>
           </Card>
         </div>

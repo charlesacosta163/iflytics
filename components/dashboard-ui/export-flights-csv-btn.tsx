@@ -38,7 +38,6 @@ const ExportFlightsCSVBtn: React.FC<ExportFlightsCSVBtnProps> = ({ routesWithDis
     return { ...route, aircraftIcao };
   });
 
-  console.log(routesWithDistances[0])
 
   const [selectedFields, setSelectedFields] = useState({
     flightId: false,
@@ -77,8 +76,7 @@ const ExportFlightsCSVBtn: React.FC<ExportFlightsCSVBtnProps> = ({ routesWithDis
     destinationLongitude: 'Destination Longitude',
     distance: 'Distance (nm)',
     totalTime: 'Duration (mins)* (Required)',
-    aircraftIcao: 'Aircraft (ICAO)',
-    aircraftName: 'Aircraft Name',
+    aircraftIcao: 'Aircraft',
     server: 'Server',
   };
 
@@ -114,9 +112,8 @@ const ExportFlightsCSVBtn: React.FC<ExportFlightsCSVBtnProps> = ({ routesWithDis
       if (selectedFields.destinationLatitude) row['Destination Latitude'] = route.destinationCoordinates.latitude;
       if (selectedFields.destinationLongitude) row['Destination Longitude'] = route.destinationCoordinates.longitude;
       if (selectedFields.distance) row['Distance'] = route.distance;
-      if (selectedFields.totalTime) row['Duration'] = Math.round(route.totalTime);
-      if (selectedFields.aircraftIcao) row['Aircraft'] = route.aircraftIcao.icao;
-      if (selectedFields.aircraftName) row['Aircraft Name'] = route.aircraftIcao.name;
+      if (selectedFields.totalTime) row['Duration'] = `${Math.floor(route.totalTime/60)}:${Math.floor(route.totalTime%60).toString().padStart(2,'0')}:00`;
+      if (selectedFields.aircraftIcao) row['Aircraft'] = `${route.aircraftIcao.name} (${route.aircraftIcao.icao})`;
       if (selectedFields.server) row['Server'] = route.server;
       
       return row;
@@ -153,9 +150,8 @@ const ExportFlightsCSVBtn: React.FC<ExportFlightsCSVBtnProps> = ({ routesWithDis
       if (selectedFields.destinationLatitude) row['Destination Latitude'] = route.destinationCoordinates.latitude;
       if (selectedFields.destinationLongitude) row['Destination Longitude'] = route.destinationCoordinates.longitude;
       if (selectedFields.distance) row['Distance'] = route.distance;
-      if (selectedFields.totalTime) row['Duration'] = Math.round(route.totalTime);
-      if (selectedFields.aircraftIcao) row['Aircraft'] = route.aircraftIcao.icao;
-      if (selectedFields.aircraftName) row['Aircraft Name'] = route.aircraftIcao.name;
+      if (selectedFields.totalTime) row['Duration'] = `${Math.floor(route.totalTime/60)}:${Math.floor(route.totalTime%60).toString().padStart(2,'0')}:00`;
+      if (selectedFields.aircraftIcao) row['Aircraft'] = `${route.aircraftIcao.name} (${route.aircraftIcao.icao})`;
       if (selectedFields.server) row['Server'] = route.server;
       
       return row;
@@ -174,7 +170,7 @@ const ExportFlightsCSVBtn: React.FC<ExportFlightsCSVBtnProps> = ({ routesWithDis
           Export CSV
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-2xl overflow-y-auto max-h-[90vh]">
+      <DialogContent className="max-w-2xl overflow-y-auto max-h-[90vh] z-[10001]">
         <DialogHeader>
           <DialogTitle>Export Flight Data</DialogTitle>
         </DialogHeader>

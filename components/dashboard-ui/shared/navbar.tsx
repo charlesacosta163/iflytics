@@ -94,7 +94,7 @@ const Navbar = () => {
             </Link>
 
             <span className="text-[10px] font-semibold text-white bg-amber-500 rounded-full absolute -bottom-4 left-5 px-2 py-0.10 shadow-lg z-100">
-              v0.9.1-beta
+              v0.9.2-beta
             </span>
           </div>
 
