@@ -42,7 +42,7 @@ export const metadata: Metadata = {
   keywords: "infinite flight, flight tracking, aviation analytics, pilot statistics, flight data, expert server, flight simulator, aviation dashboard, pilot leaderboards, flight history, iflytics flights",
 }
 
-const FlightsPage = async ({searchParams}: { searchParams: { [key: string]: string | string[] | undefined }}) => {
+const FlightsPage = async ({searchParams}: { searchParams: Promise<{ [key: string]: string | string[] | undefined }>}) => {
   const user = await getUser();
   const data = user.user_metadata;
 
@@ -59,7 +59,7 @@ const FlightsPage = async ({searchParams}: { searchParams: { [key: string]: stri
   const DEFAULT_TIMEFRAME = "day-30";
   
   // Handle cases where timeframe is missing or invalid
-  let timeframe = searchParams?.timeframe || DEFAULT_TIMEFRAME;
+  let timeframe = (await searchParams)?.timeframe || DEFAULT_TIMEFRAME;
   
   // Handle array case and ensure we have a string
   if (Array.isArray(timeframe)) {
