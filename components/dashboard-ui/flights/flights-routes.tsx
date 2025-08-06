@@ -31,14 +31,15 @@ import { FlightContinentsPieChart } from "../charts/route-pies/flight-continents
 import { FlightDomesticIntlPieChart } from "../charts/route-pies/flight-domestic-intl-pie";
 import ExportFlightsCSVBtn from "../export-flights-csv-btn";
 import { getAllAircraft } from "@/lib/actions";
+import { hasLifetimeAccess, Subscription } from "@/lib/subscription/helpers";
 
 let maintenanceMode = false;
 
-const FlightsRoutes = async ({ flights, user , role}: { flights: Flight[], user: any, role: string}) => {
+const FlightsRoutes = async ({ flights, user , subscription}: { flights: Flight[], user: any, subscription: Subscription}) => {
   // console.log(`🔄 FlightsRoutes called at ${new Date().toISOString()}`); --> Debugging
 
   // Based on THIS Data for user flights
-  // Criteria: Flight has a totalTime > 10, originAirport, destinationAirport must be non-empty
+  // Criteria: Flight has a totalTime > 5, originAirport, destinationAirport must be non-empty
   const validFlights = flights.filter((flight) => {
     return (
       flight.totalTime > 5 && flight.originAirport && flight.destinationAirport && flight.originAirport !== flight.destinationAirport
@@ -185,11 +186,13 @@ const FlightsRoutes = async ({ flights, user , role}: { flights: Flight[], user:
       <div className="flex gap-4 items-center">
         <RevalidateRoutesButton userId={user.id} />
 
-        {
-          (role === "tester" || role === "admin") && (
-            <ExportFlightsCSVBtn routesWithDistances={routesWithDistances} aircraftArray={aircraftArray.result} />
-          )
-        }
+       
+            <ExportFlightsCSVBtn 
+              routesWithDistances={routesWithDistances} 
+              aircraftArray={aircraftArray.result} 
+              subscription={subscription as Subscription}
+            />
+      
       </div>
 
       <div className="grid grid-cols-1 lg:col-span-3 bg-white dark:bg-gray-800 rounded-xl  p-4">

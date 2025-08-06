@@ -168,7 +168,7 @@ const CommunityUsers = ({ users }: CommunityUsersProps) => {
       )}
     </div>
     <div className="flex justify-center mt-8">
-      <a href="#top-bar" className="text-center">
+      <a href="#navbar" className="text-center">
         <Button variant="outline" className="bg-dark border-gray-600 text-white hover:bg-gray-700 flex items-center gap-2">
           <FaArrowUp className="w-4 h-4 text-white" />
           Back to Top

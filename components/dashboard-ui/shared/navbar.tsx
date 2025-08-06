@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import Pathname from "./pathname";
 import { LogoutButton } from "@/components/logout-button";
 import { getUser } from "@/lib/supabase/user-actions";
 import { Menu, X } from "lucide-react";
@@ -24,25 +23,53 @@ import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
 import { InlineThemeSwitcher } from "@/components/inline-theme-switcher";
 import { RiCopilotFill } from "react-icons/ri";
 
+import { getUserSubscription } from "@/lib/subscription/subscription";
+import { AccessLevel, Subscription } from "@/lib/subscription/helpers";
+
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [user, setUser] = useState<any>(null);
   const [userObj, setUserObj] = useState<any>(null);
+  const [subscription, setSubscription] = useState<Subscription>({
+    id: "default",
+    plan: "free",
+    status: "active",
+    created_at: new Date().toISOString(),
+    ifc_user_id: "",
+    role: "user",
+  });
 
   useEffect(() => {
     const fetchUser = async () => {
-      const user = await getUser();
-      setUser(user);
-      const userObj = customUserImages.find((entry) => entry.username === user?.user_metadata?.ifcUsername) || null
-      setUserObj(userObj);
-    }
+      try {
+        const userData = await getUser();
+        if (!userData) return;
+
+        setUser(userData);
+        
+        // Find user image
+        const userObjData = customUserImages.find(
+          (entry) => entry.username === userData?.user_metadata?.ifcUsername
+        ) || null;
+        setUserObj(userObjData);
+
+        // Get subscription only if we have a user
+        if (userData.id) {
+          const subscriptionData = await getUserSubscription(userData.id);
+          setSubscription(subscriptionData as Subscription);
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+
     fetchUser();
   }, []);
 
 
   return (
-    <div className="relative">
+    <div id="navbar" className="relative">
       {/* Main Navbar */}
       <div className="flex justify-between items-center px-4 py-2 sticky top-0 bg-transparent z-50 border-b-2 border-gray-200 dark:border-gray-800">
         <div className="flex items-center gap-3">
@@ -148,7 +175,15 @@ const Navbar = () => {
 
                   <div className="flex flex-col gap-[0.1rem] text-sm font-semibold self-start">
                     {userObj?.username ? userObj?.username : user?.user_metadata?.ifcUsername}
-                    <span className="text-[0.5rem] text-light bg-blue-700 px-2 py-[0.1rem] rounded-full self-start">Free</span>
+                    {subscription.plan === "free" && (
+                      <span className="text-[0.5rem] text-light bg-blue-700 px-2 py-[0.1rem] rounded-full self-start">Free</span>
+                    )}
+                    {subscription.plan === "premium" && (
+                      <span className="text-[0.5rem] text-gray bg-yellow-400 px-2 py-[0.1rem] rounded-full self-start">Premium</span>
+                    )}
+                    {subscription.plan === "lifetime" && (
+                      <span className="text-[0.5rem] text-light bg-green-700 px-2 py-[0.1rem] rounded-full self-start">Lifetime</span>
+                    )}
                   </div>
                 </div>
 

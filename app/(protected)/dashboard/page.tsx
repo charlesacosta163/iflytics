@@ -215,7 +215,7 @@ export default async function DashboardPage() {
               </div>
               <div className="bg-white/15 rounded-xl p-4 backdrop-blur-md col-span-2 relative overflow-hidden">
                 <div className="text-2xl font-bold">
-                  {userData.virtualOrganization}
+                  {userData.virtualOrganization || "Not In Organization"}
                 </div>
                 <div className="text-blue-100 text-sm flex items-center gap-1">
                   <MdOutlineAirlines /> Virtual Organization

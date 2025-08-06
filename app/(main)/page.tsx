@@ -11,7 +11,7 @@ import Link from "next/link";
 import { FaCheck } from "react-icons/fa6";
 import { MdOutlineAccountCircle } from "react-icons/md";
 import { BsDatabaseCheck } from "react-icons/bs";
-import { TbPlaneInflight, TbUsersGroup, TbLiveView, TbBrandFunimation } from "react-icons/tb";
+import { TbPlaneInflight, TbUsersGroup, TbLiveView, TbBrandFunimation, TbMapPin } from "react-icons/tb";
 import { RiCopilotFill } from "react-icons/ri";
 import { LiaGlobeAmericasSolid } from "react-icons/lia";
 import { GrTrophy } from "react-icons/gr";
@@ -68,9 +68,13 @@ export default function Home() {
               {/* Title with Gradient Animation */}
               <div className="text-center lg:text-left animate-fade-in-up delay-200">
                 <h1 className="text-5xl lg:text-6xl font-black tracking-tight mb-3 lg:mb-4 relative">
+
+                <span className="border-b-6 border-amber-500">
                   <span className="text-gray-900 dark:text-gray-100">
                   <span className="text-amber-500 dark:text-amber-300">IF</span>lytics
+
                   </span>
+                </span>
 
                 </h1>
                 <p className="text-gray-600 dark:text-gray-300 text-lg sm:text-xl font-semibold animate-fade-in-up delay-300">
@@ -165,11 +169,15 @@ export default function Home() {
                     <div className="text-center">
                       <span className="text-gray-500 dark:text-gray-400 text-lg font-medium">or</span>
                     </div>
-                    <div className="mt-4">
-                      <Link href="/auth/login" className="group/login relative inline-block">
-                        <div className="absolute -inset-0.5 bg-gradient-to-r from-gray-500/30 to-gray-600/30 rounded-xl blur opacity-0 group-hover/login:opacity-50 transition-all duration-500"></div>
-                        <div className="relative bg-[#ff8f45] dark:bg-indigo-500 dark:hover:bg-indigo-600 backdrop-blur-sm text-light px-8 py-3 rounded-xl transition-all duration-300 font-semibold hover:scale-105">
-                          Create an account now
+                    <div className="mt-4 grid grid-cols-2 gap-4 w-full">
+                      <Link href="/auth/login" className=" group/login relative inline-block">
+                        <div className="relative bg-[#ff8f45] dark:bg-gray-500 dark:hover:bg-gray-600 backdrop-blur-sm text-light px-4 py-2 rounded-xl transition-all duration-300 font-semibold hover:scale-105 text-center flex items-center justify-center gap-2">
+                          <MdOutlineAccountCircle/> Create account
+                        </div>
+                      </Link>
+                      <Link href="/map/dark" className="group/map relative inline-block">
+                        <div className="relative bg-[#4599ff] dark:bg-indigo-500 dark:hover:bg-indigo-600 backdrop-blur-sm text-light px-4 py-2 rounded-xl transition-all duration-300 font-semibold hover:scale-105 text-center flex items-center justify-center gap-2">
+                         <TbMapPin/> Go to Map
                         </div>
                       </Link>
                     </div>

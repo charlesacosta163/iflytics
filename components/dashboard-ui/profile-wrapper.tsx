@@ -40,7 +40,7 @@ interface User {
 //   keywords: "infinite flight, flight tracking, aviation analytics, pilot statistics, flight data, expert server, flight simulator, aviation dashboard, pilot leaderboards, flight history, iflytics profile",
 // }
 
-const ENABLE_SUBSCRIPTIONS = false;
+const ENABLE_SUBSCRIPTIONS = process.env.NEXT_PUBLIC_SUBSCRIPTION_ENABLED === 'true';
 
 const ProfileWrapper = ({
   userProfile,

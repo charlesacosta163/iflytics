@@ -7,31 +7,22 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { FaFileExport, FaDownload, FaDesktop } from 'react-icons/fa'
 import Papa from 'papaparse'
 import { aircraftIdToIcaoWithArray } from '@/lib/foo'
-
-interface RouteWithDistance {
-  flightId: string;
-  created: string;
-  origin: string;
-  originIsoCountry: string;
-  originContinent: string;
-  originCoordinates: { latitude: number; longitude: number };
-  destination: string;
-  destinationIsoCountry: string;
-  destinationContinent: string;
-  destinationCoordinates: { latitude: number; longitude: number };
-  distance: number;
-  totalTime: number;
-  aircraftId: string;
-  server: string;
-  aircraftIcao: any;
-}
+import { hasLifetimeAccess, Subscription } from '@/lib/subscription/helpers';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { FaQuestionCircle } from 'react-icons/fa';
+import Link from 'next/link';
 
 interface ExportFlightsCSVBtnProps {
   routesWithDistances: any[];
   aircraftArray: any[];
+  subscription: Subscription;  // Add this
 }
 
-const ExportFlightsCSVBtn: React.FC<ExportFlightsCSVBtnProps> = ({ routesWithDistances, aircraftArray }) => {
+const ExportFlightsCSVBtn: React.FC<ExportFlightsCSVBtnProps> = ({ 
+  routesWithDistances, 
+  aircraftArray,
+  subscription 
+}) => {
 
    routesWithDistances = routesWithDistances.map((route) => {
     const aircraftIcao = aircraftIdToIcaoWithArray(route.aircraftId, aircraftArray);
@@ -113,7 +104,15 @@ const ExportFlightsCSVBtn: React.FC<ExportFlightsCSVBtnProps> = ({ routesWithDis
       if (selectedFields.destinationLongitude) row['Destination Longitude'] = route.destinationCoordinates.longitude;
       if (selectedFields.distance) row['Distance'] = route.distance;
       if (selectedFields.totalTime) row['Duration'] = `${Math.floor(route.totalTime/60)}:${Math.floor(route.totalTime%60).toString().padStart(2,'0')}:00`;
-      if (selectedFields.aircraftIcao) row['Aircraft'] = `${route.aircraftIcao.name} (${route.aircraftIcao.icao})`;
+
+      // If aircraft string is equal to "()" or includes undefined, set as empty string
+      if (selectedFields.aircraftIcao && route.aircraftIcao.icao) {
+        if (route.aircraftIcao.name === "()" || route.aircraftIcao.name === undefined || route.aircraftIcao.name.includes("undefined")) {
+          row['Aircraft'] = "";
+        } else {
+          row['Aircraft'] = `${route.aircraftIcao.name}`;
+        }
+      }
       if (selectedFields.server) row['Server'] = route.server;
       
       return row;
@@ -165,77 +164,108 @@ const ExportFlightsCSVBtn: React.FC<ExportFlightsCSVBtnProps> = ({ routesWithDis
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline" className="flex items-center gap-2">
-          <FaFileExport />
-          Export CSV
-        </Button>
+        {hasLifetimeAccess(subscription) ? (
+          <Button variant="outline" className="flex items-center gap-2">
+            <FaFileExport />
+            Export CSV
+          </Button>
+        ) : (
+          <div className="flex items-center gap-2">
+            <Button 
+              variant="outline" 
+              className="flex items-center gap-2"
+              disabled
+            >
+              <FaFileExport />
+              Export CSV
+            </Button>
+            <Popover>
+              <PopoverTrigger>
+                <FaQuestionCircle className="w-4 h-4 text-gray-400 hover:text-gray-300 transition-colors" />
+              </PopoverTrigger>
+              <PopoverContent className="w-80">
+                <div className="space-y-2">
+                  <h4 className="font-semibold">Lifetime Feature</h4>
+                  <p className="text-sm text-gray-400">
+                    Exporting flight data is available exclusively for Lifetime members. 
+                    Upgrade to Lifetime to unlock this and other premium features. Data compatibility with MyFlightRadar24.
+                  </p>
+                </div>
+              </PopoverContent>
+            </Popover>
+          </div>
+        )}
       </DialogTrigger>
-      <DialogContent className="max-w-2xl overflow-y-auto max-h-[90vh] z-[10001]">
-        <DialogHeader>
-          <DialogTitle>Export Flight Data</DialogTitle>
-        </DialogHeader>
-        
-        <div className="flex flex-col">
-          <p className="text-sm text-gray-600 mb-4 dark:text-gray-400">
-            Select which fields to include in your CSV export. Compatible with MyFlightRadar24.
-          </p>
+
+      {/* Only render dialog content if user has lifetime access */}
+      {hasLifetimeAccess(subscription) && (
+        <DialogContent className="max-w-2xl overflow-y-auto max-h-[90vh] z-[10001]">
+          <DialogHeader>
+            <DialogTitle>Export Flight Data</DialogTitle>
+          </DialogHeader>
           
-          <div className="flex flex-col gap-2 overflow-y-auto">
-            {Object.entries(fieldLabels).map(([field, label]) => (
-              <div key={field} className="flex items-center space-x-2">
-                <Checkbox
-                  id={field}
-                  checked={selectedFields[field as keyof typeof selectedFields]}
-                  onCheckedChange={(checked) => handleFieldToggle(field, checked as boolean)}
-                  disabled={mandatoryFields.includes(field)}
-                />
-                <label 
-                  htmlFor={field} 
-                  className={`text-sm ${mandatoryFields.includes(field) ? 'font-medium text-blue-600' : 'text-gray-700 dark:text-gray-300'}`}
-                >
-                  {label}
-                </label>
-              </div>
-            ))}          
-          <div>
-            <Button 
-                variant="outline" 
-                onClick={() => setShowPreview(!showPreview)}
-                className="w-full flex items-center gap-2 mb-2"
-            >
-                <FaDesktop /> {/* or FaEye */}
-                {showPreview ? 'Hide Preview' : 'Preview Data'}
+          <div className="flex flex-col">
+            <p className="text-sm text-gray-600 mb-4 dark:text-gray-400">
+              Select which fields to include in your CSV export. Compatible with MyFlightRadar24.
+            </p>
+            
+            <div className="flex flex-col gap-2 overflow-y-auto">
+              {Object.entries(fieldLabels).map(([field, label]) => (
+                <div key={field} className="flex items-center space-x-2">
+                  <Checkbox
+                    id={field}
+                    checked={selectedFields[field as keyof typeof selectedFields]}
+                    onCheckedChange={(checked) => handleFieldToggle(field, checked as boolean)}
+                    disabled={mandatoryFields.includes(field)}
+                  />
+                  <label 
+                    htmlFor={field} 
+                    className={`text-sm ${mandatoryFields.includes(field) ? 'font-medium text-blue-600' : 'text-gray-700 dark:text-gray-300'}`}
+                  >
+                    {label}
+                  </label>
+                </div>
+              ))}          
+            <div>
+              <Button 
+                  variant="outline" 
+                  onClick={() => setShowPreview(!showPreview)}
+                  className="w-full flex items-center gap-2 mb-2"
+              >
+                  <FaDesktop /> {/* or FaEye */}
+                  {showPreview ? 'Hide Preview' : 'Preview Data'}
 
-            </Button>
-                
-          </div>
-
-          {showPreview && (
-            <div className="border rounded p-3 w-full max-w-full h-32 overflow-auto">
-              <p className="text-xs text-gray-500 mb-2">First 5 rows preview:</p>
-              <pre className="text-xs whitespace-pre-wrap break-all">
-                {Papa.unparse(getPreviewData())}
-              </pre>
+              </Button>
+                  
             </div>
-          )}
 
-          <div className="pt-4 border-t">
-            <Button 
-              onClick={handleExport}
-              className="w-full flex items-center gap-2"
-            >
-              <FaDownload />
-              Download CSV ({routesWithDistances.length} flights)
-            </Button>
+            {showPreview && (
+              <div className="border rounded p-3 w-full max-w-full h-32 overflow-auto">
+                <p className="text-xs text-gray-500 mb-2">First 5 rows preview:</p>
+                <pre className="text-xs whitespace-pre-wrap break-all">
+                  {Papa.unparse(getPreviewData())}
+                </pre>
+              </div>
+            )}
+
+            <div className="pt-4 border-t">
+              <Button 
+                onClick={handleExport}
+                className="w-full flex items-center gap-2"
+              >
+                <FaDownload />
+                Download CSV ({routesWithDistances.length} flights)
+              </Button>
+            </div>
+            
+            <p className="text-xs text-gray-500">
+              * Required fields for MyFlightRadar24 compatibility
+            </p>
           </div>
-          
-          <p className="text-xs text-gray-500">
-            * Required fields for MyFlightRadar24 compatibility
-          </p>
-        </div>
 
-        </div>
-      </DialogContent>
+          </div>
+        </DialogContent>
+      )}
     </Dialog>
   );
 };

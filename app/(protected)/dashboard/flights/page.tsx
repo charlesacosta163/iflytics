@@ -30,6 +30,10 @@ import Link from "next/link";
 import FlightsAircraft from "@/components/dashboard-ui/flights/flights-aircraft";
 import { MdOutlineFlightTakeoff } from "react-icons/md";
 
+// Subscriptions
+import { getUserSubscription } from "@/lib/subscription/subscription";
+import { hasPremiumAccess, Subscription } from '@/lib/subscription/helpers';
+
 let aircraftAnalysisMaintainance = false
 
 export const metadata: Metadata = {
@@ -38,38 +42,64 @@ export const metadata: Metadata = {
   keywords: "infinite flight, flight tracking, aviation analytics, pilot statistics, flight data, expert server, flight simulator, aviation dashboard, pilot leaderboards, flight history, iflytics flights",
 }
 
-const FlightsPage = async ({searchParams}: { searchParams: Promise < {
-  [key: string]: string | string[] | undefined
-}>}) => {
+const FlightsPage = async ({searchParams}: { searchParams: { [key: string]: string | string[] | undefined }}) => {
   const user = await getUser();
   const data = user.user_metadata;
 
-  const userProfile = await getUserProfile();
-  // console.log(userProfile)
-  
-  const {timeframe} = await searchParams || "day-30"
-  
-  let allFlights;
-  
-  const [ frameType, value ] = (Array.isArray(timeframe) ? timeframe[0] : timeframe || "day-30").split('-');
+  // Get subscription data
+  const subscription = await getUserSubscription(user.id) || {
+    plan: "free",
+    status: "active",
+    created_at: new Date().toISOString(),
+    ifc_user_id: user.id,
+    role: "user",
+  };
 
+  // Default timeframe handling
+  const DEFAULT_TIMEFRAME = "day-30";
+  
+  // Handle cases where timeframe is missing or invalid
+  let timeframe = (await searchParams)?.timeframe || DEFAULT_TIMEFRAME;
+  
+  // Handle array case and ensure we have a string
+  if (Array.isArray(timeframe)) {
+    timeframe = timeframe[0] || DEFAULT_TIMEFRAME;
+  }
+
+  // Split and validate timeframe parts
+  const [frameType, value] = timeframe.split('-');
+
+  // Validate timeframe format and redirect if invalid
   if (!frameType || !value) {
-    redirect("/dashboard/flights?timeframe=day-30");
+    redirect(`/dashboard/flights?timeframe=${DEFAULT_TIMEFRAME}`);
   }
 
-  if (frameType && frameType === "day" && ["1", "7", "30", "90"].includes(value as string)) {
-    allFlights = await getFlightsTimeFrame(data.ifcUserId, parseInt(value as string));
-  } else if (frameType === "flight") {
-    const flightCount = parseInt(value);
-    if (!isNaN(flightCount) && flightCount > 0 && flightCount <= 800) {
-      allFlights = await getFlightsTimeFrame(data.ifcUserId, 0, flightCount);
-    } else {
-      redirect("/dashboard/flights?timeframe=day-30");
+  // Validate day timeframe
+  let allFlights; // All flights for the timeframe
+  if (frameType === "day") {
+    if (!["1", "7", "30", "90"].includes(value)) {
+      redirect(`/dashboard/flights?timeframe=${DEFAULT_TIMEFRAME}`);
     }
-  } else {
-    redirect("/dashboard/flights?timeframe=day-30");
+    allFlights = await getFlightsTimeFrame(data.ifcUserId, parseInt(value));
   }
-  
+  // Validate flight timeframe
+  else if (frameType === "flight") {
+    // Check premium access first
+    if (!hasPremiumAccess(subscription as Subscription)) {
+      redirect(`/dashboard/flights?timeframe=${DEFAULT_TIMEFRAME}`);
+    }
+    
+    const flightCount = parseInt(value);
+    if (isNaN(flightCount) || flightCount <= 0 || flightCount > 800) {
+      redirect(`/dashboard/flights?timeframe=${DEFAULT_TIMEFRAME}`);
+    }
+    allFlights = await getFlightsTimeFrame(data.ifcUserId, 0, flightCount);
+  }
+  // Invalid frame type
+  else {
+    redirect(`/dashboard/flights?timeframe=${DEFAULT_TIMEFRAME}`);
+  }
+
   const flightOverviewStats = getFlightOverviewStatsPerTimeFrame(allFlights);
   const flightAverages = getFlightAveragesPerTimeFrame(allFlights);
   const flightActivity = getFlightTimePerTimeFrame(allFlights);
@@ -77,17 +107,8 @@ const FlightsPage = async ({searchParams}: { searchParams: Promise < {
   const mostVisitedOriginAndDestinationAirports =
     await getMostVisitedOriginAndDestinationAirports(allFlights);
   const aircraftUsageData = await getAllPlayerAircraftUsageData(allFlights);
-
-
-  // allFlights.forEach((flight, index) => {
-    
-  //   if (flight.violations.length > 0) {
-  //     console.log(`Violation ${index + 1}: `, flight.violations, "\n");
-  //   }
-
-  // })
  
-  return (
+  return (  
     <div className="space-y-8 pb-8">
       {/* Header Section */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -100,7 +121,7 @@ const FlightsPage = async ({searchParams}: { searchParams: Promise < {
             Your flight statistics and insights
           </p>
         </div>
-        <SelectTimeframeButton role={userProfile.role}/>
+        <SelectTimeframeButton subscription={subscription as Subscription} />
       </div>
 
       {/* Tabs */}
@@ -121,12 +142,11 @@ const FlightsPage = async ({searchParams}: { searchParams: Promise < {
           <span className="hidden sm:inline text-xs sm:text-sm">Routes</span>
         </TabsTrigger>
         
-        {!aircraftAnalysisMaintainance && (
           <TabsTrigger value="aircraft" className="data-[state=active]:bg-gray-700 data-[state=active]:text-white data-[state=inactive]:bg-transparent data-[state=inactive]:text-gray-300 transition-all duration-200 rounded-full flex flex-col sm:flex-row gap-1 sm:gap-2 items-center px-2 sm:px-4">
             <FaPlane className="w-4 h-4 sm:w-5 sm:h-5 text-light" />
             <span className="hidden sm:inline text-xs sm:text-sm">Aircraft</span>
           </TabsTrigger>
-        )}
+  
       </TabsList>
       
       <TabsContent value="overview" className="space-y-8">
@@ -147,14 +167,24 @@ const FlightsPage = async ({searchParams}: { searchParams: Promise < {
       </TabsContent>
       
       <TabsContent value="routes" className="space-y-6">
-        <FlightsRoutes flights={allFlights} user={user} role={userProfile.role}/>
+        {hasPremiumAccess(subscription as Subscription) ? (
+          <FlightsRoutes flights={allFlights} user={user} subscription={subscription as Subscription}/>
+        ) : (
+          <div className="text-center text-gray-500">
+            <p>You need to be a premium/lifetime user to access route analysis.</p>
+          </div>
+        )}
       </TabsContent>
 
-      {!aircraftAnalysisMaintainance && (
         <TabsContent value="aircraft" className="space-y-6">
-          <FlightsAircraft flights={allFlights} user={user} />
+          {hasPremiumAccess(subscription as Subscription) ? (
+            <FlightsAircraft flights={allFlights} user={user} />
+          ) : (
+            <div className="text-center text-gray-500">
+              <p>You need to be a premium/lifetime user to access aircraft analysis.</p>
+            </div>
+          )}
         </TabsContent>
-      )}
     </Tabs>
     </div>
   );
