@@ -59,7 +59,7 @@ const FlightsPage = async ({searchParams}: { searchParams: { [key: string]: stri
   const DEFAULT_TIMEFRAME = "day-30";
   
   // Handle cases where timeframe is missing or invalid
-  let timeframe = (await searchParams)?.timeframe || DEFAULT_TIMEFRAME;
+  let timeframe = searchParams?.timeframe || DEFAULT_TIMEFRAME;
   
   // Handle array case and ensure we have a string
   if (Array.isArray(timeframe)) {
