@@ -9,7 +9,25 @@ export async function GET(req: NextRequest) {
   const username = searchParams.get('username') || 'Guest';
   const theme = searchParams.get('theme')?.toLowerCase() || 'default';
   const font = searchParams.get('font')?.toLowerCase() || 'inter';
-  const text = 'white';
+  
+  // Custom color parameters
+  const customCardColor = searchParams.get('card_color');
+  const customTextColor = searchParams.get('text_color');
+
+  // Helper function to validate and normalize hex color
+  const normalizeHex = (hex: string | null): string | null => {
+    if (!hex) return null;
+    
+    // Remove # if present
+    const cleanHex = hex.replace('#', '');
+    
+    // Validate 6-digit hex
+    if (!/^[A-Fa-f0-9]{6}$/.test(cleanHex)) {
+      return null;
+    }
+    
+    return `#${cleanHex}`;
+  };
 
   // Font families
   const fonts = {
@@ -25,14 +43,14 @@ export async function GET(req: NextRequest) {
   // Pastel theme colors (darker variants)
   const themes = {
     default: '#1a1d21',
-    sage: '#718176',    // Darker sage green
-    lavender: '#7671A3', // Darker purple
-    rose: '#B68E95',    // Darker pink
-    sky: '#6B99AD',     // Darker blue
-    peach: '#C49B82',   // Darker peach
-    mint: '#75A69A',    // Darker mint
-    lilac: '#9B8BAB',   // Darker lilac
-    sand: '#A69485',     // Darker sand
+    sage: '#718176',
+    lavender: '#7671A3',
+    rose: '#B68E95',
+    sky: '#6B99AD',
+    peach: '#C49B82',
+    mint: '#75A69A',
+    lilac: '#9B8BAB',
+    sand: '#A69485',
     blue: '#3b82f6',
     green: '#22c55e',
     red: '#ef4444',
@@ -42,7 +60,13 @@ export async function GET(req: NextRequest) {
     pink: '#ec4899',
   };
 
-  const selectedTheme = themes[theme as keyof typeof themes] || themes.default;
+  // Determine card color (custom hex takes priority over theme)
+  const selectedCardColor = normalizeHex(customCardColor) 
+    || themes[theme as keyof typeof themes] 
+    || themes.default;
+
+  // Determine text color (custom hex takes priority, fallback to white)
+  const selectedTextColor = normalizeHex(customTextColor) || 'white';
 
   // Format flight time from minutes to hours and minutes
   const formatFlightTime = (minutes: number) => {
@@ -69,23 +93,20 @@ export async function GET(req: NextRequest) {
   const svg = `
   <svg width="500" height="320" xmlns="http://www.w3.org/2000/svg">
     <defs>
-      <linearGradient id="cardGradient">
-        <stop offset="100%" style="stop-color:${selectedTheme};stop-opacity:1" />
-      </linearGradient>
       <filter id="shadow">
         <feDropShadow dx="0" dy="4" stdDeviation="4" flood-opacity="0.25"/>
       </filter>
     </defs>
     
     <!-- Card Background -->
-    <rect width="500" height="320" rx="15" fill="url(#cardGradient)" filter="shadow"/>
+    <rect width="500" height="320" rx="15" fill="${selectedCardColor}" filter="shadow"/>
     
     <!-- Header -->
     <g transform="translate(30, 40)">
-      <text font-family="${selectedFont}" font-size="24" font-weight="bold" fill="${text}">
+      <text font-family="${selectedFont}" font-size="24" font-weight="bold" fill="${selectedTextColor}">
         ${data.discourseUsername || 'Guest'}
       </text>
-      <text x="0" y="25" font-family="${selectedFont}" font-size="14" fill="${text}" opacity="0.8">
+      <text x="0" y="25" font-family="${selectedFont}" font-size="14" fill="${selectedTextColor}" opacity="0.8">
         Grade ${data.grade} ${data.virtualOrganization ? '• ' + data.virtualOrganization : ''}
       </text>
     </g>
@@ -94,48 +115,48 @@ export async function GET(req: NextRequest) {
     <g transform="translate(30, 110)">
       <!-- XP -->
       <g>
-        <text font-family="${selectedFont}" font-size="14" fill="${text}" opacity="0.8">XP</text>
-        <text y="25" font-family="${selectedFont}" font-size="20" font-weight="bold" fill="${text}">
+        <text font-family="${selectedFont}" font-size="14" fill="${selectedTextColor}" opacity="0.8">XP</text>
+        <text y="25" font-family="${selectedFont}" font-size="20" font-weight="bold" fill="${selectedTextColor}">
           ${data.xp.toLocaleString()}
         </text>
       </g>
 
       <!-- Online Flights -->
       <g transform="translate(160, 0)">
-        <text font-family="${selectedFont}" font-size="14" fill="${text}" opacity="0.8">Online Flights</text>
-        <text y="25" font-family="${selectedFont}" font-size="20" font-weight="bold" fill="${text}">
+        <text font-family="${selectedFont}" font-size="14" fill="${selectedTextColor}" opacity="0.8">Online Flights</text>
+        <text y="25" font-family="${selectedFont}" font-size="20" font-weight="bold" fill="${selectedTextColor}">
           ${data.onlineFlights.toLocaleString()}
         </text>
       </g>
 
       <!-- Landing Count -->
       <g transform="translate(320, 0)">
-        <text font-family="${selectedFont}" font-size="14" fill="${text}" opacity="0.8">Landings</text>
-        <text y="25" font-family="${selectedFont}" font-size="20" font-weight="bold" fill="${text}">
+        <text font-family="${selectedFont}" font-size="14" fill="${selectedTextColor}" opacity="0.8">Landings</text>
+        <text y="25" font-family="${selectedFont}" font-size="20" font-weight="bold" fill="${selectedTextColor}">
           ${data.landingCount.toLocaleString()}
         </text>
       </g>
 
       <!-- Flight Time -->
       <g transform="translate(0, 70)">
-        <text font-family="${selectedFont}" font-size="14" fill="${text}" opacity="0.8">Flight Time</text>
-        <text y="25" font-family="${selectedFont}" font-size="20" font-weight="bold" fill="${text}">
+        <text font-family="${selectedFont}" font-size="14" fill="${selectedTextColor}" opacity="0.8">Flight Time</text>
+        <text y="25" font-family="${selectedFont}" font-size="20" font-weight="bold" fill="${selectedTextColor}">
           ${formatFlightTime(data.flightTime)}
         </text>
       </g>
 
       <!-- ATC Operations -->
       <g transform="translate(160, 70)">
-        <text font-family="${selectedFont}" font-size="14" fill="${text}" opacity="0.8">ATC Operations</text>
-        <text y="25" font-family="${selectedFont}" font-size="20" font-weight="bold" fill="${text}">
+        <text font-family="${selectedFont}" font-size="14" fill="${selectedTextColor}" opacity="0.8">ATC Operations</text>
+        <text y="25" font-family="${selectedFont}" font-size="20" font-weight="bold" fill="${selectedTextColor}">
           ${data.atcOperations.toLocaleString()}
         </text>
       </g>
 
       <!-- ATC Rank -->
       <g transform="translate(320, 70)">
-        <text font-family="${selectedFont}" font-size="14" fill="${text}" opacity="0.8">ATC Rank</text>
-        <text y="25" font-family="${selectedFont}" font-size="20" font-weight="bold" fill="${text}">
+        <text font-family="${selectedFont}" font-size="14" fill="${selectedTextColor}" opacity="0.8">ATC Rank</text>
+        <text y="25" font-family="${selectedFont}" font-size="20" font-weight="bold" fill="${selectedTextColor}">
           ${atcRank || '-'}
         </text>
       </g>
@@ -144,15 +165,15 @@ export async function GET(req: NextRequest) {
 
     <!-- Expert Server Status -->
     <g transform="translate(30, 240)">
-      <text font-family="${selectedFont}" font-size="14" fill="${text}" opacity="0.8">Expert Server Status</text>
-      <text y="25" font-family="${selectedFont}" font-size="20" font-weight="bold" fill="${text}">
-                 ${isFlyingInExpertServer ? '<tspan fill="#dcedc8">Flying</tspan>' : '<tspan fill="#ffcdd2">Not flying</tspan>'}
+      <text font-family="${selectedFont}" font-size="14" fill="${selectedTextColor}" opacity="0.8">Expert Server Status</text>
+      <text y="25" font-family="${selectedFont}" font-size="20" font-weight="bold" fill="${selectedTextColor}">
+                 ${isFlyingInExpertServer ? 'Flying' : 'Not flying'}
       </text>
     </g>
     
     <!-- Footer -->
-    <text x="30" y="300" font-family="${selectedFont}" font-size="12" fill="${text}" opacity="0.7">
-      Generated by <a href="https://iflytics.app/user/${data.discourseUsername}" fill="#ffe985" target="_blank" style="text-decoration: underline; color: ${text};">IFlytics</a> • Updated ${new Date().toLocaleDateString()}
+    <text x="30" y="300" font-family="${selectedFont}" font-size="12" fill="${selectedTextColor}" opacity="0.7">
+      Generated by <a href="https://iflytics.app/user/${data.discourseUsername}" target="_blank" style="text-decoration: underline; color: ${selectedTextColor};">IFlytics</a> • Updated ${new Date().toLocaleDateString()}
     </text>
   </svg>
   `;
