@@ -1,3 +1,4 @@
+import { activeAirlines } from "./airlines-lib.js";
 import { airports } from "./airports-lib.js";
 import { aircraftIcaoCodes } from "./data.js";
 
@@ -9,6 +10,23 @@ export function getAirportLocally(airportIcao: string): any {
         return null;
     }
 }
+
+export function getAirline(callsign: string) {
+    // Use string.includes to find the airline
+    const { airlines } = activeAirlines
+
+    const airline = airlines.find((airline) => 
+      airline.callsign && 
+      airline.callsign.trim() !== '' && 
+      callsign.toLowerCase().includes(airline.callsign.toLowerCase())
+    )
+
+    if (!airline) {
+      return null
+    }
+
+    return airline.name
+  }
 
 export function matchATCRankToTitle(atcRank: string) {
     switch (atcRank) {

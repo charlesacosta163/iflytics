@@ -291,6 +291,7 @@ function createUserFlightRoutesCache(userId: string) {
       const routePairs = flights.map(flight => ({
         flightId: flight.id,
         created: flight.created,
+        callsign: flight.callsign,
         origin: flight.originAirport,
         destination: flight.destinationAirport,
         aircraftId: flight.aircraftId,
@@ -304,6 +305,7 @@ function createUserFlightRoutesCache(userId: string) {
           return {
             flightId: route.flightId,
             created: route.created,
+            callsign: route.callsign,
             origin: route.origin || "????",
             originIsoCountry: originIsoCountry,
             originContinent: originContinent,
@@ -375,6 +377,7 @@ export async function getAllFlightRoutes(flights: Flight[], userId: string) {
 export function getUniqueRoutes(routesWithDistances: {
   flightId: string;
   created: string;
+  callsign: string;
   origin: string;
   originIsoCountry: string;
   originContinent: string;
@@ -408,6 +411,7 @@ export function getUniqueRoutes(routesWithDistances: {
         created: route.created,
         aircraftId: route.aircraftId,
         server: route.server,
+        callsign: route.callsign,
         origin: route.origin,
         originIsoCountry: route.originIsoCountry,
         originContinent: route.originContinent,

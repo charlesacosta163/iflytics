@@ -42,11 +42,15 @@ export async function getUserSubscription(userId: string) {
 
         // Handle regular users
         if (role === "user") {
-            const { data: subscription } = await supabaseAdmin
+            const { data: subscriptions } = await supabaseAdmin
                 .from('subscriptions')
                 .select('*')
                 .eq('ifc_user_id', userId)
-                .single();
+                .eq('status', 'active')
+                .order('created_at', { ascending: false }); // Get newest first
+
+            // Get the most recent active subscription (should be lifetime)
+            const subscription = subscriptions?.[0];
 
             if (subscription) {
                 // Check if subscription is actually active
