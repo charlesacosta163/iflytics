@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/accordion";
 import { faqData } from "@/lib/data";
 import { InlineThemeSwitcher } from "@/components/inline-theme-switcher";
+import { Badge } from "@/components/ui/badge";
 
 export default function Home() {
   return (
@@ -97,7 +98,8 @@ export default function Home() {
           </div>
 
           {/* Enhanced Form Section */}
-          <div className="flex-1 flex flex-col gap-4 lg:gap-6 items-center animate-slide-in-right delay-300 w-full">
+          <div className="flex-1 flex flex-col gap-4 lg:gap-6 items-center animate-slide-in-right delay-300 w-full relative">
+            <Badge className="absolute -top-2 left-1/2 -translate-x-1/2 z-50 bg-gradient-to-r from-blue-400 to-purple-400 text-light font-bold tracking-tight">Official Release Soon, Big Discounts on Launch!</Badge>
             {/* Form with Enhanced Styling */}
             <div className="relative group w-full max-w-[500px]">
               {/* <div className="absolute -inset-1 bg-gradient-to-r from-gray-400 via-blue-400 to-gray-400 rounded-[24px] blur opacity-15 group-hover:opacity-30 transition-all duration-1000 animate-gradient-x bg-[length:200%_auto]"></div> */}

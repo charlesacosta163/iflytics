@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { FaBook, FaSearch, FaSignInAlt } from "react-icons/fa";
+import { LuMessageCircleQuestion } from "react-icons/lu";
 import { LiaGlobeAmericasSolid } from "react-icons/lia";
 import Pathname from "./dashboard-ui/shared/pathname";
 import { createClient } from "@/lib/supabase/client";
@@ -83,12 +84,20 @@ const Navbar = () => {
               <FaSearch className="w-4 h-4 group-hover:rotate-12 transition-transform duration-200" />
               <span>Search</span>
             </Link>
-            <Link
+            <Link 
               href="#pricing"
               className="group flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-all duration-200"
             >
               <GrMoney className="w-4 h-4 group-hover:rotate-12 transition-transform duration-200" />
               <span>Pricing</span>
+            </Link>
+
+            <Link
+              href="#faq"
+              className="group flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-all duration-200"
+            >
+              <LuMessageCircleQuestion className="w-4 h-4 group-hover:rotate-12 transition-transform duration-200" />
+              <span>FAQs</span>
             </Link>
           </div>
 
