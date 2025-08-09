@@ -3285,6 +3285,15 @@ export const customUserImages = [
       "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/mason_lennox/288/1515169_2.png"
     )}&w=64&h=64&fit=cover&mask=circle`,
   },
+  {
+    // IFLYTICS USER
+    id: 222,
+    role: "user",
+    username: "FlightParadise",
+    image: `https://images.weserv.nl/?url=${encodeURIComponent(
+      "https://avatars.discourse-cdn.com/v4/letter/f/cdc98d/288.png"
+    )}&w=64&h=64&fit=cover&mask=circle`,
+  },
 ];
 
 export const aircraftIcaoCodes = [
@@ -3459,3 +3468,36 @@ export const continentCodes = [
     value: "South America",
   },
 ];
+
+export const faqData = [
+  {
+    id: 1,
+    question: "What is IFlytics?",
+    answer: "IFlytics is a comprehensive flight analytics platform designed specifically for Infinite Flight pilots. We transform your raw flight data into meaningful insights through interactive dashboards, detailed statistics, and beautiful visualizations. Track your progress with metrics like total flight time, landings, XP earned, nautical miles flown, and unique routes. Analyze your aircraft usage patterns, explore route maps, compare performance across different timeframes, and connect with fellow pilots in the community. Whether you're a casual flyer or serious aviation enthusiast, IFlytics helps you understand and improve your flying experience in Infinite Flight.",
+  },
+  {
+    id: 2,
+    question: "How do I get started?",
+    answer: "To get started, you need to sign up for an account and connect your Infinite Flight account. Once you've connected your account, you can start tracking your flights and getting insights on your flying.",
+  },
+  {
+    id: 3,
+    question: "What's the difference between Free, Premium, and Lifetime plans?",
+    answer: "Free users get basic flight tracking and statistics with time-based analytics (1, 7, 30 days). Premium users unlock advanced features like route analysis, aircraft analytics, flight-frame analysis (10-800 flights) and priority support. Lifetime users get all features forever, exclusively with the new Flight CSV exports with FlightRadar24 compatibility.",
+  },
+  {
+    id: 4,
+    question: "When will The Flight Arena be available?",
+    answer: "The Flight Arena is scheduled for release in 2026. This exciting feature will turn your flight data into interactive games and challenges, adding a gamification layer to your aviation experience. Premium and Lifetime users will get full access when it launches.",
+  },
+  // {
+  //   id: 6,
+  //   question: "Do you offer refunds?",
+  //   answer: "We offer a comprehensive free tier and all premium features are FREE during our beta period, so you can fully test IFlytics before purchasing. Monthly Premium subscriptions include a 7-day satisfaction guarantee - contact our support team within 7 days for a full refund. Lifetime purchases are final sales with no refunds.",
+  // },
+  {
+    id: 7,
+    question: "How do I contact support?",
+    answer: "You can contact support in our Discord server. We're here to help you with any questions or issues you may have.",
+  },
+];  

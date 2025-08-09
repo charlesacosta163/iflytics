@@ -18,10 +18,21 @@ import { GrTrophy } from "react-icons/gr";
 import { PiArrowFatLineUp } from "react-icons/pi";
 import { SlBadge } from "react-icons/sl";
 import TestimonialCarousel from "@/components/testimonial-carousel";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { faqData } from "@/lib/data";
+import { InlineThemeSwitcher } from "@/components/inline-theme-switcher";
 
 export default function Home() {
   return (
     <div className="min-h-screen w-full">
+      <div className="fixed bottom-4 right-4 z-50">
+        <InlineThemeSwitcher />
+      </div>
       {/* Hero Section - Compact & Mobile-Friendly */}
       <section className="h-auto lg:h-[90svh] max-w-[1000px] w-full mx-auto flex justify-center items-center">
         {/* Animated Background Elements */}
@@ -31,88 +42,58 @@ export default function Home() {
           <div className="absolute top-1/3 right-1/4 w-48 h-48 bg-gradient-to-r from-purple-400/5 to-gray-400/5 rounded-full blur-2xl animate-float"></div>
         </div>
 
-        <div className="container w-full flex flex-col lg:flex-row items-center gap-8 lg:gap-12 p-4 lg:p-6 relative z-10">
+        <div className="container w-full flex flex-col lg:flex-row items-center gap-8 p-4 lg:p-6 relative z-10">
           <div className="flex-1 flex flex-col gap-4 lg:gap-8">
             <header className="flex flex-col items-center lg:items-start gap-4 lg:gap-6">
-              {/* Logo with Animation - Conditional based on theme */}
-              <div className="relative group animate-fade-in-up">
-                <div className="absolute -inset-2 bg-gradient-to-r from-blue-400/15 to-purple-400/15 rounded-full blur-lg opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
-                
-                {/* Dark mode logo (default) */}
-                <Image 
-                  src={iflyticsLogoLight} 
-                  alt="IFlytics Logo" 
-                  width={200} 
-                  height={200}
-                  className="relative w-[150px] h-[150px] lg group-hover:scale-105 transition-transform duration-300 animate-hover-float dark:block hidden opacity-75"
-                />
-                
-                {/* Light mode logo */}
-                <Image 
-                  src={iflyticsLogo} 
-                  alt="IFlytics Logo Light" 
-                  width={200} 
-                  height={200}
-                  className="relative w-[150px] h-[150px] lg group-hover:scale-105 transition-transform duration-300 animate-hover-float dark:hidden block"
-                />
-              </div>
               
-              {/* Title with Gradient Animation */}
-              <div className="text-center lg:text-left animate-fade-in-up delay-200">
-                <h1 className="text-5xl lg:text-6xl font-black tracking-tight mb-3 lg:mb-4 relative">
-
-                <span className="border-b-6 border-amber-500">
-                  <span className="text-gray-900 dark:text-gray-100">
-                  <span className="text-amber-500 dark:text-amber-300">IF</span>lytics
-
-                  </span>
-                </span>
-
+              {/* Value Proposition First - Large Headline */}
+              <div className="text-center lg:text-left animate-fade-in-up">
+                <h1 className="text-4xl lg:text-6xl font-black tracking-tighter mb-4 lg:mb-6 relative text-gray-900 dark:text-gray-100 leading-tight text-balance">
+                  Transform Your Flight Data Into 
+                  <span className="block text-blue-600 dark:text-blue-400">Powerful Insights</span>
                 </h1>
-                <p className="text-gray-600 dark:text-gray-300 text-lg sm:text-xl font-semibold animate-fade-in-up delay-300">
-                Professional-grade flight analytics and journey history for Infinite Flight enthusiasts.
+                <p className="text-gray-600 dark:text-gray-300 tracking-tight lg:text-2xl font-medium animate-fade-in-up delay-200 mb-4 lg:mb-6">
+                  See how you've grown as a pilot with detailed analytics, route maps, and performance tracking for every flight.
                 </p>
+              </div>
+
+              {/* Logo and Brand - Supporting Role */}
+              <div className="flex items-center gap-3 animate-fade-in-up delay-300">
+                <div className="relative group">
+                  <div className="absolute -inset-2 bg-gradient-to-r from-blue-400/15 to-purple-400/15 rounded-full blur-lg opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
+                  
+                  {/* Dark mode logo (default) */}
+                  <Image 
+                    src={iflyticsLogoLight} 
+                    alt="IFlytics Logo" 
+                    width={60} 
+                    height={60}
+                    className="relative w-[60px] h-[60px] group-hover:scale-105 transition-transform duration-300 dark:block hidden opacity-75"
+                  />
+                  
+                  {/* Light mode logo */}
+                  <Image 
+                    src={iflyticsLogo} 
+                    alt="IFlytics Logo Light" 
+                    width={60} 
+                    height={60}
+                    className="relative w-[60px] h-[60px] group-hover:scale-105 transition-transform duration-300 dark:hidden block"
+                  />
+                </div>
+                
+                <div>
+                  <h2 className="text-2xl font-black tracking-tight text-gray-900 dark:text-gray-100">
+                    <span className="text-amber-500 dark:text-amber-300">IF</span>lytics
+                  </h2>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 font-medium">
+                    For Infinite Flight Pilots
+                  </p>
+                </div>
               </div>
             </header>
 
             {/* Enhanced Feature Points - Desktop Only */}
-            <section className="hidden lg:flex flex-col gap-4 animate-slide-in-left delay-500">
-              {/* Feature 1 */}
-              <div className="group flex gap-4 items-center p-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-all duration-300 hover:scale-105">
-                <div className="relative">
-                  <div className="absolute -inset-1 bg-gradient-to-r from-blue-400 to-blue-600 rounded-full blur opacity-0 group-hover:opacity-40 transition-all duration-500"></div>
-                  <span className="relative flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 shadow-lg group-hover:shadow-blue-500/20 transition-all duration-300">
-                    <IoStatsChartSharp className="text-white text-lg"/>
-                </span>
-                </div>
-                <div className="flex-1">
-                  <h3 className="font-bold text-gray-800 dark:text-light text-base mb-1 group-hover:text-blue-600 transition-colors duration-300">
-                    Real-time Analytics Dashboard
-                  </h3>
-                  <p className="text-gray-600 dark:text-gray-300 text-sm group-hover:text-gray-700 dark:group-hover:text-gray-200 transition-colors duration-300">
-                    Get instant insights into your flight performance
-                  </p>
-                </div>
-              </div>
-
-              {/* Feature 2 */}
-              <div className="group flex gap-4 items-center p-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-all duration-300 hover:scale-105">
-                <div className="relative">
-                  <div className="absolute -inset-1 bg-gradient-to-r from-purple-400 to-purple-600 rounded-full blur opacity-0 group-hover:opacity-40 transition-all duration-500"></div>
-                  <span className="relative flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-purple-500 to-purple-600 shadow-lg group-hover:shadow-purple-500/20 transition-all duration-300">
-                    <LuHistory className="text-white text-lg animate-spin-slow"/>
-                </span>
-                </div>
-                <div className="flex-1">
-                  <h3 className="font-bold text-gray-800 dark:text-light text-base mb-1 group-hover:text-purple-600 transition-colors duration-300">
-                    Extensive Flight Journey
-                  </h3>
-                  <p className="text-gray-600 dark:text-gray-300 text-sm group-hover:text-gray-700 dark:group-hover:text-gray-200 transition-colors duration-300">
-                    Explore detailed history with routes and aircraft
-                  </p>
-                </div>
-              </div>
-            </section>
+            
           </div>
 
           {/* Enhanced Form Section */}
@@ -126,54 +107,54 @@ export default function Home() {
               redirect(`/user/${formData.get("name") as string}`)
               }} className="relative px-4 py-6 lg:px-8 lg:py-10 rounded-[23px] bg-[#ffe3d0] dark:bg-dark shadow-xl backdrop-blur-sm">
                 
-                {/* Form Header */}
-                <div className="text-center mb-6 lg:mb-8">
-                  <h2 className="text-gray-900 dark:text-light text-2xl lg:text-3xl tracking-tight font-black mb-2 lg:mb-3 text-balance">
-                    Find your Infinite Flight Stats
-                  </h2>
-                  <div className="w-12 lg:w-16 h-1 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full mx-auto"></div>
-                </div>
-                
-                <div className="flex flex-col gap-4 lg:gap-6">
-                  {/* Enhanced Input */}
-                  <div className="relative group/input">
-                    <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-400 to-purple-400 rounded-xl blur opacity-0 group-hover/input:opacity-25 transition-all duration-500"></div>
-                    <div className="relative text-gray-900 dark:text-white">
-                      <input 
-                        type="text" 
-                        name="name" 
-                        className="relative bg-light dark:bg-gray-900/80 backdrop-blur-sm pl-10 lg:pl-12 pr-4 py-2 lg:py-3 font-medium rounded-xl outline-none w-full focus:border-blue-400 transition-all duration-300 text-base placeholder:text-gray-500 dark:placeholder:text-gray-400 text-gray-900 dark:text-white" 
-                        placeholder="Enter your IFC Username" 
-                        required
-                      />
-                      <TbSearch className="absolute left-3 lg:left-4 top-[12px] lg:top-[16px] font-bold text-lg lg:text-xl text-gray-500 dark:text-gray-400 group-hover/input:text-blue-400 transition-colors duration-300"/>
-                    </div>
-                  </div>
+                                 {/* Form Header */}
+                 <div className="text-center mb-4 lg:mb-6">
+                   <h2 className="text-gray-900 dark:text-light text-xl lg:text-2xl tracking-tight font-black mb-2 text-balance">
+                     Find your Infinite Flight Stats
+                   </h2>
+                   <div className="w-12 h-1 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full mx-auto"></div>
+                 </div>
+                 
+                 <div className="flex flex-col gap-3 lg:gap-4">
+                   {/* Enhanced Input */}
+                   <div className="relative group/input">
+                     <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-400 to-purple-400 rounded-xl blur opacity-0 group-hover/input:opacity-25 transition-all duration-500"></div>
+                     <div className="relative text-gray-900 dark:text-white">
+                       <input 
+                         type="text" 
+                         name="name" 
+                         className="relative bg-light dark:bg-gray-900/80 backdrop-blur-sm pl-9 pr-4 py-2.5 font-medium rounded-lg outline-none w-full focus:border-blue-400 transition-all duration-300 text-sm placeholder:text-gray-500 dark:placeholder:text-gray-400 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700" 
+                         placeholder="Enter your IFC Username" 
+                         required
+                       />
+                       <TbSearch className="absolute left-3 top-[14px] text-base text-gray-500 dark:text-gray-400 group-hover/input:text-blue-400 transition-colors duration-300"/>
+                     </div>
+                   </div>
+                   
+                   {/* Enhanced Button */}
+                   <div className="relative group/button">
+                     <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-600 to-blue-700 rounded-lg blur opacity-40 group-hover/button:opacity-80 transition-all duration-500"></div>
+                     <SearchUserButton className="relative bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 font-bold text-sm lg:text-base py-2.5 rounded-lg shadow-lg hover:shadow-blue-500/20 transition-all duration-300 hover:scale-[1.02]" />
+                   </div>
                   
-                  {/* Enhanced Button */}
-                  <div className="relative group/button">
-                    <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl blur opacity-40 group-hover/button:opacity-80 transition-all duration-500"></div>
-                    <SearchUserButton className="relative bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 font-bold text-base lg:text-lg py-3 lg:py-4 rounded-xl shadow-lg hover:shadow-blue-500/20 transition-all duration-300 hover:scale-[1.02]" />
-                  </div>
-                  
-                  {/* Login Option */}
-                  <div className="animate-slide-in-up delay-400 self-center">
-                    <div className="text-center">
-                      <span className="text-gray-500 dark:text-gray-400 text-lg font-medium">or</span>
-                    </div>
-                    <div className="mt-4 grid grid-cols-2 gap-4 w-full">
-                      <Link href="/auth/login" className=" group/login relative inline-block">
-                        <div className="relative bg-[#ff8f45] dark:bg-gray-500 dark:hover:bg-gray-600 backdrop-blur-sm text-light px-4 py-2 rounded-xl transition-all duration-300 font-semibold hover:scale-105 text-center flex items-center justify-center gap-2">
-                          <MdOutlineAccountCircle/> Create account
-                        </div>
-                      </Link>
-                      <Link href="/map/dark" className="group/map relative inline-block">
-                        <div className="relative bg-[#4599ff] dark:bg-indigo-500 dark:hover:bg-indigo-600 backdrop-blur-sm text-light px-4 py-2 rounded-xl transition-all duration-300 font-semibold hover:scale-105 text-center flex items-center justify-center gap-2">
-                         <TbMapPin/> Go to Map
-                        </div>
-                      </Link>
-                    </div>
-                  </div>
+                                     {/* Login Option */}
+                   <div className="animate-slide-in-up delay-400 self-center">
+                     <div className="text-center">
+                       <span className="text-gray-500 dark:text-gray-400 text-sm font-medium">or</span>
+                     </div>
+                     <div className="mt-3 grid grid-cols-2 gap-3 w-full">
+                       <Link href="/auth/login" className=" group/login relative inline-block">
+                         <div className="relative bg-[#ff8f45] dark:bg-gray-500 dark:hover:bg-gray-600 backdrop-blur-sm text-light px-3 py-2 rounded-lg transition-all duration-300 font-medium hover:scale-105 text-center flex items-center justify-center gap-1.5 text-sm">
+                           <MdOutlineAccountCircle className="text-base"/> Create account
+                         </div>
+                       </Link>
+                       <Link href="/map/dark" className="group/map relative inline-block">
+                         <div className="relative bg-[#4599ff] dark:bg-indigo-500 dark:hover:bg-indigo-600 backdrop-blur-sm text-light px-3 py-2 rounded-lg transition-all duration-300 font-medium hover:scale-105 text-center flex items-center justify-center gap-1.5 text-sm">
+                          <TbMapPin className="text-base"/> Go to Map
+                         </div>
+                       </Link>
+                     </div>
+                   </div>
                   
                   {/* Enhanced Footer Links */}
                   <div className="space-y-2 lg:space-y-3">
@@ -901,7 +882,7 @@ export default function Home() {
                   </div>
                   <div className="flex items-start gap-3 font-bold">
                     <FaCheck className="text-green-500 mt-1 flex-shrink-0"/>
-                    <span className="text-blue-700 dark:text-blue-300">FlightRadar24 import compatibility</span>
+                    <span className="text-blue-700 dark:text-blue-300">FlightRadar24 import compatibility (supports Date, Origin, Destination, Aircraft, Airline, Duration properties)</span>
                   </div>
                   <div className="flex items-start gap-3 font-bold">
                     <FaCheck className="text-green-500 mt-1 flex-shrink-0"/>
@@ -923,6 +904,34 @@ export default function Home() {
               All plans include access to your extensive flight history and Expert Server live tracking
             </p>
           </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section id="faq" className="w-full bg-dark py-24 overflow-hidden">
+        <div className="container mx-auto px-4 max-w-[1200px] w-full">
+          {/* Header */}
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-black text-white mb-6">
+              Frequently Asked <span className="text-blue-400">Questions</span>
+            </h2>
+          </div>
+
+          {/* FAQ Accordion */}
+          <div className="max-w-4xl mx-auto space-y-4">
+            <Accordion type="single" collapsible className="space-y-4">
+                {faqData.map((faq, index) => (
+                  <AccordionItem key={index} value={`item-${index}`} className="bg-gray-800/50 rounded-lg px-6 shadow-none border-none">
+                    <AccordionTrigger className="text-white hover:text-blue-400 text-left text-lg font-bold tracking-tight">
+                      {faq.question}
+                    </AccordionTrigger>
+                    <AccordionContent className="text-gray-300 pb-4">
+                      {faq.answer}
+                    </AccordionContent>
+                  </AccordionItem>
+                ))}
+            </Accordion>
+          </div>  
         </div>
       </section>
 
