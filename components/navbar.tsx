@@ -49,7 +49,7 @@ const Navbar = () => {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full rounded-b-[20px] dark:border-gray-800 bg-white/95 dark:bg-gray-900/95 backdrop-blur supports-[backdrop-filter]:bg-white/60 dark:supports-[backdrop-filter]:bg-gray-900/60">
+    <header className="z-50 w-full rounded-b-[20px] dark:border-gray-800 bg-white/95 dark:bg-gray-900/95 backdrop-blur supports-[backdrop-filter]:bg-white/60 dark:supports-[backdrop-filter]:bg-gray-900/60">
       <div className="container mx-auto px-4 max-w-7xl">
         <nav className="flex h-16 items-center justify-between">
           {/* Logo Section */}
@@ -79,7 +79,7 @@ const Navbar = () => {
             {/* Search Button */}
             <Link
               href="/"
-              className="group flex items-center gap-2 px-3 py-2 text-sm font-medium bg-gray-900 text-white hover:bg-gray-800 rounded-full transition-all duration-200 shadow-sm"
+              className="group flex items-center gap-2 px-3 py-2 text-sm font-medium bg-gray-900 text-white dark:bg-blue-950 dark:hover:bg-black rounded-full transition-all duration-200 shadow-sm"
             >
               <FaSearch className="w-4 h-4 group-hover:rotate-12 transition-transform duration-200" />
               <span>Search</span>

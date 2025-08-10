@@ -7,13 +7,16 @@ import { stripe } from "@/lib/stripe/stripe";
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET!;
 
 export async function POST(req: NextRequest) {
-  const rawBody = await req.text(); // Required for Stripe
+  console.log("🔥 WEBHOOK CALLED!", new Date().toISOString());
+  
+  const rawBody = await req.text();
   const sig = req.headers.get("stripe-signature")!;
 
   let event: Stripe.Event;
 
   try {
     event = stripe.webhooks.constructEvent(rawBody, sig, endpointSecret);
+    console.log("✅ Webhook verified, event type:", event.type);
   } catch (err: any) {
     console.error("Webhook signature verification failed:", err.message);
     return new NextResponse(`Webhook Error: ${err.message}`, { status: 400 });
@@ -21,50 +24,58 @@ export async function POST(req: NextRequest) {
 
   // Handle the event
   switch (event.type) {
-    // Checkout
     case "checkout.session.completed":
       const session = event.data.object as Stripe.Checkout.Session;
-      console.log("Did it go through?");
+      console.log("💳 Checkout session completed");
+      console.log("📋 Session details:");
+      console.log("  - Mode:", session.mode);
+      console.log("  - Customer:", session.customer);
+      console.log("  - Metadata:", JSON.stringify(session.metadata, null, 2));
 
-      // Check the mode: subscription vs payment
       if (session.mode === "payment") {
-         if (!session.customer) {
-            console.error("Customer ID is missing for lifetime payment session.");
-            break;
-          }
-        const { error } = await supabaseAdmin.from("subscriptions").insert({
-          stripe_customer_id: session.customer ? session.customer as string : null,
+        console.log("🎯 Processing LIFETIME payment");
+        
+        const insertData = {
+          stripe_customer_id: session.customer as string || null,
           stripe_subscription_id: null,
           plan: "lifetime",
           status: "active",
           ifc_user_id: session.metadata?.ifc_user_id,
           current_period_end: null,
           cancel_at: null,
-        });
-      
+        };
+        
+        console.log("📝 About to insert:", JSON.stringify(insertData, null, 2));
+        
+        const { data, error } = await supabaseAdmin
+          .from("subscriptions")
+          .insert(insertData);
+
         if (error) {
-          console.error("Failed to insert lifetime subscription:", error);
+          console.error("❌ FAILED to insert lifetime subscription:");
+          console.error("Error details:", JSON.stringify(error, null, 2));
         } else {
-          console.log("Lifetime plan activated.");
+          console.log("✅ SUCCESS! Lifetime subscription inserted:");
+          console.log("Inserted data:", JSON.stringify(data, null, 2));
+          
+          // NEW: Deactivate the old premium subscription
+          const { error: deactivateError } = await supabaseAdmin
+            .from("subscriptions")
+            .update({ status: "inactive" })
+            .eq("ifc_user_id", session.metadata?.ifc_user_id)
+            .eq("plan", "premium")
+            .eq("status", "active");
+          
+          if (deactivateError) {
+            console.error("❌ Failed to deactivate old premium subscription:", deactivateError);
+          } else {
+            console.log("🔄 Successfully deactivated old premium subscription");
+          }
         }
       } else if (session.mode === "subscription") {
-        // Subscription → Monthly plan
-        const { data: subscriptionData, error: subscriptionError } =
-          await supabaseAdmin.from("subscriptions").insert({
-            stripe_subscription_id: session.subscription as string,
-            stripe_customer_id: session.customer as string,
-            plan: "premium",
-            status: "active",
-            current_period_end: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-            ifc_user_id: session.metadata?.ifc_user_id,
-            cancel_at: null,
-          });
-
-        if (subscriptionError) {
-          console.error("Error inserting subscription:", subscriptionError);
-        } else {
-          console.log("Subscription inserted:", subscriptionData);
-        }
+        console.log("🔄 Processing SUBSCRIPTION payment");
+        // Don't insert subscription here - let customer.subscription.created handle it
+        console.log("Subscription will be handled by customer.subscription.created event");
       }
       break;
 

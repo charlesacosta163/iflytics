@@ -14,7 +14,7 @@ import { deleteUser } from "@/lib/supabase/user-actions";
 
 import { SiGithubcopilot } from "react-icons/si";
 import Link from "next/link";
-import { FaUser, FaTrash, FaExclamationTriangle, FaCog } from "react-icons/fa";
+import { FaUser, FaTrash, FaExclamationTriangle, FaCog, FaCrown, FaCheck } from "react-icons/fa";
 import { customUserImages } from "@/lib/data";
 import { useEffect } from "react";
 
@@ -53,6 +53,9 @@ const ProfileWrapper = ({
   const [deleteConfirmText, setDeleteConfirmText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState("");
+
+  const [isSubscriptionLoading, setIsSubscriptionLoading] = useState(false);
+  const [subscriptionError, setSubscriptionError] = useState<string | null>(null);
 
   const userCustomImage = customUserImages.find(
     (user) => user.username === userProfile?.ifc_username
@@ -195,66 +198,132 @@ const ProfileWrapper = ({
                   Settings
                 </h2>
               </div>
-              {ENABLE_SUBSCRIPTIONS &&
-                (subscription ? (
-                  subscription.plan === "lifetime" ? (
-                    <div className="flex flex-col gap-0.5 font-medium">
-                      <span className="text-green-600 dark:text-green-400">
-                        You have the Lifetime Plan 🎉
-                      </span>
-                      <p className="text-sm text-gray-600 dark:text-gray-300">
-                        Enjoy unlimited access — no renewal needed.
-                      </p>
-                    </div>
-                  ) : (
-                    <div className="flex flex-col gap-0.5 font-medium">
-                      <span className="text-gray-500 dark:text-gray-300">
-                        You are in the premium plan
-                      </span>
-                      <span className="text-xs text-gray-500 dark:text-gray-300">
-                        Expires in{" "}
-                        {Math.ceil(
-                          (new Date(subscription.current_period_end).getTime() -
-                            new Date().getTime()) /
-                            (1000 * 60 * 60 * 24)
-                        )}{" "}
-                        days
-                      </span>
+              {ENABLE_SUBSCRIPTIONS && (
+                <div className="space-y-4">
+                  {/* Subscription Header */}
+                  <div className="flex justify-between items-center">
+                    <h3 className="text-xl font-semibold">Subscription</h3>
+                    {subscription && (
+                      <div className="text-xs text-gray-500">
+                        Member since: {new Date(subscription.created_at).toLocaleDateString()}
+                      </div>
+                    )}
+                  </div>
 
-                      {subscription.cancel_at ? (
-                        <div className="flex flex-col gap-2">
-                          <p className="text-sm text-yellow-600 dark:text-yellow-400">
-                            Your subscription will cancel on{" "}
-                            {new Date(
-                              subscription.current_period_end
-                            ).toLocaleDateString()}
-                            .
+                  {/* Debug Info - REMOVE AFTER TESTING */}
+                  <div className="text-xs text-red-500 border border-red-200 p-2 rounded">
+                    DEBUG: 
+                    ENABLE_SUBSCRIPTIONS: {ENABLE_SUBSCRIPTIONS.toString()}<br/>
+                    subscription: {JSON.stringify(subscription)}<br/>
+                    isSubscriptionLoading: {isSubscriptionLoading.toString()}<br/>
+                    subscriptionError: {subscriptionError || 'null'}
+                  </div>
+
+                  {/* Loading State */}
+                  {isSubscriptionLoading && (
+                    <div className="animate-pulse space-y-2">
+                      <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+                      <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+                    </div>
+                  )}
+
+                  {/* Error State */}
+                  {subscriptionError && (
+                    <div className="bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 p-3 rounded-lg text-sm">
+                      {subscriptionError}
+                      <Button 
+                        variant="link" 
+                        className="text-red-700 dark:text-red-300 text-xs ml-2"
+                        onClick={() => setSubscriptionError(null)}
+                      >
+                        Dismiss
+                      </Button>
+                    </div>
+                  )}
+
+                  {/* Subscription Content */}
+                  {!isSubscriptionLoading && (
+                    <div className="rounded-lg border p-4 space-y-3">
+                      {subscription && subscription.plan === "lifetime" ? (
+                        // Lifetime Plan
+                        <div className="flex flex-col gap-0.5">
+                          <span className="text-green-600 dark:text-green-400 font-medium flex items-center gap-2">
+                            <FaCrown className="text-yellow-500" />
+                            Lifetime Member
+                          </span>
+                          <p className="text-sm text-gray-600 dark:text-gray-300">
+                            Enjoy unlimited access to all features forever.
                           </p>
-                          <ReactivateButton
-                            subscriptionId={subscription.stripe_subscription_id}
-                          />
+                        </div>
+                      ) : subscription && subscription.plan === "premium" ? (
+                        // Premium Plan
+                        <div className="space-y-3">
+                          <div className="flex flex-col gap-0.5">
+                            <span className="text-blue-600 dark:text-blue-400 font-medium">
+                              Premium Member
+                            </span>
+                            <div className="text-sm text-gray-500">
+                              Next billing date: {new Date(subscription.current_period_end).toLocaleDateString()}
+                            </div>
+                          </div>
+                          
+                          {/* Upgrade to Lifetime Option */}
+                          <div className="border-t pt-3">
+                            <div className="flex flex-col gap-2">
+                              <span className="text-sm font-medium">Want to upgrade to Lifetime?</span>
+                              <p className="text-xs text-gray-500">
+                                Get permanent access and never worry about renewals.
+                              </p>
+                              <LifetimeButton isPremiumUser={true} />
+                            </div>
+                          </div>
                         </div>
                       ) : (
-                        <div className="flex gap-2 items-center">
-                          <span className="text-xs text-gray-500 dark:text-gray-300 mt-2">
-                            Your subscription will renew on{" "}
-                            {new Date(
-                              subscription.current_period_end
-                            ).toLocaleDateString()}
-                          </span>
-                          <CancelSubscriptionButton
-                            subscriptionId={subscription.stripe_subscription_id}
-                          />
+                        // Free Plan (when subscription is null OR plan is "free")
+                        <div className="space-y-4">
+                          <div className="flex flex-col gap-2">
+                            <span className="text-gray-600 dark:text-gray-400 font-medium">
+                              Free Plan
+                            </span>
+                            <p className="text-sm text-gray-500 dark:text-gray-400">
+                              Unlock premium features to enhance your flight tracking experience
+                            </p>
+                          </div>
+
+                          <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+                            <SubscribeButton />
+                            <div className="relative">
+                              <LifetimeButton />
+                              <span className="absolute -top-2 -right-2 bg-green-500 text-white text-xs px-2 py-0.5 rounded-full">
+                                Best Value
+                              </span>
+                            </div>
+                          </div>
+
+                          <div className="mt-4 pt-4 border-t">
+                            <h4 className="font-medium mb-2">Premium Features:</h4>
+                            <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-300">
+                              <li className="flex items-center gap-2">
+                                <FaCheck className="text-green-500" />
+                                Advanced Flight Analytics
+                              </li>
+                              <li className="flex items-center gap-2">
+                                <FaCheck className="text-green-500" />
+                                Route Analysis
+                              </li>
+                              <li className="flex items-center gap-2">
+                                <FaCheck className="text-green-500" />
+                                Aircraft Usage Stats
+                              </li>
+                              {/* Add more premium features */}
+                            </ul>
+                          </div>
                         </div>
                       )}
                     </div>
-                  )
-                ) : (
-                  <div className="flex gap-4">
-                    <SubscribeButton />
-                    <LifetimeButton />
-                  </div>
-                ))}
+                  )}
+                </div>
+              )}
 
               {/* Danger Zone */}
               <div className="w-full flex justify-between gap-2 items-center py-4 px-6 bg-red-50 dark:bg-gray-700 rounded-xl ">

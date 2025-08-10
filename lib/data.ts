@@ -3325,6 +3325,15 @@ export const customUserImages = [
       "https://avatars.discourse-cdn.com/v4/letter/f/cdc98d/288.png"
     )}&w=64&h=64&fit=cover&mask=circle`,
   },
+  {
+    // IFLYTICS USER
+    id: 223,
+    role: "user",
+    username: "Juan_Sebastian_Gomez",
+    image: `https://images.weserv.nl/?url=${encodeURIComponent(
+      "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/juan_sebastian_gomez/288/1540766_2.png"
+    )}&w=64&h=64&fit=cover&mask=circle`,
+  },
 ];
 
 export const aircraftIcaoCodes = [

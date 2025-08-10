@@ -67,6 +67,7 @@ const FlightsRoutes = async ({ flights, user , subscription}: { flights: Flight[
   const routesWithDistances = await getAllFlightRoutes(validFlights, user.id);
   // const endTime = Date.now(); --> Debugging
 
+  // console.log(routesWithDistances[0])
   
   // console.log(`⏱️ Route calculation took ${endTime - startTime}ms`); --> Debugging
   
@@ -126,6 +127,7 @@ const FlightsRoutes = async ({ flights, user , subscription}: { flights: Flight[
     // {
     //   flightId: '931999ef-911f-4a42-8f65-f7ec060dd1b8',
     //   created: '2025-07-21T02:41:02.727818Z',
+    //   callsign: 'Air Canada 123',
     //   aircraftId: '64568366-b72c-47bd-8bf6-6fdb81b683f9',
     //   server: 'Expert',
     //   origin: 'KLAX',

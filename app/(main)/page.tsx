@@ -27,13 +27,12 @@ import {
 import { faqData } from "@/lib/data";
 import { InlineThemeSwitcher } from "@/components/inline-theme-switcher";
 import { Badge } from "@/components/ui/badge";
+import ReleaseTimer from "@/components/dashboard-ui/release-timer";
 
 export default function Home() {
   return (
     <div className="min-h-screen w-full">
-      <div className="fixed bottom-4 right-4 z-50">
-        <InlineThemeSwitcher />
-      </div>
+      <ReleaseTimer />
       {/* Hero Section - Compact & Mobile-Friendly */}
       <section className="h-auto lg:h-[90svh] max-w-[1000px] w-full mx-auto flex justify-center items-center">
         {/* Animated Background Elements */}
@@ -49,7 +48,7 @@ export default function Home() {
               
               {/* Value Proposition First - Large Headline */}
               <div className="text-center lg:text-left animate-fade-in-up">
-                <h1 className="text-4xl lg:text-6xl font-black tracking-tighter mb-4 lg:mb-6 relative text-gray-900 dark:text-gray-100 leading-tight text-balance">
+                <h1 className="text-4xl lg:text-6xl font-black tracking-tighter mb-4 lg:mb-6 relative text-gray-700 dark:text-gray-100 leading-tight text-balance">
                   Transform Your Flight Data Into 
                   <span className="block text-blue-600 dark:text-blue-400">Powerful Insights</span>
                 </h1>
@@ -99,7 +98,7 @@ export default function Home() {
 
           {/* Enhanced Form Section */}
           <div className="flex-1 flex flex-col gap-4 lg:gap-6 items-center animate-slide-in-right delay-300 w-full relative">
-            <Badge className="absolute -top-2 left-1/2 -translate-x-1/2 z-50 bg-gradient-to-r from-blue-400 to-purple-400 text-light font-bold tracking-tight">Official Release Soon, Big Discounts on Launch!</Badge>
+            <Badge className="absolute -top-2 left-1/2 -translate-x-1/2 z-50 bg-gradient-to-r from-[#ff879b] to-[#ffc49c] dark:from-[#1e90ff] dark:to-[#99badd] text-light font-bold tracking-tight">August 25th! Big Discounts on Launch!</Badge>
             {/* Form with Enhanced Styling */}
             <div className="relative group w-full max-w-[500px]">
               {/* <div className="absolute -inset-1 bg-gradient-to-r from-gray-400 via-blue-400 to-gray-400 rounded-[24px] blur opacity-15 group-hover:opacity-30 transition-all duration-1000 animate-gradient-x bg-[length:200%_auto]"></div> */}
@@ -111,7 +110,7 @@ export default function Home() {
                 
                                  {/* Form Header */}
                  <div className="text-center mb-4 lg:mb-6">
-                   <h2 className="text-gray-900 dark:text-light text-xl lg:text-2xl tracking-tight font-black mb-2 text-balance">
+                   <h2 className="text-orange-800 dark:text-light text-xl lg:text-2xl tracking-tight font-black mb-2 text-balance">
                      Find your Infinite Flight Stats
                    </h2>
                    <div className="w-12 h-1 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full mx-auto"></div>
@@ -187,7 +186,7 @@ export default function Home() {
           {/* Header Section */}
           <div className="text-center mb-20">
             <div className="inline-block mb-6">
-              <h2 className="text-5xl font-black text-gray-900 dark:text-gray-100 mb-6 animate-fade-in-up relative">
+              <h2 className="text-4xl lg:text-6xl font-black text-gray-900 dark:text-gray-100 mb-6 animate-fade-in-up relative">
                 Powerful Flight Analytics
                 <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-[#FFD6BA] to-orange-300 rounded-full animate-scale-in delay-500"></div>
               </h2>
@@ -343,7 +342,7 @@ export default function Home() {
           {/* Header Section */}
           <div className="text-center mb-20">
             <div className="inline-block mb-6">
-              <h2 className="text-5xl font-black text-white mb-6 animate-fade-in-up relative">
+              <h2 className="text-4xl lg:text-6xl font-black text-white mb-6 animate-fade-in-up relative">
                 Expert Server Live Map
                 <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-blue-400 to-cyan-400 rounded-full animate-scale-in delay-500"></div>
               </h2>
@@ -736,7 +735,7 @@ export default function Home() {
         <div className="container mx-auto px-4 max-w-[1200px] relative z-10">
           {/* Header Section */}
           <div className="text-center mb-16">
-            <h2 className="text-5xl font-black text-gray-900 dark:text-white mb-6 animate-fade-in-up relative">
+            <h2 className="text-4xl lg:text-6xl font-black text-gray-900 dark:text-white mb-6 animate-fade-in-up relative">
               Choose Your Plan
               <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full animate-scale-in delay-500"></div>
             </h2>

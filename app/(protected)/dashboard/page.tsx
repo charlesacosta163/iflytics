@@ -65,14 +65,14 @@ export default async function DashboardPage() {
 
   const gradeColorClass =
     userData.grade >= 5
-      ? "bg-gradient-to-r from-amber-500/50 to-yellow-600/60"
+      ? "bg-gradient-to-r from-amber-500 to-yellow-600"
       : userData.grade >= 4
-      ? "bg-gradient-to-r from-green-500/50 to-green-600/60"
+      ? "bg-gradient-to-r from-green-500 to-green-600"
       : userData.grade >= 3
-      ? "bg-gradient-to-r from-purple-500/50 to-purple-600/60"
+      ? "bg-gradient-to-r from-purple-500 to-purple-600"
       : userData.grade >= 2
-      ? "bg-gradient-to-r from-blue-500/50 to-blue-600/60"
-      : "bg-gradient-to-r from-gray-600/50 to-dark/50";
+      ? "bg-gradient-to-r from-blue-500 to-blue-600"
+      : "bg-gradient-to-r from-gray-600 to-dark";
 
   const atcRank = matchATCRankToTitle(userData.atcRank.toString() || "Unknown");
   return (
@@ -107,7 +107,7 @@ export default async function DashboardPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {/* Welcome Card - Large */}
-          <Card className="md:col-span-1 lg:col-span-2 bg-[#687FE5] text-white backdrop-blur-xl">
+          <Card className={`md:col-span-1 lg:col-span-2 ${gradeColorClass} text-white`}>
             <CardHeader>
               <CardTitle className="text-2xl font-bold tracking-tight">
                 Profile Overview

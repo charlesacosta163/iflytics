@@ -4,13 +4,14 @@ import React, { useState } from 'react'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
-import { FaFileExport, FaDownload, FaDesktop } from 'react-icons/fa'
+import { FaFileExport, FaDownload, FaDesktop, FaUser, FaTrash, FaExclamationTriangle, FaCog, FaCrown, FaCheck } from 'react-icons/fa'
 import Papa from 'papaparse'
 import { aircraftIdToIcaoWithArray } from '@/lib/foo'
 import { hasLifetimeAccess, Subscription } from '@/lib/subscription/helpers';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { FaQuestionCircle } from 'react-icons/fa';
 import Link from 'next/link';
+import { getAirline } from '@/lib/sync-actions'
 
 interface ExportFlightsCSVBtnProps {
   routesWithDistances: any[];
@@ -47,6 +48,7 @@ const ExportFlightsCSVBtn: React.FC<ExportFlightsCSVBtnProps> = ({
     totalTime: true, // Mandatory
     aircraftIcao: false, // Change from aircraftId to aircraftIcao
     aircraftName: false,
+    airline: false,
     server: false,
   });
 
@@ -68,6 +70,7 @@ const ExportFlightsCSVBtn: React.FC<ExportFlightsCSVBtnProps> = ({
     distance: 'Distance (nm)',
     totalTime: 'Duration (mins)* (Required)',
     aircraftIcao: 'Aircraft',
+    airline: 'Airline',
     server: 'Server',
   };
 
@@ -113,6 +116,7 @@ const ExportFlightsCSVBtn: React.FC<ExportFlightsCSVBtnProps> = ({
           row['Aircraft'] = `${route.aircraftIcao.name}`;
         }
       }
+      if (selectedFields.airline) row['Airline'] = getAirline(route.callsign) || "";
       if (selectedFields.server) row['Server'] = route.server;
       
       return row;
@@ -151,6 +155,7 @@ const ExportFlightsCSVBtn: React.FC<ExportFlightsCSVBtnProps> = ({
       if (selectedFields.distance) row['Distance'] = route.distance;
       if (selectedFields.totalTime) row['Duration'] = `${Math.floor(route.totalTime/60)}:${Math.floor(route.totalTime%60).toString().padStart(2,'0')}:00`;
       if (selectedFields.aircraftIcao) row['Aircraft'] = `${route.aircraftIcao.name} (${route.aircraftIcao.icao})`;
+      if (selectedFields.airline) row['Airline'] = getAirline(route.callsign) || "";
       if (selectedFields.server) row['Server'] = route.server;
       
       return row;
@@ -188,7 +193,7 @@ const ExportFlightsCSVBtn: React.FC<ExportFlightsCSVBtnProps> = ({
                   <h4 className="font-semibold">Lifetime Feature</h4>
                   <p className="text-sm text-gray-400">
                     Exporting flight data is available exclusively for Lifetime members. 
-                    Upgrade to Lifetime to unlock this and other premium features. Data compatibility with MyFlightRadar24.
+                    Highlighted properties are compatible with MyFlightRadar24.
                   </p>
                 </div>
               </PopoverContent>

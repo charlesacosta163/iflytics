@@ -178,7 +178,7 @@ const FlightsPage = async ({searchParams}: { searchParams: Promise<{ [key: strin
 
         <TabsContent value="aircraft" className="space-y-6">
           {hasPremiumAccess(subscription as Subscription) ? (
-            <FlightsAircraft flights={allFlights} user={user} />
+            <FlightsAircraft flights={allFlights} user={user} role={subscription.role} />
           ) : (
             <div className="text-center text-gray-500">
               <p>You need to be a premium/lifetime user to access aircraft analysis.</p>

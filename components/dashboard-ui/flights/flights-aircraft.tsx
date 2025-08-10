@@ -1,14 +1,9 @@
 import React from 'react'
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Progress } from '@/components/ui/progress'
-import { Plane, Clock, Award, BarChart3 } from 'lucide-react'
+import { Plane, BarChart3 } from 'lucide-react'
 import { getAllFlightRoutes, matchAircraftNameToImage } from '@/lib/cache/flightinsightsdata'
 import Image from 'next/image'
 import { Flight } from '@/lib/types'
-import { getUser } from '@/lib/supabase/user-actions'
 import { convertMinutesToHours } from '@/lib/utils'
-import FlightAircraftEntry from '@/components/dashboard-ui/aircraft-tables/flight-aircraft-entry'
 
 import { getAllAircraft } from '@/lib/actions'
 import AircraftUsageTable from '../aircraft-tables/aircraft-usage-table'
@@ -16,6 +11,7 @@ import AircraftBrandsCard from '../aircraft-tables/aircraft-brands-card'
 import { FaRegSadCry } from 'react-icons/fa'
 import { LuPizza } from 'react-icons/lu'
 import { VscCopilotWarning } from 'react-icons/vsc'
+import AirlineAnalysisCard from '../aircraft-tables/airline-analysis-card'
 
 // Mock data - replace with your actual data fetching
 // const mockAircraftData = [
@@ -74,7 +70,7 @@ const shortenNumber = (number: number) => {
   }
 };
 
-const FlightsAircraft = async ({ flights, user }: { flights: Flight[], user: any }) => {
+const FlightsAircraft = async ({ flights, user, role }: { flights: Flight[], user: any, role: string }) => {
 
   // ------------------------------ MOCK DATA STARTS HERE ------------------------------
   // const totalFlights = mockAircraftData.reduce((acc, aircraft) => acc + aircraft.count, 0)
@@ -277,6 +273,10 @@ const FlightsAircraft = async ({ flights, user }: { flights: Flight[], user: any
       {analysisData.aircraftStats.length > 0 ? (
         <>
           <AircraftUsageTable analysisData={analysisData} flightsAmountRaw={flights.length} allFlightsWithDistances={routesWithDistances} />
+
+          {/* FEATURE AVAILABLE ON RELEASE */}
+          {(role === "tester" || role === "admin") && <AirlineAnalysisCard routesWithDistances={routesWithDistances} />}
+          
           <AircraftBrandsCard allAircraft={analysisData.aircraftStats} />
         </>
       ) : (
