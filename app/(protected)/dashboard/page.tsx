@@ -119,7 +119,7 @@ export default async function DashboardPage() {
 
             <CardContent className="grid grid-cols-2 lg:grid-cols-3 gap-4">
               <div
-                className={`bg-white/15 ${gradeColorClass} rounded-xl p-4 backdrop-blur-md relative overflow-hidden`}
+                className={`bg-white/15 rounded-xl p-4 backdrop-blur-md relative overflow-hidden`}
               >
                 <div className="text-2xl font-bold">{userData.grade}</div>
                 <div className="text-blue-100 text-sm flex items-center gap-1">

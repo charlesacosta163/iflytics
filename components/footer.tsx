@@ -1,5 +1,5 @@
 import React from 'react'
-import { FaGithub } from "react-icons/fa";
+import { FaDiscord, FaGithub } from "react-icons/fa";
 import Link from 'next/link';
 import { InlineThemeSwitcher } from './inline-theme-switcher';
 
@@ -11,6 +11,13 @@ const Footer = () => {
         <Link href="https://github.com/charlesacosta163" target="_blank" rel="noopener noreferrer">
           <FaGithub className="text-lg hover:text-gray-700 dark:hover:text-gray-300 transition-colors" />
         </Link>
+        <Link href="https://discord.gg/ZswK5eRm" target="_blank" rel="noopener noreferrer">
+          <FaDiscord className="text-lg hover:text-gray-700 dark:hover:text-gray-300 transition-colors" />
+        </Link>
+        <span>|</span>
+        <Link href="/legal/terms" className="hover:text-gray-700 dark:hover:text-gray-300 transition-colors">Terms of Service</Link>
+        <span>|</span>
+        <Link href="/legal/privacy" className="hover:text-gray-700 dark:hover:text-gray-300 transition-colors">Privacy Policy</Link>
       </div>
       
       <InlineThemeSwitcher />
