@@ -130,7 +130,7 @@ const CommunityUsers = ({ users }: CommunityUsersProps) => {
       <div className={`grid gap-4 ${
         globalViewMode === 'expanded' 
           ? 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3' 
-          : 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6'
+          : 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-20'
       }`}>
         {filteredUsers.map((user: User) => (
           <UserCard 
