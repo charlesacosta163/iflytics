@@ -19,6 +19,7 @@ import { LuGoal } from "react-icons/lu";
 import { BsIncognito } from "react-icons/bs";
 import { LiaGlobeAmericasSolid } from "react-icons/lia";
 import { getRandomCaption } from "@/lib/foo.js";
+import Banner from "../banner";
 
 const Sidebar = () => {
   const pathname = usePathname();
@@ -34,7 +35,7 @@ const Sidebar = () => {
 
         <header className="px-6 py-4 border-b border-gray-200 dark:border-gray-800 relative">
             <span className="text-xs font-medium absolute -bottom-2.5 left-1/2 -translate-x-1/2 bg-amber-500 text-white px-2 py-0.5 rounded-full">
-              v0.9.3-beta
+              v0.9.3.1-beta
             </span>
 
             <Link
@@ -65,25 +66,27 @@ const Sidebar = () => {
               <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider px-3">Main</h3>
             </div>
             
-            <Link href="/dashboard" className={cn("flex gap-3 text-gray-700 dark:text-gray-300 font-medium items-center hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white rounded-lg px-3 py-2.5 transition-all duration-200 group", pathname === "/dashboard" && "bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 font-semibold")}>
-                <FaHome className="w-4 h-4 group-hover:scale-110 transition-transform duration-200" />
-                Dashboard
-            </Link>
+            <div className="grid grid-cols-2 gap-2">
+  <Link href="/dashboard" className={cn("flex flex-col gap-1 text-gray-700 dark:text-gray-300 font-medium items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white rounded-lg py-3 transition-all duration-200 group", pathname === "/dashboard" && "bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 font-semibold")}>
+    <FaHome className="w-4 h-4 group-hover:scale-110 transition-transform duration-200" />
+    <span className="text-xs text-center">Dashboard</span>
+  </Link>
 
-            <Link href="/dashboard/flights?timeframe=day-30" className={cn("flex gap-3 text-gray-700 dark:text-gray-300 font-medium items-center hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white rounded-lg px-3 py-2.5 transition-all duration-200 group", pathname === "/dashboard/flights" && "bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 font-semibold")}>
-                <TiPlaneOutline className="w-4 h-4 group-hover:scale-110 transition-transform duration-200" />
-                Flights
-            </Link>
+  <Link href="/dashboard/flights?timeframe=day-30" className={cn("flex flex-col gap-1 text-gray-700 dark:text-gray-300 font-medium items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white rounded-lg py-3 transition-all duration-200 group", pathname === "/dashboard/flights" && "bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 font-semibold")}>
+    <TiPlaneOutline className="w-4 h-4 group-hover:scale-110 transition-transform duration-200" />
+    <span className="text-xs text-center">Flights</span>
+  </Link>
 
-            <Link href="/dashboard/profile" className={cn("flex gap-3 text-gray-700 dark:text-gray-300 font-medium items-center hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white rounded-lg px-3 py-2.5 transition-all duration-200 group", pathname === "/dashboard/profile" && "bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 font-semibold")}>
-                <FaUser className="w-4 h-4 group-hover:scale-110 transition-transform duration-200" />
-                Profile
-            </Link>
+  <Link href="/dashboard/profile" className={cn("flex flex-col gap-1 text-gray-700 dark:text-gray-300 font-medium items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white rounded-lg py-3 transition-all duration-200 group", pathname === "/dashboard/profile" && "bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 font-semibold")}>
+    <FaUser className="w-4 h-4 group-hover:scale-110 transition-transform duration-200" />
+    <span className="text-xs text-center">Profile</span>
+  </Link>
 
-            <Link href="/dashboard/users" className={cn("flex gap-3 text-gray-700 dark:text-gray-300 font-medium items-center hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white rounded-lg px-3 py-2.5 transition-all duration-200 group", pathname === "/dashboard/users" && "bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 font-semibold")}>
-                <GoCopilot className="w-4 h-4 group-hover:scale-110 transition-transform duration-200" />
-                Community
-            </Link>
+  <Link href="/dashboard/users" className={cn("flex flex-col gap-1 text-gray-700 dark:text-gray-300 font-medium items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white rounded-lg py-3 transition-all duration-200 group", pathname === "/dashboard/users" && "bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 font-semibold")}>
+    <GoCopilot className="w-4 h-4 group-hover:scale-110 transition-transform duration-200" />
+    <span className="text-xs text-center">Community</span>
+  </Link>
+</div>
 
             {/* Special Section - Flight Arena (Coming Soon) */}
             <div className="mt-6 mb-4">
@@ -120,6 +123,8 @@ const Sidebar = () => {
                 <div className="absolute top-0 right-0 w-20 h-20 bg-white/10 rounded-full -translate-y-10 translate-x-10"></div>
               </div>
             </div>
+
+            <Banner />
             
         </section>
 

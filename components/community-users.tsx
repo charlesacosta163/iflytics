@@ -55,11 +55,11 @@ const CommunityUsers = ({ users }: CommunityUsersProps) => {
       <div id="top-bar" className="flex flex-col gap-6">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h1 className="text-4xl font-bold dark:text-light bg-gradient-to-r from-gray-600 to-dark bg-clip-text text-transparent tracking-tight">
+            <h1 className="text-4xl font-bold text-gray-900 dark:text-light tracking-tight">
               IFlytics Community
             </h1>
             <p className="text-gray-600 dark:text-gray-300 mt-2 flex items-center gap-2">
-              <FaUsers className="text-gray-500" />
+              <FaUsers className="text-gray-500 dark:text-gray-400" />
               Discover fellow pilots and their flying journeys
             </p>
           </div>
@@ -69,7 +69,7 @@ const CommunityUsers = ({ users }: CommunityUsersProps) => {
             <Button
               onClick={toggleGlobalViewMode}
               variant="outline"
-              className="bg-dark border-gray-600 text-white hover:bg-gray-700 flex items-center gap-2"
+              className="bg-white dark:bg-dark text-gray-700 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center gap-2"
             >
               {globalViewMode === 'expanded' ? (
                 <>
@@ -85,8 +85,8 @@ const CommunityUsers = ({ users }: CommunityUsersProps) => {
             </Button>
 
             {/* Stats Badge */}
-            <div className="bg-dark text-white px-6 py-3 rounded-xl shadow-lg border border-gray-600 flex items-center gap-2 justify-between">
-              <span className="text-sm font-medium text-gray-300">Total Pilots</span>
+            <div className="bg-white dark:bg-dark text-gray-900 dark:text-white px-6 py-3 rounded-xl shadow-lg border border-gray-300 dark:border-gray-600 flex items-center gap-2 justify-between">
+              <span className="text-sm font-medium text-gray-600 dark:text-gray-300">Total Pilots</span>
               <span className="text-2xl font-bold">{users.length}</span>
             </div>
           </div>
@@ -95,18 +95,18 @@ const CommunityUsers = ({ users }: CommunityUsersProps) => {
         {/* Search Bar */}
         <div className="relative max-w-md">
           <div className="relative">
-            <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm" />
+            <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-400 text-sm" />
             <input
               type="text"
               placeholder="Search pilots by name or username..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-10 py-2 font-medium bg-gray-600 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 text-sm focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+              className="w-full pl-10 pr-10 py-2 font-medium bg-white dark:bg-gray-600 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 text-sm focus:ring-blue-500 focus:border-transparent transition-all duration-200"
             />
             {searchQuery && (
               <button
                 onClick={clearSearch}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors duration-200"
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-white transition-colors duration-200"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -115,7 +115,7 @@ const CommunityUsers = ({ users }: CommunityUsersProps) => {
           
           {/* Search Results Counter */}
           {searchQuery && (
-            <div className="mt-2 text-sm text-gray-400">
+            <div className="mt-2 text-sm text-gray-500 dark:text-gray-400">
               {filteredUsers.length > 0 ? (
                 <>Found {filteredUsers.length} pilot{filteredUsers.length !== 1 ? 's' : ''}</>
               ) : (
@@ -144,23 +144,23 @@ const CommunityUsers = ({ users }: CommunityUsersProps) => {
 
       {/* Empty State - No Users */}
       {users.length === 0 && (
-        <div className="flex flex-col items-center justify-center py-16 text-gray-500">
+        <div className="flex flex-col items-center justify-center py-16 text-gray-500 dark:text-gray-500">
           <div className="text-6xl mb-4">👥</div>
           <h3 className="text-xl font-semibold mb-2">No pilots yet</h3>
-          <p className="text-gray-400">Be the first to join the community!</p>
+          <p className="text-gray-400 dark:text-gray-400">Be the first to join the community!</p>
         </div>
       )}
 
       {/* Empty State - No Search Results */}
       {users.length > 0 && filteredUsers.length === 0 && searchQuery && (
-        <div className="flex flex-col items-center justify-center py-16 text-gray-500">
+        <div className="flex flex-col items-center justify-center py-16 text-gray-500 dark:text-gray-500">
           <div className="text-6xl mb-4">🔍</div>
           <h3 className="text-xl font-semibold mb-2">No pilots found</h3>
-          <p className="text-gray-400 mb-4">No pilots match your search for "{searchQuery}"</p>
+          <p className="text-gray-400 dark:text-gray-400 mb-4">No pilots match your search for "{searchQuery}"</p>
           <Button
             onClick={clearSearch}
             variant="outline"
-            className="bg-dark border-gray-600 text-white hover:bg-gray-700"
+            className="bg-white dark:bg-dark border-gray-300 dark:border-gray-600 text-gray-700 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-700"
           >
             Clear Search
           </Button>
@@ -169,8 +169,8 @@ const CommunityUsers = ({ users }: CommunityUsersProps) => {
     </div>
     <div className="flex justify-center mt-8">
       <a href="#navbar" className="text-center">
-        <Button variant="outline" className="bg-dark border-gray-600 text-white hover:bg-gray-700 flex items-center gap-2">
-          <FaArrowUp className="w-4 h-4 text-white" />
+        <Button variant="outline" className="bg-white dark:bg-dark border-gray-300 dark:border-gray-600 text-gray-700 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center gap-2">
+          <FaArrowUp className="w-4 h-4 text-gray-700 dark:text-white" />
           Back to Top
         </Button>
       </a>
@@ -203,7 +203,7 @@ const UserCard = ({
     
     return parts.map((part, index) => 
       regex.test(part) ? (
-        <span key={index} className="bg-yellow-400 bg-opacity-30 text-yellow-200 px-1 rounded">
+        <span key={index} className="bg-yellow-200 dark:bg-yellow-400 bg-opacity-60 dark:bg-opacity-30 text-yellow-800 dark:text-yellow-200 px-1 rounded">
           {part}
         </span>
       ) : part
@@ -213,19 +213,19 @@ const UserCard = ({
   if (viewMode === 'mini') {
     // Mini Mode
     return (
-      <Card className='group bg-dark rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-600 overflow-hidden p-4'>
+      <Card className='group bg-white dark:bg-dark rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden p-4'>
         <div className="flex flex-col items-center gap-3 text-center">
           {/* Profile Image */}
           <div 
-            className={`w-16 h-16 rounded-full border-2 border-gray-500 flex-shrink-0 ${
+            className={`w-16 h-16 rounded-full border-2 border-gray-300 dark:border-gray-500 flex-shrink-0 ${
               userImage 
                 ? 'bg-cover bg-center bg-no-repeat' 
-                : 'bg-gradient-to-br from-gray-600 to-gray-700'
+                : 'bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-600 dark:to-gray-700'
             }`}
             style={userImage ? { backgroundImage: `url(${userImage})` } : {}}
           >
             {!userImage && (
-              <div className="w-full h-full rounded-full bg-gradient-to-br from-gray-600 to-gray-700 flex items-center justify-center text-2xl">
+              <div className="w-full h-full rounded-full bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-600 dark:to-gray-700 flex items-center justify-center text-2xl">
                 🤨
               </div>
             )}
@@ -233,11 +233,11 @@ const UserCard = ({
 
           {/* User Info */}
           <div className="flex-1 min-w-0">
-            <h3 className="font-bold text-white text-sm truncate">
+            <h3 className="font-bold text-gray-900 dark:text-white text-sm truncate">
               {searchQuery ? highlightText(user.display_name, searchQuery) : user.display_name}
             </h3>
             {user.ifc_username && (
-              <p className="text-gray-400 text-xs truncate">
+              <p className="text-gray-500 dark:text-gray-400 text-xs truncate">
                 @{searchQuery ? highlightText(user.ifc_username, searchQuery) : user.ifc_username}
               </p>
             )}
@@ -247,7 +247,7 @@ const UserCard = ({
           <div className="flex items-center gap-2 w-full"> 
             <Link 
               href={`/dashboard/users/${user.ifc_user_id}`} 
-              className='flex items-center gap-1 bg-gray-700 hover:bg-gray-600 text-white text-xs px-3 py-2 rounded-lg font-semibold transition-all duration-200 shadow-md hover:shadow-lg border border-gray-600 w-full justify-center flex-1'
+              className='flex items-center gap-1 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-white text-xs px-3 py-2 rounded-lg font-semibold transition-all duration-200 shadow-md hover:shadow-lg border border-gray-200 dark:border-gray-600 w-full justify-center flex-1'
             >
               <FaEye className="text-xs" />
             </Link>
@@ -265,11 +265,11 @@ const UserCard = ({
     )
   }
 
-  // Expanded Mode (Original Design)
+  // Expanded Mode
   return (
-    <Card className='group bg-dark rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-600 overflow-hidden'>
+    <Card className='group bg-white dark:bg-dark rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-200 dark:border-gray-600 overflow-hidden'>
       {/* Card Header with Avatar */}
-      <div className="relative bg-gray-800 p-6 pb-4 border-b border-gray-600">
+      <div className="relative bg-gray-50 dark:bg-gray-800 p-6 pb-4 border-b border-gray-200 dark:border-gray-600">
         {isRecent && (
           <div className="absolute top-3 right-3 bg-green-500 text-white text-xs px-2 py-1 rounded-full font-semibold">
             New
@@ -278,10 +278,10 @@ const UserCard = ({
         
         <div className="flex items-center gap-4">
           <div 
-            className={`w-16 h-16 rounded-full text-2xl shadow-lg border-2 border-gray-600 ${
+            className={`w-16 h-16 rounded-full text-2xl shadow-lg border-2 border-gray-200 dark:border-gray-600 ${
               userImage 
                 ? 'bg-cover bg-center bg-no-repeat' 
-                : 'bg-gray-700 flex items-center justify-center'
+                : 'bg-gray-200 dark:bg-gray-700 flex items-center justify-center'
             }`}
             style={userImage ? { backgroundImage: `url(${userImage})` } : {}}
           >
@@ -291,11 +291,11 @@ const UserCard = ({
           </div>
           
           <div className="flex-1 min-w-0">
-            <h3 className='text-xl font-bold text-white truncate'>
+            <h3 className='text-xl font-bold text-gray-900 dark:text-white truncate'>
               {searchQuery ? highlightText(user.display_name, searchQuery) : user.display_name}
             </h3>
             {user.ifc_username && (
-              <p className='text-sm text-gray-400 font-medium'>
+              <p className='text-sm text-gray-500 dark:text-gray-400 font-medium'>
                 @{searchQuery ? highlightText(user.ifc_username, searchQuery) : user.ifc_username}
               </p>
             )}
@@ -306,15 +306,15 @@ const UserCard = ({
       {/* Card Body */}
       <div className="p-6 pt-4">
         <div className="mb-4">
-          <p className='text-sm text-gray-300 line-clamp-3 leading-relaxed min-h-[3.75rem]'>
+          <p className='text-sm text-gray-600 dark:text-gray-300 line-clamp-3 leading-relaxed min-h-[3.75rem]'>
             {user.bio || "✈️ Ready to take flight! No bio added yet."}
           </p>
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-between pt-4 border-t border-gray-600">
-          <div className="flex items-center gap-2 text-xs text-gray-400">
-            <FaCalendarAlt className="text-gray-500" />
+        <div className="flex items-center justify-between pt-4 border-t border-gray-200 dark:border-gray-600">
+          <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
+            <FaCalendarAlt className="text-gray-400 dark:text-gray-500" />
             <span className="font-medium">
               Joined {joinDate.toLocaleDateString('en-US', { 
                 month: 'short', 
@@ -326,7 +326,7 @@ const UserCard = ({
           <div className="flex items-center gap-2">
           <Link 
             href={`/dashboard/users/${user.ifc_user_id}`} 
-            className='group/btn flex items-center gap-2 bg-gray-700 hover:bg-gray-600 text-white text-sm px-4 py-2 rounded-lg font-semibold transition-all duration-200 shadow-md hover:shadow-lg border border-gray-600'
+            className='group/btn flex items-center gap-2 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-white text-sm px-4 py-2 rounded-lg font-semibold transition-all duration-200 shadow-md hover:shadow-lg border border-gray-200 dark:border-gray-600'
           >
             <FaEye className="text-xs group-hover/btn:scale-110 transition-transform" />
               View
