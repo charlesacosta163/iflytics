@@ -3485,6 +3485,14 @@ export const customUserImages = [
     "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/generic_flyer/288/1375315_2.png"
   )}&w=64&h=64&fit=cover&mask=circle`,
 },
+{
+  id: 241,
+  role: "user",
+  username: "delta737yt",
+  image: `https://images.weserv.nl/?url=${encodeURIComponent(
+    "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/delta737yt/288/1532912_2.png"
+  )}&w=64&h=64&fit=cover&mask=circle`,
+},
 ];
 
 export const aircraftIcaoCodes = [

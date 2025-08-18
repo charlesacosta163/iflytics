@@ -198,7 +198,7 @@ const ProfileWrapper = ({
                   Settings
                 </h2>
               </div>
-              {ENABLE_SUBSCRIPTIONS && (
+              {(ENABLE_SUBSCRIPTIONS || userProfile.role === 'admin' || userProfile.role === 'tester') && (
                 <div className="space-y-4">
                   {/* Subscription Header */}
                   <div className="flex justify-between items-center">
@@ -262,21 +262,61 @@ const ProfileWrapper = ({
                             <span className="text-blue-600 dark:text-blue-400 font-medium">
                               Premium Member
                             </span>
-                            <div className="text-sm text-gray-500">
-                              Next billing date: {new Date(subscription.current_period_end).toLocaleDateString()}
+                            {!subscription.cancel_at ? (
+                              <div className="text-sm text-gray-500">
+                                Next billing date: {new Date(subscription.current_period_end).toLocaleDateString()}
+                              </div>
+                            ) : (
+                              <div className="text-sm text-orange-600 dark:text-orange-400">
+                                Your subscription will end on {new Date(subscription.cancel_at).toLocaleDateString()}
+                              </div>
+                            )}
+                          </div>
+                          
+                          {/* Subscription Management */}
+                          <div className="border-t pt-3 space-y-3">
+                            <div className="flex flex-col gap-2">
+                              <span className="text-sm font-medium">Subscription Management</span>
+                              {!subscription.cancel_at ? (
+                                // Active subscription - show cancel button
+                                <CancelSubscriptionButton subscriptionId={subscription.stripe_subscription_id} />
+                              ) : (
+                                // Canceled subscription - show reactivate button and notice
+                                <div className="space-y-2">
+                                  <div className="p-3 bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-800 rounded-lg">
+                                    <p className="text-sm text-orange-700 dark:text-orange-300">
+                                      ⚠️ Your subscription is scheduled for cancellation on {new Date(subscription.cancel_at).toLocaleDateString()}. You'll continue to have access until then.
+                                    </p>
+                                  </div>
+                                  <ReactivateButton subscriptionId={subscription.stripe_subscription_id} />
+                                </div>
+                              )}
                             </div>
                           </div>
                           
-                          {/* Upgrade to Lifetime Option */}
-                          <div className="border-t pt-3">
-                            <div className="flex flex-col gap-2">
-                              <span className="text-sm font-medium">Want to upgrade to Lifetime?</span>
-                              <p className="text-xs text-gray-500">
-                                Get permanent access and never worry about renewals.
-                              </p>
-                              <LifetimeButton isPremiumUser={true} />
+                          {/* Upgrade to Lifetime Option - only show if subscription is canceled */}
+                          {subscription.cancel_at && (
+                            <div className="border-t pt-3">
+                              <div className="flex flex-col gap-2">
+                                <span className="text-sm font-medium">Want to upgrade to Lifetime?</span>
+                                <p className="text-xs text-gray-500">
+                                  Get permanent access and never worry about renewals.
+                                </p>
+                                <LifetimeButton isPremiumUser={true} />
+                              </div>
                             </div>
-                          </div>
+                          )}
+                          
+                          {/* Message for active premium users */}
+                          {!subscription.cancel_at && (
+                            <div className="border-t pt-3">
+                              <div className="p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+                                <p className="text-sm text-blue-700 dark:text-blue-300">
+                                  💡 You can upgrade to Lifetime after your current billing period ends or by canceling your current subscription.
+                                </p>
+                              </div>
+                            </div>
+                          )}
                         </div>
                       ) : (
                         // Free Plan (when subscription is null OR plan is "free")

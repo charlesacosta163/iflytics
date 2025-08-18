@@ -32,10 +32,11 @@ import { FlightDomesticIntlPieChart } from "../charts/route-pies/flight-domestic
 import ExportFlightsCSVBtn from "../export-flights-csv-btn";
 import { getAllAircraft } from "@/lib/actions";
 import { hasLifetimeAccess, Subscription } from "@/lib/subscription/helpers";
+import { MostFlownRoutesBarChart } from "../charts/most-flown-routes-bar";
 
 let maintenanceMode = false;
 
-const FlightsRoutes = async ({ flights, user , subscription}: { flights: Flight[], user: any, subscription: Subscription}) => {
+const FlightsRoutes = async ({ flights, user , subscription, role}: { flights: Flight[], user: any, subscription: Subscription, role: string}) => {
   // console.log(`🔄 FlightsRoutes called at ${new Date().toISOString()}`); --> Debugging
 
   // Based on THIS Data for user flights
@@ -171,6 +172,23 @@ const FlightsRoutes = async ({ flights, user , subscription}: { flights: Flight[
   }
 
   const aircraftArray = await getAllAircraft();
+
+  // Get unique origin and destination routes, and a count 
+  // Data structure to be returned: [route: `KLAX-PHKO`, count: 10]
+
+  // Process routes treating each direction as unique
+  const flownRoutesData = validFlights.reduce((acc: { route: string; count: number }[], flight) => {
+    const routeKey = `${flight.originAirport}-${flight.destinationAirport}`;
+    const existingRoute = acc.find(r => r.route === routeKey);
+    
+    if (existingRoute) {
+      existingRoute.count++;
+    } else {
+      acc.push({ route: routeKey, count: 1 });
+    }
+    
+    return acc;
+  }, [])
 
   // console.log(routesWithDistancesWithAircraftIcao[0])
 
@@ -356,6 +374,11 @@ const FlightsRoutes = async ({ flights, user , subscription}: { flights: Flight[
         </CardContent>
       </Card>
 
+        <div className="lg:col-span-3">
+           {/* FEATURE AVAILABLE ON RELEASE */}
+           {(role === "tester" || role === "admin") && <MostFlownRoutesBarChart chartData={flownRoutesData} />}
+        </div>
+
       <div className="lg:col-span-3 rounded-xl bg-transparent shadow-none">
         <div>
           <div className="text-xl font-bold dark:text-light text-gray-700">
@@ -367,16 +390,15 @@ const FlightsRoutes = async ({ flights, user , subscription}: { flights: Flight[
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-
-        <div className="bg-transparent w-full">
-          <FlightHaulsPieChart chartData={getFlightHaulCategorizerData()} />
-        </div>
-        <div className="bg-transparent w-full">
-          <FlightContinentsPieChart chartData={getFlightContinentsFlewToData()} />
-        </div>
-        <div className="bg-transparent w-full">
-          <FlightDomesticIntlPieChart chartData={getDomesticInternationalAmountsData()} />  
-        </div>
+          <div className="bg-transparent w-full">
+            <FlightHaulsPieChart chartData={getFlightHaulCategorizerData()} />
+          </div>
+          <div className="bg-transparent w-full">
+            <FlightContinentsPieChart chartData={getFlightContinentsFlewToData()} />
+          </div>
+          <div className="bg-transparent w-full">
+            <FlightDomesticIntlPieChart chartData={getDomesticInternationalAmountsData()} />  
+          </div>
 
         </div>
       </div>

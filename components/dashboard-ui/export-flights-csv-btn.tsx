@@ -75,6 +75,7 @@ const ExportFlightsCSVBtn: React.FC<ExportFlightsCSVBtnProps> = ({
   };
 
   const mandatoryFields = ['created', 'origin', 'destination', 'totalTime'];
+  const compatibleFR24Fields = ['created', 'origin', 'destination', 'totalTime', 'aircraftIcao', 'airline']
 
   const handleFieldToggle = (field: string, checked: boolean) => {
     if (mandatoryFields.includes(field)) return; // Don't allow unchecking mandatory fields
@@ -154,7 +155,7 @@ const ExportFlightsCSVBtn: React.FC<ExportFlightsCSVBtnProps> = ({
       if (selectedFields.destinationLongitude) row['Destination Longitude'] = route.destinationCoordinates.longitude;
       if (selectedFields.distance) row['Distance'] = route.distance;
       if (selectedFields.totalTime) row['Duration'] = `${Math.floor(route.totalTime/60)}:${Math.floor(route.totalTime%60).toString().padStart(2,'0')}:00`;
-      if (selectedFields.aircraftIcao) row['Aircraft'] = `${route.aircraftIcao.name} (${route.aircraftIcao.icao})`;
+      if (selectedFields.aircraftIcao) row['Aircraft'] = `${route.aircraftIcao.name}`;
       if (selectedFields.airline) row['Airline'] = getAirline(route.callsign) || "";
       if (selectedFields.server) row['Server'] = route.server;
       
@@ -211,11 +212,12 @@ const ExportFlightsCSVBtn: React.FC<ExportFlightsCSVBtnProps> = ({
           
           <div className="flex flex-col">
             <p className="text-sm text-gray-600 mb-4 dark:text-gray-400">
-              Select which fields to include in your CSV export. Compatible with MyFlightRadar24.
+              Select which fields to include in your CSV export. Fields in <span className="font-bold text-blue-600">blue</span> are compatible with MyFlightRadar24.
             </p>
             
             <div className="flex flex-col gap-2 overflow-y-auto">
-              {Object.entries(fieldLabels).map(([field, label]) => (
+              {Object.entries(fieldLabels).map(([field, label]) => {
+                return (
                 <div key={field} className="flex items-center space-x-2">
                   <Checkbox
                     id={field}
@@ -225,12 +227,12 @@ const ExportFlightsCSVBtn: React.FC<ExportFlightsCSVBtnProps> = ({
                   />
                   <label 
                     htmlFor={field} 
-                    className={`text-sm ${mandatoryFields.includes(field) ? 'font-medium text-blue-600' : 'text-gray-700 dark:text-gray-300'}`}
+                    className={`text-sm ${mandatoryFields.includes(field) || compatibleFR24Fields.includes(field) ? 'font-medium text-blue-600' : 'text-gray-700 dark:text-gray-300'}`}
                   >
                     {label}
                   </label>
                 </div>
-              ))}          
+              )})}          
             <div>
               <Button 
                   variant="outline" 

@@ -31,7 +31,7 @@ export function LifetimeButton({ isPremiumUser, currentPeriodEnd }: LifetimeButt
   return (
     <button
       onClick={handleClick}
-      className={`font-semibold px-4 py-2 rounded flex items-center gap-2 ${
+      className={`font-semibold px-4 py-2 rounded flex items-center gap-2 self-start ${
         isPremiumUser 
           ? 'bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-white'
           : 'bg-yellow-500 hover:bg-yellow-600 text-white'

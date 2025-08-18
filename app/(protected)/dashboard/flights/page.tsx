@@ -168,7 +168,7 @@ const FlightsPage = async ({searchParams}: { searchParams: Promise<{ [key: strin
       
       <TabsContent value="routes" className="space-y-6">
         {hasPremiumAccess(subscription as Subscription) ? (
-          <FlightsRoutes flights={allFlights} user={user} subscription={subscription as Subscription}/>
+          <FlightsRoutes flights={allFlights} user={user} subscription={subscription as Subscription} role={subscription.role}/>
         ) : (
           <div className="text-center text-gray-500">
             <p>You need to be a premium/lifetime user to access route analysis.</p>

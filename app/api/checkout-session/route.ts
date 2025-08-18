@@ -36,8 +36,8 @@ export async function POST(req: Request) {
         quantity: 1,
       },
     ],
-    success_url: 'https://iflytics.vercel.app/dashboard/profile',
-    cancel_url: 'https://iflytics.vercel.app/dashboard/profile',
+    success_url: 'https://iflytics.app/dashboard/profile',
+    cancel_url: 'https://iflytics.app/dashboard/profile',
   });
 
   console.log(session);
