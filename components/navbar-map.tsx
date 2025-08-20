@@ -8,6 +8,8 @@ import Pathname from "./dashboard-ui/shared/pathname";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import MobileNav from "./mobile-nav";
+import { LuMessageCircleQuestion } from "react-icons/lu";
+import { GrMoney } from "react-icons/gr";
 
 const NavbarMap = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -54,37 +56,49 @@ const NavbarMap = () => {
         <Pathname />
 
 
-                 {/* Navigation Buttons */}
-         <div className="hidden md:flex gap-2 items-center">
-           {/* Map Button */}
-           <Link
-             href="/map/dark"
-             className="relative group flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-all duration-200"
-           >
-             <LiaGlobeAmericasSolid className="w-4 h-4 group-hover:rotate-12 transition-transform duration-200" />
-             <span>Map</span>
-             <div className="absolute -top-1 -right-1 w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
-           </Link>
-           
-           {/* Directory Button */}
-           <Link
-             href="/directory"
-             className="group flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-all duration-200"
-           >
-             <FaBook className="w-4 h-4 group-hover:rotate-12 transition-transform duration-200" />
-             <span>Directory</span>
-           </Link>
-           
-           {/* Search Button */}
-           <Link
-             href="/"
-              className="group flex items-center gap-2 px-3 py-2 text-sm font-medium bg-gray-900 text-white hover:bg-gray-800 rounded-full transition-all duration-200 shadow-sm"
-           >
-             <FaSearch className="w-4 h-4 group-hover:rotate-12 transition-transform duration-200" />
-             <span>Search</span>
-           </Link>
+         {/* Desktop Navigation */}
+         <div className="hidden md:flex items-center space-x-1">
+            {/* Map Button */}
+            <Link
+              href="/map/dark"
+              className="relative group flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-all duration-200"
+            >
+              <LiaGlobeAmericasSolid className="w-4 h-4 group-hover:rotate-12 transition-transform duration-200" />
+              <span>Map</span>
+              <div className="absolute -top-1 -right-1 w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+            </Link>
+            {/* Directory Button */}
+            <Link
+              href="/directory"
+              className="group flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-all duration-200"
+            >
+              <FaBook className="w-4 h-4 group-hover:rotate-12 transition-transform duration-200" />
+              <span>Directory</span>
+            </Link>
+            {/* Search Button */}
+            <Link
+              href="/"
+              className="group flex items-center gap-2 px-3 py-2 text-sm font-medium bg-gray-900 text-white dark:bg-blue-950 dark:hover:bg-black rounded-full transition-all duration-200 shadow-sm"
+            >
+              <FaSearch className="w-4 h-4 group-hover:rotate-12 transition-transform duration-200" />
+              <span>Search</span>
+            </Link>
+            <Link 
+              href={`/#pricing`}
+              className="group flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-all duration-200"
+            >
+              <GrMoney className="w-4 h-4 group-hover:rotate-12 transition-transform duration-200" />
+              <span>Pricing</span>
+            </Link>
 
-                    </div>
+            <Link
+              href={`/#faq`}
+              className="group flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-all duration-200"
+            >
+              <LuMessageCircleQuestion className="w-4 h-4 group-hover:rotate-12 transition-transform duration-200" />
+              <span>FAQs</span>
+            </Link>
+          </div>
 
           {/* Auth Button */}
           {!isLoading ? (

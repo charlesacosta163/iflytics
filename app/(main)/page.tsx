@@ -83,7 +83,7 @@ export default function Home() {
                 
                 <div>
                   <h2 className="text-2xl font-black tracking-tight text-gray-900 dark:text-gray-100">
-                    <span className="text-amber-500 dark:text-amber-300">IF</span>lytics
+                    <span className="text-purple-500 dark:text-purple-300">IF</span>lytics
                   </h2>
                   <p className="text-sm text-gray-500 dark:text-gray-400 font-medium">
                     For Infinite Flight Pilots

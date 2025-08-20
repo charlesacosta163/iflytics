@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase/webhook-client";
 import Stripe from "stripe";
 import { stripe } from "@/lib/stripe/stripe";
+import { getUser } from "@/lib/supabase/user-actions";
 
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET!;
 
@@ -34,6 +35,7 @@ export async function POST(req: NextRequest) {
 
       if (session.mode === "payment") {
         console.log("🎯 Processing LIFETIME payment");
+
         
         // Check if user already has ANY active subscription (not just lifetime)
         const { data: existingSubscriptions, error: checkError } = await supabaseAdmin
@@ -94,8 +96,7 @@ export async function POST(req: NextRequest) {
             console.log("🔄 Successfully deactivated old premium subscription");
           }
 
-          // Schedule duplicate cleanup after a short delay
-          setTimeout(async () => {
+        // Cleanup duplicate subscriptions
             try {
               console.log("🧹 Running duplicate cleanup check...");
               
@@ -171,48 +172,48 @@ export async function POST(req: NextRequest) {
             } catch (cleanupError) {
               console.error("❌ Error during duplicate cleanup:", cleanupError);
             }
-          }, 3000); // Wait 3 seconds before running cleanup
-        }
-      } else if (session.mode === "subscription") {
-        console.log("🔄 Processing SUBSCRIPTION payment");
-        console.log("Creating subscription record from checkout session (metadata available here)");
-        
-        const insertData = {
-          stripe_customer_id: session.customer as string,
-          stripe_subscription_id: session.subscription as string, // Get from checkout session
-          plan: "premium",
-          status: "active", // Assume active since payment completed
-          ifc_user_id: session.metadata?.ifc_user_id,
-          current_period_end: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // Default to 30 days from now
-          cancel_at: null,
-        };
-        
-        console.log("📝 About to insert premium subscription from checkout:", JSON.stringify(insertData, null, 2));
-        
-        const { data, error } = await supabaseAdmin
-          .from("subscriptions")
-          .insert(insertData);
-
-        if (error) {
-          console.error("❌ FAILED to insert premium subscription from checkout:");
-          console.error("Error details:", JSON.stringify(error, null, 2));
-        } else {
-          console.log("✅ SUCCESS! Premium subscription inserted from checkout:");
-          console.log("Inserted data:", JSON.stringify(data, null, 2));
         }
       }
+      // } else if (session.mode === "subscription") {
+      //   console.log("🔄 Processing SUBSCRIPTION payment");
+      //   console.log("Creating subscription record from checkout session (metadata available here)");
+        
+      //   const insertData = {
+      //     stripe_customer_id: session.customer as string,
+      //     stripe_subscription_id: session.subscription as string, // Get from checkout session
+      //     plan: "premium",
+      //     status: "active", // Assume active since payment completed
+      //     ifc_user_id: session.metadata?.ifc_user_id,
+      //     current_period_end: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // Default to 30 days from now
+      //     cancel_at: null,
+      //   };
+        
+      //   console.log("📝 About to insert premium subscription from checkout:", JSON.stringify(insertData, null, 2));
+        
+      //   const { data, error } = await supabaseAdmin
+      //     .from("subscriptions")
+      //     .insert(insertData);
+
+      //   if (error) {
+      //     console.error("❌ FAILED to insert premium subscription from checkout:");
+      //     console.error("Error details:", JSON.stringify(error, null, 2));
+      //   } else {
+      //     console.log("✅ SUCCESS! Premium subscription inserted from checkout:");
+      //     console.log("Inserted data:", JSON.stringify(data, null, 2));
+      //   }
+      // }
       break;
 
     // Subscription Created
     case "customer.subscription.created":
       const subCreated = event.data.object as Stripe.Subscription;
       
-      console.log("🔍 SUBSCRIPTION CREATED - DEBUG INFO:");
-      console.log("  - Subscription ID:", subCreated.id);
-      console.log("  - Customer ID:", subCreated.customer);
-      console.log("  - Metadata:", JSON.stringify(subCreated.metadata, null, 2));
-      console.log("  - ifc_user_id value:", subCreated.metadata?.ifc_user_id);
-      console.log("  - typeof ifc_user_id:", typeof subCreated.metadata?.ifc_user_id);
+      // console.log("🔍 SUBSCRIPTION CREATED - DEBUG INFO:");
+      // console.log("  - Subscription ID:", subCreated.id);
+      // console.log("  - Customer ID:", subCreated.customer);
+      // console.log("  - Metadata:", JSON.stringify(subCreated.metadata, null, 2));
+      // console.log("  - ifc_user_id value:", subCreated.metadata?.ifc_user_id);
+      // console.log("  - typeof ifc_user_id:", typeof subCreated.metadata?.ifc_user_id);
 
       // Check if user already has a subscription
       if (!subCreated.metadata?.ifc_user_id || subCreated.metadata.ifc_user_id === 'undefined') {
@@ -280,16 +281,16 @@ export async function POST(req: NextRequest) {
     case "customer.subscription.updated":
       const subUpdated = event.data.object as Stripe.Subscription;
       
-      console.log("🔄 SUBSCRIPTION UPDATED:");
-      console.log("  - Subscription ID:", subUpdated.id);
-      console.log("  - Status:", subUpdated.status);
-      console.log("  - Current period end:", subUpdated.items.data[0].current_period_end);
+      // console.log("🔄 SUBSCRIPTION UPDATED:");
+      // console.log("  - Subscription ID:", subUpdated.id);
+      // console.log("  - Status:", subUpdated.status);
+      // console.log("  - Current period end:", subUpdated.items.data[0].current_period_end);
 
       const subscriptionItem = subUpdated.items.data[0] as Stripe.SubscriptionItem;
       const currentPeriodEnd = subscriptionItem?.current_period_end ?? 0;
       
-      console.log("  - Calculated period end:", currentPeriodEnd);
-      console.log("  - As date:", new Date(currentPeriodEnd * 1000));
+      // console.log("  - Calculated period end:", currentPeriodEnd);
+      // console.log("  - As date:", new Date(currentPeriodEnd * 1000));
 
       // Extract cancel_at if user cancels subscription
       const cancelAt = subUpdated.cancel_at

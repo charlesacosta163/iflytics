@@ -34,15 +34,15 @@ const Sidebar = () => {
       <div className="flex flex-col h-full">
 
         <header className="px-6 py-4 border-b border-gray-200 dark:border-gray-800 relative">
-            <span className="text-xs font-medium absolute -bottom-2.5 left-1/2 -translate-x-1/2 bg-amber-500 text-white px-2 py-0.5 rounded-full">
-              v0.9.3.1-beta
+            <span className="text-xs font-medium absolute -bottom-2.5 left-1/2 -translate-x-1/2 bg-purple-400 text-white px-2 py-0.5 rounded-full">
+              v0.9.3.2-final
             </span>
 
             <Link
             href="/dashboard"
             className="text-xl font-bold tracking-tight flex gap-3 items-center group hover:scale-105 transition-transform duration-200"
             >
-            <div className="p-2 bg-amber-500 rounded-xl shadow-lg group-hover:shadow-blue-500/25 transition-shadow duration-200">
+            <div className="p-2 bg-purple-500 rounded-xl shadow-lg group-hover:shadow-blue-500/25 transition-shadow duration-200">
               <Image
                   src={iflyticsLogo}
                   alt="Iflytics Logo"
@@ -53,7 +53,7 @@ const Sidebar = () => {
             </div>
 
             <div className="flex flex-col">
-              <span className="text-gray-900 dark:text-white"><span className="text-amber-500 dark:text-amber-300">IF</span>lytics</span>
+              <span className="text-gray-900 dark:text-white"><span className="text-purple-500 dark:text-purple-300">IF</span>lytics</span>
               <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">{randomCaption}</span>
             </div>
             

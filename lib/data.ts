@@ -3493,6 +3493,46 @@ export const customUserImages = [
     "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/delta737yt/288/1532912_2.png"
   )}&w=64&h=64&fit=cover&mask=circle`,
 },
+{
+  id: 242,
+  role: "user",
+  username: "Victorgolf",
+  image: `https://images.weserv.nl/?url=${encodeURIComponent(
+    "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/victorgolf/288/1038188_2.png"
+  )}&w=64&h=64&fit=cover&mask=circle`,
+},
+{
+  id: 243,
+  role: "user",
+  username: "Aviation2.0",
+  image: `https://images.weserv.nl/?url=${encodeURIComponent(
+    "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/aviation2.0/288/1544989_2.png"
+  )}&w=64&h=64&fit=cover&mask=circle`,
+},
+{
+  id: 244,
+  role: "user",
+  username: "jpeterson6294",
+  image: `https://images.weserv.nl/?url=${encodeURIComponent(
+    "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/jpeterson6294/288/387389_2.png"
+  )}&w=64&h=64&fit=cover&mask=circle`,
+},
+{
+  id: 245,
+  role: "user",
+  username: "powerain",
+  image: `https://images.weserv.nl/?url=${encodeURIComponent(
+    "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/powerain/288/1072942_2.png"
+  )}&w=64&h=64&fit=cover&mask=circle`,
+},
+{
+  id: 246,
+  role: "user",
+  username: "DizzyForDaze",
+  image: `https://images.weserv.nl/?url=${encodeURIComponent(
+    "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/dizzyfordaze/288/1563785_2.png"
+  )}&w=64&h=64&fit=cover&mask=circle`,
+},
 ];
 
 export const aircraftIcaoCodes = [
@@ -3689,11 +3729,11 @@ export const faqData = [
     question: "When will The Flight Arena be available?",
     answer: "The Flight Arena is scheduled for release in 2026. This exciting feature will turn your flight data into interactive games and challenges, adding a gamification layer to your aviation experience. Premium and Lifetime users will get full access when it launches.",
   },
-  // {
-  //   id: 6,
-  //   question: "Do you offer refunds?",
-  //   answer: "We offer a comprehensive free tier and all premium features are FREE during our beta period, so you can fully test IFlytics before purchasing. Monthly Premium subscriptions include a 7-day satisfaction guarantee - contact our support team within 7 days for a full refund. Lifetime purchases are final sales with no refunds.",
-  // },
+  {
+    id: 6,
+    question: "Do you offer refunds?",
+    answer: "We offer a comprehensive free tier and all premium features are FREE during our beta period, so you can test IFlytics before purchasing. Monthly Premium subscriptions include a 7-day satisfaction guarantee - contact support in our Discord server within 7 days for a full refund if you are not satisfied. Lifetime purchases are final sales with no refunds.",
+  },
   {
     id: 7,
     question: "How do I contact support?",

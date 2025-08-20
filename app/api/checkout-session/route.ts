@@ -7,13 +7,14 @@ import { getUser } from '@/lib/supabase/user-actions';
 
 
 export async function POST(req: Request) {
-  const body = await req.json();
-  const planType = body.planType === 'lifetime' ? 'lifetime' : 'monthly';
   const user = await getUser();
 
   if (!user) {
     return NextResponse.json({ error: 'User not found' }, { status: 404 });
   }
+
+  const body = await req.json();
+  const planType = body.planType === 'lifetime' ? 'lifetime' : 'monthly';
   
   const userMetadata = user.user_metadata;
 
@@ -23,10 +24,11 @@ export async function POST(req: Request) {
     mode: isLifetime ? 'payment' : 'subscription', // payment == lifetime, subscription == monthly
     customer_email: userMetadata.email,
     allow_promotion_codes: true,
+    // Metadata on the objects Stripe will create:
     metadata: {
-        ifc_user_id: user.id, // auth user id
-        ifc_username: userMetadata.ifcUsername, // if username
-        email: userMetadata.email, // email
+      ifc_user_id: user.id,
+      ifc_username: userMetadata.ifcUsername,
+      email: userMetadata.email,
     },
     line_items: [
       {
@@ -36,7 +38,7 @@ export async function POST(req: Request) {
         quantity: 1,
       },
     ],
-    success_url: 'https://iflytics.app/dashboard/profile',
+    success_url: `https://iflytics.app/dashboard/profile?session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: 'https://iflytics.app/dashboard/profile',
   });
 

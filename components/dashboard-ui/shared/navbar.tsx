@@ -120,8 +120,8 @@ const Navbar = () => {
               <span className="text-gray-700 dark:text-gray-100"><span className="text-amber-500 dark:text-amber-300">IF</span>lytics</span>
             </Link>
 
-            <span className="text-[10px] font-semibold text-white bg-amber-500 rounded-full absolute -bottom-4 left-5 px-2 py-0.10 shadow-lg z-100">
-              v0.9.3.1-beta
+            <span className="text-[10px] font-semibold text-white bg-purple-500 rounded-full absolute -bottom-4 left-5 px-2 py-0.10 shadow-lg z-100">
+              v0.9.3.2-final
             </span>
           </div>
 
