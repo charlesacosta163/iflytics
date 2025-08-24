@@ -3533,6 +3533,62 @@ export const customUserImages = [
     "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/dizzyfordaze/288/1563785_2.png"
   )}&w=64&h=64&fit=cover&mask=circle`,
 },
+{
+  id: 247,
+  role: "user",
+  username: "Dimitrios_TA",
+  image: `https://images.weserv.nl/?url=${encodeURIComponent(
+    "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/dimitrios_ta/288/1550689_2.png"
+  )}&w=64&h=64&fit=cover&mask=circle`,
+},
+{
+  id: 248,
+  role: "user",
+  username: "FlyByWire1",
+  image: `https://images.weserv.nl/?url=${encodeURIComponent(
+    "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/flybywire1/288/1441454_2.png"
+  )}&w=64&h=64&fit=cover&mask=circle`,
+},
+{
+  id: 249,
+  role: "user",
+  username: "Icey",
+  image: `https://images.weserv.nl/?url=${encodeURIComponent(
+    "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/icey/288/1565673_2.png"
+  )}&w=64&h=64&fit=cover&mask=circle`,
+},
+{
+  id: 250,
+  role: "user",
+  username: "art3tic",
+  image: `https://images.weserv.nl/?url=${encodeURIComponent(
+    "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/art3tic/288/1517284_2.png"
+  )}&w=64&h=64&fit=cover&mask=circle`,
+},
+{
+  id: 251,
+  role: "user",
+  username: "TurbopropNavigator",
+  image: `https://images.weserv.nl/?url=${encodeURIComponent(
+    "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/aviator_aries/288/1392287_2.png"
+  )}&w=64&h=64&fit=cover&mask=circle`,
+},
+{
+  id: 252,
+  role: "user",
+  username: "Gleb1",
+  image: `https://images.weserv.nl/?url=${encodeURIComponent(
+    "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/gleb1/288/1546412_2.png"
+  )}&w=64&h=64&fit=cover&mask=circle`,
+},
+{
+  id: 253,
+  role: "user",
+  username: "FINK",
+  image: `https://images.weserv.nl/?url=${encodeURIComponent(
+    "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/fink/288/1278786_2.png"
+  )}&w=64&h=64&fit=cover&mask=circle`,
+}
 ];
 
 export const aircraftIcaoCodes = [
