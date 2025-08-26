@@ -196,7 +196,7 @@ const FlightsPage = async ({searchParams}: { searchParams: Promise<{ [key: strin
         {hasPremiumAccess(subscription as Subscription) ? (
           <FlightsRoutes flights={allFlights} user={user} subscription={subscription as Subscription} role={subscription.role}/>
         ) : (
-          <div className="rounded-lg h-screen w-full flex flex-col items-center justify-center dark:bg-[url('/images/subscriptions/routeanalysis.png')] bg-[url('/images/subscriptions/routeanalysislight.png')] bg-cover bg-center relative overflow-hidden">
+          <div className="rounded-lg h-screen w-full flex flex-col items-center justify-center bg-cover bg-center relative overflow-hidden" style={{ backgroundImage: `url(/routeanalysis.png)` }}>
             
             <div className="absolute top-0 left-0 w-full h-full bg-black/80 p-8 flex flex-col gap-4 overflow-y-auto">
 
@@ -237,7 +237,7 @@ const FlightsPage = async ({searchParams}: { searchParams: Promise<{ [key: strin
           {hasPremiumAccess(subscription as Subscription) ? (
             <FlightsAircraft flights={allFlights} user={user} role={subscription.role} />
           ) : (
-            <div className="rounded-lg h-screen w-full flex flex-col items-center justify-center dark:bg-[url('/images/subscriptions/aircraftanalysis.png')] bg-[url('/images/subscriptions/aircraftanalysislight.png')] bg-cover bg-center relative overflow-hidden">
+            <div className="rounded-lg h-screen w-full flex flex-col items-center justify-center bg-cover bg-center relative overflow-hidden" style={{ backgroundImage: `url(/aircraftanalysis.png)` }}>
             
             <div className="absolute top-0 left-0 w-full h-full bg-black/80 p-8 flex flex-col gap-4 overflow-y-auto">
 
