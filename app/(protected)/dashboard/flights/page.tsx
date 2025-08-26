@@ -36,6 +36,7 @@ import { hasPremiumAccess, Subscription } from '@/lib/subscription/helpers';
 import { TbLock } from "react-icons/tb";
 import { Badge } from "@/components/ui/badge";
 import GroupedSubscriptionButtons from "@/components/dashboard-ui/grouped-sub-btns";
+import PromoReminders from "@/components/dashboard-ui/stripe/promo-reminders";
 
 let aircraftAnalysisMaintainance = false
 
@@ -208,6 +209,8 @@ const FlightsPage = async ({searchParams}: { searchParams: Promise<{ [key: strin
                   <blockquote className="text-gray-300 mt-4 text-sm font-bold">Requires <Badge className="bg-yellow-500 text-dark">Premium</Badge> or <Badge className="bg-green-600 text-light">Lifetime</Badge> Subscription</blockquote>
 
                     <GroupedSubscriptionButtons />
+                    <br />
+                    <PromoReminders />
                 </header>
 
                 <h2 className="text-2xl font-bold text-light">Features:</h2>
@@ -247,6 +250,8 @@ const FlightsPage = async ({searchParams}: { searchParams: Promise<{ [key: strin
                   <blockquote className="text-gray-300 mt-4 text-sm font-bold">Requires <Badge className="bg-yellow-500 text-dark">Premium</Badge> or <Badge className="bg-green-600 text-light">Lifetime</Badge> Subscription</blockquote>
 
                   <GroupedSubscriptionButtons />
+                  <br />
+                  <PromoReminders />
                 </header>
 
                 <h2 className="text-2xl font-bold text-light">Features:</h2>
