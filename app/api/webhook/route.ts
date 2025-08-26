@@ -4,7 +4,7 @@ import { supabaseAdmin } from "@/lib/supabase/webhook-client";
 import Stripe from "stripe";
 import { stripe } from "@/lib/stripe/stripe";
 
-const endpointSecret = process.env.STRIPE_LIVEWEBHOOK_SECRET!;
+const endpointSecret = process.env.STRIPE_LIVE_WEBHOOK_SECRET!;
 
 export async function POST(req: NextRequest) {
   // console.log("🔥 WEBHOOK CALLED!", new Date().toISOString());
