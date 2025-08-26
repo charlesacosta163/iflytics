@@ -18,7 +18,7 @@ import { GoCopilot } from "react-icons/go";
 import { LuGoal } from "react-icons/lu";
 import { BsIncognito } from "react-icons/bs";
 import { LiaGlobeAmericasSolid } from "react-icons/lia";
-import { getRandomCaption } from "@/lib/foo.js";
+import { getAppVersion, getRandomCaption } from "@/lib/foo.js";
 import Banner from "../banner";
 
 const Sidebar = () => {
@@ -34,26 +34,26 @@ const Sidebar = () => {
       <div className="flex flex-col h-full">
 
         <header className="px-6 py-4 border-b border-gray-200 dark:border-gray-800 relative">
-            <span className="text-xs font-medium absolute -bottom-2.5 left-1/2 -translate-x-1/2 bg-purple-400 text-white px-2 py-0.5 rounded-full">
-              v0.9.3.2-final
+            <span className="text-xs font-medium absolute -bottom-2.5 left-1/2 -translate-x-1/2 bg-gradient-to-r from-[#ff6982] to-[#ffd2b3] dark:from-[#0080ff] dark:to-[#00e0ff] text-white px-2 py-0.5 rounded-full">
+              Version {getAppVersion()}
             </span>
 
             <Link
             href="/dashboard"
             className="text-xl font-bold tracking-tight flex gap-3 items-center group hover:scale-105 transition-transform duration-200"
             >
-            <div className="p-2 bg-purple-500 rounded-xl shadow-lg group-hover:shadow-blue-500/25 transition-shadow duration-200">
+            <div className="p-2 bg-gradient-to-r from-[#ff6982] to-[#ffd2b3] dark:from-[#006ddb] dark:to-[#d5faff] rounded-xl shadow-lg group-hover:shadow-blue-500/25 transition-shadow duration-200">
               <Image
                   src={iflyticsLogo}
                   alt="Iflytics Logo"
                   width={24}
                   height={24}
-                  className="filter brightness-0 invert"
+                  className=""
               />
             </div>
 
             <div className="flex flex-col">
-              <span className="text-gray-900 dark:text-white"><span className="text-purple-500 dark:text-purple-300">IF</span>lytics</span>
+              <span className="bg-gradient-to-r from-[#ff6982] to-[#ffd2b3] dark:from-[#0080ff] dark:via-light dark:to-[#f1fdff] bg-clip-text text-transparent">IFlytics</span>
               <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">{randomCaption}</span>
             </div>
             

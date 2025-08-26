@@ -12,7 +12,7 @@ export async function getUserSubscription(userId: string) {
     .single();
 
   if (error) {
-    console.error('Error fetching subscription:', error);
+    // console.error('Error fetching subscription:', error);
     return null;
   }
 

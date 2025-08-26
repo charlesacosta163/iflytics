@@ -24,6 +24,8 @@ import { getUserSubscription } from "@/lib/stripe/stripe-actions";
 import { CancelSubscriptionButton } from "./stripe/cancel-subscription-button";
 import { ReactivateButton } from "./stripe/reactivate-subscription-button";
 import { LifetimeButton } from "./stripe/lifetime-plan-button";
+import { LuCreditCard } from "react-icons/lu";
+import PromoReminders from "./stripe/promo-reminders";
 
 interface User {
   id: string;
@@ -103,7 +105,7 @@ const ProfileWrapper = ({
           </span>
           <span className="text-gray-600 dark:text-gray-300 flex items-center gap-2">
             <FaUser className="text-gray-500" />
-            Your profile and settings
+            Your profile, settings and billing
           </span>
         </div>
 
@@ -115,6 +117,13 @@ const ProfileWrapper = ({
             >
               <FaUser className="text-gray-500" />
               Profile
+            </TabsTrigger>
+            <TabsTrigger
+              value="billing"
+              className="rounded-md flex gap-2 items-center justify-center border-none"
+            >
+              <LuCreditCard className="text-gray-500" />
+              Billing
             </TabsTrigger>
             <TabsTrigger
               value="settings"
@@ -191,11 +200,12 @@ const ProfileWrapper = ({
             </div>
           </TabsContent>
 
-          <TabsContent value="settings">
+          <TabsContent value="billing">
             <div className="flex flex-col gap-6 w-full px-6 py-8 bg-white dark:bg-gray-800 rounded-xl shadow-lg dark:text-light">
               <div className="flex flex-col gap-4">
-                <h2 className="text-3xl font-bold text-gray-800 dark:text-light">
-                  Settings
+                <h2 className="text-3xl font-bold text-gray-800 dark:text-light flex items-center gap-2">
+                  <LuCreditCard  />
+                  Billing
                 </h2>
               </div>
               {(ENABLE_SUBSCRIPTIONS || userProfile.role === 'admin' || userProfile.role === 'tester') && (
@@ -211,13 +221,13 @@ const ProfileWrapper = ({
                   </div>
 
                   {/* Debug Info - REMOVE AFTER TESTING */}
-                  <div className="text-xs text-red-500 border border-red-200 p-2 rounded">
+                  {/* <div className="text-xs text-red-500 border border-red-200 p-2 rounded">
                     DEBUG: 
                     ENABLE_SUBSCRIPTIONS: {ENABLE_SUBSCRIPTIONS.toString()}<br/>
                     subscription: {JSON.stringify(subscription)}<br/>
                     isSubscriptionLoading: {isSubscriptionLoading.toString()}<br/>
                     subscriptionError: {subscriptionError || 'null'}
-                  </div>
+                  </div> */}
 
                   {/* Loading State */}
                   {isSubscriptionLoading && (
@@ -322,7 +332,7 @@ const ProfileWrapper = ({
                         // Free Plan (when subscription is null OR plan is "free")
                         <div className="space-y-4">
                           <div className="flex flex-col gap-2">
-                            <span className="text-gray-600 dark:text-gray-400 font-medium">
+                            <span className="text-blue-600 dark:text-blue-400 font-medium">
                               Free Plan
                             </span>
                             <p className="text-sm text-gray-500 dark:text-gray-400">
@@ -334,7 +344,7 @@ const ProfileWrapper = ({
                             <SubscribeButton />
                             <div className="relative">
                               <LifetimeButton />
-                              <span className="absolute -top-2 -right-2 bg-green-500 text-white text-xs px-2 py-0.5 rounded-full">
+                              <span className="absolute -top-2 -right-2 bg-indigo-500 text-white text-xs px-2 py-0.5 rounded-full animate-bounce">
                                 Best Value
                               </span>
                             </div>
@@ -342,10 +352,10 @@ const ProfileWrapper = ({
 
                           <div className="mt-4 pt-4 border-t">
                             <h4 className="font-medium mb-2">Premium Features:</h4>
-                            <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-300">
+                            <ul className="grid grid-cols-2 gap-2 text-sm text-gray-600 dark:text-gray-300">
                               <li className="flex items-center gap-2">
                                 <FaCheck className="text-green-500" />
-                                Advanced Flight Analytics
+                                Access to Flight Frames
                               </li>
                               <li className="flex items-center gap-2">
                                 <FaCheck className="text-green-500" />
@@ -353,7 +363,11 @@ const ProfileWrapper = ({
                               </li>
                               <li className="flex items-center gap-2">
                                 <FaCheck className="text-green-500" />
-                                Aircraft Usage Stats
+                                Aircraft Analysis
+                              </li>
+                              <li className="flex items-center gap-2">
+                                <FaCheck className="text-green-500" />
+                                And more!
                               </li>
                               {/* Add more premium features */}
                             </ul>
@@ -364,9 +378,13 @@ const ProfileWrapper = ({
                   )}
                 </div>
               )}
+              <PromoReminders />
 
-              {/* Danger Zone */}
-              <div className="w-full flex justify-between gap-2 items-center py-4 px-6 bg-red-50 dark:bg-gray-700 rounded-xl ">
+            </div>
+          </TabsContent>
+          <TabsContent value="settings">
+            {/* Danger Zone */}
+            <div className="w-full flex justify-between gap-2 items-center py-4 px-6 bg-red-50 dark:bg-gray-700 rounded-xl ">
                 <div className="flex items-center gap-2">
                   <FaExclamationTriangle className="dark:text-red-300 text-red-500 text-xl" />
                   <h3 className="text-xl font-bold text-red-700 dark:text-red-400">
@@ -468,7 +486,6 @@ const ProfileWrapper = ({
                   </DialogContent>
                 </Dialog>
               </div>
-            </div>
           </TabsContent>
         </Tabs>
       </div>

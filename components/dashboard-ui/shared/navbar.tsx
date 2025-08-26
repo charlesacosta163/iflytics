@@ -22,6 +22,7 @@ import { customUserImages } from "@/lib/data";
 import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
 import { InlineThemeSwitcher } from "@/components/inline-theme-switcher";
 import { RiCopilotFill } from "react-icons/ri";
+import Pathname from "./pathname";
 
 import { getUserSubscription } from "@/lib/subscription/subscription";
 import { AccessLevel, Subscription } from "@/lib/subscription/helpers";
@@ -97,7 +98,7 @@ const Navbar = () => {
               />
             </div>
           </button>
-          <div className="relative block lg:hidden">
+          {/* <div className="relative block lg:hidden">
             <Link
               href="/dashboard"
               className="text-2xl font-bold tracking-tighter flex gap-2 items-center"
@@ -123,7 +124,10 @@ const Navbar = () => {
             <span className="text-[10px] font-semibold text-white bg-purple-500 rounded-full absolute -bottom-4 left-5 px-2 py-0.10 shadow-lg z-100">
               v0.9.3.2-final
             </span>
-          </div>
+          </div> */}
+          <span className="lg:hidden">
+            <Pathname />
+          </span>
 
           <div className="hidden lg:flex dark:border-gray-300 hover:border-gray-800 dark:hover:border-gray-50 transition-colors duration-200 items-center gap-2">
             <LuUser className="w-6 h-6 text-gray-600 dark:text-gray-300" />

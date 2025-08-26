@@ -1,8 +1,13 @@
+'use client';
+
 import { useState } from 'react';
+import { RiPriceTag3Line } from 'react-icons/ri';
+
+import { getUser } from '@/lib/supabase/user-actions';
 
 export function SubscribeButton() {
   const [loading, setLoading] = useState(false);
-
+  
   const handleClick = async () => {
     setLoading(true);
     try {
@@ -28,10 +33,11 @@ export function SubscribeButton() {
   return (
     <button
       onClick={handleClick}
-      className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-4 py-2 rounded disabled:opacity-50"
+      className="bg-yellow-500 hover:bg-yellow-600 text-dark font-semibold px-4 py-2 rounded disabled:opacity-50 flex flex-col gap-1"
       disabled={loading}
     >
       {loading ? 'Redirecting...' : 'Subscribe to Premium'}
+      <span className="flex gap-1 items-center text-[0.5rem]"><RiPriceTag3Line /> $1.99/mo</span>
     </button>
   );
 }

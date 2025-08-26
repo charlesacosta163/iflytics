@@ -11,16 +11,17 @@ const Footer = () => {
         <Link href="https://github.com/charlesacosta163" target="_blank" rel="noopener noreferrer">
           <FaGithub className="text-lg hover:text-gray-700 dark:hover:text-gray-300 transition-colors" />
         </Link>
-        <Link href="https://discord.gg/ZswK5eRm" target="_blank" rel="noopener noreferrer">
+        <Link href="https://discord.gg/9p46Zbwc" target="_blank" rel="noopener noreferrer">
           <FaDiscord className="text-lg hover:text-gray-700 dark:hover:text-gray-300 transition-colors" />
         </Link>
         <span>|</span>
-        <Link href="/legal/terms" className="hover:text-gray-700 dark:hover:text-gray-300 transition-colors">Terms of Service</Link>
+        <Link href="/legal/terms" className="hover:text-gray-700 dark:hover:text-gray-300 transition-colors">Terms <span className="text-xs hidden md:inline">of Service</span></Link>
         <span>|</span>
-        <Link href="/legal/privacy" className="hover:text-gray-700 dark:hover:text-gray-300 transition-colors">Privacy Policy</Link>
+        <Link href="/legal/privacy" className="hover:text-gray-700 dark:hover:text-gray-300 transition-colors">Privacy <span className="text-xs hidden md:inline">Policy</span></Link>
+
       </div>
       
-      <InlineThemeSwitcher />
+      {/* <InlineThemeSwitcher /> */}
     </footer>
   )
 }

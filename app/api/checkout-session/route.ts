@@ -33,8 +33,8 @@ export async function POST(req: Request) {
     line_items: [
       {
         price: isLifetime ? 
-            process.env.STRIPE_LIFETIME_PLAN_PRICE_ID :  // Lifetime plan price ID
-            process.env.STRIPE_MONTHLY_PREMIUM_PRICE_ID, // Monthly plan price ID
+            process.env.STRIPE_LIVE_LIFETIME_PLAN_PRICE_ID :  // Lifetime plan price ID
+            process.env.STRIPE_LIVE_MONTHLY_PREMIUM_PRICE_ID, // Monthly plan price ID
         quantity: 1,
       },
     ],

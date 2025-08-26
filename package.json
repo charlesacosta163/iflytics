@@ -1,6 +1,6 @@
 {
-  "name": "if-stats-remastered",
-  "version": "0.1.0",
+  "name": "iflytics",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",

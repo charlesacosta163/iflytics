@@ -10,6 +10,7 @@ import { matchATCRankToTitle } from "@/lib/sync-actions";
 import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import iflyticsLogo from "@/public/iflyticslight.svg";
 
 // Icons
 import { LuPlaneLanding, LuTowerControl } from "react-icons/lu";
@@ -360,50 +361,40 @@ export default async function DashboardPage() {
           </Card>
 
           {/* Flight Arena Coming Soon */}
-          <Card className="md:col-span-1 bg-gradient-to-br from-gray-800 to-gray-900 text-white backdrop-blur-xl shadow-lg overflow-hidden">
-            {/* Background accent */}
-            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-orange-400 via-pink-400 to-purple-400"></div>
+          <div className="flex flex-col gap-4">
+            <Card className="md:col-span-1 bg-gradient-to-br from-gray-800 to-gray-900 text-white backdrop-blur-xl shadow-lg overflow-hidden">
+              {/* Background accent */}
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-orange-400 via-pink-400 to-purple-400"></div>
 
-            <CardHeader className="">
-              <div className="flex items-center gap-2">
-              <TbBuildingStadium className="text-2xl text-amber-500" />
-                <CardTitle className="text-xl font-bold tracking-tight bg-gradient-to-r from-orange-400 to-purple-400 bg-clip-text text-transparent flex flex-col gap-1 ">
-                  The Flight Arena
-                  <span className="bg-gradient-to-r from-green-500 to-emerald-600 text-white px-2 py-0.5 rounded-full text-xs font-semibold self-start">
-                    Coming in 2026
-                  </span>
-                </CardTitle>
-              </div>
-            </CardHeader>
-
-            <CardContent className="flex flex-col gap-2 justify-between">
-
-                <span className="text-gray-300 text-sm leading-relaxed">
-                  <strong className="text-white">Compete with pilots</strong>{" "}
-                  with gamified Infinite Flight Stats, earn badges, and climb
-                  the leaderboard.
-                </span>
-
-                {/* Mini feature indicators */}
-                <div className="flex gap-1 mt-1">
-                  <div className="w-2 h-2 bg-orange-400 rounded-full animate-pulse"></div>
-                  <div
-                    className="w-2 h-2 bg-purple-400 rounded-full animate-pulse"
-                    style={{ animationDelay: "0.2s" }}
-                  ></div>
-                  <div
-                    className="w-2 h-2 bg-pink-400 rounded-full animate-pulse"
-                    style={{ animationDelay: "0.4s" }}
-                  ></div>
+              <CardHeader className="!h-full flex flex-col justify-center items-center">
+                <div className="flex items-center gap-4">
+                <TbBuildingStadium className="text-2xl text-amber-500" />
+                  <div className="text-2xl font-bold tracking-tight bg-gradient-to-r from-orange-400 to-purple-400 bg-clip-text text-transparent flex flex-col gap-2 ">
+                    The Flight Arena
+                    <span className="bg-gradient-to-r from-green-500 to-emerald-600 text-white px-2 py-0.5 rounded-full text-xs font-semibold self-start">
+                      Coming in 2026
+                    </span>
+                  </div>
                 </div>
+              </CardHeader>
 
-                  <Link href="https://youtu.be/dQw4w9WgXcQ?si=g_taiME19X9XZnzo" target="_blank" className="self-start mt-2 cursor-pointer">
-                    <Button className="flex items-center gap-2 text-light bg-[#424549] hover:bg-[#424549]/80 rounded-full !px-5">
-                      <TbBrandDiscord className="text-2xl" /> IFlytics Discord Soon
-                    </Button>
-                  </Link>
-            </CardContent>
-          </Card>
+            </Card>
+
+            <Card className="flex-1 bg-[#5865F2] relative overflow-hidden">
+              <TbBrandDiscord className="text-[20rem] absolute top-8 left-0 text-white opacity-10" />
+              <CardHeader className="flex flex-col gap-2 justify-center items-center">
+                <CardTitle className="text-2xl font-bold tracking-tight text-light flex items-center gap-1"><Image src={iflyticsLogo} alt="IFlytics Logo" width={24} height={24} className="" /> Join the Discord</CardTitle>
+                <CardDescription className="text-gray-200 text-center">
+                  Join the IFlytics Discord to get the latest news and updates.
+                </CardDescription>
+
+                <Link href="https://discord.gg/9p46Zbwc" target="_blank" className="bg-[#404EED] hover:bg-[#404EED]/80 text-white rounded-full px-4 py-2 flex items-center gap-2 text-center text-sm font-bold z-[1] hover:scale-105 transition-all duration-200 self-center">
+                  <TbBrandDiscord className="text-2xl" /> Join
+                </Link>
+              </CardHeader>
+            </Card>
+            
+          </div>
 
           <div className="md:col-span-1 relative group">
             {/* Animated gradient border */}

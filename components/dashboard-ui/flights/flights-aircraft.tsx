@@ -193,13 +193,13 @@ const FlightsAircraft = async ({ flights, user, role }: { flights: Flight[], use
   return (
     <div className="space-y-6">
       {/* Header Stats */}
-      <div className="lg:col-span-3 border-2 border-yellow-200 dark:border-yellow-700 bg-yellow-50 dark:bg-yellow-900/50 p-6 rounded-lg flex items-center gap-2">
+      {/* <div className="lg:col-span-3 border-2 border-yellow-200 dark:border-yellow-700 bg-yellow-50 dark:bg-yellow-900/50 p-6 rounded-lg flex items-center gap-2">
         <VscCopilotWarning className="w-6 h-6 text-yellow-500" />
         <p className="text-sm sm:text-lg font-medium dark:text-yellow-300 text-yellow-700">
           Note: The aircraft analysis is a{" "}
           <b>premium feature</b>. Currently <b className="underline">FREE ON OPEN BETA</b>.
         </p>
-      </div>
+      </div> */}
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div className='bg-[#2D336B] text-light rounded-lg'>

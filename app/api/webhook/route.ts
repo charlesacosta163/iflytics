@@ -3,12 +3,11 @@ import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase/webhook-client";
 import Stripe from "stripe";
 import { stripe } from "@/lib/stripe/stripe";
-import { getUser } from "@/lib/supabase/user-actions";
 
-const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET!;
+const endpointSecret = process.env.STRIPE_LIVEWEBHOOK_SECRET!;
 
 export async function POST(req: NextRequest) {
-  console.log("🔥 WEBHOOK CALLED!", new Date().toISOString());
+  // console.log("🔥 WEBHOOK CALLED!", new Date().toISOString());
   
   const rawBody = await req.text();
   const sig = req.headers.get("stripe-signature")!;
@@ -17,7 +16,7 @@ export async function POST(req: NextRequest) {
 
   try {
     event = stripe.webhooks.constructEvent(rawBody, sig, endpointSecret);
-    console.log("✅ Webhook verified, event type:", event.type);
+    // console.log("✅ Webhook verified, event type:", event.type);
   } catch (err: any) {
     console.error("Webhook signature verification failed:", err.message);
     return new NextResponse(`Webhook Error: ${err.message}`, { status: 400 });
@@ -27,14 +26,14 @@ export async function POST(req: NextRequest) {
   switch (event.type) {
     case "checkout.session.completed":
       const session = event.data.object as Stripe.Checkout.Session;
-      console.log("💳 Checkout session completed");
-      console.log("📋 Session details:");
-      console.log("  - Mode:", session.mode);
-      console.log("  - Customer:", session.customer);
-      console.log("  - Metadata:", JSON.stringify(session.metadata, null, 2));
+      // console.log("💳 Checkout session completed");
+      // console.log("📋 Session details:");
+      // console.log("  - Mode:", session.mode);
+      // console.log("  - Customer:", session.customer);
+      // console.log("  - Metadata:", JSON.stringify(session.metadata, null, 2));
 
       if (session.mode === "payment") {
-        console.log("🎯 Processing LIFETIME payment");
+        // console.log("🎯 Processing LIFETIME payment");
 
         
         // Check if user already has ANY active subscription (not just lifetime)
@@ -57,7 +56,7 @@ export async function POST(req: NextRequest) {
           break;
         }
 
-        console.log(`🔍 Found ${existingSubscriptions.length} existing active subscriptions`);
+        // console.log(`🔍 Found ${existingSubscriptions.length} existing active subscriptions`);
         
         const insertData = {
           stripe_customer_id: session.customer as string || null,
@@ -69,7 +68,7 @@ export async function POST(req: NextRequest) {
           cancel_at: null,
         };
         
-        console.log("📝 About to insert:", JSON.stringify(insertData, null, 2));
+        // console.log("📝 About to insert:", JSON.stringify(insertData, null, 2));
         
         const { data, error } = await supabaseAdmin
           .from("subscriptions")
@@ -79,8 +78,8 @@ export async function POST(req: NextRequest) {
           console.error("❌ FAILED to insert lifetime subscription:");
           console.error("Error details:", JSON.stringify(error, null, 2));
         } else {
-          console.log("✅ SUCCESS! Lifetime subscription inserted:");
-          console.log("Inserted data:", JSON.stringify(data, null, 2));
+          // console.log("✅ SUCCESS! Lifetime subscription inserted:");
+          // console.log("Inserted data:", JSON.stringify(data, null, 2));
           
           // Deactivate old premium subscription
           const { error: deactivateError } = await supabaseAdmin
@@ -93,12 +92,12 @@ export async function POST(req: NextRequest) {
           if (deactivateError) {
             console.error("❌ Failed to deactivate old premium subscription:", deactivateError);
           } else {
-            console.log("🔄 Successfully deactivated old premium subscription");
+            // console.log("🔄 Successfully deactivated old premium subscription");
           }
 
         // Cleanup duplicate subscriptions
             try {
-              console.log("🧹 Running duplicate cleanup check...");
+              // console.log("🧹 Running duplicate cleanup check...");
               
               // Find all active subscriptions for this user
               const { data: userSubscriptions, error: fetchError } = await supabaseAdmin
@@ -114,7 +113,7 @@ export async function POST(req: NextRequest) {
               }
 
               if (!userSubscriptions || userSubscriptions.length <= 1) {
-                console.log("✅ No duplicates found, cleanup not needed");
+                // console.log("✅ No duplicates found, cleanup not needed");
                 return;
               }
 
@@ -122,7 +121,7 @@ export async function POST(req: NextRequest) {
               const lifetimeSubscriptions = userSubscriptions.filter(sub => sub.plan === "lifetime");
               const premiumSubscriptions = userSubscriptions.filter(sub => sub.plan === "premium");
 
-              console.log(`🔍 Found ${lifetimeSubscriptions.length} lifetime and ${premiumSubscriptions.length} premium subscriptions`);
+              // console.log(`🔍 Found ${lifetimeSubscriptions.length} lifetime and ${premiumSubscriptions.length} premium subscriptions`);
 
               // Handle lifetime duplicates
               if (lifetimeSubscriptions.length > 1) {
@@ -141,16 +140,16 @@ export async function POST(req: NextRequest) {
                   if (deleteError) {
                     console.error(`❌ Failed to deactivate duplicate lifetime subscription ${duplicate.id}:`, deleteError);
                   } else {
-                    console.log(`✅ Deactivated duplicate lifetime subscription ${duplicate.id}`);
+                    // console.log(`✅ Deactivated duplicate lifetime subscription ${duplicate.id}`);
                   }
                 }
 
-                console.log(`🧹 Cleanup complete: Kept ${toKeep.id}, removed ${toRemove.length} duplicates`);
+                // console.log(`🧹 Cleanup complete: Kept ${toKeep.id}, removed ${toRemove.length} duplicates`);
               }
 
               // Handle premium duplicates (in case of premium subscriptions)
               if (premiumSubscriptions.length > 1) {
-                console.log("🚨 Multiple premium subscriptions detected, removing duplicates...");
+                // console.log("🚨 Multiple premium subscriptions detected, removing duplicates...");
                 
                 const toKeep = premiumSubscriptions[0];
                 const toRemove = premiumSubscriptions.slice(1);
@@ -164,7 +163,7 @@ export async function POST(req: NextRequest) {
                   if (deleteError) {
                     console.error(`❌ Failed to deactivate duplicate premium subscription ${duplicate.id}:`, deleteError);
                   } else {
-                    console.log(`✅ Deactivated duplicate premium subscription ${duplicate.id}`);
+                    // console.log(`✅ Deactivated duplicate premium subscription ${duplicate.id}`);
                   }
                 }
               }
@@ -174,34 +173,34 @@ export async function POST(req: NextRequest) {
             }
         }
       }
-      // } else if (session.mode === "subscription") {
-      //   console.log("🔄 Processing SUBSCRIPTION payment");
-      //   console.log("Creating subscription record from checkout session (metadata available here)");
+       else if (session.mode === "subscription") {
+        // console.log("🔄 Processing SUBSCRIPTION payment");
+        // console.log("Creating subscription record from checkout session (metadata available here)");
         
-      //   const insertData = {
-      //     stripe_customer_id: session.customer as string,
-      //     stripe_subscription_id: session.subscription as string, // Get from checkout session
-      //     plan: "premium",
-      //     status: "active", // Assume active since payment completed
-      //     ifc_user_id: session.metadata?.ifc_user_id,
-      //     current_period_end: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // Default to 30 days from now
-      //     cancel_at: null,
-      //   };
+        const insertData = {
+          stripe_customer_id: session.customer as string,
+          stripe_subscription_id: session.subscription as string, // Get from checkout session
+          plan: "premium",
+          status: "active", // Assume active since payment completed
+          ifc_user_id: session.metadata?.ifc_user_id,
+          current_period_end: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // Default to 30 days from now
+          cancel_at: null,
+        };
         
-      //   console.log("📝 About to insert premium subscription from checkout:", JSON.stringify(insertData, null, 2));
+        // console.log("📝 About to insert premium subscription from checkout:", JSON.stringify(insertData, null, 2));
         
-      //   const { data, error } = await supabaseAdmin
-      //     .from("subscriptions")
-      //     .insert(insertData);
+        const { data, error } = await supabaseAdmin
+          .from("subscriptions")
+          .insert(insertData);
 
-      //   if (error) {
-      //     console.error("❌ FAILED to insert premium subscription from checkout:");
-      //     console.error("Error details:", JSON.stringify(error, null, 2));
-      //   } else {
-      //     console.log("✅ SUCCESS! Premium subscription inserted from checkout:");
-      //     console.log("Inserted data:", JSON.stringify(data, null, 2));
-      //   }
-      // }
+        if (error) {
+          console.error("❌ FAILED to insert premium subscription from checkout:");
+          console.error("Error details:", JSON.stringify(error, null, 2));
+        } else {
+          // console.log("✅ SUCCESS! Premium subscription inserted from checkout:");
+          // console.log("Inserted data:", JSON.stringify(data, null, 2));
+        }
+      }
       break;
 
     // Subscription Created
@@ -239,13 +238,13 @@ export async function POST(req: NextRequest) {
         // Cancel the new duplicate subscription
         try {
           await stripe.subscriptions.cancel(subCreated.id);
-          console.log(`Cancelled duplicate subscription: ${subCreated.id}`);
+          // console.log(`Cancelled duplicate subscription: ${subCreated.id}`);
         } catch (err) {
           console.error("Failed to cancel duplicate subscription:", err);
         }
       } else {
         // Insert the new subscription into database
-        console.log("🔄 Inserting new premium subscription into database");
+       // console.log("🔄 Inserting new premium subscription into database");
         
         const subscriptionItem = subCreated.items.data[0];
         const currentPeriodEnd = subscriptionItem?.current_period_end ?? 0;
@@ -270,8 +269,8 @@ export async function POST(req: NextRequest) {
           console.error("❌ FAILED to insert premium subscription:");
           console.error("Error details:", JSON.stringify(error, null, 2));
         } else {
-          console.log("✅ SUCCESS! Premium subscription inserted:");
-          console.log("Inserted data:", JSON.stringify(data, null, 2));
+          // console.log("✅ SUCCESS! Premium subscription inserted:");
+          // console.log("Inserted data:", JSON.stringify(data, null, 2));
         }
       }
 
@@ -310,7 +309,7 @@ export async function POST(req: NextRequest) {
       if (updatedSubscriptionError) {
         console.error("Error updating subscription:", updatedSubscriptionError);
       } else {
-        console.log("Subscription updated:", updatedSubscriptionData);
+        // console.log("Subscription updated:", updatedSubscriptionData);
       }
       break;
 
@@ -328,7 +327,7 @@ export async function POST(req: NextRequest) {
       if (deletedSubscriptionError) {
         console.error("Error deleting subscription:", deletedSubscriptionError);
       } else {
-        console.log("Subscription deleted:", deletedSubscriptionData);
+        // console.log("Subscription deleted:", deletedSubscriptionData);
       }
 
       break;
@@ -399,7 +398,7 @@ export async function POST(req: NextRequest) {
     console.log("🎲 Randomly triggering subscription cleanup...");
     setTimeout(async () => {
       try {
-        console.log("🧹 Starting automated cleanup...");
+        // console.log("🧹 Starting automated cleanup...");
         
         // Delete inactive subscriptions older than 30 days
         const thirtyDaysAgo = new Date();
@@ -414,7 +413,7 @@ export async function POST(req: NextRequest) {
         if (error) {
           console.error("Automated cleanup failed:", error);
         } else {
-          console.log(`Cleanup complete: Removed old inactive subscriptions`);
+          // console.log(`Cleanup complete: Removed old inactive subscriptions`);
         }
         
       } catch (cleanupError) {

@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import iflyticsLogo from "@/public/infinilyticslogo.svg";
 import iflyticsLogoLight from "@/public/iflyticslight.svg";
+import { getAppVersion } from "@/lib/foo";
 const Pathname = () => {
   return (
     <div className="relative">
@@ -27,13 +28,13 @@ const Pathname = () => {
           height={32}
           className="hidden dark:block"
         />
-        <span className="dark:text-light bg-gradient-to-r from-gray-600 via-dark to-gray-600 bg-clip-text text-transparent animate-gradient-x bg-[length:200%_auto] pr-0.5">
-          <span className="text-purple-500 dark:text-purple-300">IF</span>lytics
+        <span className="bg-gradient-to-r from-[#ff879b] to-[#ffc49c] dark:from-[#0080ff] dark:via-light dark:to-light bg-clip-text text-transparent animate-gradient-x bg-[length:200%_auto] pr-0.5">
+          IFlytics
         </span>
       </Link>
 
-      <span className="text-[10px] font-semibold text-white bg-purple-500 rounded-full absolute -bottom-4 left-5 px-2 py-0.10 shadow-lg z-100">
-        Almost Ready!
+      <span className="text-[10px] font-semibold text-white bg-gradient-to-r from-[#ff879b] to-[#ffc49c] dark:from-[#1e90ff] dark:to-[#99badd] rounded-full absolute -bottom-4 left-5 px-2 py-0.10 shadow-lg z-100">
+        Version {getAppVersion()}
       </span>
     </div>
   );

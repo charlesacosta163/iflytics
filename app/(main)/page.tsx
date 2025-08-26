@@ -27,12 +27,10 @@ import {
 import { faqData } from "@/lib/data";
 import { InlineThemeSwitcher } from "@/components/inline-theme-switcher";
 import { Badge } from "@/components/ui/badge";
-import ReleaseTimer from "@/components/dashboard-ui/release-timer";
 
 export default function Home() {
   return (
     <div className="min-h-screen w-full">
-      <ReleaseTimer />
       {/* Hero Section - Compact & Mobile-Friendly */}
       <section className="h-auto lg:h-[90svh] max-w-[1000px] w-full mx-auto flex justify-center items-center">
         {/* Animated Background Elements */}
@@ -42,7 +40,7 @@ export default function Home() {
           <div className="absolute top-1/3 right-1/4 w-48 h-48 bg-gradient-to-r from-purple-400/5 to-gray-400/5 rounded-full blur-2xl animate-float"></div>
         </div>
 
-        <div className="container w-full flex flex-col lg:flex-row items-center gap-8 p-4 lg:p-6 relative z-10">
+        <div className="container w-full flex flex-col lg:flex-row items-center gap-8 p-4 py-8 lg:p-6 relative z-10">
           <div className="flex-1 flex flex-col gap-4 lg:gap-8">
             <header className="flex flex-col items-center lg:items-start gap-4 lg:gap-6">
               
@@ -50,7 +48,10 @@ export default function Home() {
               <div className="text-center lg:text-left animate-fade-in-up">
                 <h1 className="text-4xl lg:text-6xl font-black tracking-tighter mb-4 lg:mb-6 relative text-gray-700 dark:text-gray-100 leading-tight text-balance">
                   Transform Your Flight Data Into 
-                  <span className="block text-blue-600 dark:text-blue-400">Powerful Insights</span>
+                  <span className="block bg-gradient-to-r from-[#ff6982] to-[#ffd2b3] dark:from-[#0080ff] dark:to-light bg-clip-text text-transparent animate-gradient-x bg-[length:200%_auto] lg:border-b-6  [border-image:linear-gradient(to_right,#ff6982,#ffd2b3)_1] dark:[border-image:linear-gradient(to_right,#0080ff,#00e0ff)_1]">
+  Powerful Insights
+</span>
+
                 </h1>
                 <p className="text-gray-600 dark:text-gray-300 tracking-tight lg:text-2xl font-medium animate-fade-in-up delay-200 mb-4 lg:mb-6">
                   See how you've grown as a pilot with detailed analytics, route maps, and performance tracking for every flight.
@@ -58,38 +59,26 @@ export default function Home() {
               </div>
 
               {/* Logo and Brand - Supporting Role */}
-              <div className="flex items-center gap-3 animate-fade-in-up delay-300">
-                <div className="relative group">
-                  <div className="absolute -inset-2 bg-gradient-to-r from-blue-400/15 to-purple-400/15 rounded-full blur-lg opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
-                  
-                  {/* Dark mode logo (default) */}
-                  <Image 
-                    src={iflyticsLogoLight} 
-                    alt="IFlytics Logo" 
-                    width={60} 
-                    height={60}
-                    className="relative w-[60px] h-[60px] group-hover:scale-105 transition-transform duration-300 dark:block hidden opacity-75"
-                  />
-                  
-                  {/* Light mode logo */}
-                  <Image 
-                    src={iflyticsLogo} 
-                    alt="IFlytics Logo Light" 
-                    width={60} 
-                    height={60}
-                    className="relative w-[60px] h-[60px] group-hover:scale-105 transition-transform duration-300 dark:hidden block"
-                  />
-                </div>
-                
-                <div>
-                  <h2 className="text-2xl font-black tracking-tight text-gray-900 dark:text-gray-100">
-                    <span className="text-purple-500 dark:text-purple-300">IF</span>lytics
-                  </h2>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 font-medium">
-                    For Infinite Flight Pilots
-                  </p>
-                </div>
-              </div>
+              <div className="flex items-center gap-3 animate-fade-in-up delay-300
+  bg-gradient-to-r from-[#ff6982] to-[#ffd2b3] dark:from-[#0080ff] dark:to-[#00e0ff]
+  animate-gradient-x bg-[length:200%_auto] p-4 rounded-lg">
+  <div className="group">
+    {/* dark logo */}
+    <Image src={iflyticsLogoLight} alt="IFlytics Logo" width={60} height={60}
+      className="w-[60px] h-[60px] group-hover:scale-105 transition-transform duration-300 block opacity-75" />
+   
+  </div>
+
+  <div>
+    <h2 className="text-2xl font-black tracking-tight text-light">
+      IFlytics
+    </h2>
+    <p className="text-sm text-light font-medium">
+      For Infinite Flight Pilots
+    </p>
+  </div>
+</div>
+
             </header>
 
             {/* Enhanced Feature Points - Desktop Only */}
@@ -98,7 +87,7 @@ export default function Home() {
 
           {/* Enhanced Form Section */}
           <div className="flex-1 flex flex-col gap-4 lg:gap-6 items-center animate-slide-in-right delay-300 w-full relative">
-            <Badge className="absolute -top-2 left-1/2 -translate-x-1/2 z-50 bg-gradient-to-r from-[#ff879b] to-[#ffc49c] dark:from-[#1e90ff] dark:to-[#99badd] text-light font-bold tracking-tight">August 25th! Big Discounts on Launch!</Badge>
+            <Badge className="absolute -top-2 left-1/2 -translate-x-1/2 z-50 bg-gradient-to-r from-[#ff879b] to-[#ffc49c] dark:from-[#1e90ff] dark:to-[#99badd] text-light font-bold tracking-tight">View the Launch Codes in the IFC Post! Ends on <u>Sept. 25th!</u></Badge>
             {/* Form with Enhanced Styling */}
             <div className="relative group w-full max-w-[500px]">
               {/* <div className="absolute -inset-1 bg-gradient-to-r from-gray-400 via-blue-400 to-gray-400 rounded-[24px] blur opacity-15 group-hover:opacity-30 transition-all duration-1000 animate-gradient-x bg-[length:200%_auto]"></div> */}
@@ -665,8 +654,8 @@ export default function Home() {
           {/* Stats Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
-              { number: "30K+", label: "Flights Tracked", gradient: "from-blue-400 to-blue-600", icon: <TbPlaneInflight className="text-blue-400"/>, delay: "delay-100" },
-              { number: "200+", label: "Active Users", gradient: "from-green-400 to-green-600", icon: <RiCopilotFill className="text-green-400"/>, delay: "delay-200" },
+              { number: "50K+", label: "Flights Tracked", gradient: "from-blue-400 to-blue-600", icon: <TbPlaneInflight className="text-blue-400"/>, delay: "delay-100" },
+              { number: "225+", label: "Active Users", gradient: "from-green-400 to-green-600", icon: <RiCopilotFill className="text-green-400"/>, delay: "delay-200" },
               { number: "24/7", label: "Live Updates", gradient: "from-orange-400 to-orange-600", icon: <LuCalendarClock className="text-orange-400"/>, delay: "delay-400" }
             ].map((stat, index) => (
               <div key={index} className={`group text-center p-8 bg-gradient-to-br from-gray/30 to-gray/50 backdrop-blur-xl rounded-2xl border border-gray-600/30 hover:border-gray-400/50 transition-all duration-500 hover:scale-105 animate-slide-in-up ${stat.delay} relative overflow-hidden flex flex-col items-center justify-center`}>
@@ -784,7 +773,7 @@ export default function Home() {
                 </div>
 
                 <button className="w-full bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 py-3 rounded-xl font-semibold hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-300 italic">
-                  Open Beta - Premium Access
+                  Forever Free
                 </button>
               </div>
             </div>
@@ -854,9 +843,9 @@ export default function Home() {
                   </div>
                 </div>
 
-                <button className="w-full bg-gradient-to-r from-blue-500 to-purple-500 text-white py-3 rounded-xl font-semibold hover:from-blue-600 hover:to-purple-600 transition-all duration-300 shadow-lg hover:shadow-blue-500/25">
-                  Available on Official Release
-                </button>
+                <Link href="/dashboard/profile" className="w-full bg-gradient-to-r from-blue-500 to-purple-500 text-white py-3 px-2 rounded-xl font-semibold hover:from-blue-600 hover:to-purple-600 transition-all duration-300 shadow-lg hover:shadow-blue-500/25 text-center">
+                  Please go to the Billing section in your Profile to subscribe
+                </Link>
               </div>
             </div>
 
@@ -891,9 +880,9 @@ export default function Home() {
                   </div>
                 </div>
 
-                <button className="w-full bg-gradient-to-r from-blue-500 to-purple-500 text-white py-3 rounded-xl font-semibold hover:from-blue-600 hover:to-purple-600 transition-all duration-300 shadow-lg hover:shadow-blue-500/25">
-                  Available on Official Release
-                </button>
+                <Link href="/dashboard/profile" className="w-full bg-gradient-to-r from-blue-500 to-purple-500 text-white py-3 px-2 rounded-xl font-semibold hover:from-blue-600 hover:to-purple-600 transition-all duration-300 shadow-lg hover:shadow-blue-500/25 text-center">
+                  Please go to the Billing section in your Profile to subscribe
+                </Link>
               </div>
             </div>
 

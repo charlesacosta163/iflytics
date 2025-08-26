@@ -23,16 +23,19 @@ import FlightsOverview from "@/components/dashboard-ui/flights/flights-overview"
 import { getAirportCoordinates } from "@/lib/actions";
 import FlightsDisplay from "@/components/dashboard-ui/flights/flights-display";
 import FlightsRoutes from "@/components/dashboard-ui/flights/flights-routes";
-import { FaHistory, FaPlane, FaRoute } from "react-icons/fa";
+import { FaClock, FaGlobe, FaHistory, FaLock, FaMapMarkedAlt, FaPlane, FaRoute } from "react-icons/fa";
 import { FaChartLine } from "react-icons/fa";
 import { Metadata } from 'next'
 import Link from "next/link";
 import FlightsAircraft from "@/components/dashboard-ui/flights/flights-aircraft";
-import { MdOutlineFlightTakeoff } from "react-icons/md";
+import { MdAirlineSeatFlat, MdOutlineAirlines, MdOutlineFlightTakeoff } from "react-icons/md";
 
 // Subscriptions
 import { getUserSubscription } from "@/lib/subscription/subscription";
 import { hasPremiumAccess, Subscription } from '@/lib/subscription/helpers';
+import { TbLock } from "react-icons/tb";
+import { Badge } from "@/components/ui/badge";
+import GroupedSubscriptionButtons from "@/components/dashboard-ui/grouped-sub-btns";
 
 let aircraftAnalysisMaintainance = false
 
@@ -125,7 +128,7 @@ const FlightsPage = async ({searchParams}: { searchParams: Promise<{ [key: strin
       </div>
 
       {/* Tabs */}
-      <Tabs defaultValue="overview" className="w-full">
+      <Tabs defaultValue="routes" className="w-full">
       <TabsList className="w-full bg-gray-500 p-1 rounded-full mb-2">
         <TabsTrigger value="overview" className="data-[state=active]:bg-gray-700 data-[state=active]:text-white data-[state=inactive]:bg-transparent data-[state=inactive]:text-gray-300 transition-all duration-200 rounded-full flex flex-col sm:flex-row gap-1 sm:gap-2 items-center px-2 sm:px-4">
           <FaChartLine className="w-4 h-4 sm:w-5 sm:h-5 text-light" />
@@ -138,13 +141,35 @@ const FlightsPage = async ({searchParams}: { searchParams: Promise<{ [key: strin
         </TabsTrigger>
         
         <TabsTrigger value="routes" className="data-[state=active]:bg-gray-700 data-[state=active]:text-white data-[state=inactive]:bg-transparent data-[state=inactive]:text-gray-300 transition-all duration-200 rounded-full flex flex-col sm:flex-row gap-1 sm:gap-2 items-center px-2 sm:px-4">
-          <FaRoute className="w-4 h-4 sm:w-5 sm:h-5 text-light" />
-          <span className="hidden sm:inline text-xs sm:text-sm">Routes</span>
+          {
+            hasPremiumAccess(subscription as Subscription) ? (
+              <>
+                <FaRoute className="w-4 h-4 sm:w-5 sm:h-5 text-light" />
+                <span className="hidden sm:inline text-xs sm:text-sm">Routes</span>
+              </>
+            ) : (
+              <>
+                <FaLock className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-400" />
+                <span className="hidden sm:inline text-xs sm:text-sm text-yellow-300">Routes</span>
+              </>
+            )
+          }
         </TabsTrigger>
         
           <TabsTrigger value="aircraft" className="data-[state=active]:bg-gray-700 data-[state=active]:text-white data-[state=inactive]:bg-transparent data-[state=inactive]:text-gray-300 transition-all duration-200 rounded-full flex flex-col sm:flex-row gap-1 sm:gap-2 items-center px-2 sm:px-4">
-            <FaPlane className="w-4 h-4 sm:w-5 sm:h-5 text-light" />
-            <span className="hidden sm:inline text-xs sm:text-sm">Aircraft</span>
+            {
+              hasPremiumAccess(subscription as Subscription) ? (
+                <>
+                  <FaPlane className="w-4 h-4 sm:w-5 sm:h-5 text-light" />
+                  <span className="hidden sm:inline text-xs sm:text-sm">Aircraft</span>
+                </>
+            ) : (
+              <>
+                <FaLock className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-400" />
+                <span className="hidden sm:inline text-xs sm:text-sm text-yellow-300">Aircraft</span>
+              </>
+            )
+          }
           </TabsTrigger>
   
       </TabsList>
@@ -170,8 +195,37 @@ const FlightsPage = async ({searchParams}: { searchParams: Promise<{ [key: strin
         {hasPremiumAccess(subscription as Subscription) ? (
           <FlightsRoutes flights={allFlights} user={user} subscription={subscription as Subscription} role={subscription.role}/>
         ) : (
-          <div className="text-center text-gray-500">
-            <p>You need to be a premium/lifetime user to access route analysis.</p>
+          <div className="rounded-lg h-screen w-full flex flex-col items-center justify-center dark:bg-[url('/images/subscriptions/routeanalysis.png')] bg-[url('/images/subscriptions/routeanalysislight.png')] bg-cover bg-center relative overflow-hidden">
+            
+            <div className="absolute top-0 left-0 w-full h-full bg-black/80 p-8 flex flex-col gap-4 overflow-y-auto">
+
+                <header>
+                  <h1 className="text-4xl lg:text-6xl font-bold tracking-tight bg-gradient-to-r from-[#ff879b] to-[#ffe4d2] dark:from-[#0080ff] dark:via-light dark:to-light bg-clip-text text-transparent ">Route Analysis</h1>
+                  <p className="text-gray-300">
+                    View your flight routes and analyze your flight patterns in a detailed way.
+                  </p>
+
+                  <blockquote className="text-gray-300 mt-4 text-sm font-bold">Requires <Badge className="bg-yellow-500 text-dark">Premium</Badge> or <Badge className="bg-green-600 text-light">Lifetime</Badge> Subscription</blockquote>
+
+                    <GroupedSubscriptionButtons />
+                </header>
+
+                <h2 className="text-2xl font-bold text-light">Features:</h2>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {routeAnalysisFeatures.map((feature, index) => (
+                    <div key={index} className="flex flex-col gap-2 bg-gray-700/60 p-4 rounded-lg">
+                      <div className="flex items-center gap-2 text-light">
+                        {feature.icon}
+                        <h3 className="text-lg font-bold text-light">{feature.title}</h3>
+                      </div>
+                      <p className="text-gray-300">{feature.description}</p>
+                    </div>
+                  ))}
+                </div>
+                
+              
+            </div>
           </div>
         )}
       </TabsContent>
@@ -180,9 +234,38 @@ const FlightsPage = async ({searchParams}: { searchParams: Promise<{ [key: strin
           {hasPremiumAccess(subscription as Subscription) ? (
             <FlightsAircraft flights={allFlights} user={user} role={subscription.role} />
           ) : (
-            <div className="text-center text-gray-500">
-              <p>You need to be a premium/lifetime user to access aircraft analysis.</p>
+            <div className="rounded-lg h-screen w-full flex flex-col items-center justify-center dark:bg-[url('/images/subscriptions/aircraftanalysis.png')] bg-[url('/images/subscriptions/aircraftanalysislight.png')] bg-cover bg-center relative overflow-hidden">
+            
+            <div className="absolute top-0 left-0 w-full h-full bg-black/80 p-8 flex flex-col gap-4 overflow-y-auto">
+
+                <header>
+                  <h1 className="text-4xl lg:text-6xl font-bold tracking-tight bg-gradient-to-r dark:from-[#ff879b] dark:to-[#ffe4d2] from-[#0080ff] via-light to-light bg-clip-text text-transparent ">Aircraft Analysis</h1>
+                  <p className="text-gray-300">
+                    View your aircraft usage and analyze your flight patterns in a detailed way.
+                  </p>
+
+                  <blockquote className="text-gray-300 mt-4 text-sm font-bold">Requires <Badge className="bg-yellow-500 text-dark">Premium</Badge> or <Badge className="bg-green-600 text-light">Lifetime</Badge> Subscription</blockquote>
+
+                  <GroupedSubscriptionButtons />
+                </header>
+
+                <h2 className="text-2xl font-bold text-light">Features:</h2>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {aircraftAnalysisFeatures.map((feature, index) => (
+                    <div key={index} className="flex flex-col gap-2 bg-gray-700/60 p-4 rounded-lg">
+                      <div className="flex items-center gap-2 text-light">
+                        {feature.icon}
+                        <h3 className="text-lg font-bold text-light">{feature.title}</h3>
+                      </div>
+                      <p className="text-gray-300">{feature.description}</p>
+                    </div>
+                  ))}
+                </div>
+                
+              
             </div>
+          </div>
           )}
         </TabsContent>
     </Tabs>
@@ -191,3 +274,115 @@ const FlightsPage = async ({searchParams}: { searchParams: Promise<{ [key: strin
 };
 
 export default FlightsPage;
+
+
+const routeAnalysisFeatures = [
+  {
+    icon: <FaMapMarkedAlt />,
+    title: "Interactive Route Map",
+    description: "Visualize your flight routes on an interactive map with all your destinations.",
+  },
+  {
+    icon: <FaRoute />,
+    title: "Distance Analytics",
+    description: "Track total distance traveled in nautical miles, miles, and kilometers with longest route details.",
+  },
+  {
+    icon: <FaGlobe />,
+    title: "Top Countries Analysis",
+    description: "See your top 5 most visited countries with flight counts and percentages.",
+  },
+  {
+    icon: <FaClock />,
+    title: "Flight Duration Categories",
+    description: "Analyze your flights by short, medium, and long haul categories with visual charts.",
+  },
+  {
+    icon: <FaGlobe />,
+    title: "Continental Breakdown",
+    description: "View your flight distribution across different continents with color-coded charts.",
+  },
+  {
+    icon: <FaGlobe />,
+    title: "Domestic vs International",
+    description: "Compare your domestic and international flight patterns with detailed statistics.",
+  },
+  {
+    icon: <FaRoute />,
+    title: "Route Frequency Analysis",
+    description: "Identify your most frequently flown routes with detailed counts and patterns.",
+  },
+  {
+    icon: <FaClock />,
+    title: "Flight Time Categorization",
+    description: "Break down your flights by time categories for better pattern recognition.",
+  },
+  {
+    icon: <FaGlobe />,
+    title: "Export Capabilities",
+    description: "Download your route data in CSV format for external analysis. (EXCLUSIVE FOR LIFETIME SUBSCRIBERS)",
+  },
+  {
+    icon: <FaClock />,
+    title: "Real-time Updates",
+    description: "Refresh your route data to get the latest flight information and statistics.",
+  }
+]
+
+const aircraftAnalysisFeatures = [
+  {
+    icon: <FaPlane />,
+    title: "Aircraft Usage Statistics",
+    description: "Track how many unique aircraft you've flown and your total flight count across all aircraft.",
+  },
+  {
+    icon: <FaChartLine />,
+    title: "Most Used Aircraft Analysis",
+    description: "Identify your favorite aircraft with detailed statistics including flight count, total time, and distance.",
+  },
+  {
+    icon: <FaRoute />,
+    title: "Aircraft Performance Metrics",
+    description: "View comprehensive data on each aircraft including flight frequency, total distance, and last usage date.",
+  },
+  {
+    icon: <FaGlobe />,
+    title: "Aircraft Brands Breakdown",
+    description: "Analyze your aircraft preferences by manufacturer with visual charts and statistics.",
+  },
+  {
+    icon: <FaClock />,
+    title: "Flight Time Tracking",
+    description: "Monitor total time spent in each aircraft type and average flight duration per aircraft.",
+  },
+  {
+    icon: <FaMapMarkedAlt />,
+    title: "Distance Analysis",
+    description: "Track total distance covered by each aircraft in nautical miles, miles, and kilometers.",
+  },
+  {
+    icon: <MdOutlineAirlines   />,
+    title: "Airline Analysis",
+    description: "See all your top airlines with total flights, accounts CALLSIGN USED FOR THE FLIGHT.",
+  },
+  {
+    icon: <FaHistory />,
+    title: "Usage History",
+    description: "View detailed history of when each aircraft was last used and your flying patterns over time.",
+  },
+  {
+    icon: <FaChartLine />,
+    title: "Performance Comparison",
+    description: "Compare different aircraft types based on usage frequency, distance, and flight duration.",
+  },
+  {
+    icon: <FaPlane />,
+    title: "Aircraft Fleet Overview",
+    description: "Get a comprehensive overview of your entire aircraft fleet with detailed statistics and insights.",
+  },
+  {
+    icon: <FaGlobe />,
+    title: "Advanced Analytics",
+    description: "Access detailed charts and visualizations showing your aircraft usage patterns and preferences.",
+  }
+]

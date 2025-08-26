@@ -9,8 +9,10 @@ import { useRouter, useSearchParams, usePathname } from 'next/navigation'
 import { FaStar } from 'react-icons/fa6'
 import { IoWarningOutline } from 'react-icons/io5'
 import { hasPremiumAccess, Subscription } from '@/lib/subscription/helpers';
+import { TbClock } from 'react-icons/tb'
+import { LiaPlaneDepartureSolid } from 'react-icons/lia'
 
-let ENABLE_CUSTOM_FLIGHT_FRAME = false;
+let ENABLE_CUSTOM_FLIGHT_FRAME = true;
 
 const SelectTimeframeButton = ({ subscription }: { subscription: Subscription }) => {
   const router = useRouter();
@@ -53,7 +55,7 @@ const SelectTimeframeButton = ({ subscription }: { subscription: Subscription })
         </SelectValue>
       </SelectTrigger>
       <SelectContent className="font-medium">
-        <div className="text-xs text-gray-500 font-semibold bg-gray-100 px-2 py-1 rounded-md text-center">Time Frames</div>
+        <div className="text-xs text-gray-500 font-semibold bg-gray-100 px-2 py-1 rounded-md text-center flex items-center gap-2 justify-center">Time Frames <TbClock className="text-gray-500" /></div>
         <SelectItem value="day-1">Last 24 Hours</SelectItem>
         <SelectItem value="day-7">Last 7 Days</SelectItem>
         <SelectItem value="day-30">Last 30 Days</SelectItem>
@@ -62,7 +64,7 @@ const SelectTimeframeButton = ({ subscription }: { subscription: Subscription })
         {hasPremiumAccess(subscription) ? (
           <>
             <div className="text-xs text-gray-500 font-semibold bg-amber-200 px-2 py-1 rounded-md text-center flex items-center justify-center gap-2">
-              Flight Frames <FaStar className="text-yellow-500" />
+              Flight Frames <LiaPlaneDepartureSolid className="" />
             </div>
             
             <SelectItem value="flight-10">Last 10 Flights</SelectItem>
@@ -70,9 +72,7 @@ const SelectTimeframeButton = ({ subscription }: { subscription: Subscription })
             <SelectItem value="flight-100">Last 100 Flights</SelectItem>
             <SelectItem value="flight-250">Last 250 Flights</SelectItem>
             <SelectItem value="flight-500">Last 500 Flights</SelectItem>
-            <SelectItem value="flight-800" className="flex items-center gap-1">
-              Last 800 Flights <IoWarningOutline className="text-yellow-500" />
-            </SelectItem>
+            <SelectItem value="flight-800">Last 800 Flights</SelectItem>
 
             {(ENABLE_CUSTOM_FLIGHT_FRAME || subscription.role === "tester" || subscription.role === "admin") && (
               <Dialog>
@@ -114,7 +114,7 @@ const SelectTimeframeButton = ({ subscription }: { subscription: Subscription })
             )}
           </>
         ) : (
-          <div className="text-xs text-gray-500 px-2 py-1 rounded-md text-center">
+          <div className="text-xs text-gray-500 px-2 py-1 rounded-md text-center bg-yellow-200">
             ⭐️ Upgrade to Premium for Flight Frames
           </div>
         )}
