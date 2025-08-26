@@ -67,6 +67,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
 
+  const inMaintenance = true;
+
+    if (inMaintenance) {
+        return (
+            <div className="h-screen flex">
+                <div className="flex-1 flex flex-col items-center justify-center">
+                    <h1 className="text-4xl font-bold">Maintenance Mode</h1>
+                    <p className="text-lg text-gray-600">We are currently performing maintenance on the IFlytics platform. Please check back later.</p>
+                </div>
+            </div>
+        );
+    }
+
   return (
     <html lang="en" suppressHydrationWarning>
       <head>

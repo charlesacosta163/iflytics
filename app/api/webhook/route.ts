@@ -92,7 +92,7 @@ export async function POST(req: NextRequest) {
           if (deactivateError) {
             console.error("❌ Failed to deactivate old premium subscription:", deactivateError);
           } else {
-            // console.log("🔄 Successfully deactivated old premium subscription");
+            console.log("🔄 Successfully deactivated old premium subscription");
           }
 
         // Cleanup duplicate subscriptions
@@ -149,7 +149,7 @@ export async function POST(req: NextRequest) {
 
               // Handle premium duplicates (in case of premium subscriptions)
               if (premiumSubscriptions.length > 1) {
-                // console.log("🚨 Multiple premium subscriptions detected, removing duplicates...");
+                console.log("🚨 Multiple premium subscriptions detected, removing duplicates...");
                 
                 const toKeep = premiumSubscriptions[0];
                 const toRemove = premiumSubscriptions.slice(1);
@@ -163,7 +163,7 @@ export async function POST(req: NextRequest) {
                   if (deleteError) {
                     console.error(`❌ Failed to deactivate duplicate premium subscription ${duplicate.id}:`, deleteError);
                   } else {
-                    // console.log(`✅ Deactivated duplicate premium subscription ${duplicate.id}`);
+                    console.log(`✅ Deactivated duplicate premium subscription ${duplicate.id}`);
                   }
                 }
               }
@@ -238,13 +238,13 @@ export async function POST(req: NextRequest) {
         // Cancel the new duplicate subscription
         try {
           await stripe.subscriptions.cancel(subCreated.id);
-          // console.log(`Cancelled duplicate subscription: ${subCreated.id}`);
+          console.log(`Cancelled duplicate subscription: ${subCreated.id}`);
         } catch (err) {
           console.error("Failed to cancel duplicate subscription:", err);
         }
       } else {
         // Insert the new subscription into database
-       // console.log("🔄 Inserting new premium subscription into database");
+        console.log("🔄 Inserting new premium subscription into database");
         
         const subscriptionItem = subCreated.items.data[0];
         const currentPeriodEnd = subscriptionItem?.current_period_end ?? 0;
@@ -269,8 +269,8 @@ export async function POST(req: NextRequest) {
           console.error("❌ FAILED to insert premium subscription:");
           console.error("Error details:", JSON.stringify(error, null, 2));
         } else {
-          // console.log("✅ SUCCESS! Premium subscription inserted:");
-          // console.log("Inserted data:", JSON.stringify(data, null, 2));
+          console.log("✅ SUCCESS! Premium subscription inserted:");
+          console.log("Inserted data:", JSON.stringify(data, null, 2));
         }
       }
 
@@ -309,7 +309,7 @@ export async function POST(req: NextRequest) {
       if (updatedSubscriptionError) {
         console.error("Error updating subscription:", updatedSubscriptionError);
       } else {
-        // console.log("Subscription updated:", updatedSubscriptionData);
+        console.log("Subscription updated:", updatedSubscriptionData);
       }
       break;
 
@@ -327,7 +327,7 @@ export async function POST(req: NextRequest) {
       if (deletedSubscriptionError) {
         console.error("Error deleting subscription:", deletedSubscriptionError);
       } else {
-        // console.log("Subscription deleted:", deletedSubscriptionData);
+        console.log("Subscription deleted:", deletedSubscriptionData);
       }
 
       break;
@@ -398,7 +398,7 @@ export async function POST(req: NextRequest) {
     console.log("🎲 Randomly triggering subscription cleanup...");
     setTimeout(async () => {
       try {
-        // console.log("🧹 Starting automated cleanup...");
+        console.log("🧹 Starting automated cleanup...");
         
         // Delete inactive subscriptions older than 30 days
         const thirtyDaysAgo = new Date();
@@ -413,7 +413,7 @@ export async function POST(req: NextRequest) {
         if (error) {
           console.error("Automated cleanup failed:", error);
         } else {
-          // console.log(`Cleanup complete: Removed old inactive subscriptions`);
+          console.log(`Cleanup complete: Removed old inactive subscriptions`);
         }
         
       } catch (cleanupError) {
