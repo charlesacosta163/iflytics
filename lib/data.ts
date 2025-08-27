@@ -3613,6 +3613,22 @@ export const customUserImages = [
     "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/delta174j/288/1542262_2.png"
   )}&w=64&h=64&fit=cover&mask=circle`,
 },
+{
+  id: 257,
+  role: "user",
+  username: "WML",
+  image: `https://images.weserv.nl/?url=${encodeURIComponent(
+    "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/wml/288/312563_2.png"
+  )}&w=64&h=64&fit=cover&mask=circle`,
+},
+{
+  id: 258,
+  role: "user",
+  username: "IF.Georgia",
+  image: `https://images.weserv.nl/?url=${encodeURIComponent(
+    "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/if.georgia/288/1562030_2.png"
+  )}&w=64&h=64&fit=cover&mask=circle`,
+}
 ];
 
 export const aircraftIcaoCodes = [
