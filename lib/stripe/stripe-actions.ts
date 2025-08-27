@@ -9,12 +9,23 @@ export async function getUserSubscription(userId: string) {
     .select('*')
     .eq('ifc_user_id', userId)
     .eq('status', 'active')
-    .single();
+    .order('created_at', { ascending: false }); // Get newest first
 
   if (error) {
-    // console.error('Error fetching subscription:', error);
+    console.error('Error fetching subscription:', error);
     return null;
   }
 
-  return data;
+  if (!data || data.length === 0) {
+    return null;
+  }
+
+  // If multiple subscriptions, prioritize lifetime over premium
+  const lifetimeSub = data.find(sub => sub.plan === 'lifetime');
+  if (lifetimeSub) {
+    return lifetimeSub;
+  }
+
+  // Otherwise return the most recent premium subscription
+  return data[0];
 }

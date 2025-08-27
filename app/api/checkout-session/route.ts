@@ -42,7 +42,7 @@ export async function POST(req: Request) {
     cancel_url: 'https://iflytics.app/dashboard/profile',
   });
 
-  console.log(session);
+  // console.log(session);
 
   return NextResponse.json({ url: session.url });
 }

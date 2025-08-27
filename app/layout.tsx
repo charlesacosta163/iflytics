@@ -67,7 +67,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
 
-  const inMaintenance = true;
+  const inMaintenance = false;
 
     if (inMaintenance) {
         return (

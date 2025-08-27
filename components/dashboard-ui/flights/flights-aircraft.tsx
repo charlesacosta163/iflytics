@@ -274,8 +274,7 @@ const FlightsAircraft = async ({ flights, user, role }: { flights: Flight[], use
         <>
           <AircraftUsageTable analysisData={analysisData} flightsAmountRaw={flights.length} allFlightsWithDistances={routesWithDistances} />
 
-          {/* FEATURE AVAILABLE ON RELEASE */}
-          {(role === "tester" || role === "admin") && <AirlineAnalysisCard routesWithDistances={routesWithDistances} />}
+          <AirlineAnalysisCard routesWithDistances={routesWithDistances} />
           
           <AircraftBrandsCard allAircraft={analysisData.aircraftStats} />
         </>

@@ -35,7 +35,7 @@ const Sidebar = () => {
 
         <header className="px-6 py-4 border-b border-gray-200 dark:border-gray-800 relative">
             <span className="text-xs font-medium absolute -bottom-2.5 left-1/2 -translate-x-1/2 bg-gradient-to-r from-[#ff6982] to-[#ffd2b3] dark:from-[#0080ff] dark:to-[#00e0ff] text-white px-2 py-0.5 rounded-full">
-              Version {getAppVersion()}
+              {getAppVersion()}
             </span>
 
             <Link

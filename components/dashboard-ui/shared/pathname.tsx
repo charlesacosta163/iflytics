@@ -33,8 +33,8 @@ const Pathname = () => {
         </span>
       </Link>
 
-      <span className="text-[10px] font-semibold text-white bg-gradient-to-r from-[#ff879b] to-[#ffc49c] dark:from-[#1e90ff] dark:to-[#99badd] rounded-full absolute -bottom-4 left-5 px-2 py-0.10 shadow-lg z-100">
-        Version {getAppVersion()}
+      <span className="text-[10px] w-[100px] text-center font-semibold text-white bg-gradient-to-r from-[#ff879b] to-[#ffc49c] dark:from-[#1e90ff] dark:to-[#99badd] rounded-full absolute -bottom-4 left-5 px-2 py-0.10 shadow-lg z-100">
+        {getAppVersion()}
       </span>
     </div>
   );

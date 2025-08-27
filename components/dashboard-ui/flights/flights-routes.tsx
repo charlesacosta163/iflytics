@@ -411,10 +411,7 @@ const FlightsRoutes = async ({ flights, user , subscription, role}: { flights: F
       </Card>
 
       <div className="lg:col-span-3">
-        {/* FEATURE AVAILABLE ON RELEASE */}
-        {(role === "tester" || role === "admin") && (
-          <MostFlownRoutesBarChart chartData={flownRoutesData} />
-        )}
+        <MostFlownRoutesBarChart chartData={flownRoutesData} />
       </div>
 
       <div className="lg:col-span-3 rounded-xl bg-transparent shadow-none">
