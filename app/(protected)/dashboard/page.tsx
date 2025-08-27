@@ -21,7 +21,10 @@ import { FaPlane, FaMapMarkerAlt, FaUsers, FaLightbulb, FaExternalLinkAlt } from
 import { HiOutlineStatusOnline } from "react-icons/hi";
 import { TbPlaneInflight, TbClock, TbBuildingAirport, TbBuildingStadium, TbBrandDiscord } from "react-icons/tb";
 import { GoServer } from "react-icons/go";
+
 import { HiOutlineGlobeAsiaAustralia } from "react-icons/hi2";
+
+import { matchAircraftNameToImage } from "@/lib/cache/flightinsightsdata";
 
 import {
   Card,
@@ -31,7 +34,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { matchAircraftNameToImage } from "@/lib/cache/flightinsightsdata";
+
 import { BsPersonWorkspace } from "react-icons/bs";
 import { SlActionUndo } from "react-icons/sl";
 
@@ -52,8 +55,42 @@ export default async function DashboardPage() {
   const userFlights = await getUserFlights(data.ifcUsername);
 
   const userData = userStats.result[0];
-  const recentFlight = userFlights?.data.result.data[0];
-
+  const recentFlight = userFlights?.data.result.data[0] || {
+    "id": "9aeb16a3-ac69-41d3-9dd4-d62be72b1525",
+    "created": "2022-01-10T10:37:41.965626",
+    "userId": "b0018209-e010-40a0-afe1-00ecd5856c5e",
+    "aircraftId": "849366e1-cb11-4d72-9034-78b11cd026b0",
+    "liveryId": "a071518d-995a-4b3c-b65b-656da0d6ed86",
+    "callsign": "VH-KAI",
+    "server": "Casual Server",
+    "dayTime": 2.5355167,
+    "nightTime": 0,
+    "totalTime": 2.5355167,
+    "landingCount": 0,
+    "originAirport": "YTYA",
+    "destinationAirport": "YTYA",
+    "xp": 25,
+    "worldType": 1,
+    "violations": [
+      {
+        "issuedBy": {
+            "id": "2a11e620-1cc1-4ac6-90d1-18c4ed9cb913",
+            "username": "Cameron",
+            "callsign": "EC-CAM",
+            "discourseUser": {
+                "userId": 4,
+                "username": "Cameron",
+                "virtualOrganization": "",
+                "avatarTemplate": "/user_avatar/community.infiniteflight.com/cameron/{size}/886772_2.png"
+            }
+        },
+        "level": 1,
+        "type": "Ground Overspeed",
+        "description": "Ground Overspeed",
+        "created": "2023-10-31T16:34:51.014366+00:00"
+      }
+    ]
+  }
   const { aircraftName, liveryName } = await getAircraftAndLivery(
     recentFlight.aircraftId,
     recentFlight.liveryId
