@@ -3140,9 +3140,9 @@ export const customUserImages = [
     // IFLYTICS USER
     id: 202,
     role: "user",
-    username: "MyGoal_isNASA",
+    username: "RedWolf",
     image: `https://images.weserv.nl/?url=${encodeURIComponent(
-      "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/mygoal_isnasa/288/1554659_2.png"
+      "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/redwolf/288/1554134_2.png"
     )}&w=64&h=64&fit=cover&mask=circle`,
   },
   {

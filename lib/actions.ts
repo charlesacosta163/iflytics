@@ -2,6 +2,8 @@
 
 import { revalidateTag } from "next/cache"
 import { aircraftIcaoCodes } from "./data"
+import { getUser } from "./supabase/user-actions"
+import { redirect } from "next/navigation"
 
 const API_KEY = process.env.API_KEY as string
 
@@ -80,11 +82,41 @@ export async function getUserFlights(username: string, page: number = 1) {
         }, 
     })
 
+
     const data = await response.json()
-    
+        
     if (data) return {...userInfo, data}
 
     return null
+}
+
+export async function getUserMostRecentFlight(): Promise<any> {
+    try {
+        const user = await getUser()
+
+        if (!user) {
+            redirect('/auth/login')
+        }
+
+        const metadata = user.user_metadata
+        
+        if (!metadata?.ifcUsername) {
+            console.error('No IFC username found in user metadata')
+            return null
+        }
+
+        const userFlights = await getUserFlights(metadata.ifcUsername)
+
+        if (!userFlights?.data?.result?.data?.[0]) {
+            console.log('No flight data found for user:', metadata.ifcUsername)
+            return null
+        }
+
+        return userFlights.data.result.data[0]
+    } catch (error) {
+        console.error('Error in getUserMostRecentFlight:', error)
+        return null
+    }
 }
 
 export async function getAircraftAndLivery(aircraftId: string, liveryId: string) {

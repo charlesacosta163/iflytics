@@ -4,6 +4,7 @@ import {
   getAircraftAndLivery,
   getUselessFactToday,
   getUserFlights,
+  getUserMostRecentFlight,
   getUserStats,
 } from "@/lib/actions";
 import { matchATCRankToTitle } from "@/lib/sync-actions";
@@ -52,49 +53,32 @@ export default async function DashboardPage() {
   // const flights = await getAggregatedFlights(data.ifcUserId)
 
   const userStats = await getUserStats(data.ifcUsername, data.ifcUserId);
-  const userFlights = await getUserFlights(data.ifcUsername);
 
   const userData = userStats.result[0];
-  const recentFlight = userFlights?.data.result.data[0] || {
+  const recentFlight = await getUserMostRecentFlight() || {
     "id": "9aeb16a3-ac69-41d3-9dd4-d62be72b1525",
     "created": "2022-01-10T10:37:41.965626",
     "userId": "b0018209-e010-40a0-afe1-00ecd5856c5e",
     "aircraftId": "849366e1-cb11-4d72-9034-78b11cd026b0",
     "liveryId": "a071518d-995a-4b3c-b65b-656da0d6ed86",
-    "callsign": "VH-KAI",
+    "callsign": "N/A",
     "server": "Casual Server",
-    "dayTime": 2.5355167,
+    "dayTime": 0,
     "nightTime": 0,
-    "totalTime": 2.5355167,
+    "totalTime": 0,
     "landingCount": 0,
-    "originAirport": "YTYA",
-    "destinationAirport": "YTYA",
-    "xp": 25,
+    "originAirport": "NOPE",
+    "destinationAirport": "NOPE",
+    "xp": 0,
     "worldType": 1,
-    "violations": [
-      {
-        "issuedBy": {
-            "id": "2a11e620-1cc1-4ac6-90d1-18c4ed9cb913",
-            "username": "Cameron",
-            "callsign": "EC-CAM",
-            "discourseUser": {
-                "userId": 4,
-                "username": "Cameron",
-                "virtualOrganization": "",
-                "avatarTemplate": "/user_avatar/community.infiniteflight.com/cameron/{size}/886772_2.png"
-            }
-        },
-        "level": 1,
-        "type": "Ground Overspeed",
-        "description": "Ground Overspeed",
-        "created": "2023-10-31T16:34:51.014366+00:00"
-      }
-    ]
+    "violations": [],
   }
+
+
   const { aircraftName, liveryName } = await getAircraftAndLivery(
     recentFlight.aircraftId,
     recentFlight.liveryId
-  );
+  ) ;
   // Grade 5 - Amber
   // Grade 4 - Green
   // Grade 3 - Purple
@@ -276,6 +260,7 @@ export default async function DashboardPage() {
                   Your recent flight.
                 </CardDescription>
               </div>
+              { recentFlight.id && (
               <Link
                 className="bg-blue-500/30 hover:bg-blue-600/50 py-1 px-4 rounded-full flex items-center justify-center gap-2 duration-200 transition-all"
                 href={`/dashboard/flights/${recentFlight.id}`}
@@ -283,6 +268,7 @@ export default async function DashboardPage() {
                 <TbPlaneInflight className="text-2xl" />
                 <span className="text-sm font-semibold">Info</span>
               </Link>
+              )}
             </CardHeader>
 
             <CardContent className="flex flex-col gap-4 justify-between h-full bg-[#f2e1ff] rounded-xl p-4 backdrop-blur-xl">
