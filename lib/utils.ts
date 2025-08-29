@@ -63,3 +63,40 @@ export const getMinutesAgo = (lastReport: string) => {
     return "Unknown";
   }
 };
+
+export function getMonthAndYear(dateYear: string) {
+  // dateYear = "1_25"
+
+  const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+  const month = MONTHS[parseInt(dateYear.split("_")[0]) - 1];
+  const year = parseInt(dateYear.split("_")[1]);
+
+  return `${month} 20${year}`; // January 2025
+}
+
+/**
+ * Formats timeframe text based on the timeframe string
+ * @param timeframe The timeframe string (e.g., "month-8_24", "flight-800", "7")
+ * @returns Formatted text (e.g., "on June 2024", "for the last 800 flights", "7 days")
+ */
+export function formatTimeframeText(timeframe: string): string {
+  if (timeframe.startsWith('month-')) {
+    const monthYear = timeframe.split('-')[1];
+    return `on ${getMonthAndYear(monthYear)}`;
+  }
+  
+  if (timeframe.startsWith('flight-')) {
+    const flightCount = timeframe.split('-')[1];
+    return `for the last ${flightCount} flights`;
+  }
+  
+  // Handle days
+  if (timeframe.startsWith('day-')) {
+    const days = timeframe.split('-')[1];
+    return `for the last ${days} days`;
+  }
+  
+  return `for the last 30 days`;
+}
+

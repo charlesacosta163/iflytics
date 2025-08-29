@@ -26,6 +26,7 @@ import { ReactivateButton } from "./stripe/reactivate-subscription-button";
 import { LifetimeButton } from "./stripe/lifetime-plan-button";
 import { LuCreditCard } from "react-icons/lu";
 import PromoReminders from "./stripe/promo-reminders";
+import ProfileCardPicker from "./profile-card-picker";
 
 interface User {
   id: string;
@@ -97,8 +98,8 @@ const ProfileWrapper = ({
     deleteConfirmText === userProfile.ifc_username && !isDeleting;
 
   return (
-    <main className="flex flex-col items-center justify-center min-h-full w-full">
-      <div className="w-full max-w-2xl space-y-6">
+    <main className="flex flex-col min-h-full w-full">
+      <div className="w-full space-y-6 self-start">
         <div className="flex flex-col gap-2 w-full items-center">
           <span className="text-4xl font-bold dark:text-light bg-gradient-to-r from-gray-600 to-dark bg-clip-text text-transparent tracking-tight">
             Your Profile
@@ -108,8 +109,9 @@ const ProfileWrapper = ({
             Your profile, settings and billing
           </span>
         </div>
-
-        <Tabs defaultValue="profile" className="w-full">
+         
+         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <Tabs defaultValue="profile" className="w-full">
           <TabsList className="w-full rounded-md bg-gray-100 dark:bg-gray-800">
             <TabsTrigger
               value="profile"
@@ -487,7 +489,11 @@ const ProfileWrapper = ({
                 </Dialog>
               </div>
           </TabsContent>
-        </Tabs>
+            </Tabs>
+
+            <ProfileCardPicker username={userProfile.ifc_username} />
+          
+         </div>
       </div>
     </main>
   );

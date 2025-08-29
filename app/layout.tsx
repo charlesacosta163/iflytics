@@ -16,13 +16,13 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "IFlytics - Your Advanced Flight Data Analytics Companion for Infinite Flight",
-  description: "Track and analyze your Infinite Flight statistics with advanced data visualization, real-time flight maps, leaderboards, and interactive games. Join thousands of pilots exploring their aviation data.",
-  keywords: "infinite flight, flight tracking, aviation analytics, pilot statistics, flight data, expert server, flight simulator, aviation dashboard, pilot leaderboards, flight history",
+  title: "IFlytics - Your Advanced Flight Stats Companion for Infinite Flight",
+  description: "Built on top of IF\'s existing grading system, track and analyze your Infinite Flight statistics with advanced data visualization, thorough analysis of your favorite routes and aircraft, flight history, map tracker, and more! Join thousands of pilots exploring their Infinite Flight data.",
+  keywords: "infinite flight, flight tracking, analytics, flight, aviation, pilot, stats, data, expert server, flight simulator, dashboard, flight history, airbus, boeing, leaderboard",
   authors: [{ name: "IFlytics Team" }],
   creator: "IFlytics",
   publisher: "IFlytics",
-  metadataBase: new URL('https://iflytics.vercel.app'),
+  metadataBase: new URL('https://iflytics.app'),
   alternates: {
     canonical: '/',
   },
@@ -30,14 +30,14 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_US',
     url: '/',
-    title: 'IFlytics - Advanced Flight Data Analytics for Infinite Flight',
-    description: 'Track and analyze your Infinite Flight statistics with advanced data visualization, real-time flight maps, leaderboards, and interactive games.',
+    title: 'IFlytics -  Your Advanced Flight Stats Companion for Infinite Flight',
+    description: 'Built on top of IF\'s existing grading system, track and analyze your Infinite Flight statistics with advanced data visualization, thorough analysis of your favorite routes and aircraft, flight history, map tracker, and more! Join thousands of users exploring their Infinite Flight data.',
     siteName: 'IFlytics',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'IFlytics - Advanced Flight Data Analytics for Infinite Flight',
-    description: 'Track and analyze your Infinite Flight statistics with advanced data visualization, real-time flight maps, and interactive games.',
+    title: 'IFlytics - Your Advanced Flight Stats Companion for Infinite Flight',
+    description: 'Built on top of IF\'s existing grading system, track and analyze your Infinite Flight statistics with advanced data visualization, thorough analysis of your favorite routes and aircraft, flight history, map tracker, and more! Join thousands of users exploring their Infinite Flight data.',
     creator: '@iflytics',
   },
   robots: {

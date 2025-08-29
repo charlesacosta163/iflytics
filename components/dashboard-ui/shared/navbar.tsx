@@ -153,7 +153,7 @@ const Navbar = () => {
           <Popover>
             <PopoverTrigger>
               {userObj ? (
-                <div className="p-0.5 bg-gray-700 hover:bg-gray-400 transition-colors duration-200 rounded-full cursor-pointer">
+                <div className={`p-0.5 bg-${subscription.plan === "lifetime" ? "green-600" : subscription.plan === "premium" ? "yellow-500" : "blue-700"} hover:bg-gray-400 transition-colors duration-200 rounded-full cursor-pointer`}>
                   <img src={userObj?.image} alt={userObj?.username} className="w-10 h-10 rounded-full" />
                 </div>
               ) : (
@@ -168,7 +168,7 @@ const Navbar = () => {
                 <div className="flex gap-2 items-center">
 
                   {userObj ? (
-                    <div className="p-0.5 bg-gray-700 hover:bg-gray-400 transition-colors duration-200 rounded-full cursor-pointer">
+                    <div className={`p-0.5 bg-${subscription.plan === "lifetime" ? "green-600" : subscription.plan === "premium" ? "yellow-500" : "blue-700"} hover:bg-gray-400 transition-colors duration-200 rounded-full cursor-pointer`}>
                       <img src={userObj?.image} alt={userObj?.username} className="w-10 h-10 rounded-full" />
                     </div>
                     ) : (

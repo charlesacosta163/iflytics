@@ -11,7 +11,7 @@ import {
   BiTrendingUp 
 } from "react-icons/bi";
 import { PiSparkle } from "react-icons/pi";
-import { convertMinutesToHours, numberWithCommas } from "@/lib/utils";
+import { convertMinutesToHours, formatTimeframeText, getMonthAndYear, numberWithCommas } from "@/lib/utils";
 import Image from "next/image";
 import FlightActivityAreaChart from "@/components/dashboard-ui/charts/flight-activity-area-chart";
 import { AircraftUsageDonutChart } from "@/components/dashboard-ui/charts/aircraft-usage-donut-chart";
@@ -94,7 +94,7 @@ const FlightsOverview = ({
           value={numberWithCommas(flightOverviewStats.totalFlights)}
           icon={<FaPlaneDeparture />}
           color="blue"
-          subtitle={`Last ${timeframe.split('-')[1]} ${timeframe.startsWith('flight-') ? 'flights' : Number(timeframe.split('-')[1]) > 1 ? 'days' : 'day'}`}
+          subtitle={formatTimeframeText(timeframe)}
         />
         <InfoCard
           title="Landings"
@@ -131,7 +131,7 @@ const FlightsOverview = ({
               </div>
               <div>
                 <CardTitle className="text-blue-900 dark:text-blue-100">Flight Averages</CardTitle>
-                <CardDescription className="text-blue-700 dark:text-blue-300">Performance metrics for last {`${timeframe.split('-')[1]} ${timeframe.startsWith('flight-') ? 'flights' : Number(timeframe.split('-')[1]) > 1 ? 'days' : 'day'}`}</CardDescription>
+                <CardDescription className="text-blue-700 dark:text-blue-300">Performance metrics {formatTimeframeText(timeframe)}</CardDescription>
               </div>
             </div>
           </CardHeader>
@@ -231,7 +231,7 @@ const FlightsOverview = ({
                 Flight Time Per Day
               </CardTitle>
               <CardDescription className="text-gray-300">
-                Your flight time day by day for the last {timeframe.split('-')[1]} {timeframe.startsWith('flight-') ? 'flights' : Number(timeframe.split('-')[1]) > 1 ? 'days' : 'day'}
+                Your flight time day by day {formatTimeframeText(timeframe)}
               </CardDescription>
             </CardHeader>
             <CardContent className="flex flex-col items-center justify-center py-16">
@@ -258,7 +258,7 @@ const FlightsOverview = ({
                 Aircraft Usage
               </CardTitle>
               <CardDescription className="text-gray-300">
-                Your most used aircraft in the last {timeframe.split('-')[1]} {timeframe.startsWith('flight-') ? 'flights' : Number(timeframe.split('-')[1]) > 1 ? 'days' : 'day'}
+                Your most used aircraft {formatTimeframeText(timeframe)}
               </CardDescription>
             </CardHeader>
             <CardContent className="flex flex-col items-center justify-center py-16">
@@ -278,7 +278,7 @@ const FlightsOverview = ({
               Your Top 3 Aircraft
             </CardTitle>
             <CardDescription className="text-gray-300">
-              Your top 3 most used aircraft in the last {timeframe.split('-')[1]} {timeframe.startsWith('flight-') ? 'flights' : Number(timeframe.split('-')[1]) > 1 ? 'days' : 'day'}
+              Your top 3 most used aircraft {formatTimeframeText(timeframe)}
             </CardDescription>
           </CardHeader>
 

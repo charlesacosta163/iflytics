@@ -120,7 +120,7 @@ MONTHLY TIMEFRAME PLANS
   4. Month-based timeframe
     --> ?timeframe=month-5-2025 (May 2025)
 */ 
-export async function getFlightsTimeFrame(ifcUserId: string, days: number, flightsFrame?: number) {
+export async function getFlightsTimeFrame(ifcUserId: string, days: number, flightsFrame?: number, monthAndYear?: string) {
     // Determine how many pages to fetch based on requested flights
    
     let maxPages = 81; // For 800+ flights
@@ -129,11 +129,28 @@ export async function getFlightsTimeFrame(ifcUserId: string, days: number, fligh
 
     const flights = await getAggregatedFlights(ifcUserId, maxPages)
 
+    // If monthAndYear is provided (e.g 5_25) only filter by the flights in May 2025
+    // flight.created is in format 2025-05-01T00:00:00Z
+    if (monthAndYear) {
+      const [monthStr, yearStr] = monthAndYear.split("_");
+      const month = parseInt(monthStr, 10);
+      const year = parseInt(yearStr, 10) + 2000; // turn "25" → 2025
+    
+      return flights.filter((flight: any) => {
+        const flightDate = new Date(flight.created);
+        return (
+          flightDate.getMonth() === month - 1 &&
+          flightDate.getFullYear() === year
+        );
+      });
+    }
+
     // If flightsFrame is provided, prioritize it over days
     if (flightsFrame) {
         // Return the most recent X flights
         return flights.slice(0, flightsFrame)
     }
+
 
     // Otherwise, filter by days as usual
     const today = new Date()

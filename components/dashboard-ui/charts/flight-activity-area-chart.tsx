@@ -17,7 +17,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart"
-import { convertMinutesToHours } from "@/lib/utils"
+import { convertMinutesToHours, formatTimeframeText, getMonthAndYear } from "@/lib/utils"
 import { cn } from "@/lib/utils"
 import { FaPlane } from "react-icons/fa"
 
@@ -42,7 +42,7 @@ export default function FlightActivityAreaChart({flightActivityData, timeframe, 
                 Flight Time Per Day
               </CardTitle>
               <CardDescription className="text-gray-300">
-                Your flight time day by day for the last {`${timeframe.split('-')[1]} ${timeframe.startsWith('flight-') ? 'flights' : Number(timeframe.split('-')[1]) > 1 ? 'days' : 'day'}`}
+                Your flight time day by day {formatTimeframeText(timeframe)}
               </CardDescription>
             </CardHeader>
       <CardContent>

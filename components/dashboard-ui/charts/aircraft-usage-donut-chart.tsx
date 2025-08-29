@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { Label, Pie, PieChart, Cell } from "recharts"
-import { cn } from "@/lib/utils"
+import { cn, formatTimeframeText } from "@/lib/utils"
 
 import {
   Card,
@@ -17,6 +17,7 @@ import {
   ChartTooltip,
 } from "@/components/ui/chart"
 import { FaPlane } from "react-icons/fa"
+import { getMonthAndYear } from "@/lib/utils"
 
 // Chart colors - using actual color values, not Tailwind classes 
 
@@ -70,7 +71,7 @@ export function AircraftUsageDonutChart({ aircraftUsageData, timeframe, classNam
                 Aircraft Usage
               </CardTitle>
                 <CardDescription className="text-gray-300">
-                  Your most used aircraft in the last {timeframe.split('-')[1]} {timeframe.startsWith('flight-') ? 'flights' : Number(timeframe.split('-')[1]) > 1 ? 'days' : 'day'}
+                  Your most used aircraft {formatTimeframeText(timeframe)}
               </CardDescription>
             </CardHeader>
       <CardContent className="flex-1 pb-0">

@@ -38,12 +38,11 @@ import { Badge } from "@/components/ui/badge";
 import GroupedSubscriptionButtons from "@/components/dashboard-ui/grouped-sub-btns";
 import PromoReminders from "@/components/dashboard-ui/stripe/promo-reminders";
 
-let aircraftAnalysisMaintainance = false
 
 export const metadata: Metadata = {
   title: "Flights - IFlytics | Your Infinite Flight Statistics",
-  description: "View your Infinite Flight statistics with advanced data visualization, real-time flight maps, leaderboards, and interactive games. Join thousands of pilots exploring their aviation data.",
-  keywords: "infinite flight, flight tracking, aviation analytics, pilot statistics, flight data, expert server, flight simulator, aviation dashboard, pilot leaderboards, flight history, iflytics flights",
+  description: "View your Infinite Flight stats with advanced data visualization, thorough analysis of your favorite routes and aircraft, flight history, map tracker, and more! Join thousands of users exploring their Infinite Flight data.",
+  keywords: "infinite flight, flight tracking, analytics, flight, aviation, pilot, stats, data, expert server, flight simulator, dashboard, flight history, airbus, boeing, leaderboard, map tracker, route analysis, aircraft analysis",
 }
 
 const FlightsPage = async ({searchParams}: { searchParams: Promise<{ [key: string]: string | string[] | undefined }>}) => {
@@ -79,12 +78,24 @@ const FlightsPage = async ({searchParams}: { searchParams: Promise<{ [key: strin
   }
 
   // Validate day timeframe
-  let allFlights; // All flights for the timeframe
+  let allFlights = await getFlightsTimeFrame(data.ifcUserId, 800); // All flights for the timeframe
+
+  const uniqueMonths = Array.from(
+    new Set(
+      allFlights.map(flight => {
+        const date = new Date(flight.created);
+        const month = date.getMonth() + 1; // JS months are 0-based
+        const year = date.getFullYear().toString().slice(-2); // last 2 digits
+        return `${month}_${year}`;
+      })
+    )
+  );
+    
   if (frameType === "day") {
     if (!["1", "7", "30", "90"].includes(value)) {
       redirect(`/dashboard/flights?timeframe=${DEFAULT_TIMEFRAME}`);
     }
-    allFlights = await getFlightsTimeFrame(data.ifcUserId, parseInt(value));
+    allFlights = await getFlightsTimeFrame(data.ifcUserId, parseInt(value));  
   }
   // Validate flight timeframe
   else if (frameType === "flight") {
@@ -98,6 +109,18 @@ const FlightsPage = async ({searchParams}: { searchParams: Promise<{ [key: strin
       redirect(`/dashboard/flights?timeframe=${DEFAULT_TIMEFRAME}`);
     }
     allFlights = await getFlightsTimeFrame(data.ifcUserId, 0, flightCount);
+  }
+
+  else if (frameType === "month") {
+    if (!hasPremiumAccess(subscription as Subscription)) {
+      redirect(`/dashboard/flights?timeframe=${DEFAULT_TIMEFRAME}`);
+    }
+    
+    if (!uniqueMonths.includes(value)) {
+      redirect(`/dashboard/flights?timeframe=${DEFAULT_TIMEFRAME}`);
+    }
+
+    allFlights = await getFlightsTimeFrame(data.ifcUserId, 0, 0, value as string);
   }
   // Invalid frame type
   else {
@@ -125,7 +148,7 @@ const FlightsPage = async ({searchParams}: { searchParams: Promise<{ [key: strin
             Your flight statistics and insights
           </p>
         </div>
-        <SelectTimeframeButton subscription={subscription as Subscription} />
+        <SelectTimeframeButton subscription={subscription as Subscription} months={uniqueMonths} />
       </div>
 
       {/* Tabs */}

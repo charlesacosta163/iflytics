@@ -215,7 +215,7 @@ const FlightsRoutes = async ({ flights, user , subscription, role}: { flights: F
 
       <div className="grid grid-cols-1 lg:col-span-3 bg-white dark:bg-gray-800 rounded-xl  p-4">
         <section className="grid grid-cols-1 lg:grid-cols-[1fr_2fr_2fr_2fr] gap-4">
-          <div className="border bg-gray-700 rounded-xl p-4 text-white flex flex-col gap-2 items-center justify-center h-full">
+          <div className="bg-transparent rounded-xl p-4 dark:text-white text-gray-700 flex flex-col gap-2 items-center justify-center h-full">
             {customUserImages.find(
               (user: any) => user.username === userMetadata.ifcUsername
             )?.image ? (
@@ -226,12 +226,12 @@ const FlightsRoutes = async ({ flights, user , subscription, role}: { flights: F
                   )?.image
                 }
                 alt={userMetadata.ifcUsername}
-                className="w-14 h-14 border-gray-400 border-2 rounded-full"
+                className="max-w-20 w-full max-h-20 h-full border-gray-400 border-2 rounded-full"
               />
             ) : (
               <RiCopilotFill className="w-12 h-12" />
             )}
-            <p className="text-sm font-medium">@{userMetadata.ifcUsername}</p>
+            <p className="text-sm font-bold">@{userMetadata.ifcUsername}</p>
           </div>
 
           <div className="flex justify-between items-center">
@@ -425,6 +425,7 @@ const FlightsRoutes = async ({ flights, user , subscription, role}: { flights: F
           </div>
         </div>
 
+        { flights.length > 0 ? (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
           <div className="bg-transparent w-full">
             <FlightHaulsPieChart chartData={getFlightHaulCategorizerData()} />
@@ -440,6 +441,11 @@ const FlightsRoutes = async ({ flights, user , subscription, role}: { flights: F
             />
           </div>
         </div>
+        ) : (
+          <div className="text-center py-8">
+            <p className="text-gray-500 font-medium">No flight routes found</p>
+          </div>
+        )}
       </div>
 
       <div className="lg:col-span-3">
