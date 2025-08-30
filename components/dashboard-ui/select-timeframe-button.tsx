@@ -109,6 +109,43 @@ const SelectTimeframeButton = ({ subscription, months }: { subscription: Subscri
               <SelectItem value="flight-500">Last 500 Flights</SelectItem>
               <SelectItem value="flight-800">Last 800 Flights</SelectItem>
 
+              <Dialog>
+                <DialogTrigger asChild>
+                  <div className="relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none hover:bg-accent hover:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50">
+                    Custom Flight Frame
+                  </div>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Custom Flight Frame</DialogTitle>
+                  </DialogHeader>
+                  <div className="space-y-4">
+                    <div>
+                      <label className="text-sm text-gray-500">Enter number of flights (1-800)</label>
+                      <Input
+                        type="number"
+                        min="1"
+                        max="800"
+                        value={customFlights}
+                        onChange={(e) => {
+                          setCustomFlights(e.target.value);
+                          setError("");
+                        }}
+                        placeholder="Enter number of flights"
+                        className="mt-1"
+                      />
+                      {error && <p className="text-sm text-red-500 mt-1">{error}</p>}
+                    </div>
+                    <Button 
+                      onClick={handleCustomFlights}
+                      className="w-full"
+                    >
+                      Apply
+                    </Button>
+                  </div>
+                </DialogContent>
+              </Dialog>
+
               {/* Monthly Frames – list unique years as triggers */}
               {monthsByYearList.length > 0 && (
                 <>
