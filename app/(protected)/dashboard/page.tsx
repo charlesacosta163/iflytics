@@ -385,6 +385,20 @@ export default async function DashboardPage() {
 
           {/* Flight Arena Coming Soon */}
           <div className="flex flex-col gap-4">
+
+            <Card className="flex-1 bg-[#5865F2] relative overflow-hidden">
+              <TbBrandDiscord className="text-[20rem] absolute top-8 left-0 text-white opacity-10" />
+              <CardHeader className="flex flex-col gap-2 justify-center items-center">
+                <CardTitle className="text-2xl font-bold tracking-tight text-light flex items-center gap-1"><Image src={iflyticsLogo} alt="IFlytics Logo" width={24} height={24} className="" /> Join the Discord</CardTitle>
+                <CardDescription className="text-gray-200 text-center">
+                  Join the IFlytics Discord to get the latest news and updates.
+                </CardDescription>
+
+                <Link href="https://discord.gg/wHRND6n6" target="_blank" className="bg-[#404EED] hover:bg-[#404EED]/80 text-white rounded-full px-4 py-2 flex items-center gap-2 text-center text-sm font-bold z-[1] hover:scale-105 transition-all duration-200 self-center">
+                  <TbBrandDiscord className="text-2xl" /> Join
+                </Link>
+              </CardHeader>
+            </Card>
             <Card className="md:col-span-1 bg-gradient-to-br from-gray-800 to-gray-900 text-white backdrop-blur-xl shadow-lg overflow-hidden">
               {/* Background accent */}
               <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-orange-400 via-pink-400 to-purple-400"></div>
@@ -401,20 +415,6 @@ export default async function DashboardPage() {
                 </div>
               </CardHeader>
 
-            </Card>
-
-            <Card className="flex-1 bg-[#5865F2] relative overflow-hidden">
-              <TbBrandDiscord className="text-[20rem] absolute top-8 left-0 text-white opacity-10" />
-              <CardHeader className="flex flex-col gap-2 justify-center items-center">
-                <CardTitle className="text-2xl font-bold tracking-tight text-light flex items-center gap-1"><Image src={iflyticsLogo} alt="IFlytics Logo" width={24} height={24} className="" /> Join the Discord</CardTitle>
-                <CardDescription className="text-gray-200 text-center">
-                  Join the IFlytics Discord to get the latest news and updates.
-                </CardDescription>
-
-                <Link href="https://discord.gg/9p46Zbwc" target="_blank" className="bg-[#404EED] hover:bg-[#404EED]/80 text-white rounded-full px-4 py-2 flex items-center gap-2 text-center text-sm font-bold z-[1] hover:scale-105 transition-all duration-200 self-center">
-                  <TbBrandDiscord className="text-2xl" /> Join
-                </Link>
-              </CardHeader>
             </Card>
             
           </div>
