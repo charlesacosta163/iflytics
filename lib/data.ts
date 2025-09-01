@@ -3677,6 +3677,30 @@ export const customUserImages = [
     "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/anshul/288/1385151_2.png"
   )}&w=64&h=64&fit=cover&mask=circle`,
 },
+{
+  id: 265,
+  role: "user",
+  username: "boeair",
+  image: `https://images.weserv.nl/?url=${encodeURIComponent(
+    "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/boeair/288/897152_2.png"
+  )}&w=64&h=64&fit=cover&mask=circle`,
+},
+{
+  id: 266,
+  role: "user",
+  username: "Arin25",
+  image: `https://images.weserv.nl/?url=${encodeURIComponent(
+    "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/arin25/288/1566580_2.png"
+  )}&w=64&h=64&fit=cover&mask=circle`,  
+},
+{
+  id: 267,
+  role: "user",
+  username: "art.tt",
+  image: `https://images.weserv.nl/?url=${encodeURIComponent(
+    "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/art.tt/288/1517284_2.png"
+  )}&w=64&h=64&fit=cover&mask=circle`,
+},
 ];
 
 export const aircraftIcaoCodes = [
