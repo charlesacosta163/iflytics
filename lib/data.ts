@@ -3701,6 +3701,38 @@ export const customUserImages = [
     "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/art.tt/288/1517284_2.png"
   )}&w=64&h=64&fit=cover&mask=circle`,
 },
+{
+  id: 268,
+  role: "user",
+  username: "Gian_Renauld",
+  image: `https://images.weserv.nl/?url=${encodeURIComponent(
+    "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/gian_renauld/288/1568064_2.png"
+  )}&w=64&h=64&fit=cover&mask=circle`,
+},
+{
+  id: 269,
+  role: "user",
+  username: "dfk0411",
+  image: `https://images.weserv.nl/?url=${encodeURIComponent(
+    "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/dfk0411/288/1552802_2.png"
+  )}&w=64&h=64&fit=cover&mask=circle`,
+},
+{
+  id: 270,
+  role: "user",
+  username: "etiennechornet",
+  image: `https://images.weserv.nl/?url=${encodeURIComponent(
+    "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/etiennechornet/288/1560851_2.png"
+  )}&w=64&h=64&fit=cover&mask=circle`,
+},
+{
+  id: 271,
+  role: "user",
+  username: "AlaskaSam737",
+  image: `https://images.weserv.nl/?url=${encodeURIComponent(
+    "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/alaskasam737/288/1225871_2.png"
+  )}&w=64&h=64&fit=cover&mask=circle`,
+},
 ];
 
 export const aircraftIcaoCodes = [
