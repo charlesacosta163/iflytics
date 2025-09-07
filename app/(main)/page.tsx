@@ -87,7 +87,7 @@ export default function Home() {
 
           {/* Enhanced Form Section */}
           <div className="flex-1 flex flex-col gap-4 lg:gap-6 items-center animate-slide-in-right delay-300 w-full relative">
-            <Badge className="absolute -top-2 left-1/2 -translate-x-1/2 z-50 bg-gradient-to-r from-[#ff879b] to-[#ffc49c] dark:from-[#1e90ff] dark:to-[#99badd] text-light font-bold tracking-tight">View Launch Codes in the <a target="_blank" href="https://community.infiniteflight.com/t/iflytics-v1-0-0-is-here-detailed-flight-statistics-tool-for-infinite-flight-under-maintenance/1085729?u=charlesacosta163" className="text-light px-2 py-0.5 rounded-full bg-blue-400 hover:bg-blue-500 transition-colors duration-300">IFC Post!</a> Ends on <u>October 1st!</u></Badge>
+            <Badge className="absolute -top-2 left-1/2 -translate-x-1/2 z-50 bg-gradient-to-r from-[#ff879b] to-[#ffc49c] dark:from-[#1e90ff] dark:to-[#99badd] text-light font-bold tracking-tight">View Launch Codes in the <a target="_blank" href="https://community.infiniteflight.com/t/iflytics-v1-0-0-is-here-detailed-flight-statistics-tool-for-infinite-flight-under-maintenance/1085729?u=charlesacosta163" className="text-light px-2 py-0.5 rounded-full bg-blue-400 hover:bg-blue-500 dark:bg-pink-400 hover:bg-pink-500 transition-colors duration-300">IFC Post!</a> Ends on <u>October 1st!</u></Badge>
             {/* Form with Enhanced Styling */}
             <div className="relative group w-full max-w-[400px]">
               {/* <div className="absolute -inset-1 bg-gradient-to-r from-gray-400 via-blue-400 to-gray-400 rounded-[24px] blur opacity-15 group-hover:opacity-30 transition-all duration-1000 animate-gradient-x bg-[length:200%_auto]"></div> */}

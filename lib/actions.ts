@@ -90,6 +90,41 @@ export async function getUserFlights(username: string, page: number = 1) {
     return null
 }
 
+export async function getUserATCSessions(username: string, page = 1) {
+    const userInfo = await getUserStats(username)
+    if (!userInfo || userInfo.result.length === 0) {
+      return { success: false, error: "User not found" }
+    }
+  
+    const { userId } = userInfo.result[0]
+  
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/users/${userId}/atc?page=${page}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${API_KEY}`,
+          },
+        }
+      )
+  
+      if (!response.ok) {
+        return { success: false, error: `API error ${response.status}` }
+      }
+  
+      const data = await response.json()
+      if (!data?.result) {
+        return { success: false, error: "No ATC session data found" }
+      }
+  
+      return { ...userInfo, data, success: true }
+    } catch (err) {
+      console.error(err)
+      return { success: false, error: "Failed to fetch ATC sessions" }
+    }
+  }
+  
 export async function getUserMostRecentFlight(): Promise<any> {
     try {
         const user = await getUser()

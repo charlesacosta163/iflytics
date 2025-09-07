@@ -79,7 +79,7 @@ const ProfileHeader = async ({
             </div>
             <b className="text-2xl tracking-tight">{name}</b>
             <div className="font-medium text-sm">
-              Organization: {organization ? organization : "Not Joined"}
+              Organization: {organization ? organization : customUserImages.find(e => e.username == name)?.role === "staff" ? "Infinite Flight": "Not joined"}
             </div>
           </div>
         </div>

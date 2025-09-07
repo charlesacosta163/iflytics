@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { cn } from '@/lib/utils'
+import { LuBookUser, LuPlane, LuTowerControl } from 'react-icons/lu'
 
 interface UserNavigationProps {
   username: string
@@ -18,6 +19,8 @@ const UserNavigation = ({ username }: UserNavigationProps) => {
   useEffect(() => {
     if (pathname.endsWith('/flights')) {
       setActiveTab('flights')
+    } else if (pathname.endsWith('/atc')) {
+      setActiveTab('atc')
     } else {
       setActiveTab('general')
     }
@@ -26,14 +29,16 @@ const UserNavigation = ({ username }: UserNavigationProps) => {
   const handleTabChange = (value: string) => {
     if (value === 'general') {
       router.push(`/user/${username}`)
+    } else if (value === 'atc') {
+      router.push(`/user/${username}/atc`)
     } else {
       router.push(`/user/${username}/${value}`)
     }
   }
 
   return (
-    <Tabs value={activeTab} onValueChange={handleTabChange} className="w-[225px]">
-      <TabsList className="grid w-full max-w-xs grid-cols-2 bg-gray-700 p-1">
+    <Tabs value={activeTab} onValueChange={handleTabChange} className="lg:w-[500px]">
+      <TabsList className="grid w-full grid-cols-3 bg-gray-700 p-1">
         <TabsTrigger 
           value="general" 
           className={cn(
@@ -44,6 +49,7 @@ const UserNavigation = ({ username }: UserNavigationProps) => {
             "hover:bg-gray-600",
           )}
         >
+          <LuBookUser className='hidden lg:block' />
           General
         </TabsTrigger>
         <TabsTrigger 
@@ -53,10 +59,24 @@ const UserNavigation = ({ username }: UserNavigationProps) => {
             "rounded-[25px] transition-all", 
             "data-[state=active]:bg-gray",
             "data-[state=active]:font-bold",
-            "hover:bg-gray-600"
+            "hover:bg-gray-600 flex gap-2 items-center"
+          )}
+        > 
+          <LuPlane className='hidden lg:block'/>
+          Flights
+        </TabsTrigger>
+        <TabsTrigger 
+          value="atc" 
+          className={cn(
+            "text-white data-[state=active]:text-white",
+            "rounded-[25px] transition-all", 
+            "data-[state=active]:bg-gray",
+            "data-[state=active]:font-bold",
+            "hover:bg-gray-600 flex gap-2 items-center"
           )}
         >
-          Flights
+          <LuTowerControl className='hidden lg:block'/>
+          ATC Sessions
         </TabsTrigger>
       </TabsList>
     </Tabs>
