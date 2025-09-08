@@ -1,5 +1,6 @@
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
+import PromoBanner from "@/components/promo-banner";
 export default function RootLayout({
     children,
   }: Readonly<{
@@ -7,6 +8,9 @@ export default function RootLayout({
   }>) {
     return (
         <div className="min-h-screen flex flex-col overflow-x-hidden">
+
+            <PromoBanner />
+            
             <div className="max-w-[1000px] w-full mx-auto z-50">
               <Navbar />
             </div>

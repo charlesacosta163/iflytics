@@ -231,3 +231,37 @@
 .maplibregl-ctrl-attrib summary::-webkit-details-marker {
   display: none !important;
 }
+
+/* ===== Promo banner ticker (plain CSS) ===== */
+.promo-viewport {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.promo-track {
+  display: inline-block;       /* so translateX affects width properly */
+  white-space: nowrap;         /* keep the line in one row */
+  will-change: transform;      /* smoother animation */
+  animation: promo-ticker 22s linear infinite;
+}
+
+.promo-track.paused {
+  animation-play-state: paused;
+}
+
+/* Duplicate content blocks sit inline so the loop is seamless */
+.promo-seq {
+  display: inline-block;
+  margin-right: 3rem; /* space between loops */
+}
+
+@keyframes promo-ticker {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); } /* assume we render content twice */
+}
+
+/* Respect reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  .promo-track { animation: none; }
+}
