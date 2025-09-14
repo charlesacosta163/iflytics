@@ -263,7 +263,7 @@ const IFStatsLeaderboardPage = async () => {
       </header>
 
       {/* Statistics Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="bg-white dark:bg-gray-800 rounded-lg border p-4">
           <div className="flex items-center gap-2 text-gray-500 dark:text-light mb-2">
             <MdFlight className="w-4 h-4" />
@@ -529,7 +529,7 @@ const IFStatsLeaderboardPage = async () => {
         </div>
       </div>
 
-      <div className="bg-transparent border-t border-b border-gray-200 dark:border-gray-700 p-6">
+      <div className="bg-transparent border-t border-b border-gray-200 dark:border-gray-700 px-2 py-4 md:p-6">
         <h2 className="text-2xl text-center font-bold tracking-tight">
           The Community Leaderboard
         </h2>
@@ -541,19 +541,19 @@ const IFStatsLeaderboardPage = async () => {
           <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="xp" className="flex items-center gap-2">
               <FaBolt className="w-4 h-4" />
-              XP
+              <span className="hidden sm:block">XP</span>
             </TabsTrigger>
             <TabsTrigger value="flights" className="flex items-center gap-2">
               <MdFlight className="w-4 h-4" />
-              Flights
+              <span className="hidden sm:block">Flights</span>
             </TabsTrigger>
             <TabsTrigger value="time" className="flex items-center gap-2">
               <FaClock className="w-4 h-4" />
-              Time
+              <span className="hidden sm:block">Time</span>
             </TabsTrigger>
             <TabsTrigger value="landings" className="flex items-center gap-2">
               <FaLandmark className="w-4 h-4" />
-              Landings
+              <span className="hidden sm:block">Landings</span>
             </TabsTrigger>
           </TabsList>
 
