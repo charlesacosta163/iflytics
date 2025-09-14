@@ -18,15 +18,19 @@ const IFStatsLeaderboardPage = async () => {
   // Sync current user data
   await syncUserToIFStatsLeaderboard();
   
-  // Get leaderboard data
-  const leaderboardResult = await getLeaderboardData();
-  const leaderboardData = leaderboardResult.data || [];
+  const leaderboardData = await getLeaderboardData();
+
+  // console.log(leaderboardData);
 
   // Calculate stats for the bottom cards
   const totalPilots = leaderboardData.length;
   const totalFlights = leaderboardData.reduce((sum, user) => sum + (user.online_flights || 0), 0);
   const totalFlightTime = leaderboardData.reduce((sum, user) => sum + (user.flight_time || 0), 0);
   const avgGrade = totalPilots > 0 ? (leaderboardData.reduce((sum, user) => sum + (user.grade || 0), 0) / totalPilots).toFixed(1) : "0";
+  const totalLandings = leaderboardData.reduce((sum, user) => sum + (user.landing_count || 0), 0);
+  const totalXp = leaderboardData.reduce((sum, user) => sum + (user.xp || 0), 0);
+  const totalAtcOperations = leaderboardData.reduce((sum, user) => sum + (user.atc_operations || 0), 0);
+  const totalViolations = leaderboardData.reduce((sum, user) => sum + (user.violations || 0), 0);
 
   // Format flight time to hours and minutes
   const formatFlightTime = (minutes: number) => {
@@ -387,6 +391,38 @@ const IFStatsLeaderboardPage = async () => {
           </div>
           <div className="text-2xl font-bold">{avgGrade}</div>
           <div className="text-xs text-gray-500">Community average</div>
+        </div>
+        <div className="bg-white dark:bg-gray-800 rounded-lg border p-4">
+          <div className="flex items-center gap-2 text-gray-500 mb-2">
+            <FaBolt className="w-4 h-4" />
+            <span className="text-sm">Total Landings</span>
+          </div>
+          <div className="text-2xl font-bold">{totalLandings.toLocaleString()}</div>
+          <div className="text-xs text-gray-500">Combined landings</div>
+        </div>
+        <div className="bg-white dark:bg-gray-800 rounded-lg border p-4">
+          <div className="flex items-center gap-2 text-gray-500 mb-2">
+            <FaBolt className="w-4 h-4" />
+            <span className="text-sm">Total Violations</span>
+          </div>
+          <div className="text-2xl font-bold">{totalViolations.toLocaleString()}</div>
+          <div className="text-xs text-gray-500">Combined violations</div>
+        </div>
+        <div className="bg-white dark:bg-gray-800 rounded-lg border p-4">
+          <div className="flex items-center gap-2 text-gray-500 mb-2">
+            <FaBolt className="w-4 h-4" />
+            <span className="text-sm">Total ATC Operations</span>
+          </div>
+          <div className="text-2xl font-bold">{totalAtcOperations.toLocaleString()}</div>
+          <div className="text-xs text-gray-500">Combined ATC operations</div>
+        </div>
+        <div className="bg-white dark:bg-gray-800 rounded-lg border p-4">
+          <div className="flex items-center gap-2 text-gray-500 mb-2">
+            <FaBolt className="w-4 h-4" />
+            <span className="text-sm">Total XP</span>
+          </div>
+          <div className="text-2xl font-bold">{totalXp.toLocaleString()}</div>
+          <div className="text-xs text-gray-500">Combined XP</div>
         </div>
       </div>
     </div>

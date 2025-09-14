@@ -5,6 +5,7 @@ import { createClient } from "./server"
 
 // Infinite Flight Info Actions
 import { getUserId, getUserStats } from "../actions"
+import { supabaseAdmin } from "./webhook-client"
 
 export async function getUser() {
   const supabase = await createClient()
@@ -187,26 +188,30 @@ export async function updateIFCUsernameAndCreateProfile(ifcUsername: string, dis
 
 // Get function of data from the leaderboard
 export async function getLeaderboardData() {
-    try {
-      const supabase = await createClient()
-      
-      const { data, error } = await supabase
-        .from('if-stats-leaderboard')
-        .select('*')
-        .order('xp', { ascending: false })
-        .limit(50) // Top 50 users
-      
-      if (error) {
-        console.error("Error fetching leaderboard data:", error)
-        return { error: "Error fetching leaderboard data" }
-      }
-      
-      return { data }
-    } catch (err) {
-      console.error("Error fetching leaderboard data:", err)
-      return { error: "Error fetching leaderboard data" }
+  try {    
+    // Add some debugging
+    // console.log("Fetching leaderboard data...")
+    
+    const { data, error, count } = await supabaseAdmin
+      .from('if-stats-leaderboard')
+      .select('*', { count: 'exact' })
+      .order('xp', { ascending: false })
+      .limit(50) // Top 50 users
+    
+    // console.log("Query result:", { data, error, count })
+    
+    if (error) {
+      console.error("Error fetching leaderboard data:", error)
+      return [] // Return empty array instead of error object
     }
+    
+    // console.log(`Found ${data?.length || 0} leaderboard entries`)
+    return data || []
+  } catch (err) {
+    console.error("Error fetching leaderboard data:", err)
+    return []
   }
+}
 
 // Main function to sync flight analytics to here (updating data)
 export async function syncUserToIFStatsLeaderboard() {
@@ -251,7 +256,7 @@ export async function syncUserToIFStatsLeaderboard() {
             return { error: "Error updating entry in IFStats leaderboard" }
         }
 
-        console.log("User stats updated in IFStats leaderboard")
+        // console.log("User stats updated in IFStats leaderboard")
         return { success: true, message: "User stats updated in IFStats leaderboard" }
     }
 
