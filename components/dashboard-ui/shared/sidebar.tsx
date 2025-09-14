@@ -12,6 +12,7 @@ import { TiPlaneOutline } from "react-icons/ti";
 import { FaUser, FaUsers } from "react-icons/fa";
 
 import { FaHome } from "react-icons/fa";
+import { Badge } from "@/components/ui/badge";
 
 import { LogoutButton } from "@/components/logout-button";
 import { GoCopilot } from "react-icons/go";
@@ -20,6 +21,7 @@ import { BsIncognito } from "react-icons/bs";
 import { LiaGlobeAmericasSolid } from "react-icons/lia";
 import { getAppVersion, getRandomCaption } from "@/lib/foo.js";
 import Banner from "../banner";
+import { MdOutlineLeaderboard } from "react-icons/md";
 
 const Sidebar = () => {
   const pathname = usePathname();
@@ -85,6 +87,14 @@ const Sidebar = () => {
   <Link href="/dashboard/users" className={cn("flex flex-col gap-1 text-gray-700 dark:text-gray-300 font-medium items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white rounded-lg py-3 transition-all duration-200 group", pathname === "/dashboard/users" && "bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 font-semibold")}>
     <GoCopilot className="w-4 h-4 group-hover:scale-110 transition-transform duration-200" />
     <span className="text-xs text-center">Community</span>
+  </Link>
+
+  <Link href="/dashboard/leaderboard" className={cn("relative col-span-2 border-2 border-pink-200 dark:border-blue-400 flex gap-2 text-gray-700 dark:text-gray-300 font-medium items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white rounded-lg py-3 transition-all duration-200 group", pathname === "/dashboard/leaderboard" && "bg-pink-50 dark:bg-blue-900/20 text-pink-600 dark:text-blue-400 font-semibold")}>
+    <MdOutlineLeaderboard className="w-4 h-4 group-hover:scale-110 transition-transform duration-200" />
+    <span className="text-sm text-center">IFlytics Leaderboard</span>
+    <MdOutlineLeaderboard className="w-4 h-4 group-hover:scale-110 transition-transform duration-200" />
+
+    <Badge className="absolute -top-3 -left-3 bg-gradient-to-r from-pink-500 to-blue-500 text-white text-xs font-bold">NEW</Badge>
   </Link>
 </div>
 

@@ -3821,8 +3821,99 @@ export const customUserImages = [
     "https://avatars.discourse-cdn.com/v4/letter/j/46a35a/96.png"
   )}&w=64&h=64&fit=cover&mask=circle`,
 }
+]
 
-];
+// Corny compliments for leaderboard stats
+export const statCompliments = {
+  xp: [
+    "XP-ceptional pilot! ✈️",
+    "You're really racking up those experience points! 🌟",
+    "XP-ert level achieved! 🏆",
+    "Your XP game is sky-high! ☁️",
+    "XP-traordinary flying skills! 🚁",
+    "You're XP-anding your horizons! 🌅",
+    "XP-losive growth in the cockpit! 💥",
+    "Your XP is off the charts! 📈"
+  ],
+  
+  flights: [
+    "You're really taking off with those flight numbers! 🛫",
+    "Flying high and flying often! ✈️",
+    "Your flight count is plane awesome! 🛩️",
+    "Frequent flyer? More like frequent FLIER! 🎯",
+    "You've got more flights than a busy airport! 🏢",
+    "Your flight log is longer than a runway! 🛤️",
+    "Flying more than a migrating bird! 🦅",
+    "You're collecting flights like frequent flyer miles! 💳"
+  ],
+  
+  flightTime: [
+    "You've spent more time in the sky than the clouds! ☁️",
+    "Your flight hours are through the roof! 🏠",
+    "Time flies when you're having fun... flying! ⏰",
+    "You're logging serious sky time! 📝",
+    "Your flight time is plane impressive! ✈️",
+    "You've mastered the art of air time! 🎨",
+    "More hours in the cockpit than a commercial pilot! 👨‍✈️",
+    "Your flight time is reaching new altitudes! 📏"
+  ],
+  
+  landings: [
+    "Your landing count is touching down nicely! 🛬",
+    "Smooth landings and high numbers! 🌟",
+    "You're really sticking those landings! 🎯",
+    "Landing after landing after landing! 🔄",
+    "Your touchdown game is strong! 🏈",
+    "More landings than a busy airport tower! 🗼",
+    "You're a landing legend! 🏆",
+    "Nailing those landings like a pro! 🔨"
+  ],
+  
+  atc: [
+    "You're controlling the skies like a boss! 👑",
+    "Your ATC skills are tower-ing above the rest! 🗼",
+    "Ground control to Major Tom... you're amazing! 🚀",
+    "You're the voice pilots love to hear! 🎙️",
+    "Directing traffic like a symphony conductor! 🎼",
+    "Your ATC operations are off the radar... in a good way! 📡",
+    "You're keeping the skies organized! 📋",
+    "Tower power at its finest! ⚡"
+  ],
+  
+  violations: [
+    "Even the best pilots bend a few rules! 😅",
+    "Your violation count shows you're pushing boundaries! 🚧",
+    "A few violations never hurt anyone... much! 😬",
+    "You're living life on the edge of the flight envelope! ⚠️",
+    "Breaking rules and taking names! 📝",
+    "Your violations are just proof you're adventurous! 🗺️",
+    "Rules are more like... guidelines, right? 🤷‍♂️",
+    "You're not reckless, you're just... creative! 🎨"
+  ],
+  
+  grade: [
+    "Your grade is climbing higher than your altitude! 📈",
+    "Grade A pilot right here! 🅰️",
+    "Your pilot grade is top-tier! 🏅",
+    "Grading on a curve? You set the curve! 📊",
+    "Your grade is as smooth as your landings! ✨",
+    "Academic excellence meets aviation excellence! 🎓",
+    "You're acing the pilot test of life! 📝",
+    "Your grade is reaching cruising altitude! ✈️"
+  ],
+  
+  pilots: [
+    "Look at this amazing pilot community! 👥",
+    "More pilots than a flight school graduation! 🎓",
+    "The sky's getting crowded with all these great pilots! ☁️",
+    "A whole squadron of amazing aviators! ✈️",
+    "Pilots unite! The community is soaring! 🤝",
+    "More pilots means more fun in the sky! 🎉",
+    "Building an air force of awesome pilots! ⚔️",
+    "The pilot community is taking off! 🚀"
+  ]
+};
+
 
 export const aircraftIcaoCodes = [
   // Airbus Commercial

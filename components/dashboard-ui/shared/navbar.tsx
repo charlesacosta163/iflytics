@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { LogoutButton } from "@/components/logout-button";
 import { getUser } from "@/lib/supabase/user-actions";
 import { Menu, X } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
 import { TiPlaneOutline } from "react-icons/ti";
 import { GoCopilot } from "react-icons/go";
@@ -12,8 +13,6 @@ import { LuGoal, LuUser } from "react-icons/lu";
 
 import Link from "next/link";
 import Image from "next/image";
-import iflyticsLogo from "@/public/infinilyticslogo.svg";
-import iflyticsLogoLight from "@/public/iflyticslight.svg";
 import { BsIncognito } from "react-icons/bs";
 import { LiaGlobeAmericasSolid } from "react-icons/lia";
 import { useTheme } from "next-themes";
@@ -26,6 +25,7 @@ import Pathname from "./pathname";
 
 import { getUserSubscription } from "@/lib/subscription/subscription";
 import { AccessLevel, Subscription } from "@/lib/subscription/helpers";
+import { MdOutlineLeaderboard } from "react-icons/md";
 
 
 const Navbar = () => {
@@ -149,7 +149,10 @@ const Navbar = () => {
               </button>
             )
           } */}
+          <Link href="/dashboard/leaderboard" className="text-sm !px-4 !py-2 font-semibold rounded-full hover:scale-105 transition-transform duration-200 text-pink-300 dark:text-blue-300 block lg:hidden relative"><MdOutlineLeaderboard className="w-6 h-6" />
           
+            <Badge className="absolute -top-1 -left-1 bg-gradient-to-r from-pink-500 to-blue-500 text-white text-[0.5rem] font-bold py-0.3 px-1">NEW</Badge>
+          </Link>
           <Popover>
             <PopoverTrigger>
               {userObj ? (
