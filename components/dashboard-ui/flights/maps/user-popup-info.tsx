@@ -162,7 +162,8 @@ const UserPopupInfo = ({
     <Drawer 
       open={!!popupInfo} 
       onOpenChange={(open) => !open && handleClose()}
-      direction="bottom" // Move direction here
+      direction="bottom"
+      modal={false} // Disable modal behavior entirely
     >
       <DrawerContent 
         className={cn(
@@ -172,7 +173,21 @@ const UserPopupInfo = ({
             ? "max-w-full w-full h-[120px] lg:h-[140px]" // Minimized state
             : "max-w-md h-[90vh] lg:max-w-[1000px] lg:w-full lg:h-[80vh] lg:mx-4 lg:rounded-lg z-[10001]" // Full state
         )}
+        onPointerDownOutside={(e) => {
+          // Only prevent closing when minimized
+          if (isMinimized) {
+            e.preventDefault();
+          }
+        }}
+        onEscapeKeyDown={(e) => {
+          // Only prevent escape closing when minimized
+          if (isMinimized) {
+            e.preventDefault();
+          }
+        }}
       >
+        {/* Remove the custom backdrop entirely */}
+
         {/* Custom drawer handle with role-based colors */}
         <div className="flex justify-center py-2">
           <div 
