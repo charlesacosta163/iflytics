@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState, useRef } from "react";
-import { Map } from "maplibre-gl";
+import { Map, LngLatBounds } from "maplibre-gl";
 import { X, Search, ChevronLeft, ChevronRight } from "lucide-react";
 import { TiZoomInOutline, TiZoomOutOutline } from "react-icons/ti";
 import { LuPartyPopper, LuSun, LuMoon, LuTowerControl, LuEarth, LuSnowflake } from "react-icons/lu";
@@ -20,6 +20,10 @@ import { SlGlobe } from "react-icons/sl";
 import { ImBlocked } from "react-icons/im";
 import { RiUserCommunityLine } from "react-icons/ri";
 import { FaPlane, FaRegSmileBeam } from "react-icons/fa";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { ifvarbAirlines } from "@/lib/data";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 
 
 // Add the map themes configuration
@@ -45,6 +49,7 @@ const FullScreenMap = ({
   // console.log(flights[0])
   const [displayedFlights, setDisplayedFlights] = useState(flights);
   const [activeFilter, setActiveFilter] = useState<string>("all");
+  const [selectedAirline, setSelectedAirline] = useState<string>("all"); // Add this back
   const [popupInfo, setPopupInfo] = useState<any>(null);
   const mapRef = useRef<Map | null>(null);
   const mapContainerRef = useRef<HTMLDivElement>(null);
@@ -54,29 +59,54 @@ const FullScreenMap = ({
 
   // Function to apply current filter to flight data
   const applyActiveFilter = (flightData: any[]) => {
+    let filtered = flightData;
+
+    // Apply general filters first
     switch(activeFilter) {
       case "iflytics":
-        return flightData.filter(f => 
+        filtered = filtered.filter(f => 
           f.username && 
           customUserImages.some(user => user.username === f.username)
         );
+        break;
       case "no-zombies":
-        return flightData.filter(f => f.username && f.username.trim() !== "");
+        filtered = filtered.filter(f => f.username && f.username.trim() !== "");
+        break;
+      case "airline":
+      // For pure airline filter, don't apply general filter
+      break;
       default:
-        return flightData;
+        // "all" case - no general filtering, but we still need to check airline filter below
+        break;
     }
+
+    // ALWAYS apply airline filter if selected (regardless of activeFilter)
+    if (selectedAirline !== "all") {
+      filtered = filtered.filter(f => 
+        f.virtualOrganization && 
+        f.virtualOrganization.includes(selectedAirline)
+      );
+    }
+
+    return filtered;
   };
 
   // Update displayed flights when flights prop changes - but maintain filter
   useEffect(() => {
     const filteredData = applyActiveFilter(flights);
     setDisplayedFlights(filteredData);
-  }, [flights, activeFilter]);
+  }, [flights, activeFilter, selectedAirline]); // Add selectedAirline back to dependencies
 
   // Handle filter changes
   const handleFilterChange = (filteredFlights: any[], filterId: string) => {
     setActiveFilter(filterId);
     setDisplayedFlights(filteredFlights);
+  };
+
+  // Handle airline changes
+  const handleAirlineChange = (airline: string) => {
+    setSelectedAirline(airline);
+    // The useEffect will automatically reapply filters
   };
 
   // Function to create origin and destination sprites
@@ -204,7 +234,7 @@ const FullScreenMap = ({
   };
 
   // Function to show flight route
-const showFlightRoute = async (flightId: string) => {
+  const showFlightRoute = async (flightId: string) => {
     if (!mapRef.current) return;
 
     try {
@@ -509,6 +539,12 @@ const showFlightRoute = async (flightId: string) => {
       map.on("mouseleave", "flight-points", () => {
         map.getCanvas().style.cursor = "";
       });
+    });
+
+    // In the map initialization useEffect, add a double-click handler after the existing click handlers:
+    map.on("click", () => {
+      // Clear all routes on double click
+      clearAllRoutes();
     });
 
     return () => {
@@ -988,7 +1024,10 @@ const showFlightRoute = async (flightId: string) => {
 
   const zoomOut = () => {
     if (mapRef.current) {
-      mapRef.current.zoomOut({ duration: 300 });
+      mapRef.current.flyTo({
+        zoom: 1, // Zoom all the way out
+        duration: 1000,
+      });
     }
   };
 
@@ -1015,6 +1054,169 @@ const showFlightRoute = async (flightId: string) => {
     segments.push(currentSegment);
     return segments;
   };
+
+  // Add this function inside the FullScreenMap component
+  const handleShowFlightPlan = async (flightId: string, userId: string) => {
+    try {
+      // Clear any existing route
+      if (currentRouteId && mapRef.current) {
+        const map = mapRef.current;
+        
+        // Remove existing route layers and sources
+        if (map.getLayer(currentRouteId)) map.removeLayer(currentRouteId);
+        if (map.getSource(currentRouteId)) map.removeSource(currentRouteId);
+        
+        // Remove markers
+        const originMarkerId = `${currentRouteId}-origin`;
+        const destinationMarkerId = `${currentRouteId}-destination`;
+        
+        if (map.getLayer(originMarkerId)) map.removeLayer(originMarkerId);
+        if (map.getSource(originMarkerId)) map.removeSource(originMarkerId);
+        if (map.getLayer(destinationMarkerId)) map.removeLayer(destinationMarkerId);
+        if (map.getSource(destinationMarkerId)) map.removeSource(destinationMarkerId);
+      }
+
+      // Fetch and display the new flight plan
+      const flightPlan = await getUserFlightPlan(flightId);
+      
+      if (flightPlan?.flightPlanItems?.length > 1 && mapRef.current) {
+        const coordinates = flightPlan.flightPlanItems
+          .filter((item: any) => item.location)
+          .map((item: any) => [item.location.longitude, item.location.latitude])
+          .filter((coord: [number, number]) => {
+            const [lon, lat] = coord;
+            return lon >= -180 && lon <= 180 && lat >= -90 && lat <= 90 && !(lon === 0 && lat === 0);
+          });
+
+        if (coordinates.length > 1) {
+          const routeId = `route-${flightId}`;
+          setCurrentRouteId(routeId);
+
+          // Create the route (using existing logic)
+          const routeSegments = splitAntimeridianRoute(coordinates);
+          const segments: any[] = [];
+          let globalSegmentIndex = 0;
+          const totalOriginalSegments = coordinates.length - 1;
+
+          routeSegments.forEach((segmentCoords: [number, number][]) => {
+            if (segmentCoords.length > 1) {
+              for (let i = 0; i < segmentCoords.length - 1; i++) {
+                const progress = globalSegmentIndex / totalOriginalSegments;
+                const red = Math.round(30 + (147 - 30) * progress);
+                const green = Math.round(58 + (197 - 58) * progress);
+                const blue = Math.round(138 + (253 - 138) * progress);
+
+                segments.push({
+                  type: "Feature",
+                  properties: {
+                    color: `rgb(${red}, ${green}, ${blue})`,
+                    segment: globalSegmentIndex,
+                  },
+                  geometry: {
+                    type: "LineString",
+                    coordinates: [segmentCoords[i], segmentCoords[i + 1]],
+                  },
+                });
+                
+                globalSegmentIndex++;
+              }
+            }
+          });
+
+          // Add route to map
+          mapRef.current.addSource(routeId, {
+            type: "geojson",
+            data: {
+              type: "FeatureCollection",
+              features: segments as any,
+            },
+          });
+
+          mapRef.current.addLayer({
+            id: routeId,
+            type: "line",
+            source: routeId,
+            layout: {
+              "line-join": "round",
+              "line-cap": "round",
+            },
+            paint: {
+              "line-color": ["get", "color"],
+              "line-width": 3,
+            },
+          });
+
+          // Add origin and destination markers
+          const originCoord = coordinates[0];
+          const destinationCoord = coordinates[coordinates.length - 1];
+
+          // Origin marker
+          const originMarkerId = `${routeId}-origin`;
+          mapRef.current.addSource(originMarkerId, {
+            type: "geojson",
+            data: {
+              type: "Feature",
+              geometry: {
+                type: "Point",
+                coordinates: originCoord,
+              },
+              properties: {},
+            },
+          });
+
+          mapRef.current.addLayer({
+            id: originMarkerId,
+            type: "symbol",
+            source: originMarkerId,
+            layout: {
+              "icon-image": "takeoff-sprite",
+              "icon-size": 0.8,
+              "icon-anchor": "center",
+            },
+          });
+
+          // Destination marker
+          const destinationMarkerId = `${routeId}-destination`;
+          mapRef.current.addSource(destinationMarkerId, {
+            type: "geojson",
+            data: {
+              type: "Feature",
+              geometry: {
+                type: "Point",
+                coordinates: destinationCoord,
+              },
+              properties: {},
+            },
+          });
+
+          mapRef.current.addLayer({
+            id: destinationMarkerId,
+            type: "symbol",
+            source: destinationMarkerId,
+            layout: {
+              "icon-image": "landing-sprite",
+              "icon-size": 0.8,
+              "icon-anchor": "center",
+            },
+          });
+
+          // Fit map to route bounds
+          mapRef.current.flyTo({
+            zoom: 1, // Zoom all the way out
+            duration: 1000,
+          });
+        }
+      }
+    } catch (error) {
+      console.error("Error displaying flight plan:", error);
+    }
+  };
+
+  // Update the useEffect that handles popup changes to control nav visibility
+  useEffect(() => {
+    // Hide nav when popup is open, show when closed
+    setIsNavVisible(!popupInfo);
+  }, [popupInfo]);
 
   return (
     <div style={{ position: "relative", width: "100%", height: "100%" }}>
@@ -1049,8 +1251,10 @@ const showFlightRoute = async (flightId: string) => {
       <FloatingRightNav 
         flights={flights}
         activeFilter={activeFilter}
+        selectedAirline={selectedAirline}  // Add this
         onSelectUser={focusOnUser} 
         onFilterChange={handleFilterChange}
+        onAirlineChange={handleAirlineChange}  // Add this
         onZoomIn={zoomIn}
         onZoomOut={zoomOut}
         isVisible={isNavVisible}
@@ -1058,9 +1262,13 @@ const showFlightRoute = async (flightId: string) => {
 
       {/* Flight Information Popup */}
       {popupInfo && (
-        <UserPopupInfo
-          popupInfo={popupInfo}
-          setPopupInfo={clearPopupAndRoute}
+        <UserPopupInfo 
+          popupInfo={popupInfo} 
+          setPopupInfo={(info) => {
+            setPopupInfo(info);
+            setIsNavVisible(!info); // Show nav when popup closes
+          }}
+          onShowFlightPlan={handleShowFlightPlan}
         />
       )}
     </div>
@@ -1134,16 +1342,20 @@ const NavToggleButton = ({
 const FloatingRightNav = ({
   flights,
   activeFilter,
+  selectedAirline,  // Add this
   onSelectUser,
   onFilterChange,
+  onAirlineChange,  // Add this
   onZoomIn,
   onZoomOut,
   isVisible, // Add visibility prop
 }: {
   flights: any[];
   activeFilter: string;
+  selectedAirline: string;  // Add this
   onSelectUser: (flight: any) => void;
   onFilterChange: (filteredFlights: any[], filterId: string) => void;
+  onAirlineChange: (airline: string) => void;  // Add this
   onZoomIn: () => void;
   onZoomOut: () => void;
   isVisible: boolean; // Add visibility prop
@@ -1195,7 +1407,9 @@ const FloatingRightNav = ({
         <FilterButton 
           flights={flights} 
           activeFilter={activeFilter}
-          onFilterChange={onFilterChange} 
+          selectedAirline={selectedAirline}  // Add this
+          onFilterChange={onFilterChange}  // Fix the function name
+          onAirlineChange={onAirlineChange}  // Add this
         />
 
         {/* Compliment Button */}
@@ -1527,13 +1741,19 @@ const SearchButton = ({
 const FilterButton = ({ 
   flights, 
   activeFilter,
-  onFilterChange 
+  selectedAirline,
+  onFilterChange,
+  onAirlineChange
 }: { 
   flights: any[]; 
   activeFilter: string;
+  selectedAirline: string;
   onFilterChange: (filteredFlights: any[], filterId: string) => void;
+  onAirlineChange: (airline: string) => void;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isAirlineDialogOpen, setIsAirlineDialogOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const filterOptions = [
     { 
@@ -1559,6 +1779,24 @@ const FilterButton = ({
     }
   ];
 
+  // Get unique virtual airlines from flights data with search filtering
+  const getUniqueAirlines = () => {
+    const airlines = flights
+      .filter(f => f.virtualOrganization && f.virtualOrganization.trim() !== "")
+      .map(f => f.virtualOrganization)
+      .filter((airline, index, self) => self.indexOf(airline) === index)
+      .sort();
+    
+    // Apply search filter
+    if (searchTerm.trim()) {
+      return airlines.filter(airline => 
+        airline.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+    
+    return airlines;
+  };
+
   const applyFilter = (filterId: string) => {
     let filtered = flights;
     
@@ -1572,13 +1810,41 @@ const FilterButton = ({
       case "no-zombies":
         filtered = flights.filter(f => f.username && f.username.trim() !== "");
         break;
+      case "airline":
+        // Apply airline filter if one is selected
+        if (selectedAirline !== "all") {
+          filtered = flights.filter(f => 
+            f.virtualOrganization && 
+            f.virtualOrganization.includes(selectedAirline)
+          );
+        }
+        break;
       default:
         filtered = flights;
     }
     
     onFilterChange(filtered, filterId);
-    setIsOpen(false);
+    if (filterId !== "airline") {
+      setIsOpen(false);
+    }
   };
+
+  const handleAirlineSelect = (airline: string) => {
+    onAirlineChange(airline);
+    
+    let filtered = flights;
+    if (airline !== "all") {
+      filtered = flights.filter(f => 
+        f.virtualOrganization && 
+        f.virtualOrganization.includes(airline)
+      );
+    }
+    
+    onFilterChange(filtered, "airline");
+    setIsAirlineDialogOpen(false); // Close dialog after selection
+  };
+
+  const uniqueAirlines = getUniqueAirlines();
 
   return (
     <>
@@ -1589,7 +1855,7 @@ const FilterButton = ({
                    hover:bg-purple-600 hover:scale-105 transition-all duration-300
                    flex flex-col items-center justify-center relative group"
       >
-        {activeFilter !== "all" && (
+        {(activeFilter !== "all" || selectedAirline !== "all") && (
           <div className="absolute -top-1 -right-1 w-3 h-3 bg-orange-500 rounded-full animate-bounce"></div>
         )}
         <svg className="w-5 h-5 text-white group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1599,14 +1865,12 @@ const FilterButton = ({
         <span className="text-[0.5rem] text-white font-bold">Filter</span>
       </button>
 
+      {/* Filter Panel */}
       {isOpen && (
         <>
-          <div
-            className=""
-            onClick={() => setIsOpen(false)}
-          />
+          <div className="" onClick={() => setIsOpen(false)} />
 
-          <div className="absolute right-18 top-[-0.5rem] z-[10001] w-52
+          <div className="absolute right-18 top-[-0.5rem] z-[10001] w-64
                           animate-in slide-in-from-right-2 duration-500 ease-out">
             <div className="bg-gray-800/95 rounded-3xl shadow-2xl border border-gray-700/50">
               
@@ -1632,7 +1896,7 @@ const FilterButton = ({
                     onClick={() => applyFilter(option.id)}
                     className={cn(
                       "w-full flex items-center justify-between p-3 rounded-2xl transition-all duration-300 transform-gpu group hover:scale-[1.02]",
-                      activeFilter === option.id
+                      activeFilter === option.id && selectedAirline === "all"
                         ? "bg-purple-600/90 text-white shadow-lg shadow-purple-500/25"
                         : "bg-gray-700/40 text-gray-300 hover:bg-gray-700/80 hover:text-white"
                     )}
@@ -1650,6 +1914,111 @@ const FilterButton = ({
                     </span>
                   </button>
                 ))}
+
+                {/* Virtual Airlines Filter - Replace Select with Dialog Trigger */}
+                <div className="pt-2 border-t border-gray-700/50">
+                  <div className="flex items-center gap-2 mb-3">
+                    <span className="text-lg">🏢</span>
+                    <span className="text-sm font-medium text-white">Virtual Airlines</span>
+                  </div>
+                  
+                  <Dialog open={isAirlineDialogOpen} onOpenChange={setIsAirlineDialogOpen}>
+                    <DialogTrigger asChild>
+                      <button className="w-full bg-gray-700/40 border border-gray-600/50 text-white hover:bg-gray-700/80 rounded-lg px-3 py-2 text-left flex items-center justify-between">
+                        <span className="text-sm">
+                          {selectedAirline === "all" ? "All Airlines" : selectedAirline}
+                        </span>
+                        <span className="text-xs bg-gray-600 px-2 py-1 rounded">
+                          {selectedAirline === "all" ? flights.length : flights.filter(f => 
+                            f.virtualOrganization && 
+                            f.virtualOrganization.includes(selectedAirline)
+                          ).length}
+                        </span>
+                      </button>
+                    </DialogTrigger>
+                    
+                    <DialogContent className="max-w-md max-h-[80vh] bg-gray-900 border-gray-700 z-[10001]">
+                      <DialogHeader>
+                        <DialogTitle className="text-white flex items-center gap-2">
+                          <span className="text-lg">🏢</span>
+                          Select Virtual Airline/Organization
+                        </DialogTitle>
+                      </DialogHeader>
+                      
+                      {/* Search Input */}
+                      <div className="mb-4">
+                        <Input
+                          placeholder="Search airlines..."
+                          value={searchTerm}
+                          onChange={(e) => setSearchTerm(e.target.value)}
+                          className="bg-gray-800 border-gray-600 text-white placeholder-gray-400 focus:border-purple-500"
+                        />
+                      </div>
+                      
+                      <div className="max-h-96 overflow-y-auto space-y-2 pr-2">
+                        {/* All Airlines Option - only show when no search term */}
+                        {!searchTerm.trim() && (
+                          <button
+                            onClick={() => handleAirlineSelect("all")}
+                            className={cn(
+                              "w-full flex items-center justify-between p-3 rounded-lg transition-all duration-200",
+                              selectedAirline === "all"
+                                ? "bg-purple-600 text-white"
+                                : "bg-gray-800 text-gray-300 hover:bg-gray-700 hover:text-white"
+                            )}
+                          >
+                            <span className="font-medium">All Airlines</span>
+                            <span className="text-xs bg-gray-600 px-2 py-1 rounded">
+                              {flights.length}
+                            </span>
+                          </button>
+                        )}
+
+                        {/* Individual Airlines */}
+                        {uniqueAirlines.length > 0 ? (
+                          uniqueAirlines.map((airline) => {
+                            const count = flights.filter(f => 
+                              f.virtualOrganization && 
+                              f.virtualOrganization.includes(airline)
+                            ).length;
+                            
+                            return (
+                              <button
+                                key={airline}
+                                onClick={() => handleAirlineSelect(airline)}
+                                className={cn(
+                                  "w-full flex items-center justify-between p-3 rounded-lg transition-all duration-200",
+                                  selectedAirline === airline
+                                    ? "bg-purple-600 text-white"
+                                    : "bg-gray-800 text-gray-300 hover:bg-gray-700 hover:text-white"
+                                )}
+                              >
+                                <span className="truncate text-left flex-1 mr-2">{airline}</span>
+                                <span className="text-xs bg-gray-600 px-2 py-1 rounded flex-shrink-0">
+                                  {count}
+                                </span>
+                              </button>
+                            );
+                          })
+                        ) : searchTerm.trim() ? (
+                          <div className="text-center py-8 text-gray-400">
+                            <span className="text-2xl mb-2 block">🔍</span>
+                            No airlines found matching "{searchTerm}"
+                          </div>
+                        ) : null}
+                      </div>
+                    </DialogContent>
+                  </Dialog>
+
+                  {selectedAirline !== "all" && (
+                    <button
+                      onClick={() => handleAirlineSelect("all")}
+                      className="w-full mt-2 p-2 text-xs text-gray-400 hover:text-white transition-colors"
+                    >
+                      Clear airline filter
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
           </div>
