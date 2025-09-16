@@ -4310,4 +4310,5 @@ export const ifvarbAirlines = [
   "Ethiopian Airlines",
   "IFVARB",
   "Rex Virtual",
+  "Neos Virtual",
 ]
