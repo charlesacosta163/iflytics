@@ -306,14 +306,14 @@ const UserPopupInfo = ({
                       popupInfo?.emoji
                     )}
                   </div>
-                  <div>
+                  <div className="flex flex-col gap-1">
                     <DrawerTitle className={cn("text-2xl lg:text-4xl font-bold tracking-tight", roleColors.text)}>
                       {popupInfo?.callsign}
                     </DrawerTitle>
                     {(popupInfo?.role === "staff" ||
                       popupInfo?.role === "user" ||
                       popupInfo?.role === "mod") && (
-                      <span className="text-white/80 text-sm lg:text-lg font-medium">
+                      <span className="text-white/80 text-sm lg:text-lg font-medium self-start">
                         {popupInfo.role === "staff"
                           ? "INFINITE FLIGHT STAFF"
                           : popupInfo.role === "user"
