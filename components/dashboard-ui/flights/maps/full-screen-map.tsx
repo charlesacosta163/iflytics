@@ -13,8 +13,8 @@ import { cn } from "@/lib/utils";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { GiControlTower } from "react-icons/gi";
-import { FaRegFaceGrinWink } from "react-icons/fa6";
-import { getUserFlightPlan, getAllAirportsWithActiveATC } from "@/lib/actions";
+import { FaArrowTrendUp, FaRegFaceGrinWink } from "react-icons/fa6";
+import { getUserFlightPlan, getAllAirportsWithActiveATC, getAllAirportsWithActiveATCInMap } from "@/lib/actions";
 import { BiSolidFaceMask } from "react-icons/bi";
 import { SlGlobe } from "react-icons/sl";
 import { ImBlocked } from "react-icons/im";
@@ -24,6 +24,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { ifvarbAirlines } from "@/lib/data";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { MdTrendingUp } from "react-icons/md";
 
 
 // Add the map themes configuration
@@ -41,9 +42,11 @@ const mapThemes = {
 const FullScreenMap = ({
   flights,
   styleUrl,
+  server,
 }: {
   flights: any[];
   styleUrl: string;
+  server: string;
 }) => {
 
   // console.log(flights[0])
@@ -1224,7 +1227,7 @@ const FullScreenMap = ({
       <div ref={mapContainerRef} className="w-full h-full" />
 
       {/* Airplane Mode Switch - Bottom Center */}
-      <div className="absolute left-4 bottom-16 sm:bottom-4 sm:left-1/2 sm:transform sm:-translate-x-1/2 bg-white/20 dark:bg-gray-700/20 dark:text-light backdrop-blur-sm rounded-2xl shadow-lg p-3 border border-white/30">
+      <div className="absolute left-4 bottom-24 sm:bottom-4 sm:left-1/2 sm:transform sm:-translate-x-1/2 bg-white/20 dark:bg-gray-700/20 dark:text-light backdrop-blur-sm rounded-2xl shadow-lg p-3 border border-white/30">
         <div className="flex items-center space-x-3">
           <Switch
             id="airplane-mode"
@@ -1258,6 +1261,7 @@ const FullScreenMap = ({
         onZoomIn={zoomIn}
         onZoomOut={zoomOut}
         isVisible={isNavVisible}
+        server={server}
       />
 
       {/* Flight Information Popup */}
@@ -1349,6 +1353,7 @@ const FloatingRightNav = ({
   onZoomIn,
   onZoomOut,
   isVisible, // Add visibility prop
+  server, // Add server prop
 }: {
   flights: any[];
   activeFilter: string;
@@ -1359,6 +1364,7 @@ const FloatingRightNav = ({
   onZoomIn: () => void;
   onZoomOut: () => void;
   isVisible: boolean; // Add visibility prop
+  server: string; // Add server prop
 }) => {
   const router = useRouter();
 
@@ -1398,7 +1404,7 @@ const FloatingRightNav = ({
         </div>
 
         {/* ATC Button */}
-        <ActiveATCButton />
+        <ActiveATCButton server={server} />
 
         {/* Search Button */}
         <SearchButton flights={flights} onSelectUser={onSelectUser} />
@@ -1414,6 +1420,13 @@ const FloatingRightNav = ({
 
         {/* Compliment Button */}
         <ComplimentButton flights={flights} />
+
+        {/* <button
+        className="w-12 h-12 bg-red-400/90 backdrop-blur-sm rounded-xl shadow-lg
+                   hover:bg-red-500 hover:scale-105 transition-all duration-200 relative
+                   flex flex-col items-center justify-center"
+      ><MdTrendingUp className="w-6 h-6 text-white" />
+        <span className="text-[0.5rem] text-white font-bold">Trends</span></button> */}
 
         {/* Map Theme Button */}
         <MapThemeButton />
@@ -1435,14 +1448,14 @@ const FloatingRightNav = ({
   );
 };
 
-const ActiveATCButton = () => {
+const ActiveATCButton = ({ server }: { server: string }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [atcFacilities, setAtcFacilities] = useState<any[]>([]);
 
   useEffect(() => {
     const loadATC = async () => {
       try {
-        const data = await getAllAirportsWithActiveATC();
+        const data = await getAllAirportsWithActiveATCInMap(server);
 
         if (data && data.length > 0) {
           const uniqueAirports = data
@@ -1471,7 +1484,7 @@ const ActiveATCButton = () => {
     loadATC();
     const interval = setInterval(loadATC, 30000);
     return () => clearInterval(interval);
-  }, []);
+  }, [server]);
 
   return (
     <>
@@ -1488,7 +1501,6 @@ const ActiveATCButton = () => {
         <span className="text-[0.5rem] text-white font-bold">ATC</span>
       </button>
 
-      {/* Panel - NO BLUR EFFECT */}
       {isOpen && (
         <div className="absolute right-18 top-[-0.5rem] z-[10001] slide-in-from-right-2 duration-500 ease-out">
           <div className="bg-[#E8F4FD]/95 backdrop-blur-xl rounded-3xl shadow-2xl w-72">

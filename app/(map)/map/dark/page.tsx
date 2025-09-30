@@ -7,21 +7,38 @@ import {
   getFlightsFromServer,
 } from "@/lib/actions";
 import { customUserImages } from "@/lib/data";
-import { BiSolidFaceMask } from "react-icons/bi";
-
 import { aviationCompliments, alternator, unknownUserCompliments } from "@/lib/data";
-import Link from "next/link";
-import { FaRegFaceGrinBeam } from "react-icons/fa6";
+import { ChevronUp } from "lucide-react";
+import { useRouter, useSearchParams, usePathname } from 'next/navigation';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { LuServer } from "react-icons/lu";
 
-const fetcher = () => getFlightsFromServer();
+const servers = ["expert", "training", "casual"];
 
-const MapDarkPage = () => {
+const MapPage = () => {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  
+  // Get current server from query params, default to "Expert"
+  let currentServer = searchParams.get('s') || 'expert';
+  
+
+  if (!servers.includes(currentServer)) {
+    currentServer = 'expert';
+  }
+
+  const fetcher = (key: string) => {
+    const server = key.split('-')[1]; // Extract server from cache key
+    return getFlightsFromServer(server);
+  };
+
   const {
     data: flights = [],
     error,
     isLoading,
-  } = useSWR("flights", fetcher, {
-    refreshInterval: 30000, // 30 seconds
+  } = useSWR(`flights-${currentServer}`, fetcher, {
+    refreshInterval: 30000,
     revalidateOnFocus: true,
     revalidateOnReconnect: true,
   });
@@ -69,6 +86,13 @@ const MapDarkPage = () => {
     }));
   }, [flights]); // Only recreate when flights data actually changes
 
+  // Handle server selection change
+  const handleServerChange = (value: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('s', value);
+    router.push(`${pathname}?${params.toString()}`);
+  };
+
   if (error) {
     return (
       <div className="h-[calc(100vh-120px)] w-full flex items-center justify-center">
@@ -96,17 +120,26 @@ const MapDarkPage = () => {
         </div>
       )}
 
-
       {/* Live indicator */}
-      <div className="absolute bottom-4 left-4 z-40 bg-[#FFEFD5]/50 dark:bg-gray-700/50 dark:text-light backdrop-blur-sm px-3 py-2 rounded-lg ">
-        <div className="flex items-center gap-2 w-[200px]">
+      <div className="absolute bottom-4 left-4 z-40 flex flex-col">
+        <Select value={currentServer} onValueChange={handleServerChange}>
+          <SelectTrigger className="!bg-white text-xs text-dark self-start rounded-t-lg !rounded-b-none border-none h-auto cursor-pointer flex items-center gap-1">
+           <LuServer /> <span>Change Server</span>
+          </SelectTrigger>
+          <SelectContent>
+              <SelectItem value="expert">Expert Server</SelectItem>
+            <SelectItem value="training">Training Server</SelectItem>
+            <SelectItem value="casual">Casual Server</SelectItem>
+          </SelectContent>
+        </Select>
+        <div className="flex items-center gap-2 w-[250px] bg-[#FFEFD5]/50 dark:bg-gray-700/50 dark:text-light backdrop-blur-sm px-3 py-2 rounded-lg rounded-tl-none">
           <div
             className={`w-2 h-2 rounded-full ${
               isLoading ? "bg-yellow-400" : "bg-green-400"
             } animate-pulse`}
           ></div>
           <span className="text-sm font-medium">
-            {isLoading ? "Updating..." : "Expert Server"} • {flights.length}{" "}
+            {isLoading ? "Updating..." : `${currentServer.charAt(0).toUpperCase() + currentServer.slice(1)} Server`} • {flights.length}{" "}
             flights
           </span>
         </div>
@@ -125,9 +158,9 @@ const MapDarkPage = () => {
         </div>
       </Link> */}
 
-      <FullScreenMap flights={quirkyFlights} styleUrl="https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json"/>
+      <FullScreenMap flights={quirkyFlights} styleUrl="https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json" server={currentServer} />
     </div>
   );
 };
 
-export default MapDarkPage;
+export default MapPage;

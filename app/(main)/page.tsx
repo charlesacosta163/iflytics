@@ -273,7 +273,7 @@ export default function Home() {
                   Live Tracking
                 </h3>
                 <p className="text-gray-600 dark:text-gray-200 leading-relaxed">
-                  Real-time Expert Server tracking with live aircraft positions, flight routes, pilot information, and active ATC frequencies.
+                  Real-time Infinite Flight map tracking with live aircraft positions, flight routes, pilot information, and active ATC frequencies.
                 </p>
               </div>
             </div>
@@ -332,12 +332,12 @@ export default function Home() {
           <div className="text-center mb-20">
             <div className="inline-block mb-6">
               <h2 className="text-4xl lg:text-6xl font-black text-white mb-6 animate-fade-in-up relative">
-                Expert Server Live Map
+                Infinite Flight Live Map
                 <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-blue-400 to-cyan-400 rounded-full animate-scale-in delay-500"></div>
               </h2>
             </div>
             <p className="text-gray-200 text-xl font-medium animate-fade-in-up delay-200 max-w-3xl mx-auto">
-              Track live flights on Infinite Flight's Expert Server with real-time aircraft positions, routes, and pilot information
+              Track live flights on Infinite Flight's with real-time aircraft positions, routes, and pilot information
             </p>
           </div>
           
@@ -358,7 +358,7 @@ export default function Home() {
                   Live Flight Tracking
                 </h3>
                 <p className="text-gray-200 leading-relaxed text-sm">
-                  Watch pilots fly in real-time across the Expert Server with live aircraft positions and flight paths.
+                  Watch pilots fly in real-time across the Infinite Flight map with live aircraft positions and flight paths.
                 </p>
               </div>
             </div>
@@ -394,7 +394,7 @@ export default function Home() {
                   Active ATC Centers
                 </h3>
                 <p className="text-gray-200 leading-relaxed text-sm">
-                  View all active ATC positions with frequencies and coverage areas across the Expert Server.
+                  View all active ATC positions with frequencies and coverage areas across the Infinite Flight map servers.
                 </p>
               </div>
             </div>
@@ -466,7 +466,7 @@ export default function Home() {
             </div>
             
             <p className="text-gray-300 text-sm font-medium mt-4 animate-fade-in-up delay-700">
-              Updated every 30 seconds with live Expert Server data
+              Updated every 30 seconds with live Infinite Flight map data
             </p>
           </div>
         </div>
@@ -655,7 +655,7 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               { number: "50K+", label: "Flights Tracked", gradient: "from-blue-400 to-blue-600", icon: <TbPlaneInflight className="text-blue-400"/>, delay: "delay-100" },
-              { number: "225+", label: "Active Users", gradient: "from-green-400 to-green-600", icon: <RiCopilotFill className="text-green-400"/>, delay: "delay-200" },
+              { number: "275+", label: "Active Users", gradient: "from-green-400 to-green-600", icon: <RiCopilotFill className="text-green-400"/>, delay: "delay-200" },
               { number: "24/7", label: "Live Updates", gradient: "from-orange-400 to-orange-600", icon: <LuCalendarClock className="text-orange-400"/>, delay: "delay-400" }
             ].map((stat, index) => (
               <div key={index} className={`group text-center p-8 bg-gradient-to-br from-gray/30 to-gray/50 backdrop-blur-xl rounded-2xl border border-gray-600/30 hover:border-gray-400/50 transition-all duration-500 hover:scale-105 animate-slide-in-up ${stat.delay} relative overflow-hidden flex flex-col items-center justify-center`}>
@@ -764,7 +764,7 @@ export default function Home() {
                   </div>
                   <div className="flex items-start gap-3">
                     <FaCheck className="text-green-500 mt-1 flex-shrink-0"/>
-                    <span className="text-gray-700 dark:text-gray-300">The Expert Server Map</span>
+                    <span className="text-gray-700 dark:text-gray-300">The Infinite Flight Map</span>
                   </div>
                   <div className="flex items-start gap-3">
                     <FaCheck className="text-green-500 mt-1 flex-shrink-0"/>
@@ -891,7 +891,7 @@ export default function Home() {
           {/* Bottom Note */}
           <div className="mt-16 text-center">
             <p className="text-gray-600 dark:text-gray-400 text-sm">
-              All plans include access to your extensive flight history and Expert Server live tracking
+              All plans include access to your extensive flight history and Infinite Flight live tracking
             </p>
           </div>
         </div>

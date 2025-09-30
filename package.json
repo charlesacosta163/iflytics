@@ -1,6 +1,6 @@
 {
   "name": "iflytics",
-  "version": "1.4.0",
+  "version": "1.4.1-slowcore",
   "private": true,
   "scripts": {
     "dev": "next dev",

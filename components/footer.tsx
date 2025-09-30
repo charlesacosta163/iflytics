@@ -11,7 +11,7 @@ const Footer = () => {
         <Link href="https://github.com/charlesacosta163" target="_blank" rel="noopener noreferrer">
           <FaGithub className="text-lg hover:text-gray-700 dark:hover:text-gray-300 transition-colors" />
         </Link>
-        <Link href="https://discord.gg/9p46Zbwc" target="_blank" rel="noopener noreferrer">
+        <Link href="https://discord.gg/TNFmQmrW" target="_blank" rel="noopener noreferrer">
           <FaDiscord className="text-lg hover:text-gray-700 dark:hover:text-gray-300 transition-colors" />
         </Link>
         <span>|</span>

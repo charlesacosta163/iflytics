@@ -327,6 +327,50 @@ export async function getInfiniteFlightAirportCoordinates(airportIcao: string) {
     }
 }
 
+export async function getAllAirportsWithActiveATCInMap(server: string = "expert") {
+    server = server.toLowerCase()
+
+    if (server === 'training') {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/sessions/${process.env.NEXT_PUBLIC_IF_TRAINING_SERVER_ID}/atc`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${API_KEY}`
+            },
+            next: { revalidate: 120 } // Cache for 2 minutes
+        })
+
+        const data = await response.json()
+
+        return data.result
+    } else if (server === 'casual') {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/sessions/${process.env.NEXT_PUBLIC_IF_CASUAL_SERVER_ID}/atc`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${API_KEY}`
+            },
+            next: { revalidate: 120 } // Cache for 2 minutes
+        })
+
+        const data = await response.json()
+
+        return data.result
+    }
+
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/sessions/${process.env.NEXT_PUBLIC_IF_EXPERT_SERVER_ID}/atc`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${API_KEY}`
+        },
+        next: { revalidate: 120 } // Cache for 2 minutes
+    })
+
+    const data = await response.json()
+
+    return data.result
+}
 
 export async function getAllAirportsWithActiveATC() {
     try {
@@ -491,8 +535,41 @@ export async function matchATCTypeToTitle(atcType: string) {
     }
 }
 
-export async function getFlightsFromServer() {
+export async function getFlightsFromServer(server: string = "Expert") {
     // Support only from Expert Server for now
+
+    server = server.toLowerCase()
+
+    if (server === "casual") {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/sessions/${process.env.NEXT_PUBLIC_IF_CASUAL_SERVER_ID}/flights`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${API_KEY}`
+            },
+            next: { revalidate: 30 } // Cache for 30 seconds
+        })
+    
+        const data = await response.json()
+    
+        return data.result || []
+    }
+
+    else if (server === "training") {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/sessions/${process.env.NEXT_PUBLIC_IF_TRAINING_SERVER_ID}/flights`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${API_KEY}`
+            },
+            next: { revalidate: 30 } // Cache for 30 seconds
+        })
+
+        const data = await response.json()
+
+        return data.result || []
+    }
+    
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/sessions/${process.env.NEXT_PUBLIC_IF_EXPERT_SERVER_ID}/flights`, {
         method: "GET",
         headers: {
@@ -505,6 +582,7 @@ export async function getFlightsFromServer() {
     const data = await response.json()
 
     return data.result || []
+    
 }
 
 export async function getUserFlightInfo(userId: string, flightId: string) {

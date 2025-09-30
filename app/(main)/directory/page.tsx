@@ -6,7 +6,6 @@ import {
   getAirportStatus,
   getAirportATIS,
   getAllAirportsWithActiveATC,
-  matchATCTypeToTitle,
 } from "@/lib/actions";
 import { matchAircraftNameToImage } from "@/lib/cache/flightinsightsdata";
 import Image from "next/image";
