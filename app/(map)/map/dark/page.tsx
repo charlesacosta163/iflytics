@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo } from "react";
+import React, { useMemo, Suspense } from "react";
 import useSWR from "swr";
 import FullScreenMap from "@/components/dashboard-ui/flights/maps/full-screen-map";
 import {
@@ -15,7 +15,7 @@ import { LuServer } from "react-icons/lu";
 
 const servers = ["expert", "training", "casual"];
 
-const MapPage = () => {
+const MapPageContent = () => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -123,7 +123,7 @@ const MapPage = () => {
       {/* Live indicator */}
       <div className="absolute bottom-4 left-4 z-40 flex flex-col">
         <Select value={currentServer} onValueChange={handleServerChange}>
-          <SelectTrigger className="!bg-white text-xs text-dark self-start rounded-t-lg !rounded-b-none border-none h-auto cursor-pointer flex items-center gap-1">
+        <SelectTrigger className="!bg-white text-xs text-dark self-start rounded-t-lg !rounded-b-none border-none h-auto cursor-pointer flex items-center gap-1">
            <LuServer /> <span>Change Server</span>
           </SelectTrigger>
           <SelectContent>
@@ -145,21 +145,20 @@ const MapPage = () => {
         </div>
       </div>
 
-      {/* <Link href="/map/game">
-        <div className="absolute bottom-4 right-4 z-50"> */}
-          {/* Gradient border wrapper */}
-          {/* <div className="bg-gradient-to-r from-orange-500 via-yellow-500 to-green-500 p-[4px] rounded-lg shadow-lg"> */}
-            {/* Inner content */}
-            {/* <div className="bg-gray-700 text-light backdrop-blur-sm rounded-md px-4 py-2 flex items-center gap-2 hover:bg-gray-600 transition-colors">
-              <BiSolidFaceMask className="text-light" />
-              <h1 className="hidden sm:block tracking-tight font-bold">Find the Pilot</h1>
-            </div>
-          </div>
-        </div>
-      </Link> */}
-
       <FullScreenMap flights={quirkyFlights} styleUrl="https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json" server={currentServer} />
     </div>
+  );
+};
+
+const MapPage = () => {
+  return (
+    <Suspense fallback={<div className="h-screen w-full flex items-center justify-center">
+      <div className="bg-white dark:bg-gray-700 dark:text-light px-4 py-2 rounded-lg shadow-lg">
+        Loading map...
+      </div>
+    </div>}>
+      <MapPageContent />
+    </Suspense>
   );
 };
 
