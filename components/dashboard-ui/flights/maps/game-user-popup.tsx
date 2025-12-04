@@ -63,7 +63,7 @@ const GameUserPopup = ({
             <div className="text-gray-500 text-6xl mb-1">
               {popupInfo.customImage ? (
                 <img
-                  src={new URL(popupInfo.customImage, import.meta.url).href}
+                  src={popupInfo.customImage}
                   alt="Custom avatar"
                   className="w-16 h-16 rounded-full object-cover border-2 border-gray-200"
                 />

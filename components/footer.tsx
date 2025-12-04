@@ -8,10 +8,10 @@ const Footer = () => {
     <footer className='text-xs text-gray-500 dark:text-gray-400 p-4 flex items-center justify-between w-full'>
       <div className="flex items-center gap-2">
         &copy; 2025 - Charles Acosta
-        <Link href="https://github.com/charlesacosta163" target="_blank" rel="noopener noreferrer">
+        {/* <Link href="https://github.com/charlesacosta163" target="_blank" rel="noopener noreferrer">
           <FaGithub className="text-lg hover:text-gray-700 dark:hover:text-gray-300 transition-colors" />
-        </Link>
-        <Link href="https://discord.gg/TNFmQmrW" target="_blank" rel="noopener noreferrer">
+        </Link> */}
+        <Link href="https://discord.gg/cp2G7d5d" target="_blank" rel="noopener noreferrer">
           <FaDiscord className="text-lg hover:text-gray-700 dark:hover:text-gray-300 transition-colors" />
         </Link>
         <span>|</span>

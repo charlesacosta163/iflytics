@@ -213,7 +213,7 @@ const UserPopupInfo = ({
                 <div className="text-4xl lg:text-5xl">
                   {popupInfo?.customImage ? (
                     <img
-                      src={new URL(popupInfo.customImage, import.meta.url).href}
+                      src={popupInfo.customImage}
                       alt="Custom avatar"
                       className="w-12 h-12 lg:w-16 lg:h-16 rounded-full object-cover border-2 border-gray-200"
                     />
@@ -298,7 +298,7 @@ const UserPopupInfo = ({
                   <div className="text-6xl lg:text-8xl">
                     {popupInfo?.customImage ? (
                       <img
-                        src={new URL(popupInfo.customImage, import.meta.url).href}
+                        src={popupInfo.customImage}
                         alt="Custom avatar"
                         className="w-16 h-16 lg:w-24 lg:h-24 rounded-full object-cover border-2 border-white/20"
                       />

@@ -1675,10 +1675,7 @@ const SearchButton = ({
                       <div className="w-8 h-8 text-lg flex items-center justify-center">
                         {flight.customImage ? (
                           <img
-                            src={
-                              new URL(flight.customImage, import.meta.url)
-                                .href
-                            }
+                            src={flight.customImage}
                             alt="Custom avatar"
                             className="w-8 h-8 rounded-full object-cover border-2 border-gray-200"
                           />
