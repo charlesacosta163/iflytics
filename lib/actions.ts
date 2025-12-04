@@ -738,9 +738,9 @@ export async function revalidateFlightRoutes(userId: string) {
   
   try {
     // Revalidate both cache tags used in the flight routes
-    revalidateTag(`flight-routes-${userId}`)
-    revalidateTag(`user-${userId}`)
-    revalidateTag('flight-routes')
+    revalidateTag(`flight-routes-${userId}`, 'page')
+    revalidateTag(`user-${userId}`, 'page')
+    revalidateTag('flight-routes', 'page')
     
     return {
       success: true,
