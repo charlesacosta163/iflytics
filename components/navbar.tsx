@@ -79,10 +79,10 @@ const Navbar = () => {
             {/* Search Button */}
             <Link
               href="/"
-              className="group flex items-center gap-2 px-3 py-2 text-sm font-medium bg-gray-900 text-white dark:bg-blue-950 dark:hover:bg-black rounded-full transition-all duration-200 shadow-sm"
+              className="group flex items-center gap-2 px-3 py-2 text-sm bg-gray-900 text-white dark:bg-blue-950 dark:hover:bg-black rounded-full transition-all duration-200 shadow-sm font-bold"
             >
               <FaSearch className="w-4 h-4 group-hover:rotate-12 transition-transform duration-200" />
-              <span>Search</span>
+              <span>User</span>
             </Link>
             <Link 
               href="#pricing"

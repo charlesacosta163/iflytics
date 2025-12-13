@@ -1,5 +1,5 @@
 import { getUser } from "@/lib/supabase/user-actions";
-import { convertMinutesToHours } from "@/lib/utils";
+import { convertMinutesToHours, formatDate } from "@/lib/utils";
 import {
   getAircraftAndLivery,
   getUselessFactToday,
@@ -38,6 +38,7 @@ import { Button } from "@/components/ui/button";
 
 import { BsPersonWorkspace } from "react-icons/bs";
 import { SlActionUndo } from "react-icons/sl";
+import { Badge } from "@/components/ui/badge";
 
 export const metadata: Metadata = {
   title: "Dashboard - IFlytics | Your Infinite Flight Statistics",
@@ -256,8 +257,8 @@ export default async function DashboardPage() {
                 <CardTitle className="text-2xl font-bold tracking-tight">
                   Recent Flight
                 </CardTitle>
-                <CardDescription className="text-gray-600">
-                  Your recent flight.
+                <CardDescription className="text-gray-600 font-medium">
+                  <Badge className="bg-gray-600 text-white">{formatDate(recentFlight.created)}</Badge>
                 </CardDescription>
               </div>
               { recentFlight.id && (

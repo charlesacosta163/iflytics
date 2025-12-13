@@ -5,6 +5,9 @@ import Link from 'next/link'
 import ProfileHeader from '@/components/profile-header'
 import FlightEntryCard from '@/components/flight-entry'
 import PaginationBtn from '@/components/pagination-btn'
+import { LuFileSearch2 } from 'react-icons/lu'
+import { Badge } from '@/components/ui/badge'
+import FlightPageLookupButton from '@/components/flight-page-lookup-btn'
 
 type PageProps = {
     params: Promise<{name: string | string[] | undefined}>,
@@ -51,9 +54,11 @@ const FlightsPage = async ({
             
             <div className="flex items-center justify-between gap-2">
                 <h2 className='text-5xl font-black dark:text-light bg-gradient-to-r from-gray-600 to-dark bg-clip-text text-transparent py-0.5'>Flights</h2>
-                <div className="text-sm text-muted-foreground">
+                <div className="text-sm text-muted-foreground relative">
                     <span className="sm:block hidden">Showing page {pageIndex} of {totalPages} ({totalCount} total flights)</span>
                     <span className="sm:hidden">Page {pageIndex} of {totalPages}</span>
+
+                    <FlightPageLookupButton flightsTotal={totalCount as number} />
                 </div>
             </div>
 
