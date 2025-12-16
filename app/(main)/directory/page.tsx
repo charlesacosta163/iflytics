@@ -15,6 +15,7 @@ import AirportWithATCCard from "@/components/airport-with-atc-card";
 import { FaPlane } from "react-icons/fa";
 import { Metadata } from 'next'
 import { TbBuildingAirport, TbBuildingBroadcastTower } from "react-icons/tb";
+import { cn } from "@/lib/utils";
 
 let maintenanceMode = false;
 
@@ -127,7 +128,7 @@ const DirectoryPage = async ({
     if (!airport) {
       return (
         <div className="text-center py-8">
-          <p className="text-gray-500">Enter an airport ICAO code to search</p>
+          <p className="text-gray-500 dark:text-gray-400">Enter an airport ICAO code to search</p>
         </div>
       );
     }
@@ -135,10 +136,10 @@ const DirectoryPage = async ({
     if (!airportData) {
       return (
         <div className="text-center py-8">
-          <p className="text-red-400 font-bold text-2xl">
+          <p className="text-red-600 dark:text-red-400 font-bold text-xl md:text-2xl tracking-tight">
             Failed to load airport data
           </p>
-          <p className="text-gray-500 text-sm mt-2">Please try again later</p>
+          <p className="text-gray-600 dark:text-gray-400 text-sm mt-2">Please try again later</p>
         </div>
       );
     }
@@ -146,10 +147,10 @@ const DirectoryPage = async ({
     if (airportData.statusCode === 404) {
       return (
         <div className="text-center py-8">
-          <p className="text-red-400 font-bold text-2xl">
+          <p className="text-red-600 dark:text-red-400 font-bold text-xl md:text-2xl tracking-tight">
             Airport "{airport.toUpperCase()}" not found
           </p>
-          <p className="text-gray-500 text-sm mt-2">
+          <p className="text-gray-600 dark:text-gray-400 text-sm mt-2">
             Please check the ICAO code and try again
           </p>
         </div>
@@ -159,8 +160,8 @@ const DirectoryPage = async ({
     if (airportData.statusCode === 500 || airportData.error) {
       return (
         <div className="text-center py-8">
-          <p className="text-red-400 font-bold text-2xl">Server Error</p>
-          <p className="text-gray-500 text-sm mt-2">
+          <p className="text-red-600 dark:text-red-400 font-bold text-xl md:text-2xl tracking-tight">Server Error</p>
+          <p className="text-gray-600 dark:text-gray-400 text-sm mt-2">
             {airportData.error || "Unable to fetch airport data at this time"}
           </p>
         </div>
@@ -171,48 +172,89 @@ const DirectoryPage = async ({
   };
 
   return (
-    <div className="p-4 max-w-[1000px] w-full mx-auto">
-      <h1 className="text-5xl sm:text-6xl font-bold tracking-tight dark:text-light bg-gradient-to-r from-gray-600 to-dark py-0.5 bg-clip-text text-transparent flex gap-2 items-center">
+    <div className="p-4 md:p-6 max-w-[1000px] w-full mx-auto">
+      <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-gray-800 dark:text-gray-100 flex gap-2 items-center">
         Directory
       </h1>
 
       <Tabs defaultValue="airport" className="!w-full">
-        <TabsList className="mt-4 w-full bg-gray-500 p-1 rounded-full">
+        <TabsList className={cn(
+          "mt-4 md:mt-6 w-full",
+          "bg-gray-200 dark:bg-gray-700",
+          "p-1 rounded-[20px] md:rounded-[25px]"
+        )}>
           <TabsTrigger
             value="airport"
-            className="data-[state=active]:bg-gray-700 data-[state=active]:text-white data-[state=inactive]:bg-transparent data-[state=inactive]:text-gray-300 transition-all duration-200 rounded-full flex gap-2 items-center"
+            className={cn(
+              "data-[state=active]:bg-white data-[state=active]:dark:bg-gray-600",
+              "data-[state=active]:text-gray-800 data-[state=active]:dark:text-white",
+              "data-[state=inactive]:bg-transparent",
+              "data-[state=inactive]:text-gray-600 data-[state=inactive]:dark:text-gray-400",
+              "transition-all duration-200",
+              "rounded-[15px] md:rounded-[20px]",
+              "flex gap-2 items-center",
+              "font-semibold"
+            )}
           >
-            <TbBuildingAirport className="w-6 h-6 text-light" />
+            <TbBuildingAirport className="w-5 h-5 md:w-6 md:h-6" />
             Airport
           </TabsTrigger>
           <TabsTrigger
             value="aircraft"
-            className="data-[state=active]:bg-gray-700 data-[state=active]:text-white data-[state=inactive]:bg-transparent data-[state=inactive]:text-gray-300 transition-all duration-200 rounded-full flex gap-2 items-center"
+            className={cn(
+              "data-[state=active]:bg-white data-[state=active]:dark:bg-gray-600",
+              "data-[state=active]:text-gray-800 data-[state=active]:dark:text-white",
+              "data-[state=inactive]:bg-transparent",
+              "data-[state=inactive]:text-gray-600 data-[state=inactive]:dark:text-gray-400",
+              "transition-all duration-200",
+              "rounded-[15px] md:rounded-[20px]",
+              "flex gap-2 items-center",
+              "font-semibold"
+            )}
           >
-            <FaPlane className="w-6 h-6 text-light" />
+            <FaPlane className="w-5 h-5 md:w-6 md:h-6" />
             Aircraft
           </TabsTrigger>
           <TabsTrigger
             value="airport-list"
-            className="data-[state=active]:bg-gray-700 data-[state=active]:text-white data-[state=inactive]:bg-transparent data-[state=inactive]:text-gray-300 transition-all duration-200 rounded-full flex gap-2 items-center"
+            className={cn(
+              "data-[state=active]:bg-white data-[state=active]:dark:bg-gray-600",
+              "data-[state=active]:text-gray-800 data-[state=active]:dark:text-white",
+              "data-[state=inactive]:bg-transparent",
+              "data-[state=inactive]:text-gray-600 data-[state=inactive]:dark:text-gray-400",
+              "transition-all duration-200",
+              "rounded-[15px] md:rounded-[20px]",
+              "flex gap-2 items-center",
+              "font-semibold"
+            )}
           >
-            <TbBuildingBroadcastTower className="w-6 h-6 text-green-500 animate-pulse" />
+            <TbBuildingBroadcastTower className="w-5 h-5 md:w-6 md:h-6 text-green-500 animate-pulse" />
             Active ATC
           </TabsTrigger>
         </TabsList>
 
         <TabsContent value="aircraft">
-          <div className="flex gap-2 items-center mt-4 mb-6">
-            <FaPlane className="w-6 h-6 text-gray-700" />
-            <h2 className="text-gray-700 dark:text-gray-300 text-xl font-bold">All Aircraft ({aircraft.result.length})</h2>
+          <div className="flex gap-2 items-center mt-4 md:mt-6 mb-4 md:mb-6">
+            <FaPlane className="w-5 h-5 md:w-6 md:h-6 text-gray-700 dark:text-gray-300" />
+            <h2 className="text-gray-800 dark:text-gray-200 text-lg md:text-xl font-bold tracking-tight">
+              All Aircraft ({aircraft.result.length})
+            </h2>
           </div>
 
           {aircraft && aircraft.result && aircraft.result.length > 0 ? (
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
               {aircraft.result.map((aircraft: any) => (
-                <div
+                <Card
                   key={aircraft.id}
-                  className="flex md:flex-row flex-col gap-4 justify-between items-center bg-gradient-to-br from-gray to-dark p-4 rounded-lg"
+                  className={cn(
+                    "flex md:flex-row flex-col gap-3 md:gap-4 justify-between items-center",
+                    "bg-gradient-to-br from-gray-100 to-gray-200",
+                    "dark:from-gray-800 dark:to-gray-900",
+                    "p-4 md:p-5",
+                    "rounded-[20px] md:rounded-[25px]",
+                    "border-2 border-gray-200 dark:border-gray-700",
+                    "hover:scale-[1.02] transition-transform duration-200"
+                  )}
                 >
                   <Image
                     src={`/images/aircraft/${matchAircraftNameToImage(
@@ -221,16 +263,17 @@ const DirectoryPage = async ({
                     alt={aircraft.name}
                     width={200}
                     height={200}
+                    className="w-[150px] md:w-[200px] h-auto"
                   />
-                  <span className="md:text-2xl text-xl font-black tracking-tight text-white text-center md:text-right">
+                  <span className="text-lg md:text-2xl font-black tracking-tight text-gray-800 dark:text-white text-center md:text-right">
                     {aircraft.name}
                   </span>
-                </div>
+                </Card>
               ))}
             </div>
           ) : (
             <div className="text-center py-8">
-              <p className="text-gray-500">Unable to load aircraft data</p>
+              <p className="text-gray-500 dark:text-gray-400">Unable to load aircraft data</p>
             </div>
           )}
         </TabsContent>
@@ -239,16 +282,21 @@ const DirectoryPage = async ({
 
           {maintenanceMode ? (
             <div className="text-center py-8">
-              <p className="text-gray-500">This feature is currently under maintenance, please check back later.</p>
+              <p className="text-gray-500 dark:text-gray-400">This feature is currently under maintenance, please check back later.</p>
             </div>
           ) : (
-          <div className="flex flex-col gap-6">
-            <Card className="p-6 bg-gradient-to-br from-gray to-dark text-white">
-              <h2 className="text-2xl tracking-tight font-bold mb-2 flex gap-2 items-center">
-                <TbBuildingAirport className="w-6 h-6 text-light" />
+          <div className="flex flex-col gap-4 md:gap-6">
+            <Card className={cn(
+              "p-4 md:p-6",
+              "bg-gray-50 dark:bg-gray-800",
+              "border-2 border-gray-200 dark:border-gray-700",
+              "rounded-[20px] md:rounded-[25px]"
+            )}>
+              <h2 className="text-xl md:text-2xl tracking-tight font-bold mb-3 md:mb-4 flex gap-2 items-center text-gray-800 dark:text-white">
+                <TbBuildingAirport className="w-5 h-5 md:w-6 md:h-6" />
                 Enter an airport ICAO code
               </h2>
-              <form action="/directory" className="flex gap-3">
+              <form action="/directory" className="flex flex-col sm:flex-row gap-3">
                 <input
                   type="text"
                   name="airport"
@@ -256,22 +304,39 @@ const DirectoryPage = async ({
                   autoComplete="off"
                   maxLength={4}
                   minLength={4}
-                  className="flex-1 px-4 py-2 bg-gray-700 outline-none rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent border-none text-sm font-medium"
+                  className={cn(
+                    "flex-1 px-4 py-2 md:py-3",
+                    "bg-white dark:bg-gray-700",
+                    "text-gray-800 dark:text-white",
+                    "border-2 border-gray-300 dark:border-gray-600",
+                    "outline-none rounded-[15px] md:rounded-[20px]",
+                    "focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400",
+                    "focus:border-transparent",
+                    "text-sm md:text-base font-medium",
+                    "placeholder:text-gray-400 dark:placeholder:text-gray-500"
+                  )}
                   defaultValue={(airport as string) || ""}
                   required
                 />
                 <button
                   type="submit"
-                  className="px-6 py-2 bg-blue-600 text-white text-sm font-bold rounded-lg hover:bg-blue-700 transition-colors duration-200"
+                  className={cn(
+                    "px-6 py-2 md:py-3",
+                    "bg-blue-600 hover:bg-blue-700",
+                    "dark:bg-blue-500 dark:hover:bg-blue-600",
+                    "text-white text-sm md:text-base font-bold",
+                    "rounded-[15px] md:rounded-[20px]",
+                    "transition-colors duration-200"
+                  )}
                 >
                   Search
                 </button>
               </form>
 
               {airport && (
-                <span className="text-sm font-medium text-gray-300">
+                <span className="text-xs md:text-sm font-medium text-gray-600 dark:text-gray-400 mt-3 block">
                   You Searched for:{" "}
-                  <b className="text-white">{airport.toUpperCase()}</b>
+                  <b className="text-gray-800 dark:text-white">{airport.toUpperCase()}</b>
                 </span>
               )}
             </Card>

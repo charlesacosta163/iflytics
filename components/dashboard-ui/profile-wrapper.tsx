@@ -100,7 +100,7 @@ const ProfileWrapper = ({
   return (
     <main className="flex flex-col min-h-full w-full">
       <div className="w-full space-y-6 self-start">
-        <div className="flex flex-col gap-2 w-full items-center">
+        <div className="flex flex-col gap-2 w-full items-center bg-gray-50 dark:bg-gray-800 rounded-[15px] border-2 border-gray-200 dark:border-gray-700 p-4">
           <span className="text-4xl font-bold dark:text-light bg-gradient-to-r from-gray-600 to-dark bg-clip-text text-transparent tracking-tight">
             Your Profile
           </span>

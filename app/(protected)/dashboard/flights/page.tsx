@@ -37,6 +37,7 @@ import { TbLock } from "react-icons/tb";
 import { Badge } from "@/components/ui/badge";
 import GroupedSubscriptionButtons from "@/components/dashboard-ui/grouped-sub-btns";
 import PromoReminders from "@/components/dashboard-ui/stripe/promo-reminders";
+import { cn } from "@/lib/utils";
 
 
 export const metadata: Metadata = {
@@ -138,63 +139,144 @@ const FlightsPage = async ({searchParams}: { searchParams: Promise<{ [key: strin
   return (  
     <div className="space-y-8 pb-8">
       {/* Header Section */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h1 className="text-4xl font-bold dark:text-light bg-gradient-to-r from-gray-600 to-dark bg-clip-text text-transparent tracking-tight">
-            Your Flight Activity
-          </h1>
-          <p className="text-gray-600 dark:text-gray-300 mt-2 flex items-center gap-2">
-            <ImStatsDots className="text-gray-500" />
+      <div className={cn(
+        "flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 md:gap-6",
+        "p-4 md:p-6",
+        "bg-gray-50 dark:bg-gray-800",
+        "border-2 border-gray-200 dark:border-gray-700",
+        "rounded-[20px] md:rounded-[25px]"
+      )}>
+        <div className="flex-1">
+          <div className="flex items-center gap-3">
+            <div className={cn(
+              "p-2 md:p-3 rounded-[12px]",
+              "bg-purple-100 dark:bg-purple-900/30"
+            )}>
+              <ImStatsDots className="w-5 h-5 md:w-6 md:h-6 text-purple-600 dark:text-purple-400" />
+            </div>
+            <h1 className="text-2xl md:text-3xl lg:text-4xl font-black tracking-tight text-gray-800 dark:text-gray-100">
+              Your Flight Activity
+            </h1>
+          </div>
+          <p className="text-sm md:text-base text-gray-600 dark:text-gray-400 font-medium ml-12 md:ml-[60px]">
             Your flight statistics and insights
           </p>
         </div>
-        <SelectTimeframeButton subscription={subscription as Subscription} months={uniqueMonths} />
+        <div className="">
+          <SelectTimeframeButton subscription={subscription as Subscription} months={uniqueMonths} />
+        </div>
       </div>
 
       {/* Tabs */}
       <Tabs defaultValue="routes" className="w-full">
-      <TabsList className="w-full bg-gray-500 p-1 rounded-full mb-2">
-        <TabsTrigger value="overview" className="data-[state=active]:bg-gray-700 data-[state=active]:text-white data-[state=inactive]:bg-transparent data-[state=inactive]:text-gray-300 transition-all duration-200 rounded-full flex flex-col sm:flex-row gap-1 sm:gap-2 items-center px-2 sm:px-4">
-          <FaChartLine className="w-4 h-4 sm:w-5 sm:h-5 text-light" />
-          <span className="hidden sm:inline text-xs sm:text-sm">Overview</span>
+      <TabsList className={cn(
+        "w-full p-1.5 mb-3 md:mb-4",
+        "bg-gray-200 dark:bg-gray-700",
+        "rounded-[15px] md:rounded-[20px]"
+      )}>
+        <TabsTrigger 
+          value="overview" 
+          className={cn(
+            "flex flex-col sm:flex-row gap-1 sm:gap-2 items-center justify-center",
+            "px-2 sm:px-4 py-2",
+            "rounded-[12px] md:rounded-[15px]",
+            "font-bold text-xs sm:text-sm",
+            "transition-all duration-200",
+            "data-[state=active]:bg-white data-[state=active]:dark:bg-gray-600",
+            "data-[state=active]:text-gray-800 data-[state=active]:dark:text-white",
+            "data-[state=active]:shadow-sm",
+            "data-[state=inactive]:bg-transparent",
+            "data-[state=inactive]:text-gray-600 data-[state=inactive]:dark:text-gray-300",
+            "hover:bg-gray-100 dark:hover:bg-gray-600/50"
+          )}
+        >
+          <FaChartLine className="w-4 h-4 sm:w-5 sm:h-5" />
+          <span className="hidden sm:inline">Overview</span>
         </TabsTrigger>
         
-        <TabsTrigger value="flights" className="data-[state=active]:bg-gray-700 data-[state=active]:text-white data-[state=inactive]:bg-transparent data-[state=inactive]:text-gray-300 transition-all duration-200 rounded-full flex flex-col sm:flex-row gap-1 sm:gap-2 items-center px-2 sm:px-4">
-          <FaHistory className="w-4 h-4 sm:w-5 sm:h-5 text-light" />
-          <span className="hidden sm:inline text-xs sm:text-sm">Flight History</span>
+        <TabsTrigger 
+          value="flights" 
+          className={cn(
+            "flex flex-col sm:flex-row gap-1 sm:gap-2 items-center justify-center",
+            "px-2 sm:px-4 py-2",
+            "rounded-[12px] md:rounded-[15px]",
+            "font-bold text-xs sm:text-sm",
+            "transition-all duration-200",
+            "data-[state=active]:bg-white data-[state=active]:dark:bg-gray-600",
+            "data-[state=active]:text-gray-800 data-[state=active]:dark:text-white",
+            "data-[state=active]:shadow-sm",
+            "data-[state=inactive]:bg-transparent",
+            "data-[state=inactive]:text-gray-600 data-[state=inactive]:dark:text-gray-300",
+            "hover:bg-gray-100 dark:hover:bg-gray-600/50"
+          )}
+        >
+          <FaHistory className="w-4 h-4 sm:w-5 sm:h-5" />
+          <span className="hidden sm:inline">Flight History</span>
         </TabsTrigger>
         
-        <TabsTrigger value="routes" className="data-[state=active]:bg-gray-700 data-[state=active]:text-white data-[state=inactive]:bg-transparent data-[state=inactive]:text-gray-300 transition-all duration-200 rounded-full flex flex-col sm:flex-row gap-1 sm:gap-2 items-center px-2 sm:px-4">
+        <TabsTrigger 
+          value="routes" 
+          className={cn(
+            "flex flex-col sm:flex-row gap-1 sm:gap-2 items-center justify-center",
+            "px-2 sm:px-4 py-2",
+            "rounded-[12px] md:rounded-[15px]",
+            "font-bold text-xs sm:text-sm",
+            "transition-all duration-200",
+            "data-[state=active]:bg-white data-[state=active]:dark:bg-gray-600",
+            "data-[state=active]:text-gray-800 data-[state=active]:dark:text-white",
+            "data-[state=active]:shadow-sm",
+            "data-[state=inactive]:bg-transparent",
+            "data-[state=inactive]:text-gray-600 data-[state=inactive]:dark:text-gray-300",
+            "hover:bg-gray-100 dark:hover:bg-gray-600/50",
+            !hasPremiumAccess(subscription as Subscription) && "data-[state=inactive]:text-yellow-600 dark:data-[state=inactive]:text-yellow-400"
+          )}
+        >
           {
             hasPremiumAccess(subscription as Subscription) ? (
               <>
-                <FaRoute className="w-4 h-4 sm:w-5 sm:h-5 text-light" />
-                <span className="hidden sm:inline text-xs sm:text-sm">Routes</span>
+                <FaRoute className="w-4 h-4 sm:w-5 sm:h-5" />
+                <span className="hidden sm:inline">Routes</span>
               </>
             ) : (
               <>
-                <FaLock className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-400" />
-                <span className="hidden sm:inline text-xs sm:text-sm text-yellow-300">Routes</span>
+                <FaLock className="w-4 h-4 sm:w-5 sm:h-5" />
+                <span className="hidden sm:inline">Routes</span>
               </>
             )
           }
         </TabsTrigger>
         
-          <TabsTrigger value="aircraft" className="data-[state=active]:bg-gray-700 data-[state=active]:text-white data-[state=inactive]:bg-transparent data-[state=inactive]:text-gray-300 transition-all duration-200 rounded-full flex flex-col sm:flex-row gap-1 sm:gap-2 items-center px-2 sm:px-4">
-            {
-              hasPremiumAccess(subscription as Subscription) ? (
-                <>
-                  <FaPlane className="w-4 h-4 sm:w-5 sm:h-5 text-light" />
-                  <span className="hidden sm:inline text-xs sm:text-sm">Aircraft</span>
-                </>
+        <TabsTrigger 
+          value="aircraft" 
+          className={cn(
+            "flex flex-col sm:flex-row gap-1 sm:gap-2 items-center justify-center",
+            "px-2 sm:px-4 py-2",
+            "rounded-[12px] md:rounded-[15px]",
+            "font-bold text-xs sm:text-sm",
+            "transition-all duration-200",
+            "data-[state=active]:bg-white data-[state=active]:dark:bg-gray-600",
+            "data-[state=active]:text-gray-800 data-[state=active]:dark:text-white",
+            "data-[state=active]:shadow-sm",
+            "data-[state=inactive]:bg-transparent",
+            "data-[state=inactive]:text-gray-600 data-[state=inactive]:dark:text-gray-300",
+            "hover:bg-gray-100 dark:hover:bg-gray-600/50",
+            !hasPremiumAccess(subscription as Subscription) && "data-[state=inactive]:text-yellow-600 dark:data-[state=inactive]:text-yellow-400"
+          )}
+        >
+          {
+            hasPremiumAccess(subscription as Subscription) ? (
+              <>
+                <FaPlane className="w-4 h-4 sm:w-5 sm:h-5" />
+                <span className="hidden sm:inline">Aircraft</span>
+              </>
             ) : (
               <>
-                <FaLock className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-400" />
-                <span className="hidden sm:inline text-xs sm:text-sm text-yellow-300">Aircraft</span>
+                <FaLock className="w-4 h-4 sm:w-5 sm:h-5" />
+                <span className="hidden sm:inline">Aircraft</span>
               </>
             )
           }
-          </TabsTrigger>
+        </TabsTrigger>
   
       </TabsList>
       

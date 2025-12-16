@@ -69,27 +69,27 @@ const Sidebar = () => {
             </div>
             
             <div className="grid grid-cols-2 gap-2">
-  <Link href="/dashboard" className={cn("flex flex-col gap-1 text-gray-700 dark:text-gray-300 font-medium items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white rounded-lg py-3 transition-all duration-200 group", pathname === "/dashboard" && "bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 font-semibold")}>
+  <Link href="/dashboard" className={cn("flex flex-col gap-1 text-gray-700 dark:text-gray-300 font-medium items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white rounded-[20px] py-3 transition-all duration-200 group", pathname === "/dashboard" && "bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 font-semibold border-2 border-blue-200 dark:border-blue-400")}>
     <FaHome className="w-4 h-4 group-hover:scale-110 transition-transform duration-200" />
     <span className="text-xs text-center">Dashboard</span>
   </Link>
 
-  <Link href="/dashboard/flights?timeframe=day-30" className={cn("flex flex-col gap-1 text-gray-700 dark:text-gray-300 font-medium items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white rounded-lg py-3 transition-all duration-200 group", pathname === "/dashboard/flights" && "bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 font-semibold")}>
+  <Link href="/dashboard/flights?timeframe=day-30" className={cn("flex flex-col gap-1 text-gray-700 dark:text-gray-300 font-medium items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white rounded-[20px] py-3 transition-all duration-200 group", pathname === "/dashboard/flights" && "bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 font-semibold border-2 border-blue-200 dark:border-blue-400")}>
     <TiPlaneOutline className="w-4 h-4 group-hover:scale-110 transition-transform duration-200" />
     <span className="text-xs text-center">Flights</span>
   </Link>
 
-  <Link href="/dashboard/profile" className={cn("flex flex-col gap-1 text-gray-700 dark:text-gray-300 font-medium items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white rounded-lg py-3 transition-all duration-200 group", pathname === "/dashboard/profile" && "bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 font-semibold")}>
+  <Link href="/dashboard/profile" className={cn("flex flex-col gap-1 text-gray-700 dark:text-gray-300 font-medium items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white rounded-[20px] py-3 transition-all duration-200 group", pathname === "/dashboard/profile" && "bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 font-semibold border-2 border-blue-200 dark:border-blue-400")}>
     <FaUser className="w-4 h-4 group-hover:scale-110 transition-transform duration-200" />
     <span className="text-xs text-center">Profile</span>
   </Link>
 
-  <Link href="/dashboard/users" className={cn("flex flex-col gap-1 text-gray-700 dark:text-gray-300 font-medium items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white rounded-lg py-3 transition-all duration-200 group", pathname === "/dashboard/users" && "bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 font-semibold")}>
+  <Link href="/dashboard/users" className={cn("flex flex-col gap-1 text-gray-700 dark:text-gray-300 font-medium items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white rounded-[20px] py-3 transition-all duration-200 group", pathname === "/dashboard/users" && "bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 font-semibold border-2 border-blue-200 dark:border-blue-400")}>
     <GoCopilot className="w-4 h-4 group-hover:scale-110 transition-transform duration-200" />
     <span className="text-xs text-center">Community</span>
   </Link>
 
-  <Link href="/dashboard/leaderboard" className={cn("relative col-span-2 border-2 border-pink-200 dark:border-blue-400 flex gap-2 text-gray-700 dark:text-gray-300 font-medium items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white rounded-lg py-3 transition-all duration-200 group", pathname === "/dashboard/leaderboard" && "bg-pink-50 dark:bg-blue-900/20 text-pink-600 dark:text-blue-400 font-semibold")}>
+  <Link href="/dashboard/leaderboard" className={cn("relative col-span-2 border-2 border-pink-200 dark:border-blue-400 flex gap-2 text-gray-700 dark:text-gray-300 font-medium items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white rounded-[20px] py-3 transition-all duration-200 group", pathname === "/dashboard/leaderboard" && "bg-pink-50 dark:bg-blue-900/20 text-pink-600 dark:text-blue-400 font-semibold")}>
     <MdOutlineLeaderboard className="w-4 h-4 group-hover:scale-110 transition-transform duration-200" />
     <span className="text-sm text-center">IFlytics Leaderboard</span>
     <MdOutlineLeaderboard className="w-4 h-4 group-hover:scale-110 transition-transform duration-200" />
@@ -102,7 +102,7 @@ const Sidebar = () => {
             <div className="mt-6 mb-4">
               <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider px-3 mb-3">Premium</h3>
               
-              <div className="relative overflow-hidden bg-gradient-to-br from-purple-500 via-blue-500 to-indigo-600 rounded-xl p-4 shadow-lg">
+              <div className="relative overflow-hidden bg-gradient-to-br from-purple-500 via-blue-500 to-indigo-600 rounded-[20px] p-4 shadow-lg border-2 border-gray-100 dark:border-gray-700">
                 <div className="absolute inset-0 bg-black/20"></div>
                 <div className="relative z-10">
                   {/* Header */}
@@ -117,11 +117,6 @@ const Sidebar = () => {
                       </span>
                     </div>
                   </div>
-
-                  {/* Description */}
-                  <p className="text-white/80 text-xs mb-3 leading-relaxed">
-                    Gamified Infinite Flight stats, competitions, and leveling system.
-                  </p>
 
                   {/* Coming Soon Badge */}
                   <div className="bg-white/20 backdrop-blur-sm text-white px-3 py-1.5 rounded-lg text-center text-xs font-semibold border border-white/20">

@@ -1,6 +1,6 @@
 import React from "react";
 import { getUserFlights, getUserStats, matchATCRankToTitle } from "@/lib/actions";
-import { convertMinutesToHours, numberWithCommas } from "@/lib/utils";
+import { cn, convertMinutesToHours, numberWithCommas } from "@/lib/utils";
 import InfoCard from "@/components/info-card";
 import ProfileHeader from "@/components/profile-header";
 import UserNavigation from "@/components/user-navigation";
@@ -92,16 +92,16 @@ const UserPage = async ({ params }: { params: Promise<{ name: string }> }) => {
           label="Grade"
           icon={FaStar}
           className={
+            cn("text-light",
             result.grade === 5
               ? "bg-yellow-500"
-              : result.grade === 4
-              ? "bg-green-500"
-              : result.grade === 3
-              ? "bg-purple-500"
-              : result.grade === 2
-              ? "bg-blue-500"
-              : ""
-          }
+                : result.grade === 4
+                ? "bg-green-500"
+                : result.grade === 3
+                ? "bg-purple-500"
+                : result.grade === 2
+                ? "bg-blue-500"
+                : "")}
         />
 
         <InfoCard
@@ -159,7 +159,7 @@ const UserPage = async ({ params }: { params: Promise<{ name: string }> }) => {
         />
 
         {/* Powered by Infinite Flight Live API Card*/}
-        <Card className="flex flex-col gap-2 h-[150px] p-4 rounded-[25px] relative tracking-tighter text-light bg-gradient-to-r from-[#09203F] to-[#537895] overflow-hidden">
+        <Card className="flex flex-col gap-2 h-[150px] p-4 rounded-[25px] relative tracking-tighter text-light bg-gradient-to-r from-[#09203F] to-[#537895] overflow-hidden border-2 border-gray-200 dark:border-gray-700">
           <div className="flex flex-col">
             <span
               id="value"

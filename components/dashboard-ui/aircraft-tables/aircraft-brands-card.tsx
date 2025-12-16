@@ -9,7 +9,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { LuTicketsPlane } from 'react-icons/lu';
-import { convertMinutesToHours } from '@/lib/utils'
+import { convertMinutesToHours, cn } from '@/lib/utils'
 import { PiStarFill } from 'react-icons/pi';
 import { aircraftBrandsCompliments } from '@/lib/data'
 import { FaQuestionCircle } from 'react-icons/fa';
@@ -95,51 +95,96 @@ const AircraftBrandsCard = ({allAircraft}: {allAircraft: any}) => {
   };
     
   return (
-    <div className="flex flex-col md:flex-row gap-4 w-full">
+    <div className="flex flex-col md:flex-row gap-3 md:gap-4 w-full">
       {/* Aircraft Brands Statistics Card */}
-      <Card className="p-6 flex-1">
+      <Card className={cn(
+        "p-4 md:p-6 flex-1",
+        "bg-gray-50 dark:bg-gray-800",
+        "border-2 border-gray-200 dark:border-gray-700",
+        "rounded-[20px] md:rounded-[25px]"
+      )}>
         <div className="space-y-4">
-          <header className="text-center pb-2 border-b">
-            <h3 className="text-xl font-bold tracking-tight">Aircraft Brands</h3>
-            <p className="text-sm dark:text-gray-300 text-gray-500">Your flight distribution by manufacturer</p>
+          <header className={cn(
+            "text-center pb-3 md:pb-4 mb-2",
+            "border-b-2 border-gray-200 dark:border-gray-700"
+          )}>
+            <h3 className="text-lg md:text-xl font-bold tracking-tight text-gray-800 dark:text-gray-100">Aircraft Brands</h3>
+            <p className="text-xs md:text-sm text-gray-500 dark:text-gray-400 font-medium">Your flight distribution by manufacturer</p>
           </header>
           
-          <div className="space-y-3">
+          <div className="space-y-2 md:space-y-3">
             {sortedBrands.map((brandData: any, index: number) => {
               const percentage = ((brandData.count / allAircraft.reduce((sum: number, aircraft: any) => sum + aircraft.count, 0)) * 100).toFixed(1);
               
               return (
-                <div key={brandData.brand} className="flex items-center justify-between p-3 rounded-lg bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 transition-colors">
-                  <div className="flex items-center gap-3">
+                <div key={brandData.brand} className={cn(
+                  "flex items-center justify-between",
+                  "p-3 md:p-4",
+                  "rounded-[15px] md:rounded-[20px]",
+                  "bg-white dark:bg-gray-700",
+                  "hover:bg-gray-100 dark:hover:bg-gray-600",
+                  "transition-all duration-200",
+                  "border-2 border-gray-200 dark:border-gray-600",
+                  "hover:shadow-md"
+                )}>
+                  <div className="flex items-center gap-2 md:gap-3">
                     
                     {/* Dialog for Aircraft List */}
                     <Dialog>
-                      <DialogTrigger>
-                        <FaQuestionCircle className="w-4 h-4 text-gray-400 hover:text-gray-500" />
+                      <DialogTrigger className={cn(
+                        'flex items-center gap-1.5 md:gap-2',
+                        'bg-blue-600 hover:bg-blue-700',
+                        'dark:bg-blue-500 dark:hover:bg-blue-600',
+                        'transition-colors',
+                        'text-white',
+                        'rounded-[10px]',
+                        'p-2',
+                        'text-xs md:text-sm font-bold'
+                      )}>
+                        <FaQuestionCircle className="w-3 h-3 md:w-4 md:h-4" /> <span className="sm:block hidden">More</span>
                       </DialogTrigger>
-                      <DialogContent className="max-w-md bg-gray text-light border-none shadow-none">
+                      <DialogContent className={cn(
+                        "max-w-md",
+                        "bg-white dark:bg-gray-800",
+                        "border-2 border-gray-200 dark:border-gray-700",
+                        "rounded-[20px]"
+                      )}>
                         <DialogHeader>
                           <DialogTitle className="flex items-center gap-2">
-                            <span className="text-lg font-bold">{brandData.brand}</span>
-                            <Badge variant="secondary" className="text-xs rounded-full bg-gray-600/25 text-light border-none">
+                            <span className="text-base md:text-lg font-bold text-gray-800 dark:text-gray-100">{brandData.brand}</span>
+                            <Badge variant="secondary" className={cn(
+                              "text-xs rounded-full font-bold border-none",
+                              "bg-blue-100 dark:bg-blue-900/30",
+                              "text-blue-700 dark:text-blue-300"
+                            )}>
                               {brandData.aircraftList.length} aircraft
                             </Badge>
                           </DialogTitle>
                         </DialogHeader>
                         
-                        <div className="space-y-3">
-                          <div className="text-sm dark:text-gray-300 text-gray-200">
+                        <div className="space-y-3 md:space-y-4">
+                          <div className="text-xs md:text-sm text-gray-600 dark:text-gray-400 font-medium">
                             Aircraft you've flown from this manufacturer:
                           </div>
                           
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-64 overflow-y-auto">
+                          <div className="grid grid-cols-1 gap-2 md:gap-3 max-h-64 overflow-y-auto">
                             {brandData.aircraftList.map((aircraftName: string, aircraftIndex: number) => (
-                              <div key={aircraftIndex} className="flex items-center gap-3 p-3 bg-gray-600/15 text-light rounded-lg">
+                              <div key={aircraftIndex} className={cn(
+                                "flex items-center gap-3 p-3",
+                                "bg-gray-50 dark:bg-gray-700",
+                                "border-2 border-gray-200 dark:border-gray-600",
+                                "rounded-[12px]",
+                                "hover:shadow-sm transition-shadow duration-200"
+                              )}>
                                 <div className="flex-1 min-w-0">
-                                  <div className="font-semibold text-sm leading-tight">
+                                  <div className="font-bold text-xs md:text-sm leading-tight text-gray-800 dark:text-gray-100">
                                     {aircraftName}
                                   </div>
-                                  <Badge variant="outline" className="text-xs mt-1 rounded-full border-none bg-gray-600/25 dark:bg-gray-700/25 text-light">
+                                  <Badge variant="outline" className={cn(
+                                    "text-xs mt-1 rounded-full border-none font-bold",
+                                    "bg-blue-100 dark:bg-blue-900/30",
+                                    "text-blue-700 dark:text-blue-300"
+                                  )}>
                                     {allAircraft.find((a: any) => a.name === aircraftName)?.count || 0} {allAircraft.find((a: any) => a.name === aircraftName)?.count === 1 ? 'flight' : 'flights'}
                                   </Badge>
                                 </div>
@@ -149,32 +194,41 @@ const AircraftBrandsCard = ({allAircraft}: {allAircraft: any}) => {
                                     alt={aircraftName} 
                                     width={60} 
                                     height={40}
-                                    className="rounded"
+                                    className="rounded-[8px]"
                                   />
                                 </div>
                               </div>
                             ))}
                           </div>
 
-                          <div className="pt-2 border-t text-xs text-gray-300">
-                            Total flights with {brandData.brand}: <b>{brandData.count}</b>
+                          <div className={cn(
+                            "pt-2 border-t-2",
+                            "border-gray-200 dark:border-gray-700",
+                            "text-xs md:text-sm",
+                            "text-gray-700 dark:text-gray-300 font-medium"
+                          )}>
+                            Total flights with {brandData.brand}: <b className="text-gray-900 dark:text-gray-100">{brandData.count}</b>
                           </div>
                         </div>
                       </DialogContent>
                     </Dialog>
 
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm font-medium dark:text-gray-300 text-gray-600">#{index + 1}</span>
-                      <span className="font-semibold">{brandData.brand}</span>
+                    <div className="flex items-center gap-1.5 md:gap-2">
+                      <span className="text-xs md:text-sm font-bold text-gray-500 dark:text-gray-400">#{index + 1}</span>
+                      <span className="font-bold text-sm md:text-base text-gray-800 dark:text-gray-100 tracking-tight">{brandData.brand}</span>
                     </div>
                   </div>
                   
                   <div className="flex items-center gap-2">
-                    <Badge variant="secondary" className="text-xs">
+                    <Badge variant="secondary" className={cn(
+                      "text-xs font-bold rounded-full",
+                      "bg-amber-100 dark:bg-amber-900/30",
+                      "text-amber-700 dark:text-amber-300"
+                    )}>
                       {percentage}%
                     </Badge>
-                    <span className="text-sm font-medium dark:text-gray-300 text-gray-600">
-                      {brandData.count} {brandData.count === 1 ? 'flight' : 'flights'}
+                    <span className="text-xs md:text-sm font-bold text-gray-600 dark:text-gray-300">
+                      {brandData.count}
                     </span>
                   </div>
                 </div>
@@ -185,45 +239,87 @@ const AircraftBrandsCard = ({allAircraft}: {allAircraft: any}) => {
       </Card>
 
       {/* Compliment Card */}
-      <Card className="p-6 bg-gradient-to-br from-blue-400 to-indigo-700 border-none flex-1 md:self-start text-light relative overflow-hidden">
+      <Card className={cn(
+        "p-4 md:p-6 flex-1 md:self-start relative overflow-hidden",
+        "bg-gradient-to-br from-blue-500 to-indigo-600",
+        "dark:from-blue-600 dark:to-indigo-700",
+        "border-2 border-blue-400 dark:border-blue-700",
+        "rounded-[20px] md:rounded-[25px]",
+        "text-white"
+      )}>
         {/* Background Airplane Icon */}
-        <LuTicketsPlane className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 w-112 h-112 text-light opacity-10" />
+        <LuTicketsPlane className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 w-112 h-112 text-white opacity-10" />
 
         <div className="space-y-4 text-center relative z-10">
-          <header className="pb-2">
-            <h3 className="text-xl font-bold tracking-tight">Pilot's Recognition</h3>
-            <p className="text-sm">Based on your most flown brand</p>
+          <header className={cn(
+            "pb-3 md:pb-4 mb-2",
+            "border-b-2 border-white/30"
+          )}>
+            <h3 className="text-lg md:text-xl font-bold tracking-tight">Pilot's Recognition</h3>
+            <p className="text-xs md:text-sm font-semibold">Based on your most flown brand</p>
           </header>
           
           {topBrand && (
-            <div className="space-y-4">
-              <div className="flex items-center justify-between p-4 bg-white/70 rounded-lg border border-indigo-200">
-                <div className="flex flex-col gap-1">
-                  <Badge className="mb-2 text-lg font-bold tracking-tight bg-indigo-600 dark:bg-indigo-700 hover:bg-indigo-700 rounded-full px-4 py-0.5 flex items-center gap-2 dark:text-light">
-                  <PiStarFill className="text-lg text-light" /> Top Brand
+            <div className="space-y-3 md:space-y-4">
+              <div className={cn(
+                "flex items-center justify-between",
+                "p-3 md:p-4",
+                "bg-white dark:bg-white/95",
+                "rounded-[15px] md:rounded-[20px]",
+                "border-2 border-white/50"
+              )}>
+                <div className="flex flex-col gap-1 md:gap-2">
+                  <Badge className={cn(
+                    "mb-2 text-sm md:text-base font-black tracking-tight",
+                    "bg-indigo-600 hover:bg-indigo-700",
+                    "rounded-full px-3 md:px-4 py-1",
+                    "flex items-center gap-1.5 md:gap-2",
+                    "text-white w-fit"
+                  )}>
+                    <PiStarFill className="text-base md:text-lg" /> Top Brand
                   </Badge>
-                  <span className="text-5xl font-black clip-text text-transparent self-start bg-clip-text bg-gradient-to-r from-blue-500 to-indigo-700">
+                  <span className={cn(
+                    "text-3xl md:text-5xl font-black",
+                    "text-transparent self-start",
+                    "bg-clip-text bg-gradient-to-r from-blue-500 to-indigo-700",
+                    "tracking-tight"
+                  )}>
                     {topBrand.brand}
                   </span>
 
-                  <div className="flex flex-wrap gap-2 mt-2">
-                    <Badge variant="secondary" className="text-xs bg-gradient-to-br from-blue-500 to-indigo-700 text-light border-none rounded-full">
-                      Distance: {formatDistance(topBrand.totalDistance)}
+                  <div className="flex flex-wrap gap-1.5 md:gap-2 mt-1 md:mt-2">
+                    <Badge variant="secondary" className={cn(
+                      "text-xs md:text-sm font-bold rounded-full border-none",
+                      "bg-gradient-to-br from-blue-500 to-indigo-700",
+                      "text-white"
+                    )}>
+                      {formatDistance(topBrand.totalDistance)}
                     </Badge>
-                    <Badge variant="secondary" className="text-xs bg-gradient-to-br from-indigo-500 to-blue-700 text-light border-none rounded-full">
-                      Time: {convertMinutesToHours(Math.round(topBrand.totalTime))}
+                    <Badge variant="secondary" className={cn(
+                      "text-xs md:text-sm font-bold rounded-full border-none",
+                      "bg-gradient-to-br from-indigo-500 to-blue-700",
+                      "text-white"
+                    )}>
+                      {convertMinutesToHours(Math.round(topBrand.totalTime))}
                     </Badge>
                   </div>
                 </div>
-                <span className="flex flex-col items-center justify-center text-sm font-medium text-blue-500">
-                  <span className="text-3xl font-black text-blue-700">
+                <span className="flex flex-col items-center justify-center text-xs md:text-sm font-bold text-blue-600">
+                  <span className="text-2xl md:text-3xl font-black text-blue-700">
                     {topBrand.count}
                   </span> flights
                 </span>
               </div>
               
-              <div className="p-4 bg-gradient-to-br from-[#1E3B70] to-[#29539B] rounded-lg text-light font-semibold">
-                <p className="text-lg leading-relaxed text-center font-mono">
+              <div className={cn(
+                "p-3 md:p-4",
+                "bg-gradient-to-br from-indigo-700 to-blue-800",
+                "dark:from-indigo-800 dark:to-blue-900",
+                "rounded-[15px] md:rounded-[20px]",
+                "text-white font-bold",
+                "border-2 border-indigo-500/30"
+              )}>
+                <p className="text-sm md:text-base leading-relaxed text-center">
                   {getRandomCompliment(topBrand.brand)}
                 </p>
               </div>

@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { isoCountryCodes } from "@/lib/data";
+import { cn } from "@/lib/utils";
 
 // Move the InfoCard component here or import it if it's elsewhere
 const InfoCard = ({
@@ -49,17 +50,25 @@ const InfoCard = ({
   };
 
   return (
-    <div className="dark:bg-gray dark:text-light bg-[#FFD6BA] rounded-xl p-6 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+    <div className={cn(
+      "bg-gray-50 dark:bg-gray-800",
+      "text-gray-800 dark:text-gray-100",
+      "border-2 border-gray-200 dark:border-gray-700",
+      "rounded-[20px] md:rounded-[25px]",
+      "p-4 md:p-6",
+      "hover:shadow-lg transition-all duration-300",
+      "transform hover:-translate-y-1"
+    )}>
       <div className="flex items-center justify-between">
         <div className="flex-1">
-          <div className={`inline-flex p-3 rounded-lg bg-gradient-to-r ${colorClasses[color].split(' ').slice(0, 2).join(' ')} mb-4`}>
-            <div className="text-white text-xl">
+          <div className={`inline-flex p-3 rounded-[15px] bg-gradient-to-r ${colorClasses[color].split(' ').slice(0, 2).join(' ')} mb-3 md:mb-4`}>
+            <div className="text-white text-lg md:text-xl">
               {icon}
             </div>
           </div>
-          <h3 className="text-sm font-semibold dark:text-gray-300 text-gray-600 uppercase tracking-wide">{title}</h3>
-          <p className="text-3xl font-bold dark:text-gray-300 text-gray-800 mt-1">{value}</p>
-          {subtitle && <p className="text-xs dark:text-gray-300 text-gray-500 mt-1">{subtitle}</p>}
+          <h3 className="text-xs md:text-sm font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wide">{title}</h3>
+          <p className="text-2xl md:text-3xl font-bold text-gray-800 dark:text-white mt-1 tracking-tight">{value}</p>
+          {subtitle && <p className="text-xs md:text-sm text-gray-500 dark:text-gray-400 mt-1 font-medium">{subtitle}</p>}
         </div>
       </div>
     </div>
@@ -88,7 +97,7 @@ const FlightsOverview = ({
   return (
     <>
       {/* Quick Stats Grid */}
-      <section className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <section className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
         <InfoCard
           title="Total Flights"
           value={numberWithCommas(flightOverviewStats.totalFlights)}
@@ -120,94 +129,144 @@ const FlightsOverview = ({
       </section>
 
       {/* Main Analytics Grid */}
-      <section className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+      <section className="grid grid-cols-1 lg:grid-cols-3 gap-3 md:gap-4">
         
         {/* Flight Averages */}
-        <Card className="lg:col-span-1 bg-blue-100 dark:bg-blue-900/20 !shadow-none border border-blue-200 dark:border-blue-800/30">
-          <CardHeader className="pb-4">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-blue-500 dark:bg-blue-600 rounded-lg">
-                <BiTrendingUp className="text-white text-xl" />
+        <Card className={cn(
+          "lg:col-span-1",
+          "bg-blue-50 dark:bg-blue-900/20",
+          "!shadow-none",
+          "border-2 border-blue-200 dark:border-blue-800/30",
+          "rounded-[20px] md:rounded-[25px]"
+        )}>
+          <CardHeader className="pb-3 md:pb-4 px-4 md:px-6">
+            <div className="flex items-center gap-2 md:gap-3">
+              <div className="p-2 bg-blue-500 dark:bg-blue-600 rounded-[12px] md:rounded-[15px]">
+                <BiTrendingUp className="text-white text-lg md:text-xl" />
               </div>
               <div>
-                <CardTitle className="text-blue-900 dark:text-blue-100">Flight Averages</CardTitle>
-                <CardDescription className="text-blue-700 dark:text-blue-300">Performance metrics {formatTimeframeText(timeframe)}</CardDescription>
+                <CardTitle className="text-base md:text-lg font-bold tracking-tight text-blue-900 dark:text-blue-100">Flight Averages</CardTitle>
+                <CardDescription className="text-xs md:text-sm text-blue-700 dark:text-blue-300">Performance metrics {formatTimeframeText(timeframe)}</CardDescription>
               </div>
             </div>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="bg-white dark:bg-gray-800/50 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
-                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Avg Flight Time</p>
-                <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">{convertMinutesToHours(flightAverages.avgFlightTime)}</p>
+          <CardContent className="space-y-3 md:space-y-4 px-4 md:px-6">
+            <div className="grid grid-cols-2 gap-3 md:gap-4">
+              <div className={cn(
+                "bg-white dark:bg-gray-800/50",
+                "p-3 md:p-4",
+                "rounded-[15px] md:rounded-[20px]",
+                "border-2 border-gray-200 dark:border-gray-700"
+              )}>
+                <p className="text-xs md:text-sm font-semibold text-gray-600 dark:text-gray-400">Avg Flight Time</p>
+                <p className="text-xl md:text-2xl font-bold tracking-tight text-blue-600 dark:text-blue-400">{convertMinutesToHours(flightAverages.avgFlightTime)}</p>
               </div>
-              <div className="bg-white dark:bg-gray-800/50 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
-                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Landings/Flight</p>
-                <p className="text-2xl font-bold text-green-600 dark:text-green-400">{Math.round(flightAverages.avgLandingsPerFlight)}</p>
+              <div className={cn(
+                "bg-white dark:bg-gray-800/50",
+                "p-3 md:p-4",
+                "rounded-[15px] md:rounded-[20px]",
+                "border-2 border-gray-200 dark:border-gray-700"
+              )}>
+                <p className="text-xs md:text-sm font-semibold text-gray-600 dark:text-gray-400">Landings/Flight</p>
+                <p className="text-xl md:text-2xl font-bold tracking-tight text-green-600 dark:text-green-400">{Math.round(flightAverages.avgLandingsPerFlight)}</p>
               </div>
-              <div className="bg-white dark:bg-gray-800/50 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
-                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Avg XP/Flight</p>
-                <p className="text-2xl font-bold text-purple-600 dark:text-purple-400">{flightAverages.avgXpPerFlight}</p>
+              <div className={cn(
+                "bg-white dark:bg-gray-800/50",
+                "p-3 md:p-4",
+                "rounded-[15px] md:rounded-[20px]",
+                "border-2 border-gray-200 dark:border-gray-700"
+              )}>
+                <p className="text-xs md:text-sm font-semibold text-gray-600 dark:text-gray-400">Avg XP/Flight</p>
+                <p className="text-xl md:text-2xl font-bold tracking-tight text-purple-600 dark:text-purple-400">{flightAverages.avgXpPerFlight}</p>
               </div>
-              <div className="bg-white dark:bg-gray-800/50 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
-                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">XP/Landing</p>
-                <p className="text-2xl font-bold text-orange-600 dark:text-orange-400">{flightAverages.avgXpPerLanding}</p>
+              <div className={cn(
+                "bg-white dark:bg-gray-800/50",
+                "p-3 md:p-4",
+                "rounded-[15px] md:rounded-[20px]",
+                "border-2 border-gray-200 dark:border-gray-700"
+              )}>
+                <p className="text-xs md:text-sm font-semibold text-gray-600 dark:text-gray-400">XP/Landing</p>
+                <p className="text-xl md:text-2xl font-bold tracking-tight text-orange-600 dark:text-orange-400">{flightAverages.avgXpPerLanding}</p>
               </div>
             </div>
           </CardContent>
         </Card>
 
         {/* Airport Stats */}
-        <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
-          <Card className="bg-[#FFDCDC] dark:bg-red-900/20 !shadow-none border border-red-200 dark:border-red-800/30">
-            <CardHeader className="pb-4">
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-red-500 dark:bg-red-600 rounded-lg">
-                  <FaMapMarkerAlt className="text-white text-lg" />
+        <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
+          <Card className={cn(
+            "bg-red-50 dark:bg-red-900/20",
+            "!shadow-none",
+            "border-2 border-red-200 dark:border-red-800/30",
+            "rounded-[20px] md:rounded-[25px]"
+          )}>
+            <CardHeader className="pb-3 md:pb-4 px-4 md:px-6">
+              <div className="flex items-center gap-2 md:gap-3">
+                <div className="p-2 bg-red-500 dark:bg-red-600 rounded-[12px] md:rounded-[15px]">
+                  <FaMapMarkerAlt className="text-white text-base md:text-lg" />
                 </div>
                 <div>
-                  <CardTitle className="text-red-900 dark:text-red-100">Top Origin</CardTitle>
-                  <CardDescription className="text-red-700 dark:text-red-300">Most departed from</CardDescription>
+                  <CardTitle className="text-base md:text-lg font-bold tracking-tight text-red-900 dark:text-red-100">Top Origin</CardTitle>
+                  <CardDescription className="text-xs md:text-sm text-red-700 dark:text-red-300">Most departed from</CardDescription>
                 </div>
               </div>
             </CardHeader>
 
-            <CardContent className="h-full flex items-end justify-start">
+            <CardContent className="h-full flex items-end justify-start px-4 md:px-6">
               <div className="flex flex-col gap-2">
-                <p className="text-7xl font-black text-red-800 dark:text-red-200">
+                <p className="text-5xl md:text-6xl lg:text-7xl font-black tracking-tight text-red-800 dark:text-red-200">
                   {mostVisitedOriginAndDestinationAirports.topOrigin || "N/A"}
                 </p>
-                <span className="text-sm text-red-700 dark:text-red-300 font-medium flex items-center gap-2">
+                <span className="text-xs md:text-sm text-red-700 dark:text-red-300 font-semibold flex items-center gap-2">
                   {mostVisitedOriginAndDestinationAirports.originAirportInfo?.name}, &nbsp;
                   {isoCountryCodes.find((code: any) => code.isoCode === mostVisitedOriginAndDestinationAirports.originAirportInfo?.country)?.key}
                 </span>
-                <span className="text-sm text-white font-medium bg-red-500 dark:bg-red-600 px-2 py-1 rounded-md self-start">Departed <b>{mostVisitedOriginAndDestinationAirports.originCount}</b> times</span>
+                <span className={cn(
+                  "text-xs md:text-sm text-white font-bold",
+                  "bg-red-500 dark:bg-red-600",
+                  "px-3 py-1.5 rounded-[12px]",
+                  "self-start"
+                )}>
+                  Departed <b>{mostVisitedOriginAndDestinationAirports.originCount}</b> times
+                </span>
               </div>
             </CardContent>
           </Card>
 
-          <Card className="bg-[#FFE8CD] dark:bg-orange-900/20 !shadow-none border border-orange-200 dark:border-orange-800/30">
-            <CardHeader className="pb-4">
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-orange-500 dark:bg-orange-600 rounded-lg">
-                  <FaMapMarkerAlt className="text-white text-lg" />
+          <Card className={cn(
+            "bg-orange-50 dark:bg-orange-900/20",
+            "!shadow-none",
+            "border-2 border-orange-200 dark:border-orange-800/30",
+            "rounded-[20px] md:rounded-[25px]"
+          )}>
+            <CardHeader className="pb-3 md:pb-4 px-4 md:px-6">
+              <div className="flex items-center gap-2 md:gap-3">
+                <div className="p-2 bg-orange-500 dark:bg-orange-600 rounded-[12px] md:rounded-[15px]">
+                  <FaMapMarkerAlt className="text-white text-base md:text-lg" />
                 </div>
                 <div>
-                  <CardTitle className="text-orange-900 dark:text-orange-100">Top Destination</CardTitle>
-                  <CardDescription className="text-orange-700 dark:text-orange-300">Most arrived at</CardDescription>
+                  <CardTitle className="text-base md:text-lg font-bold tracking-tight text-orange-900 dark:text-orange-100">Top Destination</CardTitle>
+                  <CardDescription className="text-xs md:text-sm text-orange-700 dark:text-orange-300">Most arrived at</CardDescription>
                 </div>
               </div>
             </CardHeader>
-            <CardContent className="h-full flex items-end justify-start">
+            <CardContent className="h-full flex items-end justify-start px-4 md:px-6">
               <div className="flex flex-col gap-2">
-                <p className="text-7xl font-black text-orange-800 dark:text-orange-200">
+                <p className="text-5xl md:text-6xl lg:text-7xl font-black tracking-tight text-orange-800 dark:text-orange-200">
                   <b>{mostVisitedOriginAndDestinationAirports.topDestination || "N/A"}</b>
                 </p>
-                <span className="text-sm text-orange-700 dark:text-orange-300 font-medium flex items-center gap-2">
+                <span className="text-xs md:text-sm text-orange-700 dark:text-orange-300 font-semibold flex items-center gap-2">
                   {mostVisitedOriginAndDestinationAirports.destinationAirportInfo?.name}, &nbsp;
                   {isoCountryCodes.find((code: any) => code.isoCode === mostVisitedOriginAndDestinationAirports.destinationAirportInfo?.country)?.key}
                 </span>
-                <span className="text-sm text-white font-medium bg-orange-500 dark:bg-orange-600 px-2 py-1 rounded-md self-start">Arrived <b>{mostVisitedOriginAndDestinationAirports.destinationCount}</b> times</span>
+                <span className={cn(
+                  "text-xs md:text-sm text-white font-bold",
+                  "bg-orange-500 dark:bg-orange-600",
+                  "px-3 py-1.5 rounded-[12px]",
+                  "self-start"
+                )}>
+                  Arrived <b>{mostVisitedOriginAndDestinationAirports.destinationCount}</b> times
+                </span>
               </div>
             </CardContent>
           </Card>
@@ -215,7 +274,7 @@ const FlightsOverview = ({
       </section>
 
       {/* Charts Section */}
-      <section className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <section className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
         {/* Flight Activity Chart */}
         {flightActivity.length > 0 ? (
           <FlightActivityAreaChart
@@ -224,20 +283,26 @@ const FlightsOverview = ({
             className="col-span-2"
           />
         ) : (
-          <Card className="col-span-2 bg-gradient-to-br from-gray-900 to-gray-800 border-gray-700">
-            <CardHeader>
-              <CardTitle className="text-2xl font-bold text-white flex items-center gap-3">
-                <FaPlane className="text-blue-400" />
+          <Card className={cn(
+            "col-span-2",
+            "bg-gradient-to-br from-gray-100 to-gray-200",
+            "dark:from-gray-800 dark:to-gray-900",
+            "border-2 border-gray-200 dark:border-gray-700",
+            "rounded-[20px] md:rounded-[25px]"
+          )}>
+            <CardHeader className="px-4 md:px-6">
+              <CardTitle className="text-xl md:text-2xl font-bold tracking-tight text-gray-800 dark:text-white flex items-center gap-3">
+                <FaPlane className="text-blue-500 dark:text-blue-400" />
                 Flight Time Per Day
               </CardTitle>
-              <CardDescription className="text-gray-300">
+              <CardDescription className="text-sm md:text-base text-gray-600 dark:text-gray-300">
                 Your flight time day by day {formatTimeframeText(timeframe)}
               </CardDescription>
             </CardHeader>
-            <CardContent className="flex flex-col items-center justify-center py-16">
-              <div className="text-6xl text-gray-600 mb-4">✈️</div>
-              <p className="text-gray-300 font-semibold text-xl">No Flight Data Available</p>
-              <p className="text-gray-500 text-sm mt-2">Start flying to see your activity here!</p>
+            <CardContent className="flex flex-col items-center justify-center py-12 md:py-16">
+              <div className="text-5xl md:text-6xl text-gray-400 dark:text-gray-600 mb-4">✈️</div>
+              <p className="text-gray-700 dark:text-gray-300 font-bold text-lg md:text-xl tracking-tight">No Flight Data Available</p>
+              <p className="text-gray-500 dark:text-gray-500 text-xs md:text-sm mt-2">Start flying to see your activity here!</p>
             </CardContent>
           </Card>
         )}
@@ -250,39 +315,50 @@ const FlightsOverview = ({
               className="lg:col-span-1"  
             />
         ) : (
-          <Card className="col-span-2 lg:col-span-1 bg-gradient-to-br from-gray-900 to-gray-800 border-gray-700">
+          <Card className={cn(
+            "col-span-2 lg:col-span-1",
+            "bg-gradient-to-br from-gray-100 to-gray-200",
+            "dark:from-gray-800 dark:to-gray-900",
+            "border-2 border-gray-200 dark:border-gray-700",
+            "rounded-[20px] md:rounded-[25px]"
+          )}>
             
-            <CardHeader>
-              <CardTitle className="text-2xl font-bold text-white flex items-center gap-3">
-                <FaPlane className="text-purple-400" />
+            <CardHeader className="px-4 md:px-6">
+              <CardTitle className="text-xl md:text-2xl font-bold tracking-tight text-gray-800 dark:text-white flex items-center gap-3">
+                <FaPlane className="text-purple-500 dark:text-purple-400" />
                 Aircraft Usage
               </CardTitle>
-              <CardDescription className="text-gray-300">
+              <CardDescription className="text-sm md:text-base text-gray-600 dark:text-gray-300">
                 Your most used aircraft {formatTimeframeText(timeframe)}
               </CardDescription>
             </CardHeader>
-            <CardContent className="flex flex-col items-center justify-center py-16">
-              <div className="text-4xl text-gray-600 mb-4">🛩️</div>
-              <p className="text-gray-300 font-semibold">No Aircraft Data</p>
+            <CardContent className="flex flex-col items-center justify-center py-12 md:py-16">
+              <div className="text-3xl md:text-4xl text-gray-400 dark:text-gray-600 mb-4">🛩️</div>
+              <p className="text-gray-700 dark:text-gray-300 font-bold tracking-tight">No Aircraft Data</p>
             </CardContent>
           </Card>
         )}
 
         {/* Top 3 Aircraft */}
-        <Card className="lg:col-span-1 col-span-2 bg-dark">
-          <CardHeader>  
-            <CardTitle className="text-2xl font-bold text-white flex items-center gap-3">
-              <div className="p-2 bg-amber-500 rounded-lg">
-                <FaStar className="text-white text-lg" />
+        <Card className={cn(
+          "lg:col-span-1 col-span-2",
+          "bg-gray-50 dark:bg-gray-800",
+          "border-2 border-gray-200 dark:border-gray-700",
+          "rounded-[20px] md:rounded-[25px]"
+        )}>
+          <CardHeader className="px-4 md:px-6">  
+            <CardTitle className="text-xl md:text-2xl font-bold tracking-tight text-gray-800 dark:text-white flex items-center gap-3">
+              <div className="p-2 bg-amber-500 dark:bg-amber-600 rounded-[12px] md:rounded-[15px]">
+                <FaStar className="text-white text-base md:text-lg" />
               </div>
               Your Top 3 Aircraft
             </CardTitle>
-            <CardDescription className="text-gray-300">
+            <CardDescription className="text-sm md:text-base text-gray-600 dark:text-gray-300">
               Your top 3 most used aircraft {formatTimeframeText(timeframe)}
             </CardDescription>
           </CardHeader>
 
-          <div className="px-4 flex flex-col gap-4 pb-4">
+          <div className="px-4 md:px-6 flex flex-col gap-3 md:gap-4 pb-4 md:pb-6">
             {aircraftUsageData.length > 0 ? (
               aircraftUsageData
                 .sort((a, b) => b.count - a.count)
@@ -290,18 +366,38 @@ const FlightsOverview = ({
                 .map((aircraft, index) => (
                   <div
                     key={index}
-                    className="flex md:flex-row flex-col-reverse justify-between items-center gap-2 bg-gray-800 text-white p-4 rounded-lg relative"
+                    className={cn(
+                      "flex md:flex-row flex-col-reverse justify-between items-center gap-3",
+                      "bg-white dark:bg-gray-700",
+                      "text-gray-800 dark:text-white",
+                      "p-4 md:p-5",
+                      "rounded-[15px] md:rounded-[20px]",
+                      "border-2 border-gray-200 dark:border-gray-600",
+                      "relative"
+                    )}
                   >
                     <div className="flex flex-col gap-1 text-center md:text-left">
-                      <p className={`${index === 0 && "text-amber-400"} ${index === 1 && "text-amber-200"} ${index === 2 && "text-amber-50"} text-2xl font-black`}>
+                      <p className={cn(
+                        "text-xl md:text-2xl font-black tracking-tight",
+                        index === 0 && "text-amber-500 dark:text-amber-400",
+                        index === 1 && "text-amber-400 dark:text-amber-300",
+                        index === 2 && "text-amber-300 dark:text-amber-200"
+                      )}>
                         {aircraft.name}
                       </p>
-                      <span className="text-sm text-gray-400 font-medium">
+                      <span className="text-xs md:text-sm text-gray-600 dark:text-gray-400 font-semibold">
                         Flights: {aircraft.count}
                       </span>
                     </div>
 
-                    <span className="text-sm text-white font-bold bg-gray-500 w-8 h-8 rounded-md absolute top-2 right-2 flex items-center justify-center">
+                    <span className={cn(
+                      "text-xs md:text-sm text-white font-bold",
+                      "bg-gray-600 dark:bg-gray-500",
+                      "w-7 h-7 md:w-8 md:h-8",
+                      "rounded-[8px]",
+                      "absolute top-2 right-2",
+                      "flex items-center justify-center"
+                    )}>
                       {index + 1}
                     </span>
 
@@ -310,15 +406,15 @@ const FlightsOverview = ({
                       alt={aircraft.name}
                       width={200}
                       height={120}
-                      className="rounded-lg"
+                      className="rounded-[12px] w-[150px] md:w-[200px] h-auto"
                     />
                   </div>
                 ))
             ) : (
-              <div className="flex flex-col items-center justify-center py-16">
-                <div className="text-4xl text-gray-600 mb-4">🛩️</div>
-                <p className="text-gray-300 font-semibold">No Aircraft Data</p>
-                <p className="text-gray-500 text-sm">Fly some aircraft to see your top 3!</p>
+              <div className="flex flex-col items-center justify-center py-12 md:py-16">
+                <div className="text-3xl md:text-4xl text-gray-400 dark:text-gray-600 mb-4">🛩️</div>
+                <p className="text-gray-700 dark:text-gray-300 font-bold tracking-tight">No Aircraft Data</p>
+                <p className="text-gray-500 dark:text-gray-500 text-xs md:text-sm">Fly some aircraft to see your top 3!</p>
               </div>
             )}
           </div>

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Bricolage_Grotesque } from "next/font/google";
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/next"
 import { ThemeProvider } from "next-themes";
@@ -13,6 +13,13 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+const bricolageGrotesque = Bricolage_Grotesque({ 
+  weight: ['400', '500', '600', '700', '800'],
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-bricolage',
 });
 
 export const metadata: Metadata = {
@@ -87,7 +94,7 @@ export default function RootLayout({
         <link rel="shortcut icon" href="/favicon.ico?v=2" />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased dark:bg-gray-950 bg-[#FAF0E6]`}
+        className={`${bricolageGrotesque.className} ${geistSans.variable} ${geistMono.variable} antialiased dark:bg-gray-950 bg-[#FAF0E6]`}
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           {children}

@@ -68,7 +68,7 @@ const UserATCSessionCard: React.FC<UserATCSessionCardProps> = (props) => {
 
   return (
     <div className="flex flex-col">
-      <section className="flex flex-col gap-4 p-6 sm:p-8 rounded-t-xl 
+      <section className="flex flex-col gap-4 p-6 sm:p-8 rounded-t-[30px] border-2 border-gray-200 dark:border-gray-700 border-b-0
                     bg-white dark:bg-gray-900 dark:text-light">
   <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
     {/* Left Side of Header */}
@@ -163,7 +163,7 @@ const UserATCSessionCard: React.FC<UserATCSessionCardProps> = (props) => {
       <Accordion
         type="single"
         collapsible
-        className="w-full bg-gray-100 dark:bg-gray-900 rounded-b-xl px-8"
+        className="w-full bg-gray-100 dark:bg-gray-900 rounded-b-[30px] px-8 border-2 border-gray-200 dark:border-gray-700 border-t-0"
         defaultValue="item-1"
       >
         <AccordionItem value="item-1">

@@ -1,12 +1,12 @@
 import { getUser } from "@/lib/supabase/user-actions";
-import { convertMinutesToHours, formatDate } from "@/lib/utils";
+import { convertMinutesToHours, formatDate, cn } from "@/lib/utils";
 import {
   getAircraftAndLivery,
-  getUselessFactToday,
   getUserFlights,
   getUserMostRecentFlight,
   getUserStats,
 } from "@/lib/actions";
+import { getFlightsWithinNinetyDays, getInfiniteFlightGrade, getUserViolationCount } from "@/lib/grade-progression-helpers";
 import { matchATCRankToTitle } from "@/lib/sync-actions";
 import { Metadata } from "next";
 import Image from "next/image";
@@ -22,9 +22,7 @@ import { FaPlane, FaMapMarkerAlt, FaUsers, FaLightbulb, FaExternalLinkAlt } from
 import { HiOutlineStatusOnline } from "react-icons/hi";
 import { TbPlaneInflight, TbClock, TbBuildingAirport, TbBuildingStadium, TbBrandDiscord } from "react-icons/tb";
 import { GoServer } from "react-icons/go";
-
 import { HiOutlineGlobeAsiaAustralia } from "react-icons/hi2";
-
 import { matchAircraftNameToImage } from "@/lib/cache/flightinsightsdata";
 
 import {
@@ -39,6 +37,8 @@ import { Button } from "@/components/ui/button";
 import { BsPersonWorkspace } from "react-icons/bs";
 import { SlActionUndo } from "react-icons/sl";
 import { Badge } from "@/components/ui/badge";
+import { getAggregatedFlights } from "@/lib/cache/flightdata";
+import GradeProgressionCard from "@/components/dashboard-ui/grade-progression-card";
 
 export const metadata: Metadata = {
   title: "Dashboard - IFlytics | Your Infinite Flight Statistics",
@@ -50,12 +50,33 @@ export const metadata: Metadata = {
 
 export default async function DashboardPage() {
   const { user_metadata: data } = await getUser();
-  // const uselessFact = await getUselessFactToday();
-  // const flights = await getAggregatedFlights(data.ifcUserId)
+  const flights = await getAggregatedFlights(data.ifcUserId) // Use for Grade Progression Table
 
   const userStats = await getUserStats(data.ifcUsername, data.ifcUserId);
-
   const userData = userStats.result[0];
+
+
+  // Sample Object
+  /*  {
+  onlineFlights: 586,
+  violations: 9,
+  xp: 510841,
+  landingCount: 943,
+  flightTime: 38397,
+  atcOperations: 234,
+  atcRank: 0,
+  grade: 3,
+  hash: '2F082449',
+  violationCountByLevel: { level1: 7, level2: 1, level3: 1 },
+  roles: [ 53, 75 ],
+  userId: '1577e4a9-98c7-4d61-9ff3-cf0d003284e4',
+  virtualOrganization: 'Air Canada Virtual [ACVA]',
+  discourseUsername: 'charlesacosta163',
+  groups: [],
+  errorCode: 0
+  } */
+
+
   const recentFlight = await getUserMostRecentFlight() || {
     "id": "9aeb16a3-ac69-41d3-9dd4-d62be72b1525",
     "created": "2022-01-10T10:37:41.965626",
@@ -74,7 +95,6 @@ export default async function DashboardPage() {
     "worldType": 1,
     "violations": [],
   }
-
 
   const { aircraftName, liveryName } = await getAircraftAndLivery(
     recentFlight.aircraftId,
@@ -100,109 +120,130 @@ export default async function DashboardPage() {
   const atcRank = matchATCRankToTitle(userData.atcRank.toString() || "Unknown");
   return (
     <div className="relative">
-      {/* Liquid Glass Background */}
-      {/* <div className="fixed inset-0 -z-10">
-        <div className="absolute inset-0 dark:bg-gradient-to-br from-slate-900 via-gray-900 to-black"></div>
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(59,130,246,0.15),transparent_50%)]"></div>
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_60%,rgba(147,51,234,0.1),transparent_50%)]"></div>
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_80%,rgba(34,197,94,0.08),transparent_50%)]"></div>
-        <div className="absolute inset-0 backdrop-blur-[1px] bg-gradient-to-t from-black/20 to-transparent"></div>
-      </div> */}
 
-      <div className="relative z-10 space-y-6 pb-6">
+      <div className="relative z-10 space-y-4 md:space-y-6 pb-6">
         {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <div>
-            <h1 className="text-4xl font-bold dark:text-light bg-gradient-to-r from-gray-600 to-gray-800 bg-clip-text text-transparent tracking-tight">
-              Welcome back, {data.ifcUsername}!
-            </h1>
-            <p className="text-gray-400 mt-2 flex items-center gap-2">
-              <FaPlane className="text-gray-400" />
+        <div className={cn(
+          "flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 md:gap-6",
+          "p-4 md:p-6",
+          "bg-gray-50 dark:bg-gray-800",
+          "border-2 border-gray-200 dark:border-gray-700",
+          "rounded-[20px] md:rounded-[25px]"
+        )}>
+          <div className="flex-1">
+            <div className="flex items-center gap-3">
+              <div className={cn(
+                "p-2 md:p-3 rounded-[12px]",
+                "bg-blue-100 dark:bg-blue-900/30"
+              )}>
+                <FaPlane className="w-5 h-5 md:w-6 md:h-6 text-blue-600 dark:text-blue-400" />
+              </div>
+              <div>
+                <h1 className="text-2xl md:text-3xl lg:text-4xl font-black tracking-tight text-gray-800 dark:text-gray-100">
+                  Welcome back, {data.ifcUsername}!
+                </h1>
+              </div>
+            </div>
+            <p className="text-sm md:text-base text-gray-600 dark:text-gray-400 font-medium ml-12 md:ml-[60px]">
               Your aviation dashboard
             </p>
           </div>
-          <div
-            className={`flex items-center self-start sm:self-end gap-2 ${gradeColorClass} text-white px-4 py-2 rounded-full`}
-          >
-            <span className="font-bold">Grade {userData.grade}</span>
+          
+          <div className="flex items-center gap-3">
+            <div className={cn(
+              "flex items-center gap-2 md:gap-3",
+              "px-4 md:px-6 py-2.5 md:py-3",
+              "rounded-[12px] md:rounded-[15px]",
+              "border-2 w-full",
+              gradeColorClass,
+              "text-white",
+              "shadow-md",
+              "transition-transform hover:scale-105 duration-200"
+            )}>
+              <TfiMedall className="w-4 h-4 md:w-5 md:h-5" />
+              <div className="flex flex-col">
+                <span className="text-xs font-semibold opacity-90">Current Grade</span>
+                <span className="text-lg md:text-xl font-black">Grade {userData.grade}</span>
+              </div>
+            </div>
           </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {/* Welcome Card - Large */}
           <Card className={`md:col-span-1 lg:col-span-2 ${gradeColorClass} text-white`}>
-            <CardHeader>
-              <CardTitle className="text-2xl font-bold tracking-tight">
+            <CardHeader className="px-4 md:px-6">
+              <CardTitle className="text-xl md:text-2xl font-bold tracking-tight">
                 Profile Overview
               </CardTitle>
-              <CardDescription className="text-gray-200">
+              <CardDescription className="text-gray-100 text-sm md:text-base">
                 Your general stats.
               </CardDescription>
             </CardHeader>
 
-            <CardContent className="grid grid-cols-2 lg:grid-cols-3 gap-4">
+            <CardContent className="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4 px-4 md:px-6">
               <div
-                className={`bg-white/15 rounded-xl p-4 backdrop-blur-md relative overflow-hidden`}
+                className={`bg-white/15 rounded-[20px] md:rounded-[25px] p-4 md:p-5 backdrop-blur-md relative overflow-hidden`}
               >
-                <div className="text-2xl font-bold">{userData.grade}</div>
-                <div className="text-blue-100 text-sm flex items-center gap-1">
+                <div className="text-xl md:text-2xl font-bold tracking-tight">{userData.grade}</div>
+                <div className="text-gray-100 text-xs md:text-sm flex items-center gap-1 font-medium">
                   <TfiMedall /> Grade
                 </div>
                 <div className="absolute top-4 right-4 opacity-10">
-                  <TfiMedall className="text-[6rem]" />
+                  <TfiMedall className="text-[5rem] md:text-[6rem]" />
                 </div>
               </div>
-              <div className="bg-white/15 rounded-xl p-4 backdrop-blur-md relative overflow-hidden">
-                <div className="text-2xl font-bold">
+              <div className="bg-white/15 rounded-[20px] md:rounded-[25px] p-4 md:p-5 backdrop-blur-md relative overflow-hidden">
+                <div className="text-xl md:text-2xl font-bold tracking-tight">
                   {userData.onlineFlights}
                 </div>
-                <div className="text-blue-100 text-sm flex items-center gap-1">
+                <div className="text-gray-100 text-xs md:text-sm flex items-center gap-1 font-medium">
                   <HiOutlineStatusOnline /> Online Flights
                 </div>
                 <div className="absolute top-0 right-4 opacity-10">
-                  <HiOutlineStatusOnline className="text-[8rem]" />
+                  <HiOutlineStatusOnline className="text-[7rem] md:text-[8rem]" />
                 </div>
               </div>
-              <div className="bg-white/15 rounded-xl p-4 backdrop-blur-md relative overflow-hidden">
-                <div className="text-2xl font-bold">
+              <div className="bg-white/15 rounded-[20px] md:rounded-[25px] p-4 md:p-5 backdrop-blur-md relative overflow-hidden">
+                <div className="text-xl md:text-2xl font-bold tracking-tight">
                   {userData.landingCount}
                 </div>
-                <div className="text-blue-100 text-sm flex items-center gap-1">
+                <div className="text-gray-100 text-xs md:text-sm flex items-center gap-1 font-medium">
                   <LuPlaneLanding /> Landings
                 </div>
                 <div className="absolute top-0 right-4 opacity-10">
-                  <LuPlaneLanding className="text-[8rem]" />
+                  <LuPlaneLanding className="text-[7rem] md:text-[8rem]" />
                 </div>
               </div>
               <div
-                className={`bg-white/15 rounded-xl p-4 backdrop-blur-md relative overflow-hidden`}
+                className={`bg-white/15 rounded-[20px] md:rounded-[25px] p-4 md:p-5 backdrop-blur-md relative overflow-hidden`}
               >
-                <div className="text-2xl font-bold">{userData.xp}</div>
-                <div className="text-blue-100 text-sm flex items-center gap-1">
+                <div className="text-xl md:text-2xl font-bold tracking-tight">{userData.xp}</div>
+                <div className="text-gray-100 text-xs md:text-sm flex items-center gap-1 font-medium">
                   <PiShootingStarBold /> XP
                 </div>
                 <div className="absolute top-4 right-4 opacity-10">
-                  <PiShootingStarBold className="text-[6rem]" />
+                  <PiShootingStarBold className="text-[5rem] md:text-[6rem]" />
                 </div>
               </div>
-              <div className="bg-white/15 rounded-xl p-4 backdrop-blur-md relative overflow-hidden">
-                <div className="text-2xl font-bold">
+              <div className="bg-white/15 rounded-[20px] md:rounded-[25px] p-4 md:p-5 backdrop-blur-md relative overflow-hidden">
+                <div className="text-xl md:text-2xl font-bold tracking-tight">
                   {convertMinutesToHours(userData.flightTime)}
                 </div>
-                <div className="text-blue-100 text-sm flex items-center gap-1">
+                <div className="text-gray-100 text-xs md:text-sm flex items-center gap-1 font-medium">
                   <TbClock /> Flight Time
                 </div>
                 <div className="absolute top-0 right-4 opacity-10">
-                  <TbClock className="text-[8rem]" />
+                  <TbClock className="text-[7rem] md:text-[8rem]" />
                 </div>
               </div>
-              <div className="bg-white/15 rounded-xl p-4 !pb-0 backdrop-blur-md relative overflow-hidden md:row-span-2">
+              <div className="bg-white/15 rounded-[20px] md:rounded-[25px] p-4 md:p-5 !pb-0 backdrop-blur-md relative overflow-hidden md:row-span-2">
                 {/* Small screens - simplified view */}
                 <div className="lg:hidden flex flex-col">
-                  <span className="text-2xl font-bold">
+                  <span className="text-xl md:text-2xl font-bold tracking-tight">
                     {userData.atcOperations || 0}
                   </span>
-                  <span className="text-sm flex items-center gap-1">
+                  <span className="text-xs md:text-sm flex items-center gap-1 font-medium">
                     <LuTowerControl /> {atcRank}
                   </span>
                 </div>
@@ -210,18 +251,18 @@ export default async function DashboardPage() {
                 {/* Large screens - detailed view */}
                 <div className="hidden lg:block">
                   <div className="flex items-center gap-1">
-                    <LuTowerControl className="text-2xl" />
-                    <div className="text-light text-sm font-bold tracking-tight">
+                    <LuTowerControl className="text-xl md:text-2xl" />
+                    <div className="text-light text-xs md:text-sm font-bold tracking-tight">
                       ATC Summary
                     </div>
                   </div>
 
                   <div className="h-full flex flex-col justify-between !py-2">
                     <div className="flex flex-col">
-                      <span className="text-2xl font-bold">
+                      <span className="text-xl md:text-2xl font-bold tracking-tight">
                         {userData.atcOperations || 0}
                       </span>
-                      <span className="text-blue-100 text-sm flex items-center gap-1">
+                      <span className="text-gray-100 text-xs md:text-sm flex items-center gap-1 font-medium">
                         <BsPersonWorkspace /> Operations
                       </span>
                     </div>
@@ -233,120 +274,124 @@ export default async function DashboardPage() {
                 </div>
 
                 <div className="absolute lg:-bottom-4 top-0 lg:top-auto right-0 opacity-10">
-                  <LuTowerControl className="text-[8rem]" />
+                  <LuTowerControl className="text-[7rem] md:text-[8rem]" />
                 </div>
               </div>
-              <div className="bg-white/15 rounded-xl p-4 backdrop-blur-md col-span-2 relative overflow-hidden">
-                <div className="text-2xl font-bold">
+              <div className="bg-white/15 rounded-[20px] md:rounded-[25px] p-4 md:p-5 backdrop-blur-md col-span-2 relative overflow-hidden">
+                <div className="text-xl md:text-2xl font-bold tracking-tight">
                   {userData.virtualOrganization || "Not In Organization"}
                 </div>
-                <div className="text-blue-100 text-sm flex items-center gap-1">
+                <div className="text-gray-100 text-xs md:text-sm flex items-center gap-1 font-medium">
                   <MdOutlineAirlines /> Virtual Organization
                 </div>
                 <div className="absolute top-0 right-4 opacity-10">
-                  <MdOutlineAirlines className="text-[8rem]" />
+                  <MdOutlineAirlines className="text-[7rem] md:text-[8rem]" />
                 </div>
               </div>
             </CardContent>
           </Card>
 
           {/* Recent Flight */}
-          <Card className="md:col-span-1 lg:col-span-2 !pb-0 bg-[#FEEBF6] text-dark backdrop-blur-xl">
-            <CardHeader className="flex justify-between gap-2 items-center">
-              <div>
-                <CardTitle className="text-2xl font-bold tracking-tight">
+          <Card className="md:col-span-1 lg:col-span-2 bg-[#FEEBF6] text-dark">
+            <CardHeader className="px-4 md:px-6 flex flex-row justify-between items-start gap-3">
+              <div className="flex-1">
+                <CardTitle className="text-xl md:text-2xl font-bold tracking-tight">
                   Recent Flight
                 </CardTitle>
-                <CardDescription className="text-gray-600 font-medium">
-                  <Badge className="bg-gray-600 text-white">{formatDate(recentFlight.created)}</Badge>
+                <CardDescription className="text-gray-600 font-medium text-sm md:text-base mt-2">
+                  <Badge className="bg-gray-600 text-white font-medium">{formatDate(recentFlight.created)}</Badge>
                 </CardDescription>
               </div>
               { recentFlight.id && (
               <Link
-                className="bg-blue-500/30 hover:bg-blue-600/50 py-1 px-4 rounded-full flex items-center justify-center gap-2 duration-200 transition-all"
+                className="bg-blue-500/30 hover:bg-blue-600/50 py-2 px-4 rounded-full flex items-center justify-center gap-2 duration-200 transition-all"
                 href={`/dashboard/flights/${recentFlight.id}`}
               >
-                <TbPlaneInflight className="text-2xl" />
-                <span className="text-sm font-semibold">Info</span>
+                <TbPlaneInflight className="text-lg md:text-xl" />
+                <span className="text-xs md:text-sm font-semibold">Info</span>
               </Link>
               )}
             </CardHeader>
 
-            <CardContent className="flex flex-col gap-4 justify-between h-full bg-[#f2e1ff] rounded-xl p-4 backdrop-blur-xl">
-              <section className="flex flex-col gap-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-600 font-medium">Callsign</span>
-                  <span className="font-bold text-gray-800">
+            <CardContent className="px-4 md:px-6 space-y-3 md:space-y-4">
+              {/* Flight Details Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
+                <div className="bg-white/50 rounded-[20px] md:rounded-[25px] p-4 md:p-5 backdrop-blur-sm">
+                  <p className="text-xs md:text-sm text-gray-600 mb-1 font-medium">Callsign</p>
+                  <p className="text-xl md:text-2xl font-bold tracking-tight text-gray-800">
                     {recentFlight.callsign}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-600 font-medium">Route</span>
-                  <span className="font-bold">
-                    {recentFlight.originAirport || "????"} →{" "}
-                    {recentFlight.destinationAirport || "????"}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-600 font-medium">Duration</span>
-                  <span className="font-bold text-blue-500">
-                    {convertMinutesToHours(
-                      Math.round(recentFlight.totalTime)
-                    ) || "???"}
-                  </span>
+                  </p>
                 </div>
 
-                <div className="flex-1 flex gap-4 items-center px-4 py-3 bg-gradient-to-r from-blue-900 via-purple-900 to-blue-900 rounded-lg">
-                  <div className="flex-1 flex flex-col gap-1 ">
-                    <div className="text-white font-bold tracking-tight text-2xl">
-                      {aircraftName}
-                    </div>
-                    <div className="text-gray-400 text-sm">{liveryName}</div>
-                  </div>
-                  {/* Aircraft Image */}
+                <div className="bg-white/50 rounded-[20px] md:rounded-[25px] p-4 md:p-5 backdrop-blur-sm">
+                  <p className="text-xs md:text-sm text-gray-600 mb-1 font-medium">Route</p>
+                  <p className="text-xl md:text-2xl font-bold tracking-tight text-gray-800">
+                    {recentFlight.originAirport || "????"} → {recentFlight.destinationAirport || "????"}
+                  </p>
+                </div>
+
+                <div className="bg-white/50 rounded-[20px] md:rounded-[25px] p-4 md:p-5 backdrop-blur-sm">
+                  <p className="text-xs md:text-sm text-gray-600 mb-1 font-medium">Duration</p>
+                  <p className="text-xl md:text-2xl font-bold tracking-tight text-blue-500">
+                    {convertMinutesToHours(Math.round(recentFlight.totalTime)) || "???"}
+                  </p>
+                </div>
+              </div>
+
+              {/* Aircraft Display */}
+              <div className="bg-gradient-to-r from-blue-900 via-purple-900 to-blue-900 rounded-[25px] md:rounded-[30px] p-5 md:p-6 flex items-center justify-between gap-4">
+                <div className="flex-1">
+                  <h3 className="text-white font-bold tracking-tight text-xl md:text-2xl lg:text-3xl">
+                    {aircraftName}
+                  </h3>
+                  <p className="text-gray-300 text-xs md:text-sm mt-1 font-medium">{liveryName}</p>
+                </div>
+                <div className="flex-shrink-0">
                   <Image
-                    src={`/images/aircraft/${matchAircraftNameToImage(
-                      aircraftName || ""
-                    )}`}
+                    src={`/images/aircraft/${matchAircraftNameToImage(aircraftName || "")}`}
                     alt={aircraftName || "Aircraft"}
                     width={120}
                     height={90}
-                    className="rounded-lg object-contain"
+                    className="rounded-lg object-contain w-[80px] h-[60px] md:w-[120px] md:h-[90px]"
                   />
                 </div>
-              </section>
+              </div>
 
-              <section className="grid grid-cols-2 gap-4">
-                <div className="bg-[#A5B68D] rounded-xl p-4 backdrop-blur-md overflow-hidden relative">
-                  <div className="text-2xl font-bold text-green-100">
+              {/* Stats Grid */}
+              <div className="grid grid-cols-2 gap-3 md:gap-4">
+                <div className="bg-[#A5B68D] rounded-[20px] md:rounded-[25px] p-4 md:p-5 backdrop-blur-md overflow-hidden relative">
+                  <div className="text-xl md:text-2xl font-bold tracking-tight text-white">
                     {recentFlight.xp}
                   </div>
-                  <div className="text-green-200 text-sm">XP Earned</div>
+                  <div className="text-green-100 text-xs md:text-sm font-medium">XP Earned</div>
                   <div className="absolute top-2 right-2 opacity-10">
-                    <PiShootingStarBold className="text-[6rem]" />
+                    <PiShootingStarBold className="text-[5rem] md:text-[6rem]" />
                   </div>
                 </div>
 
-                <div className="bg-[#687FE5] rounded-xl p-4 backdrop-blur-md overflow-hidden relative">
-                  <div className="text-2xl font-bold text-blue-100">
+                <div className="bg-[#687FE5] rounded-[20px] md:rounded-[25px] p-4 md:p-5 backdrop-blur-md overflow-hidden relative">
+                  <div className="text-xl md:text-2xl font-bold tracking-tight text-white">
                     {recentFlight.server}
                   </div>
-                  <div className="text-blue-300 text-sm">Server</div>
+                  <div className="text-blue-100 text-xs md:text-sm font-medium">Server</div>
                   <div className="absolute top-0 right-0 opacity-10">
-                    <GoServer className="text-[8rem]" />
+                    <GoServer className="text-[7rem] md:text-[8rem]" />
                   </div>
                 </div>
-              </section>
+              </div>
             </CardContent>
           </Card>
 
+          { /* Grade Progression Table - Per the Infinite Flight Grade Table*/}
+          <GradeProgressionCard userData={userData} flights={flights}/>
+
           {/* Quick Actions */}
-          <Card className=" dark:bg-[#381f17]/50 bg-[#FCD8CD] text-dark backdrop-blur-xl">
+          <Card className="dark:bg-[#381f17]/50 bg-[#FCD8CD] text-dark backdrop-blur-xl">
             <CardHeader>
-              <CardTitle className="text-2xl font-bold tracking-tight flex items-center gap-2 text-light dark:bg-amber-700 bg-amber-500 px-4 py-1 rounded-full justify-center">
-                <SlActionUndo className="text-2xl" /> Quick Actions
+              <CardTitle className="text-xl md:text-2xl font-bold tracking-tight flex items-center gap-2 text-light dark:bg-amber-700 bg-amber-500 px-4 py-1 rounded-full justify-center">
+                <SlActionUndo className="text-xl md:text-2xl" /> Quick Actions
               </CardTitle>
-              <CardDescription className="text-gray-600 dark:text-gray-400 text-center">
+              <CardDescription className="text-gray-600 dark:text-gray-400 text-center text-sm md:text-base">
                 Quick actions to help you get started.
               </CardDescription>
             </CardHeader>
@@ -390,12 +435,12 @@ export default async function DashboardPage() {
             <Card className="flex-1 bg-[#5865F2] relative overflow-hidden">
               <TbBrandDiscord className="text-[20rem] absolute top-8 left-0 text-white opacity-10" />
               <CardHeader className="flex flex-col gap-2 justify-center items-center">
-                <CardTitle className="text-2xl font-bold tracking-tight text-light flex items-center gap-1"><Image src={iflyticsLogo} alt="IFlytics Logo" width={24} height={24} className="" /> Join the Discord</CardTitle>
-                <CardDescription className="text-gray-200 text-center">
+                <CardTitle className="text-xl md:text-2xl font-bold tracking-tight text-light flex items-center gap-1"><Image src={iflyticsLogo} alt="IFlytics Logo" width={24} height={24} className="" /> Join the Discord</CardTitle>
+                <CardDescription className="text-gray-200 text-center text-sm md:text-base">
                   Join the IFlytics Discord to get the latest news and updates.
                 </CardDescription>
                    {/* NEEDS TO BE UPDATED WEEKLY */}
-                <Link href="https://discord.gg/cp2G7d5d" target="_blank" className="bg-[#404EED] hover:bg-[#404EED]/80 text-white rounded-full px-4 py-2 flex items-center gap-2 text-center text-sm font-bold z-[1] hover:scale-105 transition-all duration-200 self-center">
+                <Link href="https://discord.gg/w6SresBG" target="_blank" className="bg-[#404EED] hover:bg-[#404EED]/80 text-white rounded-full px-4 py-2 flex items-center gap-2 text-center text-sm font-bold z-[1] hover:scale-105 transition-all duration-200 self-center">
                   <TbBrandDiscord className="text-2xl" /> Join
                 </Link>
               </CardHeader>
@@ -406,8 +451,8 @@ export default async function DashboardPage() {
 
               <CardHeader className="!h-full flex flex-col justify-center items-center">
                 <div className="flex items-center gap-4">
-                <TbBuildingStadium className="text-2xl text-amber-500" />
-                  <div className="text-2xl font-bold tracking-tight bg-gradient-to-r from-orange-400 to-purple-400 bg-clip-text text-transparent flex flex-col gap-2 ">
+                <TbBuildingStadium className="text-xl md:text-2xl text-amber-500" />
+                  <div className="text-xl md:text-2xl font-bold tracking-tight bg-gradient-to-r from-orange-400 to-purple-400 bg-clip-text text-transparent flex flex-col gap-2 ">
                     The Flight Arena
                     <span className="bg-gradient-to-r from-green-500 to-emerald-600 text-white px-2 py-0.5 rounded-full text-xs font-semibold self-start">
                       Coming in 2026
@@ -434,10 +479,10 @@ export default async function DashboardPage() {
                   {/* Header section */}
                   <div className="text-center mt-4">
                     <div className="inline-flex flex-col items-center gap-2 bg-black/40 backdrop-blur-md py-3 px-6 rounded-2xl border border-white/20 shadow-2xl">
-                      <div className="text-3xl font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-yellow-300 via-orange-300 to-pink-300 drop-shadow-lg">
+                      <div className="text-2xl md:text-3xl font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-yellow-300 via-orange-300 to-pink-300 drop-shadow-lg">
                         Find The Pilot
                       </div>
-                      <div className="text-gray-200 text-sm font-medium">
+                      <div className="text-gray-200 text-xs md:text-sm font-medium">
                         A game for the analysts 🧐
                       </div>
                     </div>
@@ -471,16 +516,16 @@ export default async function DashboardPage() {
           <TbBuildingAirport className="text-[20rem] absolute top-8 left-0 text-amber-500 opacity-10" />
           
             <CardHeader className="">
-              <CardTitle className="text-2xl font-bold tracking-tight text-gray dark:text-white">
+              <CardTitle className="text-xl md:text-2xl font-bold tracking-tight text-gray dark:text-white">
                 Infinite Flight Community
               </CardTitle>
-              <CardDescription className="text-gray-700 dark:text-gray-400">
+              <CardDescription className="text-gray-700 dark:text-gray-400 text-sm md:text-base">
                 Connect with pilots worldwide
               </CardDescription>
             </CardHeader>
 
             <CardContent className="flex flex-col gap-4">
-              <span className="text-gray-700 dark:text-white tracking-tight leading-relaxed font-medium">
+              <span className="text-gray-700 dark:text-white tracking-tight leading-relaxed font-medium text-sm md:text-base">
                 Join thousands of virtual pilots sharing their passion for
                 aviation!
               </span>

@@ -171,7 +171,7 @@ const ExportFlightsCSVBtn: React.FC<ExportFlightsCSVBtnProps> = ({
     <Dialog>
       <DialogTrigger asChild>
         {hasLifetimeAccess(subscription) ? (
-          <Button variant="outline" className="flex items-center gap-2">
+          <Button variant="outline" className="flex items-center gap-2 border-2 border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200 rounded-[15px]">
             <FaFileExport />
             Export CSV
           </Button>

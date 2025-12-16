@@ -46,7 +46,7 @@ export default function Home() {
               
               {/* Value Proposition First - Large Headline */}
               <div className="text-center lg:text-left animate-fade-in-up">
-                <h1 className="text-4xl lg:text-6xl font-black tracking-tighter mb-4 lg:mb-6 relative text-gray-700 dark:text-gray-100 leading-tight text-balance">
+                <h1 className="text-4xl lg:text-5xl font-black tracking-tighter mb-4 lg:mb-6 relative text-gray-700 dark:text-gray-100 leading-tight text-balance">
                   Transform Your Flight Data Into 
                   <span className="block bg-gradient-to-r from-[#ff6982] to-[#ffd2b3] dark:from-[#0080ff] dark:to-light bg-clip-text text-transparent animate-gradient-x bg-[length:200%_auto] lg:border-b-6  [border-image:linear-gradient(to_right,#ff6982,#ffd2b3)_1] dark:[border-image:linear-gradient(to_right,#0080ff,#00e0ff)_1]">
   Powerful Insights
@@ -61,7 +61,7 @@ export default function Home() {
               {/* Logo and Brand - Supporting Role */}
               <div className="hidden lg:flex items-center gap-3 animate-fade-in-up delay-300
   bg-gradient-to-r from-[#ff6982] to-[#ffd2b3] dark:from-[#0080ff] dark:to-[#00e0ff]
-  animate-gradient-x bg-[length:200%_auto] p-4 rounded-xl">
+  animate-gradient-x bg-[length:200%_auto] p-4 rounded-[30px]">
   <div className="group">
     {/* dark logo */}
     <Image src={iflyticsLogoLight} alt="IFlytics Logo" width={60} height={60}
@@ -87,7 +87,7 @@ export default function Home() {
 
           {/* Enhanced Form Section */}
           <div className="flex-1 flex flex-col gap-4 lg:gap-6 items-center animate-slide-in-right delay-300 w-full relative">
-            <Badge className="absolute -top-2 left-1/2 -translate-x-1/2 z-50 bg-gradient-to-r from-[#ff879b] to-[#ffc49c] dark:from-[#1e90ff] dark:to-[#99badd] text-light font-bold tracking-tight">December 15th - Jan 3rd: 50% OFF! BOTH PLANS!</Badge>
+            <Badge className="absolute -top-2 left-1/2 -translate-x-1/2 z-50 bg-gradient-to-r from-[#ff879b] to-[#ffc49c] dark:from-[#1e90ff] dark:to-[#99badd] text-light font-bold tracking-tight">December 15th - Jan 3rd: 50% OFF! &nbsp;CODE: <Badge className="bg-blue-500 dark:bg-pink-600 dark:text-light px-2 py-0.5 rounded-md font-bold">IFHOLIDAY50</Badge></Badge>
             {/* Form with Enhanced Styling */}
             <div className="relative group w-full max-w-[400px]">
               {/* <div className="absolute -inset-1 bg-gradient-to-r from-gray-400 via-blue-400 to-gray-400 rounded-[24px] blur opacity-15 group-hover:opacity-30 transition-all duration-1000 animate-gradient-x bg-[length:200%_auto]"></div> */}
@@ -95,7 +95,7 @@ export default function Home() {
             <form action={async (formData: FormData) => {
               'use server'
               redirect(`/user/${formData.get("name") as string}`)
-              }} className="relative px-4 py-6 lg:px-8 lg:py-10 rounded-[23px] bg-[#ffe3d0] dark:bg-dark shadow-xl backdrop-blur-sm">
+              }} className="relative px-4 py-6 lg:px-8 lg:py-10 rounded-[30px] bg-[#ffe3d0] dark:bg-dark shadow-xl backdrop-blur-sm border-4 border-gray-100 dark:border-gray-700">
                 
                                  {/* Form Header */}
                  <div className="text-center mb-4 lg:mb-6">
@@ -781,6 +781,7 @@ export default function Home() {
             {/* Premium Tier */}
             <div className="group animate-slide-in-up delay-200">
               <div className="relative bg-[#ffe1ce] dark:bg-gray-800/50 p-8 rounded-2xl border-2 border-amber-200 dark:border-amber-700 hover:scale-105 transition-all duration-500 shadow-lg hover:shadow-2xl h-full flex flex-col">
+              <Badge className="absolute -top-2 left-1/2 -translate-x-1/2 z-50 bg-gradient-to-r from-[#ff879b] to-[#ffc49c] dark:from-[#1e90ff] dark:to-[#99badd] text-light font-bold tracking-tight">December 15th - Jan 3rd: 50% OFF! &nbsp;CODE: <Badge className="bg-blue-500 dark:bg-pink-600 dark:text-light px-2 py-0.5 rounded-md font-bold">IFHOLIDAY50</Badge></Badge> 
                 <div className="text-center mb-8">
                   <h3 className="text-2xl font-bold text-yellow-600 dark:text-yellow-400 mb-2">Premium</h3>
                   <div className="text-4xl font-black text-yellow-600 dark:text-yellow-400 mb-2">$1.99</div>
@@ -851,11 +852,12 @@ export default function Home() {
 
             {/* Lifetime Plan */}
             <div className="group animate-slide-in-up delay-100">
-              <div className="relative bg-[#ffe1ce] dark:bg-gray-800/50 p-8 rounded-2xl border-2 border-green-200 dark:border-green-700 hover:scale-105 transition-all duration-500 shadow-lg hover:shadow-2xl h-full flex flex-col">
+              <div className="relative bg-[#ffe1ce] dark:bg-gray-800/50 p-8 rounded-2xl border-2 border-purple-200 dark:border-purple-700 hover:scale-105 transition-all duration-500 shadow-lg hover:shadow-2xl h-full flex flex-col">
+              <Badge className="absolute -top-2 left-1/2 -translate-x-1/2 z-50 bg-gradient-to-r from-[#ff879b] to-[#ffc49c] dark:from-[#1e90ff] dark:to-[#99badd] text-light font-bold tracking-tight">December 15th - Jan 3rd: 50% OFF! &nbsp;CODE: <Badge className="bg-blue-500 dark:bg-pink-600 dark:text-light px-2 py-0.5 rounded-md font-bold">IFHOLIDAY50</Badge></Badge> 
                 <div className="text-center mb-8">
-                  <h3 className="text-2xl font-bold text-green-600 dark:text-green-400 mb-2">Lifetime</h3>
-                  <div className="text-4xl font-black text-green-600 dark:text-green-400 mb-2">$49.99</div>
-                  <p className="text-gray-600 dark:text-gray-400">Forever</p>
+                  <h3 className="text-2xl font-bold text-purple-600 dark:text-purple-400 mb-2">Lifetime</h3>
+                  <div className="text-4xl font-black text-purple-600 dark:text-purple-400 mb-2">$49.99 </div>
+                  <p className="text-purple-600 dark:text-purple-400">Forever</p>
                 </div>
                 
                 <div className="flex-1 space-y-4 mb-8">
@@ -867,16 +869,16 @@ export default function Home() {
                   
                   {/* Lifetime-specific features */}
                   <div className="flex items-start gap-3 font-bold">
-                    <FaCheck className="text-green-500 mt-1 flex-shrink-0"/>
-                    <span className="text-gray-700 dark:text-gray-300">Export flight data as CSV files based on Time or Flight Frames</span>
+                    <FaCheck className="text-purple-500 mt-1 flex-shrink-0"/>
+                    <span className="text-purple-700 dark:text-purple-300">Export flight data as CSV files based on Time or Flight Frames</span>
                   </div>
                   <div className="flex items-start gap-3 font-bold">
-                    <FaCheck className="text-green-500 mt-1 flex-shrink-0"/>
+                    <FaCheck className="text-purple-500 mt-1 flex-shrink-0"/>
                     <span className="text-blue-700 dark:text-blue-300">FlightRadar24 import compatibility (supports Date, Origin, Destination, Aircraft, Airline, Duration properties)</span>
                   </div>
                   <div className="flex items-start gap-3 font-bold">
-                    <FaCheck className="text-green-500 mt-1 flex-shrink-0"/>
-                    <span className="text-gray-700 dark:text-gray-300">One-time payment - no recurring charges</span>
+                    <FaCheck className="text-purple-500 mt-1 flex-shrink-0"/>
+                    <span className="text-purple-700 dark:text-purple-300">One-time payment - no recurring charges</span>
                   </div>
                 </div>
 

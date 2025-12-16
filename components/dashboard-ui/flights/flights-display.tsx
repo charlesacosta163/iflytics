@@ -8,8 +8,7 @@ import { FaInfoCircle, FaRegCalendarAlt, FaRegClock } from "react-icons/fa";
 import { MdFlight } from "react-icons/md";
 import { IoInfinite } from "react-icons/io5";
 import { LuPlane, LuPlaneTakeoff } from "react-icons/lu";
-import { formatDate } from "@/lib/utils";
-import { convertMinutesToHours } from "@/lib/utils";
+import { formatDate, convertMinutesToHours, cn } from "@/lib/utils";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
@@ -235,21 +234,29 @@ const FlightsDisplay = ({ flights }: { flights: Flight[] }) => {
           flights.map((flight: any, index: number) => {
             return (
               <div key={index} className="flex flex-col">
-                <Card className="p-4 rounded-[25px] bg-gradient-to-br from-gray-800 via-gray-900 to-black text-light flex flex-col gap-2 relative overflow-hidden">
-                  <MdFlight className="absolute -top-20 right-0 text-light opacity-10 text-[24rem] -z-10 rotate-45 pointer-events-none" />
-                  <IoInfinite className="hidden md:block absolute -top-30 left-10 text-light opacity-10 text-[24rem] -z-10 -rotate-315 pointer-events-none" />
-                  <div className="flex justify-between gap-2">
+                <Card className={cn(
+                  "p-4 md:p-5",
+                  "rounded-[20px] md:rounded-[25px]",
+                  "bg-gray-50 dark:bg-gray-800",
+                  "text-gray-800 dark:text-gray-100",
+                  "border-2 border-gray-200 dark:border-gray-700",
+                  "flex flex-col gap-3",
+                  "relative overflow-hidden"
+                )}>
+                  <MdFlight className="absolute -top-20 right-0 text-gray-300 dark:text-gray-700 opacity-10 text-[20rem] md:text-[24rem] -z-10 rotate-45 pointer-events-none" />
+                  <IoInfinite className="hidden md:block absolute -top-30 left-10 text-gray-300 dark:text-gray-700 opacity-10 text-[24rem] -z-10 -rotate-315 pointer-events-none" />
+                  <div className="flex justify-between gap-2 z-10">
                     <div id="left" className="flex flex-col gap-2">
-                      <div className="flex gap-2 items-center text-sm font-medium">
-                        <FaRegCalendarAlt className="w-6 h-6" />
+                      <div className="flex gap-2 items-center text-xs md:text-sm font-medium text-gray-600 dark:text-gray-400">
+                        <FaRegCalendarAlt className="w-4 h-4 md:w-5 md:h-5" />
                         <div>{formatDate(flight.created)}</div>
                       </div>
-                      <div className="flex gap-2 items-center font-semibold">
-                        <LuPlane className="w-6 h-6" />
+                      <div className="flex gap-2 items-center font-bold text-lg md:text-xl tracking-tight">
+                        <LuPlane className="w-5 h-5 md:w-6 md:h-6" />
                         <div>{flight.callsign}</div>
                       </div>
-                      <div className="flex gap-2 items-center text-sm font-medium">
-                        <IoLocationOutline className="w-6 h-6" />
+                      <div className="flex gap-2 items-center text-xs md:text-sm font-medium text-gray-600 dark:text-gray-400">
+                        <IoLocationOutline className="w-4 h-4 md:w-5 md:h-5" />
                         <div>
                           {flight.originAirport !== flight.destinationAirport
                             ? `${flight.originAirport} → ${
@@ -260,24 +267,31 @@ const FlightsDisplay = ({ flights }: { flights: Flight[] }) => {
                       </div>
                     </div>
 
-                    <div id="right" className="flex flex-col gap-2 self-end">
-                      <div className="flex gap-2 items-center text-sm font-medium">
-                        <FaRegClock className="w-6 h-6" />
+                    <div id="right" className="flex flex-col gap-2 self-end text-right">
+                      <div className="flex gap-2 items-center text-xs md:text-sm font-semibold text-blue-600 dark:text-blue-400">
+                        <FaRegClock className="w-4 h-4 md:w-5 md:h-5" />
                         <div>{convertMinutesToHours(flight.totalTime)}</div>
                       </div>
-                      <div className="flex gap-2 items-center text-sm font-medium">
-                        <IoSparklesOutline className="w-6 h-6" />
+                      <div className="flex gap-2 items-center text-xs md:text-sm font-semibold text-amber-600 dark:text-amber-400">
+                        <IoSparklesOutline className="w-4 h-4 md:w-5 md:h-5" />
                         <div>{flight.xp} XP</div>
                       </div>
                     </div>
                   </div>
 
                   <Link
-                    className="cursor-pointer"
+                    className="cursor-pointer z-10"
                     href={`/dashboard/flights/${flight.id}`}
                   >
-                    <Button className="bg-gray-800 hover:bg-gray-700 dark:text-light">
-                      <FaInfoCircle className="w-6 h-6" />
+                    <Button className={cn(
+                      "w-full",
+                      "bg-gray-700 hover:bg-gray-800",
+                      "dark:bg-gray-700 dark:hover:bg-gray-600",
+                      "text-white",
+                      "rounded-[12px] md:rounded-[15px]",
+                      "flex items-center gap-2"
+                    )}>
+                      <FaInfoCircle className="w-4 h-4 md:w-5 md:h-5" />
                       More Details
                     </Button>
                   </Link>

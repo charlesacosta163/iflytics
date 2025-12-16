@@ -8,7 +8,7 @@ export default function PromoBanner() {
   const [reduced, setReduced] = useState(false);
 
   useEffect(() => {
-    const dismissed = localStorage.getItem("promoBannerDismissed") === "true";
+    const dismissed = localStorage.getItem("christmasPromoBanner2024") === "true";
     if (dismissed) setOpen(false);
 
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -22,18 +22,18 @@ export default function PromoBanner() {
 
   const handleClose = () => {
     setOpen(false);
-    localStorage.setItem("promoBannerDismissed", "true");
+    localStorage.setItem("christmasPromoBanner2024", "true");
   };
 
   return (
     <div
       className="
         relative w-full
-        bg-gradient-to-r from-fuchsia-500 via-indigo-500 to-emerald-500
+        bg-gradient-to-r from-red-600 via-green-600 to-red-600
         text-white
       "
       role="region"
-      aria-label="Promotional discount codes"
+      aria-label="Holiday promotional discount code"
     >
       {/* Scrolling area */}
       <div className="promo-viewport py-2 sm:py-2.5 pr-12 sm:pr-16 pl-12 sm:pl-16">
@@ -41,33 +41,31 @@ export default function PromoBanner() {
           {/* Duplicate sequence twice for seamless loop */}
           <div className="promo-seq">
             <span className="font-semibold tracking-wide text-sm sm:text-base">
-              🎉 Limited-time sale — codes expire <span className="underline decoration-2">October&nbsp;1</span>!
+              🎄 Holiday Sale — code expires <span className="underline decoration-2">January&nbsp;3</span>! ❄️
             </span>
             <span className="mx-3 opacity-70">|</span>
             <span className="text-xs sm:text-sm">
-              <span className="font-bold bg-white/15 px-2 py-0.5 rounded-md">STATS4LIFE40</span>{" "}
-              → <span className="font-semibold">40% off</span> <em>for LIFETIME PLAN</em>
+              <span className="font-bold bg-white/20 px-2 py-0.5 rounded-md">IFHOLIDAY50</span>{" "}
+              → <span className="font-semibold">50% OFF</span> <em>LIFETIME & PREMIUM Plans</em>
             </span>
             <span className="mx-3 opacity-70">|</span>
             <span className="text-xs sm:text-sm">
-              <span className="font-bold bg-white/15 px-2 py-0.5 rounded-md">PREMIUM50</span>{" "}
-              → <span className="font-semibold">50% off</span> first month of PREMIUM PLAN
+              ⭐ Valid <span className="font-semibold">December 15 - January 3</span> ⭐
             </span>
           </div>
 
           <div className="promo-seq">
             <span className="font-semibold tracking-wide text-sm sm:text-base">
-              🎉 Limited-time sale — codes expire <span className="underline decoration-2">October&nbsp;1</span>!
+              🎄 Holiday Sale — code expires <span className="underline decoration-2">January&nbsp;3</span>! ❄️
             </span>
             <span className="mx-3 opacity-70">|</span>
             <span className="text-xs sm:text-sm">
-              <span className="font-bold bg-white/15 px-2 py-0.5 rounded-md">STATS4LIFE40</span>{" "}
-              → <span className="font-semibold">40% off</span> <em>for the LIFETIME PLAN</em>
+              <span className="font-bold bg-white/20 px-2 py-0.5 rounded-md">IFHOLIDAY50</span>{" "}
+              → <span className="font-semibold">50% OFF</span> <em>LIFETIME & PREMIUM Plans</em>
             </span>
             <span className="mx-3 opacity-70">|</span>
             <span className="text-xs sm:text-sm">
-              <span className="font-bold bg-white/15 px-2 py-0.5 rounded-md">PREMIUM50</span>{" "}
-              → <span className="font-semibold">50% off</span> first month of PREMIUM PLAN
+              ⭐ Valid <span className="font-semibold">December 15 - January 3</span> ⭐
             </span>
           </div>
         </div>

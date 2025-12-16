@@ -26,6 +26,7 @@ import Pathname from "./pathname";
 import { getUserSubscription } from "@/lib/subscription/subscription";
 import { AccessLevel, Subscription } from "@/lib/subscription/helpers";
 import { MdOutlineLeaderboard } from "react-icons/md";
+import { cn } from "@/lib/utils";
 
 
 const Navbar = () => {
@@ -129,10 +130,16 @@ const Navbar = () => {
             <Pathname />
           </span>
 
-          <div className="hidden lg:flex dark:border-gray-300 hover:border-gray-800 dark:hover:border-gray-50 transition-colors duration-200 items-center gap-2">
-            <LuUser className="w-6 h-6 text-gray-600 dark:text-gray-300" />
-            <Link href="/dashboard" className="text-xl font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors duration-200 tracking-tight border-b-2 border-gray-700">
-              {user?.user_metadata?.ifcUsername ? <span>Hello <b>{user?.user_metadata?.ifcUsername}</b>!</span> : "Loading..."}
+          <div className="hidden lg:flex items-center gap-2 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border-2 border-blue-200 dark:border-blue-800/30 rounded-[15px] px-4 py-2 hover:shadow-md transition-all duration-200">
+            <div className="p-1.5 bg-blue-500 dark:bg-blue-600 rounded-full">
+              <LuUser className="w-4 h-4 text-white" />
+            </div>
+            <Link href="/dashboard" className="text-base font-bold text-gray-800 dark:text-gray-100 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200 tracking-tight">
+              {user?.user_metadata?.ifcUsername ? (
+                <span>Hello <span className="text-blue-600 dark:text-blue-400">{user?.user_metadata?.ifcUsername}</span>!</span>
+              ) : (
+                <span className="text-gray-500 dark:text-gray-400">Loading...</span>
+              )}
             </Link>
           </div>
 
@@ -165,8 +172,8 @@ const Navbar = () => {
                 </div>
               )}
             </PopoverTrigger>
-            <PopoverContent>
-              <section className="flex flex-col gap-4">
+            <PopoverContent className="rounded-[25px] border-4 border-gray-200 dark:border-gray-700">
+              <section className="flex flex-col gap-4 ">
 
                 <div className="flex gap-2 items-center">
 
@@ -194,7 +201,7 @@ const Navbar = () => {
                   </div>
                 </div>
 
-                <Link href="/dashboard/profile" className="flex px-4 py-2 rounded-md gap-2 items-center bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 transition-colors duration-200 cursor-pointer text-sm">
+                <Link href="/dashboard/profile" className="flex px-4 py-2 gap-2 items-center bg-gray-100 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 transition-colors duration-200 cursor-pointer text-sm rounded-[15px] border-2 border-gray-200 dark:border-gray-700">
                   <div>
                     <FaUser className="w-4 h-4 text-dark dark:text-light" />
                   </div>

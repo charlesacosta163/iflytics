@@ -11,6 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { cn } from '@/lib/utils'
 
 const AircraftUsageTable = ({analysisData, flightsAmountRaw, allFlightsWithDistances}: {
   analysisData: any, 
@@ -39,23 +40,46 @@ const AircraftUsageTable = ({analysisData, flightsAmountRaw, allFlightsWithDista
   const hasMoreThan6 = sortedAircraftStats.length > 6;
 
   return (
-    <Card className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-transparent border-none shadow-none">
-        <header className='md:col-span-2 flex md:flex-row flex-col items-center justify-center md:justify-between gap-4 mb-4'>
+    <Card className={cn(
+      "grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4",
+      "bg-gray-50 dark:bg-gray-800",
+      "border-2 border-gray-200 dark:border-gray-700",
+      "rounded-[20px] md:rounded-[25px]",
+      "p-4 md:p-6"
+    )}>
+        <header className={cn(
+          'md:col-span-2',
+          'flex md:flex-row flex-col items-center justify-center md:justify-between',
+          'gap-3 md:gap-4 mb-4 md:mb-6',
+          'pb-3 md:pb-4',
+          'border-b-2 border-gray-200 dark:border-gray-700'
+        )}>
           <div className='text-center md:text-left'>
-            <span className='text-2xl tracking-tight font-bold'>Frequently Used Aircraft</span>
-            <p className='text-xs dark:text-gray-300 text-gray-500 font-medium'>
+            <span className='text-xl md:text-2xl tracking-tight font-bold text-gray-800 dark:text-gray-100'>Frequently Used Aircraft</span>
+            <p className='text-xs md:text-sm text-gray-500 dark:text-gray-400 font-medium mt-1'>
               List of all your aircraft and their usage
             </p>
           </div>
 
           <Select defaultValue="flights" onValueChange={setSortBy}>
-            <SelectTrigger className="w-[180px]">
+            <SelectTrigger className={cn(
+              "w-[180px] md:w-[200px]",
+              "bg-white dark:bg-gray-700",
+              "border-2 border-gray-200 dark:border-gray-600",
+              "text-gray-800 dark:text-gray-100",
+              "rounded-[12px] md:rounded-[15px]",
+              "font-bold text-sm"
+            )}>
               <SelectValue placeholder="Sort by" />
             </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="flights">Sort by Flights</SelectItem>
-              <SelectItem value="distance">Sort by Distance</SelectItem>
-              <SelectItem value="time">Sort by Flight Time</SelectItem>
+            <SelectContent className={cn(
+              "bg-white dark:bg-gray-700",
+              "border-2 border-gray-200 dark:border-gray-600",
+              "rounded-[12px]"
+            )}>
+              <SelectItem value="flights" className="text-gray-800 dark:text-gray-100 font-medium">Sort by Flights</SelectItem>
+              <SelectItem value="distance" className="text-gray-800 dark:text-gray-100 font-medium">Sort by Distance</SelectItem>
+              <SelectItem value="time" className="text-gray-800 dark:text-gray-100 font-medium">Sort by Flight Time</SelectItem>
             </SelectContent>
           </Select>
         </header>
@@ -69,29 +93,43 @@ const AircraftUsageTable = ({analysisData, flightsAmountRaw, allFlightsWithDista
             allFlightsWithDistances={allFlightsWithDistances} // Pass the actual data instead of empty array
           />
         )) : (
-          <div className="md:col-span-2 flex justify-center mt-4">
-            <p className="text-gray-400">No aircraft data available</p>
+          <div className={cn(
+            "md:col-span-2 flex justify-center py-8",
+            "bg-white dark:bg-gray-700",
+            "border-2 border-gray-200 dark:border-gray-600",
+            "rounded-[15px] md:rounded-[20px]"
+          )}>
+            <p className="text-gray-500 dark:text-gray-400 font-medium">No aircraft data available</p>
           </div>
         )}
 
         {hasMoreThan6 && (
-          <div className="md:col-span-2 flex justify-center mt-4">
+          <div className="md:col-span-2 flex justify-center mt-2 md:mt-4">
             <Button 
               variant="outline" 
               onClick={() => setShowAll(!showAll)}
-              className="w-auto"
+              className={cn(
+                "w-auto px-6 py-3",
+                "bg-white dark:bg-gray-700",
+                "hover:bg-gray-100 dark:hover:bg-gray-600",
+                "border-2 border-gray-200 dark:border-gray-600",
+                "text-gray-800 dark:text-gray-100",
+                "rounded-[12px] md:rounded-[15px]",
+                "font-bold text-sm md:text-base",
+                "transition-all duration-200"
+              )}
             >
               {showAll ? (
                 <>
                   Show Less
-                  <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
                   </svg>
                 </>
               ) : (
                 <>
                   Show More ({sortedAircraftStats.length - 6})
-                  <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
                 </>

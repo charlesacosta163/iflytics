@@ -2,12 +2,10 @@ import React from "react";
 import { FaPlane, FaBolt, FaClock, FaLandmark } from "react-icons/fa";
 import { MdFlight, MdRadio } from "react-icons/md";
 import { IoWarning } from "react-icons/io5";
-import { TbStars } from "react-icons/tb";
-import { LuPlaneLanding } from "react-icons/lu";
-import { PiIslandFill } from "react-icons/pi";
+
 import { RiCopilotFill, RiStarFill } from "react-icons/ri";
 import { Progress } from "@/components/ui/progress";
-
+import { LuClapperboard } from "react-icons/lu";
 import {
   syncUserToIFStatsLeaderboard,
   getLeaderboardData,
@@ -252,9 +250,9 @@ const IFStatsLeaderboardPage = async () => {
 
   return (
     <div className="flex flex-col gap-6">
-      <header>
-        <h1 className="text-4xl font-bold dark:text-light bg-gradient-to-r from-gray-600 to-gray-800 bg-clip-text text-transparent tracking-tight">
-          IFlytics Leaderboard
+      <header className="bg-gray-50 dark:bg-gray-800 rounded-[15px] border-2 border-gray-200 dark:border-gray-700 p-4">
+        <h1 className="text-4xl font-bold dark:text-light flex items-center gap-2 bg-gradient-to-r from-gray-600 to-gray-800 bg-clip-text text-transparent tracking-tight">
+          <LuClapperboard className="w-6 h-6 text-blue-500" /> IFlytics Leaderboard
         </h1>
         <p className="text-gray-400 mt-2">
           A community-based effort to track the progress of the IFlytics
@@ -264,7 +262,7 @@ const IFStatsLeaderboardPage = async () => {
 
       {/* Statistics Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-white dark:bg-gray-800 rounded-lg border p-4">
+        <div className="bg-white dark:bg-gray-800 rounded-[15px] border-2 border-gray-200 dark:border-gray-700 p-4">
           <div className="flex items-center gap-2 text-gray-500 dark:text-light mb-2">
             <MdFlight className="w-4 h-4" />
             <span className="text-sm">Total Pilots</span>
@@ -279,7 +277,7 @@ const IFStatsLeaderboardPage = async () => {
           </div>
         </div>
 
-        <div className="bg-white dark:bg-gray-800 rounded-lg border p-4">
+        <div className="bg-white dark:bg-gray-800 rounded-[15px] border-2 border-gray-200 dark:border-gray-700 p-4">
           <div className="flex items-center gap-2 text-gray-500 dark:text-light mb-2">
             <FaPlane className="w-4 h-4" />
             <span className="text-sm">Total Flights</span>
@@ -294,7 +292,7 @@ const IFStatsLeaderboardPage = async () => {
           </div>
         </div>
 
-        <div className="bg-white dark:bg-gray-800 rounded-lg border p-4">
+        <div className="bg-white dark:bg-gray-800 rounded-[15px] border-2 border-gray-200 dark:border-gray-700 p-4">
           <div className="flex items-center gap-2 text-gray-500 dark:text-light mb-2">
             <FaClock className="w-4 h-4" />
             <span className="text-sm">Total Flight Time</span>
@@ -309,7 +307,7 @@ const IFStatsLeaderboardPage = async () => {
           </div>
         </div>
 
-        <div className="bg-white dark:bg-gray-800 rounded-lg border p-4">
+        <div className="bg-white dark:bg-gray-800 rounded-[15px] border-2 border-gray-200 dark:border-gray-700 p-4">
           <div className="flex items-center gap-2 text-gray-500 dark:text-light mb-2">
             <FaBolt className="w-4 h-4" />
             <span className="text-sm">Avg Grade</span>
@@ -320,7 +318,7 @@ const IFStatsLeaderboardPage = async () => {
             {gradeProgress.toFixed(0)}% to Grade {GRADE_GOAL} goal
           </div>
         </div>
-        <div className="bg-white dark:bg-gray-800 rounded-lg border p-4">
+        <div className="bg-white dark:bg-gray-800 rounded-[15px] border-2 border-gray-200 dark:border-gray-700 p-4">
           <div className="flex items-center gap-2 text-gray-500 dark:text-light mb-2">
             <FaLandmark className="w-4 h-4" />
             <span className="text-sm">Total Landings</span>
@@ -334,7 +332,7 @@ const IFStatsLeaderboardPage = async () => {
             landing goal
           </div>
         </div>
-        <div className="bg-white dark:bg-gray-800 rounded-lg border p-4">
+        <div className="bg-white dark:bg-gray-800 rounded-[15px] border-2 border-gray-200 dark:border-gray-700 p-4">
           <div className="flex items-center gap-2 text-gray-500 dark:text-light mb-2">
             <IoWarning className="w-4 h-4 text-red-500" />
             <span className="text-sm">Total Violations</span>
@@ -352,7 +350,7 @@ const IFStatsLeaderboardPage = async () => {
             violation limit
           </div>
         </div>
-        <div className="bg-white dark:bg-gray-800 rounded-lg border p-4">
+        <div className="bg-white dark:bg-gray-800 rounded-[15px] border-2 border-gray-200 dark:border-gray-700 p-4">
           <div className="flex items-center gap-2 text-gray-500 dark:text-light mb-2">
             <MdRadio className="w-4 h-4" />
             <span className="text-sm">Total ATC Operations</span>
@@ -365,7 +363,7 @@ const IFStatsLeaderboardPage = async () => {
             {atcProgress.toFixed(0)}% to {ATC_GOAL.toLocaleString()} ATC goal
           </div>
         </div>
-        <div className="bg-white dark:bg-gray-800 rounded-lg border p-4">
+        <div className="bg-white dark:bg-gray-800 rounded-[15px] border-2 border-gray-200 dark:border-gray-700 p-4">
           <div className="flex items-center gap-2 text-gray-500 dark:text-light mb-2">
             <RiStarFill className="w-4 h-4" />
             <span className="text-sm">Total XP</span>
@@ -384,7 +382,7 @@ const IFStatsLeaderboardPage = async () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           
           {/* Most XP Card */}
-          <div className="flex flex-col gap-2 bg-white dark:bg-gray-800 rounded-lg border p-4">
+          <div className="flex flex-col gap-2 bg-white dark:bg-gray-800 rounded-[15px] border-2 border-gray-200 dark:border-gray-700 p-4">
             <div className="flex justify-between items-center gap-2">
               <section>
                 <div className="flex items-center gap-2 text-gray-500 mb-2">
@@ -408,7 +406,7 @@ const IFStatsLeaderboardPage = async () => {
           </div>
 
           {/* Most Flights Card */}
-          <div className="flex flex-col gap-2 bg-white dark:bg-gray-800 rounded-lg border p-4">
+          <div className="flex flex-col gap-2 bg-white dark:bg-gray-800 rounded-[15px] border-2 border-gray-200 dark:border-gray-700 p-4">
             <div className="flex justify-between items-center gap-2">
               <section>
                 <div className="flex items-center gap-2 text-gray-500 mb-2">
@@ -432,7 +430,7 @@ const IFStatsLeaderboardPage = async () => {
           </div>
 
           {/* Most Flight Time Card */}
-          <div className="flex flex-col gap-2 bg-white dark:bg-gray-800 rounded-lg border p-4">
+          <div className="flex flex-col gap-2 bg-white dark:bg-gray-800 rounded-[15px] border-2 border-gray-200 dark:border-gray-700 p-4">
             <div className="flex justify-between items-center gap-2">
               <section>
                 <div className="flex items-center gap-2 text-gray-500 mb-2">
@@ -456,7 +454,7 @@ const IFStatsLeaderboardPage = async () => {
           </div>
 
           {/* Most Landings Card */}
-          <div className="flex flex-col gap-2 bg-white dark:bg-gray-800 rounded-lg border p-4">
+          <div className="flex flex-col gap-2 bg-white dark:bg-gray-800 rounded-[15px] border-2 border-gray-200 dark:border-gray-700 p-4">
             <div className="flex justify-between items-center gap-2">
               <section>
                 <div className="flex items-center gap-2 text-gray-500 mb-2">
@@ -480,7 +478,7 @@ const IFStatsLeaderboardPage = async () => {
           </div>
 
           {/* Most ATC Operations Card */}
-          <div className="flex flex-col gap-2 bg-white dark:bg-gray-800 rounded-lg border p-4">
+          <div className="flex flex-col gap-2 bg-white dark:bg-gray-800 rounded-[15px] border-2 border-gray-200 dark:border-gray-700 p-4">
             <div className="flex justify-between items-center gap-2">
               <section>
                 <div className="flex items-center gap-2 text-gray-500 mb-2">
@@ -504,7 +502,7 @@ const IFStatsLeaderboardPage = async () => {
           </div>
 
           {/* Most Violations Card */}
-          <div className="flex flex-col gap-2 bg-white dark:bg-gray-800 rounded-lg border p-4">
+              <div className="flex flex-col gap-2 bg-white dark:bg-gray-800 rounded-[15px] border-2 border-gray-200 dark:border-gray-700 p-4">
             <div className="flex justify-between items-center gap-2">
               <section>
                 <div className="flex items-center gap-2 text-gray-500 mb-2">

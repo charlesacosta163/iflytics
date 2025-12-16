@@ -11,6 +11,7 @@ import {
 import { FaRoute } from "react-icons/fa";
 import { GiPathDistance } from "react-icons/gi";
 import { RiCopilotFill } from "react-icons/ri";
+import { cn } from "@/lib/utils";
 
 import { customUserImages } from "@/lib/data";
 
@@ -194,7 +195,7 @@ const FlightsRoutes = async ({ flights, user , subscription, role}: { flights: F
 
   // console.log(getFlightContinentsFlewToData())
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
       {/* <div className="lg:col-span-3 border-2 border-yellow-200 dark:border-yellow-700 bg-yellow-50 dark:bg-yellow-900/50 p-6 rounded-lg flex items-center gap-2">
         <VscCopilotWarning className="w-6 h-6 text-yellow-500" />
         <p className="text-sm sm:text-lg font-medium dark:text-yellow-300 text-yellow-700">
@@ -203,7 +204,7 @@ const FlightsRoutes = async ({ flights, user , subscription, role}: { flights: F
         </p>
       </div> */}
 
-      <div className="flex gap-4 items-center">
+      <div className="flex gap-3 md:gap-4 items-center">
         <RevalidateRoutesButton userId={user.id} />
 
         <ExportFlightsCSVBtn
@@ -213,9 +214,19 @@ const FlightsRoutes = async ({ flights, user , subscription, role}: { flights: F
         />
       </div>
 
-      <div className="grid grid-cols-1 lg:col-span-3 bg-white dark:bg-gray-800 rounded-xl  p-4">
-        <section className="grid grid-cols-1 lg:grid-cols-[1fr_2fr_2fr_2fr] gap-4">
-          <div className="bg-transparent rounded-xl p-4 dark:text-white text-gray-700 flex flex-col gap-2 items-center justify-center h-full">
+      <div className={cn(
+        "grid grid-cols-1 lg:col-span-3",
+        "bg-gray-50 dark:bg-gray-800",
+        "border-2 border-gray-200 dark:border-gray-700",
+        "rounded-[20px] md:rounded-[25px]",
+        "p-4 md:p-6"
+      )}>
+        <section className="grid grid-cols-1 lg:grid-cols-[1fr_2fr_2fr_2fr] gap-3 md:gap-4">
+          <div className={cn(
+            "bg-transparent rounded-[15px] p-3 md:p-4",
+            "text-gray-800 dark:text-white",
+            "flex flex-col gap-2 items-center justify-center h-full"
+          )}>
             {customUserImages.find(
               (user: any) => user.username === userMetadata.ifcUsername
             )?.image ? (
@@ -226,90 +237,114 @@ const FlightsRoutes = async ({ flights, user , subscription, role}: { flights: F
                   )?.image
                 }
                 alt={userMetadata.ifcUsername}
-                className="max-w-20 w-full max-h-20 h-full border-gray-400 border-2 rounded-full"
+                className="max-w-16 md:max-w-20 w-full max-h-16 md:max-h-20 h-full border-gray-400 dark:border-gray-600 border-2 rounded-full"
               />
             ) : (
-              <RiCopilotFill className="w-12 h-12" />
+              <RiCopilotFill className="w-10 h-10 md:w-12 md:h-12" />
             )}
-            <p className="text-sm font-bold">@{userMetadata.ifcUsername}</p>
+            <p className="text-xs md:text-sm font-bold tracking-tight">@{userMetadata.ifcUsername}</p>
           </div>
 
-          <div className="flex justify-between items-center">
+          <div className="flex justify-between items-center gap-3">
             <div className="flex flex-col gap-1">
-              <h2 className="text-4xl font-bold tracking-tight">
+              <h2 className="text-3xl md:text-4xl font-black tracking-tight text-gray-800 dark:text-gray-100">
                 {uniqueRoutes.length}{" "}
-                <span className="text-sm dark:text-gray-300 text-gray-500">
+                <span className="text-xs md:text-sm text-gray-500 dark:text-gray-400 font-bold">
                   Unique Routes
                 </span>
               </h2>
-              <p className="text-sm dark:text-gray-300 text-gray-500">
-                <b className="text-lg font-bold">{totalDomesticRoutes}</b>{" "}
+              <p className="text-xs md:text-sm text-gray-600 dark:text-gray-400 font-medium">
+                <b className="text-base md:text-lg font-black text-gray-800 dark:text-gray-200">{totalDomesticRoutes}</b>{" "}
                 Domestic
               </p>
-              <p className="text-sm dark:text-gray-300 text-gray-500">
-                <b className="text-lg font-bold">{totalInternationalRoutes}</b>{" "}
+              <p className="text-xs md:text-sm text-gray-600 dark:text-gray-400 font-medium">
+                <b className="text-base md:text-lg font-black text-gray-800 dark:text-gray-200">{totalInternationalRoutes}</b>{" "}
                 International
               </p>
             </div>
 
-            <div className="bg-gray-200 dark:bg-gray-700 dark:text-light rounded-xl p-4 text-gray-700 flex flex-col gap-2 items-center justify-center h-full">
-              <FaRoute className="w-12 h-12" />
+            <div className={cn(
+              "bg-blue-100 dark:bg-blue-900/30",
+              "text-blue-600 dark:text-blue-400",
+              "rounded-[12px] md:rounded-[15px]",
+              "p-3 md:p-4",
+              "flex flex-col gap-2 items-center justify-center h-full"
+            )}>
+              <FaRoute className="w-10 h-10 md:w-12 md:h-12" />
             </div>
           </div>
-          <div className="flex justify-between items-center">
+          <div className="flex justify-between items-center gap-3">
             <div className="flex flex-col gap-1">
-              <h2 className="text-4xl font-bold tracking-tight">
+              <h2 className="text-3xl md:text-4xl font-black tracking-tight text-gray-800 dark:text-gray-100">
                 {maintenanceMode
                   ? "Under Maintenance"
                   : shortenNumber(totalDistanceTraveled)}{" "}
-                <span className="text-sm dark:text-gray-300 text-gray-500">
+                <span className="text-xs md:text-sm text-gray-500 dark:text-gray-400 font-bold">
                   Nautical Miles
                 </span>
               </h2>
-              <p className="text-sm dark:text-gray-300 text-gray-500">
-                <b className="text-lg font-bold">
+              <p className="text-xs md:text-sm text-gray-600 dark:text-gray-400 font-medium">
+                <b className="text-base md:text-lg font-black text-gray-800 dark:text-gray-200">
                   {shortenNumber(totalDistanceTraveled * 1.1508)}
                 </b>{" "}
                 Miles
               </p>
-              <p className="text-sm dark:text-gray-300 text-gray-500">
-                <b className="text-lg font-bold">
+              <p className="text-xs md:text-sm text-gray-600 dark:text-gray-400 font-medium">
+                <b className="text-base md:text-lg font-black text-gray-800 dark:text-gray-200">
                   {shortenNumber(totalDistanceTraveled * 1.852)}
                 </b>{" "}
                 Kilometers
               </p>
             </div>
 
-            <div className="bg-gray-200 dark:bg-gray-700 dark:text-light rounded-xl p-4 text-gray-700 flex flex-col gap-2 items-center justify-center h-full">
-              <GiPathDistance className="w-12 h-12" />
+            <div className={cn(
+              "bg-green-100 dark:bg-green-900/30",
+              "text-green-600 dark:text-green-400",
+              "rounded-[12px] md:rounded-[15px]",
+              "p-3 md:p-4",
+              "flex flex-col gap-2 items-center justify-center h-full"
+            )}>
+              <GiPathDistance className="w-10 h-10 md:w-12 md:h-12" />
             </div>
           </div>
 
-          <div className="flex gap-4 flex-col">
-            <div className="bg-gray-200 dark:bg-gray-700 dark:text-light rounded-xl px-4 py-2 text-gray-700 flex gap-4 items-center justify-center h-full">
+          <div className="flex gap-2 md:gap-3 flex-col">
+            <div className={cn(
+              "bg-white dark:bg-gray-700",
+              "border-2 border-gray-200 dark:border-gray-600",
+              "rounded-[12px] md:rounded-[15px]",
+              "px-3 md:px-4 py-2 md:py-3",
+              "flex gap-3 items-center justify-between h-full"
+            )}>
               {/* Average Route Length */}
-              <span className="text-sm dark:text-gray-300 text-gray-500">
-                Average Route Length
+              <span className="text-xs md:text-sm text-gray-600 dark:text-gray-400 font-bold">
+                Average Route
               </span>
-              <div className="text-xs dark:text-gray-300 text-gray-500 font-medium flex flex-col flex-1 text-right">
-                <b className="text-2xl font-bold">
+              <div className="text-xs md:text-sm text-gray-600 dark:text-gray-400 font-medium flex flex-col text-right">
+                <b className="text-xl md:text-2xl font-black text-gray-800 dark:text-gray-100">
                   {Math.round(totalDistanceTraveled / uniqueRoutes.length || 0)}
                 </b>{" "}
-                Nautical Miles
+                <span className="text-xs font-bold">NM</span>
               </div>
             </div>
-            <div className="bg-gray-200 dark:bg-gray-700 dark:text-light rounded-xl px-4 py-2 text-gray-700 flex gap-4 items-center justify-center h-full">
+            <div className={cn(
+              "bg-white dark:bg-gray-700",
+              "border-2 border-gray-200 dark:border-gray-600",
+              "rounded-[12px] md:rounded-[15px]",
+              "px-3 md:px-4 py-2 md:py-3",
+              "flex gap-3 items-center justify-between h-full"
+            )}>
               {/* Longest Route */}
-              <span className="text-sm dark:text-gray-300 text-gray-500">
+              <span className="text-xs md:text-sm text-gray-600 dark:text-gray-400 font-bold">
                 Longest Route
               </span>
-              <div className="flex flex-col gap-1 flex-1 text-right">
-                <div>
+              <div className="flex flex-col gap-0.5 text-right">
+                <div className="text-xs md:text-sm font-black text-gray-800 dark:text-gray-100">
                   <b>{longestRouteInfo.origin || "N/A"}</b> →{" "}
                   <b>{longestRouteInfo.destination || "N/A"}</b>
                 </div>
-                <div className="text-xs dark:text-gray-300 text-gray-500 font-medium">
-                  <b>{longestRouteInfo.distance || 0}</b> Nm
+                <div className="text-xs text-gray-600 dark:text-gray-400 font-bold">
+                  {longestRouteInfo.distance || 0} NM
                 </div>
               </div>
             </div>
@@ -319,27 +354,39 @@ const FlightsRoutes = async ({ flights, user , subscription, role}: { flights: F
       {/* Summary Stats Cards (NEW 👆) */}
 
       {/* Route Map */}
-      <div className="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-200 min-h-[500px]">
+      <div className={cn(
+        "lg:col-span-2",
+        "bg-white dark:bg-gray-800",
+        "border-2 border-gray-200 dark:border-gray-700",
+        "rounded-[20px] md:rounded-[25px]",
+        "min-h-[500px]",
+        "overflow-hidden"
+      )}>
         <RouteMap routes={uniqueRoutes} />
       </div>
 
       {/* Top 5 Countries List */}
-      <Card className="bg-gradient-to-br from-gray-700 to-gray-800 rounded-xl shadow-sm">
-        <CardHeader>
-          <CardTitle className="text-xl font-bold text-light">
+      <Card className={cn(
+        "bg-gradient-to-br from-purple-500 to-indigo-600",
+        "dark:from-purple-600 dark:to-indigo-700",
+        "border-2 border-purple-400 dark:border-purple-700",
+        "rounded-[20px] md:rounded-[25px]"
+      )}>
+        <CardHeader className="pb-3 md:pb-4">
+          <CardTitle className="text-lg md:text-xl font-bold tracking-tight text-white">
             Top 5 Countries
           </CardTitle>
-          <CardDescription className="text-sm text-gray-200">
+          <CardDescription className="text-xs md:text-sm text-white/90 font-semibold">
             Countries you flew to the most
           </CardDescription>
         </CardHeader>
-        <CardContent className="pb-4">
-          <div className="space-y-6">
+        <CardContent className="pb-4 md:pb-6">
+          <div className="space-y-4 md:space-y-6">
             {maintenanceMode ? (
               <div className="text-center py-8">
-                <div className="text-gray-400 mb-2">
+                <div className="text-white/70 mb-2">
                   <svg
-                    className="w-12 h-12 mx-auto"
+                    className="w-10 h-10 md:w-12 md:h-12 mx-auto"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -352,8 +399,8 @@ const FlightsRoutes = async ({ flights, user , subscription, role}: { flights: F
                     />
                   </svg>
                 </div>
-                <p className="text-gray-500 font-medium">Under Maintenance</p>
-                <p className="text-sm text-gray-400 mt-1">
+                <p className="text-white font-bold">Under Maintenance</p>
+                <p className="text-sm text-white/80 mt-1 font-medium">
                   We're working on it!
                 </p>
               </div>
@@ -366,24 +413,31 @@ const FlightsRoutes = async ({ flights, user , subscription, role}: { flights: F
                 const percentage = Math.round((count / maxCount) * 100);
 
                 return (
-                  <div key={countryName} className="space-y-3">
+                  <div key={countryName} className="space-y-2 md:space-y-3">
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <div className="flex items-center justify-center w-8 h-8 rounded-full bg-gray text-white text-sm font-bold">
+                      <div className="flex items-center gap-2 md:gap-3">
+                        <div className={cn(
+                          "flex items-center justify-center",
+                          "w-7 h-7 md:w-8 md:h-8",
+                          "rounded-full",
+                          "bg-white dark:bg-white/95",
+                          "text-purple-600",
+                          "text-xs md:text-sm font-black"
+                        )}>
                           {index + 1}
                         </div>
                         <div>
-                          <p className="font-semibold text-light">
+                          <p className="font-bold text-sm md:text-base text-white tracking-tight">
                             {countryName}
                           </p>
-                          <p className="text-sm text-gray-200">
+                          <p className="text-xs md:text-sm text-white/90 font-semibold">
                             {count} flight{count !== 1 ? "s" : ""}
                           </p>
                         </div>
                       </div>
                       <div className="text-right">
-                        <p className="text-lg font-bold text-light">{count}</p>
-                        <p className="text-xs text-gray-200">
+                        <p className="text-base md:text-lg font-black text-white">{count}</p>
+                        <p className="text-xs text-white/90 font-bold">
                           {(
                             (count /
                               top5Countries.reduce((sum, c) => sum + c[1], 0)) *
@@ -396,14 +450,14 @@ const FlightsRoutes = async ({ flights, user , subscription, role}: { flights: F
                     <Progress
                       // change progress bar color
                       value={percentage}
-                      className="h-3 bg-gray-600"
+                      className="h-2 md:h-3 bg-white/30"
                     />
                   </div>
                 );
               })
             ) : (
               <div className="text-center py-8">
-                <p className="text-gray-500 font-medium">No countries found</p>
+                <p className="text-white/70 font-bold">No countries found</p>
               </div>
             )}
           </div>
@@ -414,19 +468,25 @@ const FlightsRoutes = async ({ flights, user , subscription, role}: { flights: F
         <MostFlownRoutesBarChart chartData={flownRoutesData} />
       </div>
 
-      <div className="lg:col-span-3 rounded-xl bg-transparent shadow-none">
-        <div>
-          <div className="text-xl font-bold dark:text-light text-gray-700">
+      <div className={cn(
+        "lg:col-span-3",
+        "bg-gray-50 dark:bg-gray-800",
+        "border-2 border-gray-200 dark:border-gray-700",
+        "rounded-[20px] md:rounded-[25px]",
+        "p-4 md:p-6"
+      )}>
+        <div className="mb-4 md:mb-6">
+          <div className="text-lg md:text-xl font-bold tracking-tight text-gray-800 dark:text-gray-100">
             Flight Route Metrics
           </div>
-          <div className="text-sm dark:text-gray-300 text-gray-500">
+          <div className="text-xs md:text-sm text-gray-500 dark:text-gray-400 font-medium">
             Your flight route metrics by flight duration, continents, and
             domestic vs international flights
           </div>
         </div>
 
         { flights.length > 0 ? (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 md:gap-4">
           <div className="bg-transparent w-full">
             <FlightHaulsPieChart chartData={getFlightHaulCategorizerData()} />
           </div>
@@ -442,8 +502,13 @@ const FlightsRoutes = async ({ flights, user , subscription, role}: { flights: F
           </div>
         </div>
         ) : (
-          <div className="text-center py-8">
-            <p className="text-gray-500 font-medium">No flight routes found</p>
+          <div className={cn(
+            "text-center py-8",
+            "bg-white dark:bg-gray-700",
+            "border-2 border-gray-200 dark:border-gray-600",
+            "rounded-[15px] md:rounded-[20px]"
+          )}>
+            <p className="text-gray-500 dark:text-gray-400 font-bold">No flight routes found</p>
           </div>
         )}
       </div>

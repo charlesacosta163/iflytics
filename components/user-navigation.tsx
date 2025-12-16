@@ -37,46 +37,64 @@ const UserNavigation = ({ username }: UserNavigationProps) => {
   }
 
   return (
-    <Tabs value={activeTab} onValueChange={handleTabChange} className="lg:w-[500px]">
-      <TabsList className="grid w-full grid-cols-3 bg-gray-700 p-1">
+    <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full lg:w-[500px]">
+      <TabsList className={cn(
+        "grid w-full grid-cols-3",
+        "bg-gray-200 dark:bg-gray-700",
+        "",
+        "rounded-[20px] md:rounded-[25px]"
+      )}>
         <TabsTrigger 
           value="general" 
           className={cn(
-            "text-white data-[state=active]:text-white",
-            "rounded-[25px] transition-all", 
-            "data-[state=active]:bg-gray",
+            "text-gray-700 dark:text-gray-300",
+            "data-[state=active]:text-gray-800 data-[state=active]:dark:text-white",
+            "rounded-[15px] md:rounded-[20px]",
+            "transition-all", 
+            "data-[state=active]:bg-white data-[state=active]:dark:bg-gray-600",
             "data-[state=active]:font-bold",
-            "hover:bg-gray-600",
+            "hover:bg-gray-300 dark:hover:bg-gray-600",
+            "flex gap-2 items-center justify-center",
+            "text-sm md:text-base"
           )}
         >
-          <LuBookUser className='hidden lg:block' />
+          <LuBookUser className='w-4 h-4 md:w-5 md:h-5 hidden lg:block' />
           General
         </TabsTrigger>
         <TabsTrigger 
           value="flights" 
           className={cn(
-            "text-white data-[state=active]:text-white",
-            "rounded-[25px] transition-all", 
-            "data-[state=active]:bg-gray",
+            "text-gray-700 dark:text-gray-300",
+            "data-[state=active]:text-gray-800 data-[state=active]:dark:text-white",
+            "rounded-[15px] md:rounded-[20px]",
+            "transition-all", 
+            "data-[state=active]:bg-white data-[state=active]:dark:bg-gray-600",
             "data-[state=active]:font-bold",
-            "hover:bg-gray-600 flex gap-2 items-center"
+            "hover:bg-gray-300 dark:hover:bg-gray-600",
+            "flex gap-2 items-center justify-center",
+            "text-sm md:text-base"
           )}
         > 
-          <LuPlane className='hidden lg:block'/>
+          <LuPlane className='w-4 h-4 md:w-5 md:h-5 hidden lg:block'/>
           Flights
         </TabsTrigger>
         <TabsTrigger 
           value="atc" 
           className={cn(
-            "text-white data-[state=active]:text-white",
-            "rounded-[25px] transition-all", 
-            "data-[state=active]:bg-gray",
+            "text-gray-700 dark:text-gray-300",
+            "data-[state=active]:text-gray-800 data-[state=active]:dark:text-white",
+            "rounded-[15px] md:rounded-[20px]",
+            "transition-all", 
+            "data-[state=active]:bg-white data-[state=active]:dark:bg-gray-600",
             "data-[state=active]:font-bold",
-            "hover:bg-gray-600 flex gap-2 items-center"
+            "hover:bg-gray-300 dark:hover:bg-gray-600",
+            "flex gap-2 items-center justify-center",
+            "text-sm md:text-base"
           )}
         >
-          <LuTowerControl className='hidden lg:block'/>
-          ATC Sessions
+          <LuTowerControl className='w-4 h-4 md:w-5 md:h-5 hidden lg:block'/>
+          <span className="hidden sm:inline">ATC Sessions</span>
+          <span className="sm:hidden">ATC</span>
         </TabsTrigger>
       </TabsList>
     </Tabs>
