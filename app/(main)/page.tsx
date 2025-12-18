@@ -733,7 +733,7 @@ export default function Home() {
             </p>
             <p className="text-purple-600 dark:text-purple-300 text-2xl font-bold tracking-tight animate-fade-in-up delay-200 mt-4 italic underline flex gap-2 items-center justify-center animate-bounce">
               <FaStar className="text-purple-600 dark:text-purple-400" />
-              Big Discounts coming on Launch Day!
+              Holiday Discounts Ongoing Until January 3rd!
             </p>
           </div>
 

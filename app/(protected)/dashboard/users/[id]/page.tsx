@@ -98,14 +98,14 @@ const ViewUserPage = async ({
   return (
     <main className="flex flex-col items-center gap-4 min-h-full w-full py-4 md:py-6 px-2 md:px-4">
       <Card className="bg-gray-50 dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-[20px] md:rounded-[25px] p-4 md:p-6 w-full max-w-[1000px]">
-        <header className="flex flex-col items-center gap-2">
+      <header className="flex flex-col items-center gap-2">
           <h1 className="text-2xl md:text-3xl lg:text-4xl font-black tracking-tight text-gray-800 dark:text-gray-100 text-center">
-            {userProfile.display_name}'s Profile
-          </h1>
+          {userProfile.display_name}'s Profile
+        </h1>
           <p className="text-sm md:text-base text-gray-600 dark:text-gray-400 font-medium text-center">
-            View their flight statistics and profile information
-          </p>
-        </header>
+          View their flight statistics and profile information
+        </p>
+      </header>
       </Card>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-[1000px]">
@@ -411,14 +411,14 @@ const ViewUserPage = async ({
           </div>
         </section>
         {pilotServerSession && (
-          <section className="col-span-2 flex justify-center items-center h-full w-full">
+        <section className="col-span-2 flex justify-center items-center h-full w-full">
             <Card className="flex-1 flex flex-col gap-4 w-full bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 border-2 border-purple-200 dark:border-purple-800/30 rounded-[20px] md:rounded-[25px] p-4 md:p-6 shadow-md hover:shadow-lg transition-shadow max-w-[1000px] h-[400px] md:h-[500px]">
-              <ProfileUserFlightMap
-                flightData={pilotServerSession}
-                userDisplayName={userProfile.display_name}
-              />
+            <ProfileUserFlightMap
+              flightData={pilotServerSession}
+              userDisplayName={userProfile.display_name}
+            />
             </Card>
-          </section>
+        </section>
         )}
       </div>
     </main>

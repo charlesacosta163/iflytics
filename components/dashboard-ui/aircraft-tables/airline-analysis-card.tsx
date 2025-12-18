@@ -124,21 +124,21 @@ const AirlineAnalysisCard = async ({ routesWithDistances }: { routesWithDistance
                          <span className="text-gray-500 dark:text-gray-500 font-semibold">{aircraft.flights} {aircraft.flights === 1 ? 'flight' : 'flights'}</span>
                        </div>
                      ))}
-                     {airline.aircraft.length > 3 && (
-                       <Dialog>
-                         <DialogTrigger>
+                                           {airline.aircraft.length > 3 && (
+                        <Dialog>
+                          <DialogTrigger>
                            <div className="text-xs md:text-sm text-blue-500 dark:text-blue-400 hover:text-blue-600 dark:hover:text-blue-300 cursor-pointer hover:underline font-bold">
-                             +{airline.aircraft.length - 3} more aircraft
-                           </div>
-                         </DialogTrigger>
+                              +{airline.aircraft.length - 3} more aircraft
+                            </div>
+                          </DialogTrigger>
                          <DialogContent className={cn(
                            "max-w-md",
                            "bg-white dark:bg-gray-800",
                            "border-2 border-gray-200 dark:border-gray-700",
                            "rounded-[20px]"
                          )}>
-                           <DialogHeader>
-                             <DialogTitle className="flex items-center gap-2">
+                            <DialogHeader>
+                              <DialogTitle className="flex items-center gap-2">
                                <span className="text-base md:text-lg font-bold text-gray-800 dark:text-gray-100">{airline.airline}</span>
                                <Badge variant="secondary" className={cn(
                                  "text-xs rounded-full",
@@ -146,18 +146,18 @@ const AirlineAnalysisCard = async ({ routesWithDistances }: { routesWithDistance
                                  "text-blue-700 dark:text-blue-300",
                                  "border-none font-bold"
                                )}>
-                                 {airline.aircraft.length} aircraft
-                               </Badge>
-                             </DialogTitle>
-                           </DialogHeader>
-                           
+                                  {airline.aircraft.length} aircraft
+                                </Badge>
+                              </DialogTitle>
+                            </DialogHeader>
+                            
                            <div className="space-y-3 md:space-y-4">
                              <div className="text-xs md:text-sm text-gray-600 dark:text-gray-400 font-medium">
-                               All aircraft you've flown with this airline:
-                             </div>
-                             
+                                All aircraft you've flown with this airline:
+                              </div>
+                              
                              <div className="grid grid-cols-1 gap-2 md:gap-3 max-h-64 overflow-y-auto">
-                               {airline.aircraft.map((aircraft: any, aircraftIndex: number) => (
+                                {airline.aircraft.map((aircraft: any, aircraftIndex: number) => (
                                  <div key={aircraftIndex} className={cn(
                                    "flex items-center gap-3 p-3",
                                    "bg-gray-50 dark:bg-gray-700",
@@ -165,31 +165,31 @@ const AirlineAnalysisCard = async ({ routesWithDistances }: { routesWithDistance
                                    "rounded-[12px]",
                                    "hover:shadow-sm transition-shadow duration-200"
                                  )}>
-                                   <div className="flex-1 min-w-0">
+                                    <div className="flex-1 min-w-0">
                                      <div className="font-bold text-xs md:text-sm leading-tight text-gray-800 dark:text-gray-100">
-                                       {aircraft.name}
-                                     </div>
+                                        {aircraft.name}
+                                      </div>
                                      <Badge variant="outline" className={cn(
                                        "text-xs mt-1 rounded-full",
                                        "bg-blue-100 dark:bg-blue-900/30",
                                        "text-blue-700 dark:text-blue-300",
                                        "border-none font-bold"
                                      )}>
-                                       {aircraft.flights} {aircraft.flights === 1 ? 'flight' : 'flights'}
-                                     </Badge>
-                                   </div>
-                                   <div className="flex-shrink-0">
-                                     <Image 
-                                       src={`/images/aircraft/${matchAircraftNameToImage(aircraft.name) || "placeholder.png"}`} 
-                                       alt={aircraft.name} 
-                                       width={60} 
-                                       height={40}
+                                        {aircraft.flights} {aircraft.flights === 1 ? 'flight' : 'flights'}
+                                      </Badge>
+                                    </div>
+                                    <div className="flex-shrink-0">
+                                      <Image 
+                                        src={`/images/aircraft/${matchAircraftNameToImage(aircraft.name) || "placeholder.png"}`} 
+                                        alt={aircraft.name} 
+                                        width={60} 
+                                        height={40}
                                        className="rounded-[8px]"
-                                     />
-                                   </div>
-                                 </div>
-                               ))}
-                             </div>
+                                      />
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
 
                              <div className={cn(
                                "pt-2 border-t-2",
@@ -199,11 +199,11 @@ const AirlineAnalysisCard = async ({ routesWithDistances }: { routesWithDistance
                                "font-medium"
                              )}>
                                Total flights with {airline.airline}: <b className="text-gray-900 dark:text-gray-100">{airline.flights}</b>
-                             </div>
-                           </div>
-                         </DialogContent>
-                       </Dialog>
-                     )}
+                              </div>
+                            </div>
+                          </DialogContent>
+                        </Dialog>
+                      )}
                    </div>
                  </div>
                )) : (

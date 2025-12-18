@@ -6,7 +6,6 @@ import {
   getUserMostRecentFlight,
   getUserStats,
 } from "@/lib/actions";
-import { getFlightsWithinNinetyDays, getInfiniteFlightGrade, getUserViolationCount } from "@/lib/grade-progression-helpers";
 import { matchATCRankToTitle } from "@/lib/sync-actions";
 import { Metadata } from "next";
 import Image from "next/image";
@@ -39,6 +38,8 @@ import { SlActionUndo } from "react-icons/sl";
 import { Badge } from "@/components/ui/badge";
 import { getAggregatedFlights } from "@/lib/cache/flightdata";
 import GradeProgressionCard from "@/components/dashboard-ui/grade-progression-card";
+import { getPreviousMonthStats, getThisMonthStats } from "@/lib/monthly-stats-helpers";
+import MonthlyStatsComparisonCard from "@/components/dashboard-ui/monthly-stats-comparison-card";
 
 export const metadata: Metadata = {
   title: "Dashboard - IFlytics | Your Infinite Flight Statistics",
@@ -53,8 +54,10 @@ export default async function DashboardPage() {
   const flights = await getAggregatedFlights(data.ifcUserId) // Use for Grade Progression Table
 
   const userStats = await getUserStats(data.ifcUsername, data.ifcUserId);
-  const userData = userStats.result[0];
+  let userData = userStats.result[0];
 
+  const previousMonthStats = getPreviousMonthStats(flights);
+  const thisMonthStats = getThisMonthStats(flights);
 
   // Sample Object
   /*  {
@@ -108,14 +111,14 @@ export default async function DashboardPage() {
 
   const gradeColorClass =
     userData.grade >= 5
-      ? "bg-gradient-to-r from-amber-500 to-yellow-600"
+      ? "bg-gradient-to-r from-amber-500 to-yellow-600 dark:from-amber-600/80 dark:to-yellow-700/80 border-4 border-amber-300 dark:border-amber-700"
       : userData.grade >= 4
-      ? "bg-gradient-to-r from-green-500 to-green-600"
+      ? "bg-gradient-to-r from-green-500 to-green-600 dark:from-green-600/80 dark:to-green-700/80 border-4 border-green-300 dark:border-green-700"
       : userData.grade >= 3
-      ? "bg-gradient-to-r from-purple-500 to-purple-600"
+      ? "bg-gradient-to-r from-purple-500 to-purple-600 dark:from-purple-600/80 dark:to-purple-700/80 border-4 border-purple-300 dark:border-purple-700"
       : userData.grade >= 2
-      ? "bg-gradient-to-r from-blue-500 to-blue-600"
-      : "bg-gradient-to-r from-gray-600 to-dark";
+      ? "bg-gradient-to-r from-blue-500 to-blue-600 dark:from-blue-600/80 dark:to-blue-700/80 border-4 border-blue-300 dark:border-blue-700"
+      : "bg-gradient-to-r from-gray-600 to-gray-700 dark:from-gray-700/80 dark:to-gray-800/80 border-4 border-gray-300 dark:border-gray-700";
 
   const atcRank = matchATCRankToTitle(userData.atcRank.toString() || "Unknown");
   return (
@@ -171,7 +174,7 @@ export default async function DashboardPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {/* Welcome Card - Large */}
-          <Card className={`md:col-span-1 lg:col-span-2 ${gradeColorClass} text-white`}>
+          <Card className={`md:col-span-1 lg:col-span-2 ${gradeColorClass} text-white rounded-[25px]`}>
             <CardHeader className="px-4 md:px-6">
               <CardTitle className="text-xl md:text-2xl font-bold tracking-tight">
                 Profile Overview
@@ -292,19 +295,19 @@ export default async function DashboardPage() {
           </Card>
 
           {/* Recent Flight */}
-          <Card className="md:col-span-1 lg:col-span-2 bg-[#FEEBF6] text-dark">
+          <Card className="md:col-span-1 lg:col-span-2 bg-[#FEEBF6] dark:bg-indigo-950 text-dark dark:text-gray-100 rounded-[25px] border-4 border-indigo-200 dark:border-indigo-700">
             <CardHeader className="px-4 md:px-6 flex flex-row justify-between items-start gap-3">
               <div className="flex-1">
-                <CardTitle className="text-xl md:text-2xl font-bold tracking-tight">
+                <CardTitle className="text-xl md:text-2xl font-bold tracking-tight dark:text-gray-100">
                   Recent Flight
                 </CardTitle>
-                <CardDescription className="text-gray-600 font-medium text-sm md:text-base mt-2">
-                  <Badge className="bg-gray-600 text-white font-medium">{formatDate(recentFlight.created)}</Badge>
+                <CardDescription className="text-gray-600 dark:text-gray-400 font-medium text-sm md:text-base mt-2">
+                  <Badge className="bg-gray-600 dark:bg-gray-700 text-white font-medium">{formatDate(recentFlight.created)}</Badge>
                 </CardDescription>
               </div>
               { recentFlight.id && (
               <Link
-                className="bg-blue-500/30 hover:bg-blue-600/50 py-2 px-4 rounded-full flex items-center justify-center gap-2 duration-200 transition-all"
+                className="bg-blue-500/30 dark:bg-blue-600/40 hover:bg-blue-600/50 dark:hover:bg-blue-500/60 py-2 px-4 rounded-full flex items-center justify-center gap-2 duration-200 transition-all text-gray-800 dark:text-gray-100"
                 href={`/dashboard/flights/${recentFlight.id}`}
               >
                 <TbPlaneInflight className="text-lg md:text-xl" />
@@ -316,35 +319,35 @@ export default async function DashboardPage() {
             <CardContent className="px-4 md:px-6 space-y-3 md:space-y-4">
               {/* Flight Details Grid */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
-                <div className="bg-white/50 rounded-[20px] md:rounded-[25px] p-4 md:p-5 backdrop-blur-sm">
-                  <p className="text-xs md:text-sm text-gray-600 mb-1 font-medium">Callsign</p>
-                  <p className="text-xl md:text-2xl font-bold tracking-tight text-gray-800">
+                <div className="bg-white/50 dark:bg-gray-700/50 rounded-[20px] md:rounded-[25px] p-4 md:p-5 backdrop-blur-sm border dark:border-gray-600">
+                  <p className="text-xs md:text-sm text-gray-600 dark:text-gray-400 mb-1 font-medium">Callsign</p>
+                  <p className="text-lg md:text-xl font-bold tracking-tight text-gray-800 dark:text-gray-100">
                     {recentFlight.callsign}
                   </p>
                 </div>
 
-                <div className="bg-white/50 rounded-[20px] md:rounded-[25px] p-4 md:p-5 backdrop-blur-sm">
-                  <p className="text-xs md:text-sm text-gray-600 mb-1 font-medium">Route</p>
-                  <p className="text-xl md:text-2xl font-bold tracking-tight text-gray-800">
+                <div className="bg-white/50 dark:bg-gray-700/50 rounded-[20px] md:rounded-[25px] p-4 md:p-5 backdrop-blur-sm border dark:border-gray-600">
+                  <p className="text-xs md:text-sm text-gray-600 dark:text-gray-400 mb-1 font-medium">Route</p>
+                  <p className="text-lg md:text-xl font-bold tracking-tight text-gray-800 dark:text-gray-100">
                     {recentFlight.originAirport || "????"} → {recentFlight.destinationAirport || "????"}
                   </p>
                 </div>
 
-                <div className="bg-white/50 rounded-[20px] md:rounded-[25px] p-4 md:p-5 backdrop-blur-sm">
-                  <p className="text-xs md:text-sm text-gray-600 mb-1 font-medium">Duration</p>
-                  <p className="text-xl md:text-2xl font-bold tracking-tight text-blue-500">
+                <div className="bg-white/50 dark:bg-gray-700/50 rounded-[20px] md:rounded-[25px] p-4 md:p-5 backdrop-blur-sm border dark:border-gray-600">
+                  <p className="text-xs md:text-sm text-gray-600 dark:text-gray-400 mb-1 font-medium">Duration</p>
+                  <p className="text-lg md:text-xl font-bold tracking-tight text-blue-500 dark:text-blue-400">
                     {convertMinutesToHours(Math.round(recentFlight.totalTime)) || "???"}
                   </p>
                 </div>
               </div>
 
               {/* Aircraft Display */}
-              <div className="bg-gradient-to-r from-blue-900 via-purple-900 to-blue-900 rounded-[25px] md:rounded-[30px] p-5 md:p-6 flex items-center justify-between gap-4">
+              <div className="bg-gradient-to-r from-blue-900 via-purple-900 to-blue-900 dark:from-blue-950 dark:via-purple-950 dark:to-blue-950 rounded-[25px] md:rounded-[30px] p-4 flex items-center justify-between gap-4 border-2 border-blue-800/50 dark:border-blue-700/30">
                 <div className="flex-1">
                   <h3 className="text-white font-bold tracking-tight text-xl md:text-2xl lg:text-3xl">
                     {aircraftName}
                   </h3>
-                  <p className="text-gray-300 text-xs md:text-sm mt-1 font-medium">{liveryName}</p>
+                  <p className="text-gray-300 dark:text-gray-400 text-xs md:text-sm mt-1 font-medium">{liveryName}</p>
                 </div>
                 <div className="flex-shrink-0">
                   <Image
@@ -359,22 +362,22 @@ export default async function DashboardPage() {
 
               {/* Stats Grid */}
               <div className="grid grid-cols-2 gap-3 md:gap-4">
-                <div className="bg-[#A5B68D] rounded-[20px] md:rounded-[25px] p-4 md:p-5 backdrop-blur-md overflow-hidden relative">
+                <div className="bg-[#A5B68D] dark:bg-green-900/40 rounded-[20px] md:rounded-[25px] p-4 md:p-5 backdrop-blur-md overflow-hidden relative border-2 border-green-700/30 dark:border-green-800/50">
                   <div className="text-xl md:text-2xl font-bold tracking-tight text-white">
                     {recentFlight.xp}
                   </div>
-                  <div className="text-green-100 text-xs md:text-sm font-medium">XP Earned</div>
-                  <div className="absolute top-2 right-2 opacity-10">
+                  <div className="text-green-100 dark:text-green-300 text-xs md:text-sm font-medium">XP Earned</div>
+                  <div className="absolute top-2 right-2 opacity-10 dark:opacity-20">
                     <PiShootingStarBold className="text-[5rem] md:text-[6rem]" />
                   </div>
                 </div>
 
-                <div className="bg-[#687FE5] rounded-[20px] md:rounded-[25px] p-4 md:p-5 backdrop-blur-md overflow-hidden relative">
+                <div className="bg-[#687FE5] dark:bg-blue-900/40 rounded-[20px] md:rounded-[25px] p-4 md:p-5 backdrop-blur-md overflow-hidden relative border-2 border-blue-700/30 dark:border-blue-800/50">
                   <div className="text-xl md:text-2xl font-bold tracking-tight text-white">
                     {recentFlight.server}
                   </div>
-                  <div className="text-blue-100 text-xs md:text-sm font-medium">Server</div>
-                  <div className="absolute top-0 right-0 opacity-10">
+                  <div className="text-blue-100 dark:text-blue-300 text-xs md:text-sm font-medium">Server</div>
+                  <div className="absolute top-0 right-0 opacity-10 dark:opacity-20">
                     <GoServer className="text-[7rem] md:text-[8rem]" />
                   </div>
                 </div>
@@ -382,8 +385,10 @@ export default async function DashboardPage() {
             </CardContent>
           </Card>
 
+          <MonthlyStatsComparisonCard previousMonthStats={previousMonthStats} thisMonthStats={thisMonthStats}/>
           { /* Grade Progression Table - Per the Infinite Flight Grade Table*/}
           <GradeProgressionCard userData={userData} flights={flights}/>
+
 
           {/* Quick Actions */}
           <Card className="dark:bg-[#381f17]/50 bg-[#FCD8CD] text-dark backdrop-blur-xl">

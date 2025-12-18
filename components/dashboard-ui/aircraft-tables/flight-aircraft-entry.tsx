@@ -118,7 +118,7 @@ const FlightAircraftEntry = ({ index, aircraft, flightsAmountRaw, allFlightsWith
                     src={`/images/aircraft/${matchAircraftNameToImage(aircraft.name) || "placeholder.png"}`} 
                     alt={aircraft.name} 
                     width={40} 
-                    height={25}
+                    height={25} 
                     className="rounded-[6px]"
                   />
                   <span className="font-bold tracking-tight">{aircraft.name} Flight History</span>

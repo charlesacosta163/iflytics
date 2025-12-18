@@ -9,6 +9,21 @@ export const aircraftBrands = {
   "Special": ["Space Shuttle"]
 }
 
+export const months = [
+  { index: 1, name: "January" },
+  { index: 2, name: "February" },
+  { index: 3, name: "March" },
+  { index: 4, name: "April" },
+  { index: 5, name: "May" },
+  { index: 6, name: "June" },
+  { index: 7, name: "July" },
+  { index: 8, name: "August" },
+  { index: 9, name: "September" },
+  { index: 10, name: "October" },
+  { index: 11, name: "November" },
+  { index: 12, name: "December" }
+]
+
 export const aircraftBrandsCompliments = {
   "Airbus": [
     "European engineering at its finest! ✈️",
@@ -4539,6 +4554,22 @@ export const customUserImages = [
   username: "EliasOlsen",
   image: `https://images.weserv.nl/?url=${encodeURIComponent(
     "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/eliasolsen/288/1257157_2.png"
+  )}&w=64&h=64&fit=cover&mask=circle`,
+},
+{
+  id: 372,
+  role: "user",
+  username: "Baba",
+  image: `https://images.weserv.nl/?url=${encodeURIComponent(
+    "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/baba/288/1596106_2.png"
+  )}&w=64&h=64&fit=cover&mask=circle`,
+},
+{
+  id: 373,
+  role: "user",
+  username: "CannedPig",
+  image: `https://images.weserv.nl/?url=${encodeURIComponent(
+    "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/cannedpig/288/1468587_2.png"
   )}&w=64&h=64&fit=cover&mask=circle`,
 },
 ]

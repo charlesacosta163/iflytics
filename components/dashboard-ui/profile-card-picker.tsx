@@ -91,7 +91,7 @@ const ProfileCardPicker: React.FC<ProfileCardPickerProps> = ({ username = 'Guest
       </div>
      
       {/* Customization Controls */}
-      <Card>
+      <Card className="rounded-[25px] border-4 border-gray-200 dark:border-gray-700">
         <CardHeader>
           <CardTitle className="text-2xl font-bold tracking-tight text-center">Customize Your IFC Stats Card</CardTitle>
           <CardDescription className="text-sm text-muted-foreground font-medium text-center">

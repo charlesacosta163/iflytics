@@ -142,7 +142,7 @@ const GradeProgressionCard = ({ userData, flights }: any) => {
   const violationExaminationProgress = getViolationExaminationCount();
 
   return (
-    <Card className="md:col-span-2 lg:col-span-4 bg-[#FCF9EA] dark:bg-gray-800 shadow-none border-2 border-amber-100 dark:border-gray-700">
+    <Card className="md:col-span-2 lg:col-span-4 bg-[#FCF9EA] dark:bg-gray-800 shadow-none border-4 rounded-[25px] border-amber-200 dark:border-gray-700">
       <CardHeader className="px-4 md:px-6">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
           <div>
@@ -166,10 +166,10 @@ const GradeProgressionCard = ({ userData, flights }: any) => {
                 value={selectedGrade.toString()}
                 onValueChange={(value) => setSelectedGrade(Number(value))}
               >
-                <SelectTrigger className="w-[180px] bg-white dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200">
+                <SelectTrigger className="w-[180px] bg-white dark:bg-gray-700 dark:text-gray-200 rounded-[15px] border-2 border-gray-200 dark:border-gray-600">
                   <SelectValue placeholder="Select grade" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="rounded-[15px]">
                   {availableGrades.map((grade) => (
                     <SelectItem key={grade.grade} value={grade.grade.toString()}>
                       Grade {grade.grade}
@@ -186,7 +186,7 @@ const GradeProgressionCard = ({ userData, flights }: any) => {
         </div>
       </CardHeader>
       <CardContent className="px-4 md:px-6">
-        <Accordion type="multiple" defaultValue={["overall", "ninety-day", "violations"]} className="w-full">
+        <Accordion type="multiple" className="w-full">
         {/* Overall Totals */}
           <AccordionItem value="overall" className="border-none">
             <AccordionTrigger className="hover:no-underline p-4 md:p-6 bg-amber-100 dark:bg-amber-900/30 rounded-[30px] md:rounded-[40px] mb-3 md:mb-4">

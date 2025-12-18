@@ -112,7 +112,7 @@ const ProfileWrapper = ({
          
          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             <Tabs defaultValue="profile" className="w-full">
-          <TabsList className="w-full rounded-md bg-gray-100 dark:bg-gray-800">
+          <TabsList className="w-full rounded-[20px] bg-gray-100 dark:bg-gray-800 border-4 border-gray-200 dark:border-gray-700">
             <TabsTrigger
               value="profile"
               className="rounded-md flex gap-2 items-center justify-center border-none"
@@ -137,7 +137,7 @@ const ProfileWrapper = ({
           </TabsList>
 
           <TabsContent value="profile">
-            <div className="flex sm:flex-row flex-col gap-6 w-full px-6 py-8 bg-white dark:bg-gray-800 rounded-xl shadow-lg dark:text-light">
+            <div className="flex sm:flex-row flex-col gap-6 w-full px-6 py-8 bg-white dark:bg-gray-800  shadow-lg dark:text-light rounded-[25px] border-4 border-gray-200 dark:border-gray-700">
               <div className="self-center sm:self-start shrink-0">
                 <div
                   className={`w-[120px] h-[120px] rounded-full flex items-center justify-center shadow-md border-4 border-gray-100 ${
@@ -203,7 +203,7 @@ const ProfileWrapper = ({
           </TabsContent>
 
           <TabsContent value="billing">
-            <div className="flex flex-col gap-6 w-full px-6 py-8 bg-white dark:bg-gray-800 rounded-xl shadow-lg dark:text-light">
+            <div className="flex flex-col gap-6 w-full px-6 py-8 bg-white dark:bg-gray-800 shadow-lg dark:text-light rounded-[25px] border-4 border-gray-200 dark:border-gray-700">
               <div className="flex flex-col gap-4">
                 <h2 className="text-3xl font-bold text-gray-800 dark:text-light flex items-center gap-2">
                   <LuCreditCard  />
@@ -386,7 +386,7 @@ const ProfileWrapper = ({
           </TabsContent>
           <TabsContent value="settings">
             {/* Danger Zone */}
-            <div className="w-full flex justify-between gap-2 items-center py-4 px-6 bg-red-50 dark:bg-gray-700 rounded-xl ">
+            <div className="w-full flex justify-between gap-2 items-center py-4 px-6 bg-red-50 dark:bg-gray-700 rounded-[25px] border-4 border-red-200 dark:border-red-700">
                 <div className="flex items-center gap-2">
                   <FaExclamationTriangle className="dark:text-red-300 text-red-500 text-xl" />
                   <h3 className="text-xl font-bold text-red-700 dark:text-red-400">

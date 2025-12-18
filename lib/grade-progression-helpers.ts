@@ -102,7 +102,7 @@ export function getUserViolationCount(violationObj: Record<string, number>) {
   
     return count;
 }
-
+  
 
 // ==================== VIOLATION UTILITY FUNCTIONS ==================== //
 

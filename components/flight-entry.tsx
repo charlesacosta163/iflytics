@@ -127,7 +127,7 @@ const FlightEntryCard = ({
                 </div>
               </div>
 
-              <div className="flex flex-col gap-2">
+                              <div className="flex flex-col gap-2">
                   <h3 className="font-bold text-base md:text-lg text-gray-700 dark:text-gray-300 tracking-tight">
                     Flight Details
                   </h3>
