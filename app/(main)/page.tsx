@@ -430,7 +430,7 @@ export default function Home() {
                   Multiple Themes
                 </h3>
                 <p className="text-gray-200 leading-relaxed text-sm">
-                  Choose from various map themes including dark mode, light mode, and seasonal special themes.
+                  Choose from various map themes including dark mode or light mode.
                 </p>
               </div>
             </div>
@@ -470,167 +470,9 @@ export default function Home() {
             </p>
           </div>
         </div>
-      </section>
+      </section> 
 
-      {/* Flight Arena Section - Compact & Presentable */}
-      <section className="relative w-full bg-gradient-to-br from-gray via-dark to-gray py-24 overflow-hidden">
-        {/* Animated Background Elements */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute top-10 left-10 w-64 h-64 bg-gradient-to-r from-red-400/15 to-purple-400/15 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute bottom-10 right-10 w-80 h-80 bg-gradient-to-r from-purple-400/15 to-red-400/15 rounded-full blur-3xl animate-pulse delay-1000"></div>
-        </div>
-
-        <div className="container mx-auto px-4 max-w-[1000px] relative z-10">
-          {/* Header Section */}
-          <div className="text-center mb-16">
-            <div className="inline-block mb-6 group">
-              <div className="relative p-1 bg-gradient-to-r from-red-400 via-purple-400 to-red-400 rounded-2xl animate-gradient-x">
-                <div className="bg-gray px-8 py-3 rounded-xl backdrop-blur-sm">
-                  <span className="text-white font-bold text-sm tracking-wider flex items-center gap-2">
-                    <span className="w-2 h-2 bg-red-400 rounded-full animate-ping"></span>
-                    COMING SOON
-                  </span>
-                </div>
-              </div>
-            </div>
-            
-            <div className="text-5xl font-black text-transparent bg-gradient-to-r from-white via-gray-100 to-white bg-clip-text mb-2 animate-fade-in-up">
-              The Flight Arena
-            </div>
-            <span className="bg-yellow-400 text-gray px-2 py-1 rounded-full text-xs font-bold shadow-lg mb-6">
-                Premium
-              </span>
-            <p className="text-gray-300 text-xl font-medium max-w-2xl mx-auto leading-relaxed animate-fade-in-up delay-200 mt-4">
-              Your Infinite Flight Stats Turned Into an <b className="bg-gradient-to-r from-red-400 to-purple-400 bg-clip-text text-transparent">Adventure</b>
-            </p>
-          </div>
-
-          {/* Features Grid - Compact */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16 items-stretch">
-            
-            {/* Card 1 - Monthly Tournaments */}
-            <div className="group relative animate-slide-in-up h-full">
-              <div className="absolute -inset-1 bg-gradient-to-r from-red-400 to-purple-400 rounded-2xl blur opacity-20 group-hover:opacity-50 transition duration-700"></div>
-              <div className="relative bg-dark/90 backdrop-blur-xl p-8 rounded-2xl border border-gray-600/30 group-hover:border-red-400/50 transition-all duration-500 hover:scale-105 h-full flex flex-col">
-                <div className="flex items-start gap-4 mb-4 flex-1">
-                  <div className="text-4xl"><GrTrophy className="text-orange-400"/></div>
-                  <div className="flex-1">
-                    <h3 className="text-white text-2xl font-bold mb-3 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-red-400 group-hover:to-purple-400 group-hover:bg-clip-text transition-all duration-300">
-                      Monthly Tournaments
-                    </h3>
-                    <p className="text-gray-300 leading-relaxed">
-                      Climb up the ranks by earning achievements and badges to earn points! Compete in monthly challenges with leaderboards and exciting prizes.
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2 text-sm text-gray-400 mt-auto">
-                  <span className="w-2 h-2 bg-orange-400 rounded-full animate-pulse"></span>
-                  Fresh competition every month
-                </div>
-              </div>
-            </div>
-
-            {/* Card 2 - Leaderboards */}
-            <div className="group relative animate-slide-in-up h-full">
-              <div className="absolute -inset-1 bg-gradient-to-r from-purple-400 to-pink-400 rounded-2xl blur opacity-20 group-hover:opacity-50 transition duration-700"></div>
-              <div className="relative bg-dark/90 backdrop-blur-xl p-8 rounded-2xl border border-gray-600/30 group-hover:border-purple-400/50 transition-all duration-500 hover:scale-105 h-full flex flex-col">
-                <div className="flex items-start gap-4 mb-4 flex-1">
-                  <div className="text-4xl"><PiArrowFatLineUp className="text-purple-400"/></div>
-                  <div className="flex-1">
-                    <h3 className="text-white text-2xl font-bold mb-3 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-purple-400 group-hover:to-pink-400 group-hover:bg-clip-text transition-all duration-300">
-                      User Leveling System
-                    </h3>
-                    <p className="text-gray-300 leading-relaxed">
-                    Level up your profile by achieving more badges and completing challenges! Achieve different profiletitles as you level up!
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2 text-sm text-gray-400 mt-auto">
-                  <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
-                  Up to User Level 10
-                </div>
-              </div>
-            </div>
-
-            {/* Card 3 - Achievements */}
-            <div className="group relative animate-slide-in-up h-full">
-              <div className="absolute -inset-1 bg-gradient-to-r from-blue-400 to-cyan-400 rounded-2xl blur opacity-20 group-hover:opacity-50 transition duration-700"></div>
-              <div className="relative bg-dark/90 backdrop-blur-xl p-8 rounded-2xl border border-gray-600/30 group-hover:border-blue-400/50 transition-all duration-500 hover:scale-105 h-full flex flex-col">
-                <div className="flex items-start gap-4 mb-4 flex-1">
-                  <div className="text-4xl"><SlBadge className="text-blue-400"/></div>
-                  <div className="flex-1">
-                    <h3 className="text-white text-2xl font-bold mb-3 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-blue-400 group-hover:to-cyan-400 group-hover:bg-clip-text transition-all duration-300">
-                      Badges Galore
-                    </h3>
-                    <p className="text-gray-300 leading-relaxed">
-                    Different kinds of badges (achievements) you can earn throughout tournaments, ranging from flight time milestones to aircraft usage goals!
-
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2 text-sm text-gray-400 mt-auto">
-                  <span className="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></span>
-                    100+ unique badges available
-                </div>
-              </div>
-            </div>
-
-            {/* Card 4 - Premium Access */}
-            <div className="group relative animate-slide-in-up h-full">
-              <div className="absolute -inset-1 bg-gradient-to-r from-yellow-400 to-orange-400 rounded-2xl blur opacity-20 group-hover:opacity-50 transition duration-700"></div>
-              <div className="relative bg-dark/90 backdrop-blur-xl p-8 rounded-2xl border border-gray-600/30 group-hover:border-yellow-400/50 transition-all duration-500 hover:scale-105 h-full flex flex-col">
-                <div className="flex items-start gap-4 mb-4 flex-1">
-                  <div className="text-4xl"><TbBrandFunimation className="text-yellow-400"/></div>
-                  <div className="flex-1">
-                    <h3 className="text-white text-2xl font-bold mb-3 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-yellow-400 group-hover:to-orange-400 group-hover:bg-clip-text transition-all duration-300">
-                      Enjoy the Experience
-                    </h3>
-                    <p className="text-gray-300 leading-relaxed">
-                      Enjoy the experience of flying with fellow community members, and see how you stack up against them!
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2 text-sm text-gray-400 mt-auto">
-                  <span className="w-2 h-2 bg-yellow-400 rounded-full animate-pulse"></span>
-                      Have fun with fellow community members!
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* CTA Section - Compact */}
-          <div className="text-center">
-            <div className="relative group inline-block">
-              <div className="absolute -inset-1 bg-gradient-to-r from-red-400 to-purple-400 rounded-2xl blur opacity-50 group-hover:opacity-100 transition duration-700"></div>
-              <div className="relative bg-gradient-to-r from-red-500 to-purple-500 p-8 rounded-2xl cursor-pointer group-hover:scale-105 transition-transform duration-300">
-                <h3 className="text-white text-3xl font-black mb-3">Coming in 2026</h3>
-                <p className="text-gray-100 font-medium mb-4">Turn your flight data into games and challenges</p>
-                
-                {/* Quick Stats
-                <div className="flex justify-center gap-8 text-sm">
-                  <div className="text-center">
-                    <div className="text-xl font-bold text-white">Q2 2025</div>
-                    <div className="text-gray-200">Launch</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-xl font-bold text-white">1000+</div>
-                    <div className="text-gray-200">Pilots Ready</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-xl font-bold text-white">$50K+</div>
-                    <div className="text-gray-200">Prize Pool</div>
-                  </div>
-                </div> */}
-
-                <div className="absolute top-2 right-2 w-3 h-3 bg-white rounded-full animate-ping"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-      
-
-      {/* Stats Section - Beautified & Compact */}
+      {/* Stats Section */}
       <section className="relative w-full bg-dark py-20 overflow-hidden">
         {/* Animated Background Elements */}
         <div className="absolute inset-0 overflow-hidden">
@@ -655,7 +497,7 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               { number: "75K+", label: "Flights Tracked", gradient: "from-blue-400 to-blue-600", icon: <TbPlaneInflight className="text-blue-400"/>, delay: "delay-100" },
-              { number: "335+", label: "Active Users", gradient: "from-green-400 to-green-600", icon: <RiCopilotFill className="text-green-400"/>, delay: "delay-200" },
+              { number: "340+", label: "Active Users", gradient: "from-green-400 to-green-600", icon: <RiCopilotFill className="text-green-400"/>, delay: "delay-200" },
               { number: "24/7", label: "Live Updates", gradient: "from-orange-400 to-orange-600", icon: <LuCalendarClock className="text-orange-400"/>, delay: "delay-400" }
             ].map((stat, index) => (
               <div key={index} className={`group text-center p-8 bg-gradient-to-br from-gray/30 to-gray/50 backdrop-blur-xl rounded-2xl border border-gray-600/30 hover:border-gray-400/50 transition-all duration-500 hover:scale-105 animate-slide-in-up ${stat.delay} relative overflow-hidden flex flex-col items-center justify-center`}>
@@ -825,23 +667,7 @@ export default function Home() {
                     <FaCheck className="text-green-500 mt-1 flex-shrink-0"/>
                     <span className="text-gray-700 dark:text-gray-300 font-semibold">Priority user support</span>
                   </div>
-                  <div className="flex items-start gap-3">
-                    <div className="w-5 h-5 mt-1 flex-shrink-0 relative">
-                      <div className="absolute inset-0 bg-gradient-to-r from-red-400 to-purple-400 rounded-full animate-pulse"></div>
-                      <div className="absolute inset-0.5 bg-white dark:bg-gray-800 rounded-full"></div>
-                      <div className="absolute inset-1 bg-gradient-to-r from-red-400 to-purple-400 rounded-full"></div>
-                    </div>
-                    <div>
-
-                      <div className="flex gap-2 items-center">
-                      <span className="text-gray-700 dark:text-gray-300 font-semibold">The Flight Arena</span>
-                      <button className="bg-red-400 text-light px-2 py-1 rounded-full text-xs font-bold" disabled>
-                          Coming in 2026
-                        </button>
-                      </div>
-                      <span className="text-gray-600 dark:text-gray-400 text-sm block">Turn your Infinite Flight statistics into games and challenges and climb up the leaderboard.</span>
-                    </div>
-                  </div>
+                  
                 </div>
 
                 <Link href="/dashboard/profile" className="w-full bg-gradient-to-r from-blue-500 to-purple-500 text-white py-3 px-2 rounded-xl font-semibold hover:from-blue-600 hover:to-purple-600 transition-all duration-300 shadow-lg hover:shadow-blue-500/25 text-center">
@@ -938,9 +764,9 @@ export default function Home() {
         <div className="container mx-auto px-4 max-w-[1000px] relative z-10">
           <div className="relative group">
             {/* Glowing Border Animation */}
-            <div className="absolute -inset-1 bg-gradient-to-r from-gray-400 via-dark to-gray-400 rounded-3xl blur opacity-20 group-hover:opacity-40 transition-all duration-1000 animate-gradient-x bg-[length:200%_auto]"></div>
+            <div className="absolute -inset-1 bg-gradient-to-r from-gray-400 via-dark to-gray-400 rounded-[30px] blur opacity-20 group-hover:opacity-40 transition-all duration-1000 animate-gradient-x bg-[length:200%_auto]"></div>
             
-            <div className="relative bg-gradient-to-br from-gray via-dark to-gray px-4 sm:px-8 py-16 rounded-3xl shadow-2xl border border-gray-600/30 backdrop-blur-sm">
+            <div className="relative bg-gradient-to-br from-gray via-dark to-gray px-4 sm:px-8 py-16 rounded-[30px] shadow-2xl border border-gray-600/30 backdrop-blur-sm">
               {/* Floating Animation Elements */}
               <div className="absolute top-6 right-6 w-6 h-6 bg-gradient-to-r from-blue-400/30 to-purple-400/30 rounded-full animate-float"></div>
               <div className="absolute bottom-6 left-6 w-4 h-4 bg-gradient-to-r from-gray-400/30 to-blue-400/30 rounded-full animate-float delay-1000"></div>

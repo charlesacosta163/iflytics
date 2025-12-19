@@ -4572,6 +4572,14 @@ export const customUserImages = [
     "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/cannedpig/288/1468587_2.png"
   )}&w=64&h=64&fit=cover&mask=circle`,
 },
+{
+  id: 374,
+  role: "user",
+  username: "vendriexien",
+  image: `https://images.weserv.nl/?url=${encodeURIComponent(
+    "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/vendriexien/288/1512666_2.png"
+  )}&w=64&h=64&fit=cover&mask=circle`,
+},
 ]
 
 // Corny compliments for leaderboard stats
@@ -4854,11 +4862,6 @@ export const faqData = [
     id: 3,
     question: "What's the difference between Free, Premium, and Lifetime plans?",
     answer: "Free users get basic flight tracking and statistics with time-based analytics (1, 7, 30 days). Premium users unlock advanced features like route analysis, aircraft analytics, flight-frame analysis (10-800 flights) and priority support. Lifetime users get all features forever, exclusively with the new Flight CSV exports with FlightRadar24 compatibility.",
-  },
-  {
-    id: 4,
-    question: "When will The Flight Arena be available?",
-    answer: "The Flight Arena is scheduled for release in 2026. This exciting feature will turn your flight data into interactive games and challenges, adding a gamification layer to your aviation experience. Premium and Lifetime users will get full access when it launches.",
   },
   {
     id: 6,

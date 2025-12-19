@@ -98,37 +98,7 @@ const Sidebar = () => {
   </Link>
 </div>
 
-            {/* Special Section - Flight Arena (Coming Soon) */}
-            <div className="mt-6 mb-4">
-              <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider px-3 mb-3">Premium</h3>
-              
-              <div className="relative overflow-hidden bg-gradient-to-br from-purple-500 via-blue-500 to-indigo-600 rounded-[20px] p-4 shadow-lg border-2 border-gray-100 dark:border-gray-700">
-                <div className="absolute inset-0 bg-black/20"></div>
-                <div className="relative z-10">
-                  {/* Header */}
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="p-2 bg-white/20 rounded-lg backdrop-blur-sm">
-                      <LuGoal className="w-5 h-5 text-white" />
-                    </div>
-                    <div className="flex flex-col">
-                      <span className="font-bold text-white text-sm">The Flight Arena</span>
-                      <span className="text-xs bg-amber-400 text-amber-900 px-2 py-0.5 font-bold rounded-full w-fit">
-                        Premium
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Coming Soon Badge */}
-                  <div className="bg-white/20 backdrop-blur-sm text-white px-3 py-1.5 rounded-lg text-center text-xs font-semibold border border-white/20">
-                    Coming in 2026
-                  </div>
-                </div>
-                
-                {/* Decorative gradient overlay */}
-                <div className="absolute top-0 right-0 w-20 h-20 bg-white/10 rounded-full -translate-y-10 translate-x-10"></div>
-              </div>
-            </div>
-
+          
             <Banner />
             
         </section>

@@ -7,7 +7,7 @@ import { HiOutlineExternalLink } from 'react-icons/hi'
 
 const Banner = () => {
   return (
-    <Link target='_blank' href="https://infinitetoolbox.vercel.app" className='bg-[#E2BFB3] px-2 py-4 rounded-[20px] items-center flex flex-col relative overflow-hidden hover:scale-105 transition-all duration-300 hover:bg-[#FFBE98] border-2 border-gray-100 dark:border-gray-700'>
+    <Link target='_blank' href="https://infinitetoolbox.vercel.app" className='bg-[#E2BFB3] px-2 py-4 rounded-[20px] items-center flex flex-col relative overflow-hidden hover:scale-105 transition-all duration-300 hover:bg-[#FFBE98] border-2 border-gray-100 dark:border-gray-700 mt-4'>
         
         <header className='text-white text-sm font-bold tracking-tighter z-10'>Check Out My Other App:</header>
 

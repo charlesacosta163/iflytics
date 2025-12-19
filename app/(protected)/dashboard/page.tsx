@@ -40,6 +40,7 @@ import { getAggregatedFlights } from "@/lib/cache/flightdata";
 import GradeProgressionCard from "@/components/dashboard-ui/grade-progression-card";
 import { getPreviousMonthStats, getThisMonthStats } from "@/lib/monthly-stats-helpers";
 import MonthlyStatsComparisonCard from "@/components/dashboard-ui/monthly-stats-comparison-card";
+import { DivIcon } from "leaflet";
 
 export const metadata: Metadata = {
   title: "Dashboard - IFlytics | Your Infinite Flight Statistics",
@@ -391,41 +392,39 @@ export default async function DashboardPage() {
 
 
           {/* Quick Actions */}
-          <Card className="dark:bg-[#381f17]/50 bg-[#FCD8CD] text-dark backdrop-blur-xl">
+          <Card className="dark:bg-[#381f17]/50 border-4 border-amber-500/30 dark:border-amber-700/30 bg-[#FCD8CD] text-dark backdrop-blur-xl rounded-[25px] shadow-none">
             <CardHeader>
               <CardTitle className="text-xl md:text-2xl font-bold tracking-tight flex items-center gap-2 text-light dark:bg-amber-700 bg-amber-500 px-4 py-1 rounded-full justify-center">
                 <SlActionUndo className="text-xl md:text-2xl" /> Quick Actions
               </CardTitle>
-              <CardDescription className="text-gray-600 dark:text-gray-400 text-center text-sm md:text-base">
-                Quick actions to help you get started.
-              </CardDescription>
+             
             </CardHeader>
 
             <CardContent>
               <div className="grid grid-cols-2 gap-2 text-light">
                 <Link href="/dashboard/flights">
-                  <div className="bg-[#9dbe7f] hover:bg-[#B1D690]/80 rounded-xl p-2 py-3 text-center transition-all duration-200 cursor-pointer hover:scale-105">
+                  <div className="bg-[#9dbe7f] hover:bg-[#B1D690]/80 dark:bg-green-900/40 rounded-[25px] border-4 border-green-500/30 p-2 py-3 text-center transition-all duration-200 cursor-pointer hover:scale-105">
                     <TbPlaneInflight className="text-2xl mx-auto mb-1" />
                     <div className="text-sm font-medium">View Flights</div>
                   </div>
                 </Link>
 
                 <Link href="/map/dark">
-                  <div className="bg-blue-400 hover:bg-blue-400/80 rounded-xl p-2 py-3 text-center transition-all duration-200 cursor-pointer hover:scale-105">
+                  <div className="bg-blue-400 hover:bg-blue-400/80 dark:bg-blue-900/40 rounded-[25px] border-4 border-blue-500/30 p-2 py-3 text-center transition-all duration-200 cursor-pointer hover:scale-105">
                     <HiOutlineGlobeAsiaAustralia className="text-2xl mx-auto mb-1" />
                     <div className="text-sm font-medium">Live Map</div>
                   </div>
                 </Link>
 
                 <Link href="/dashboard/profile">
-                  <div className="bg-[#FFA24C] hover:bg-[#FFA24C]/80 rounded-xl p-2 py-3 text-center transition-all duration-200 cursor-pointer hover:scale-105">
+                  <div className="bg-[#FFA24C] hover:bg-[#FFA24C]/80 dark:bg-orange-900/40 rounded-[25px] border-4 border-orange-500/30 p-2 py-3 text-center transition-all duration-200 cursor-pointer hover:scale-105">
                     <FaUsers className="text-2xl mx-auto mb-1" />
                     <div className="text-sm font-medium">Profile</div>
                   </div>
                 </Link>
 
                 <Link href="/directory">
-                  <div className="bg-[#FF77B7] hover:bg-[#FF77B7]/80 rounded-xl p-2 py-3 text-center transition-all duration-200 cursor-pointer hover:scale-105">
+                  <div className="bg-[#FF77B7] hover:bg-[#FF77B7]/80 dark:bg-pink-900/40 rounded-[25px] border-4 border-pink-500/30 p-2 py-3 text-center transition-all duration-200 cursor-pointer hover:scale-105">
                     <MdOutlineLibraryBooks className="text-2xl mx-auto mb-1" />
                     <div className="text-sm font-medium">Directory</div>
                   </div>
@@ -434,49 +433,32 @@ export default async function DashboardPage() {
             </CardContent>
           </Card>
 
-          {/* Flight Arena Coming Soon */}
-          <div className="flex flex-col gap-4">
 
-            <Card className="flex-1 bg-[#5865F2] relative overflow-hidden">
+            <Card className="flex-1 bg-[#5865F2] relative overflow-hidden flex items-center justify-center rounded-[25px] shadow-none border-4 border-indigo-200 dark:border-indigo-400">
               <TbBrandDiscord className="text-[20rem] absolute top-8 left-0 text-white opacity-10" />
-              <CardHeader className="flex flex-col gap-2 justify-center items-center">
-                <CardTitle className="text-xl md:text-2xl font-bold tracking-tight text-light flex items-center gap-1"><Image src={iflyticsLogo} alt="IFlytics Logo" width={24} height={24} className="" /> Join the Discord</CardTitle>
-                <CardDescription className="text-gray-200 text-center text-sm md:text-base">
+
+              <div className="flex flex-col gap-2 justify-center items-center z-[1]">
+                <header className="text-xl md:text-2xl font-bold tracking-tight text-light flex items-center gap-1"><Image src={iflyticsLogo} alt="IFlytics Logo" width={24} height={24} className="" /> Join the Discord</header>
+                <div className="text-gray-200 text-center text-sm md:text-base">
                   Join the IFlytics Discord to get the latest news and updates.
-                </CardDescription>
-                   {/* NEEDS TO BE UPDATED WEEKLY */}
-                <Link href="https://discord.gg/w6SresBG" target="_blank" className="bg-[#404EED] hover:bg-[#404EED]/80 text-white rounded-full px-4 py-2 flex items-center gap-2 text-center text-sm font-bold z-[1] hover:scale-105 transition-all duration-200 self-center">
+                </div>
+                  {/* NEEDS TO BE UPDATED WEEKLY */}
+                <Link href="https://discord.gg/9vd2Qu9c" target="_blank" className="bg-[#404EED] hover:bg-[#404EED]/80 text-white rounded-full px-4 py-2 flex items-center gap-2 text-center text-sm font-bold z-[1] hover:scale-105 transition-all duration-200 self-center">
                   <TbBrandDiscord className="text-2xl" /> Join
                 </Link>
-              </CardHeader>
-            </Card>
-            <Card className="md:col-span-1 bg-gradient-to-br from-gray-800 to-gray-900 text-white backdrop-blur-xl shadow-lg overflow-hidden">
-              {/* Background accent */}
-              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-orange-400 via-pink-400 to-purple-400"></div>
-
-              <CardHeader className="!h-full flex flex-col justify-center items-center">
-                <div className="flex items-center gap-4">
-                <TbBuildingStadium className="text-xl md:text-2xl text-amber-500" />
-                  <div className="text-xl md:text-2xl font-bold tracking-tight bg-gradient-to-r from-orange-400 to-purple-400 bg-clip-text text-transparent flex flex-col gap-2 ">
-                    The Flight Arena
-                    <span className="bg-gradient-to-r from-green-500 to-emerald-600 text-white px-2 py-0.5 rounded-full text-xs font-semibold self-start">
-                      Coming in 2026
-                    </span>
-                  </div>
-                </div>
-              </CardHeader>
+              </div>
 
             </Card>
+  
             
-          </div>
 
           <div className="md:col-span-1 relative group">
             {/* Animated gradient border */}
-            <div className="absolute inset-0 bg-gradient-to-br from-orange-400 via-pink-400 to-green-500 rounded-lg blur-sm opacity-75 group-hover:opacity-100 transition-opacity duration-300 animate-pulse"></div>
-            <div className="absolute inset-0 bg-gradient-to-br from-orange-400 via-yellow-400 to-green-500 rounded-lg"></div>
+            <div className="absolute inset-0 bg-gradient-to-br from-orange-400 via-pink-400 to-green-500 blur-sm opacity-75 group-hover:opacity-100 transition-opacity duration-300 animate-pulse rounded-[25px]"></div>
+            <div className="absolute inset-0 bg-gradient-to-br from-orange-400 via-yellow-400 to-green-500 rounded-[25px]"></div>
 
             <div className="p-1 h-full">
-              <Card className="relative bg-[url('/findthepilotimg.png')] bg-cover bg-top-left text-white rounded-lg !h-full overflow-hidden">
+              <Card className="relative bg-[url('/findthepilotimg.png')] bg-cover bg-top-left text-white rounded-[25px] !h-full overflow-hidden">
                 {/* Dark overlay with animated gradient */}
                 <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-purple-900/40 to-black/60"></div>
 
@@ -516,7 +498,7 @@ export default async function DashboardPage() {
             </div>
           </div>
 
-          <Card className="dark:bg-gray-900 bg-gray-100 text-dark backdrop-blur-xl relative overflow-hidden">
+          <Card className="dark:bg-gray-900 bg-gray-100 text-dark backdrop-blur-xl relative overflow-hidden rounded-[25px] shadow-none border-4 border-gray-200 dark:border-gray-700">
 
           <TbBuildingAirport className="text-[20rem] absolute top-8 left-0 text-amber-500 opacity-10" />
           
@@ -524,9 +506,6 @@ export default async function DashboardPage() {
               <CardTitle className="text-xl md:text-2xl font-bold tracking-tight text-gray dark:text-white">
                 Infinite Flight Community
               </CardTitle>
-              <CardDescription className="text-gray-700 dark:text-gray-400 text-sm md:text-base">
-                Connect with pilots worldwide
-              </CardDescription>
             </CardHeader>
 
             <CardContent className="flex flex-col gap-4">

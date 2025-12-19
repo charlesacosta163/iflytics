@@ -130,13 +130,13 @@ const Navbar = () => {
             <Pathname />
           </span>
 
-          <div className="hidden lg:flex items-center gap-2 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border-2 border-blue-200 dark:border-blue-800/30 rounded-[15px] px-4 py-2 hover:shadow-md transition-all duration-200">
-            <div className="p-1.5 bg-blue-500 dark:bg-blue-600 rounded-full">
+          <div className="hidden lg:flex items-center gap-2 bg-pink-50 dark:bg-pink-900/20 border-2 border-pink-200 dark:border-blue-800/30 rounded-[15px] px-4 py-2 hover:shadow-md transition-all duration-200">
+            <div className="p-1.5 bg-pink-500 dark:bg-blue-600 rounded-full">
               <LuUser className="w-4 h-4 text-white" />
             </div>
-            <Link href="/dashboard" className="text-base font-bold text-gray-800 dark:text-gray-100 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200 tracking-tight">
+            <Link href="/dashboard" className="text-base font-bold text-gray-800 dark:text-gray-100 hover:text-pink-600 dark:hover:text-blue-400 transition-colors duration-200 tracking-tight">
               {user?.user_metadata?.ifcUsername ? (
-                <span>Hello <span className="text-blue-600 dark:text-blue-400">{user?.user_metadata?.ifcUsername}</span>!</span>
+                <span>Hello <span className="text-pink-600 dark:text-blue-400">{user?.user_metadata?.ifcUsername}</span>!</span>
               ) : (
                 <span className="text-gray-500 dark:text-gray-400">Loading...</span>
               )}
@@ -227,113 +227,132 @@ const Navbar = () => {
       >
         {/* Backdrop */}
         <div
-          className={`absolute inset-0 bg-black transition-opacity duration-300 ${
-            isMenuOpen ? "opacity-50" : "opacity-0"
+          className={`absolute inset-0 bg-black/50 dark:bg-black/70 transition-opacity duration-300 ${
+            isMenuOpen ? "opacity-100" : "opacity-0"
           }`}
           onClick={() => setIsMenuOpen(false)}
         />
 
         {/* Sliding Menu */}
         <div
-          className={`absolute top-[73px] left-0 w-full bg-dark text-white shadow-2xl transition-all duration-300 ease-out ${
+          className={`absolute top-[73px] left-0 right-0 mx-3 bg-white dark:bg-gray-900 rounded-[25px] border-2 border-gray-200 dark:border-gray-700 shadow-2xl transition-all duration-300 ease-out ${
             isMenuOpen
               ? "translate-y-0 opacity-100"
               : "-translate-y-4 opacity-0"
           }`}
         >
-          <div className="p-6">
+          <div className="p-5">
             {/* Menu Header */}
-            <div className="mb-6 pb-4 border-b border-gray-600">
-              <h3 className="text-lg font-bold text-white">
+            <div className="mb-5 pb-4 border-b-2 border-gray-200 dark:border-gray-700">
+              <h3 className="text-base font-bold text-gray-800 dark:text-gray-100 tracking-tight">
                 Where would you like to go?
               </h3>
             </div>
 
             {/* Navigation Links */}
-            <nav className="space-y-2 grid grid-cols-2 gap-2">
+            <nav className="grid grid-cols-2 gap-3">
               <Link
                 href="/dashboard"
-                className="group flex items-center gap-4 p-4 rounded-lg hover:bg-gray-700 transition-all duration-200 hover:translate-x-2"
+                className={cn(
+                  "group flex items-center gap-3 p-4 rounded-[15px]",
+                  "bg-gray-50 dark:bg-gray-800/50",
+                  "hover:bg-gray-100 dark:hover:bg-gray-800",
+                  "border-2 border-gray-200 dark:border-gray-700",
+                  "transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+                )}
                 onClick={() => setIsMenuOpen(false)}
               >
-                <div className="p-2 bg-gray-700 rounded-lg group-hover:bg-gray-600 transition-colors duration-200">
-                  <FaHome className="w-4 h-4 text-light" />
+                <div className="p-2 bg-blue-500 dark:bg-blue-600 rounded-[10px] group-hover:scale-110 transition-transform duration-200">
+                  <FaHome className="w-4 h-4 text-white" />
                 </div>
-                <span className="font-medium">Dashboard</span>
+                <span className="font-semibold text-sm text-gray-800 dark:text-gray-100 tracking-tight">Dashboard</span>
               </Link>
 
               <Link
                 href="/dashboard/flights?timeframe=day-30"
-                className="group flex items-center gap-4 p-4 rounded-lg hover:bg-gray-700 transition-all duration-200 hover:translate-x-2"
+                className={cn(
+                  "group flex items-center gap-3 p-4 rounded-[15px]",
+                  "bg-gray-50 dark:bg-gray-800/50",
+                  "hover:bg-gray-100 dark:hover:bg-gray-800",
+                  "border-2 border-gray-200 dark:border-gray-700",
+                  "transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+                )}
                 onClick={() => setIsMenuOpen(false)}
               >
-                <div className="p-2 bg-gray-700 rounded-lg group-hover:bg-gray-600 transition-colors duration-200">
-                  <TiPlaneOutline className="w-4 h-4 text-light" />
+                <div className="p-2 bg-purple-500 dark:bg-purple-600 rounded-[10px] group-hover:scale-110 transition-transform duration-200">
+                  <TiPlaneOutline className="w-4 h-4 text-white" />
                 </div>
-                <span className="font-medium">Flights</span>
+                <span className="font-semibold text-sm text-gray-800 dark:text-gray-100 tracking-tight">Flights</span>
               </Link>
 
               <Link
                 href="/dashboard/profile"
-                className="group flex items-center gap-4 p-4 rounded-lg hover:bg-gray-700 transition-all duration-200 hover:translate-x-2"
+                className={cn(
+                  "group flex items-center gap-3 p-4 rounded-[15px]",
+                  "bg-gray-50 dark:bg-gray-800/50",
+                  "hover:bg-gray-100 dark:hover:bg-gray-800",
+                  "border-2 border-gray-200 dark:border-gray-700",
+                  "transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+                )}
                 onClick={() => setIsMenuOpen(false)}
               >
-                <div className="p-2 bg-gray-700 rounded-lg group-hover:bg-gray-600 transition-colors duration-200">
-                  <FaUser className="w-4 h-4 text-light" />
+                <div className="p-2 bg-green-500 dark:bg-green-600 rounded-[10px] group-hover:scale-110 transition-transform duration-200">
+                  <FaUser className="w-4 h-4 text-white" />
                 </div>
-                <span className="font-medium">Profile</span>
+                <span className="font-semibold text-sm text-gray-800 dark:text-gray-100 tracking-tight">Profile</span>
               </Link>
 
               <Link
                 href="/dashboard/users"
-                className="group flex items-center gap-4 p-4 rounded-lg hover:bg-gray-700 transition-all duration-200 hover:translate-x-2"
+                className={cn(
+                  "group flex items-center gap-3 p-4 rounded-[15px]",
+                  "bg-gray-50 dark:bg-gray-800/50",
+                  "hover:bg-gray-100 dark:hover:bg-gray-800",
+                  "border-2 border-gray-200 dark:border-gray-700",
+                  "transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+                )}
                 onClick={() => setIsMenuOpen(false)}
               >
-                <div className="p-2 bg-gray-700 rounded-lg group-hover:bg-gray-600 transition-colors duration-200">
-                  <GoCopilot className="w-4 h-4 text-light" />
+                <div className="p-2 bg-pink-500 dark:bg-pink-600 rounded-[10px] group-hover:scale-110 transition-transform duration-200">
+                  <GoCopilot className="w-4 h-4 text-white" />
                 </div>
-                <span className="font-medium">Community</span>
+                <span className="font-semibold text-sm text-gray-800 dark:text-gray-100 tracking-tight">Community</span>
               </Link>
 
               <Link
                 href="/map/dark"
-                className="group flex items-center gap-4 p-4 rounded-lg transition-all duration-200 hover:translate-x-2 bg-blue-500/[.2] hover:bg-blue-500/[0.3]"
+                className={cn(
+                  "group flex items-center gap-3 p-4 rounded-[15px]",
+                  "bg-blue-50 dark:bg-blue-900/20",
+                  "hover:bg-blue-100 dark:hover:bg-blue-900/30",
+                  "border-2 border-blue-300 dark:border-blue-700/50",
+                  "transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+                )}
                 onClick={() => setIsMenuOpen(false)}
               >
-                <div className="p-2 bg-gray-700 rounded-lg group-hover:bg-gray-600 transition-colors duration-200">
-                  <LiaGlobeAmericasSolid className="w-4 h-4 text-blue-400" />
+                <div className="p-2 bg-blue-500 dark:bg-blue-600 rounded-[10px] group-hover:scale-110 transition-transform duration-200">
+                  <LiaGlobeAmericasSolid className="w-4 h-4 text-white" />
                 </div>
-                <span className="font-medium text-blue-400">Map</span>
+                <span className="font-semibold text-sm text-blue-700 dark:text-blue-400 tracking-tight">Map</span>
               </Link>
 
               <Link
                 href="/"
-                className="group flex items-center gap-4 p-4 rounded-lg transition-all duration-200 hover:translate-x-2 bg-orange-500/[.2] hover:bg-orange-500/[0.3]"
+                className={cn(
+                  "group flex items-center gap-3 p-4 rounded-[15px]",
+                  "bg-orange-50 dark:bg-orange-900/20",
+                  "hover:bg-orange-100 dark:hover:bg-orange-900/30",
+                  "border-2 border-orange-300 dark:border-orange-700/50",
+                  "transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+                )}
                 onClick={() => setIsMenuOpen(false)}
               >
-                <div className="p-2 bg-gray-700 rounded-lg group-hover:bg-gray-600 transition-colors duration-200">
-                  <BsIncognito className="w-4 h-4 text-orange-400" />
+                <div className="p-2 bg-orange-500 dark:bg-orange-600 rounded-[10px] group-hover:scale-110 transition-transform duration-200">
+                  <BsIncognito className="w-4 h-4 text-white" />
                 </div>
-                <span className="font-medium text-orange-400">Guest</span>
+                <span className="font-semibold text-sm text-orange-700 dark:text-orange-400 tracking-tight">Guest</span>
               </Link>
 
-              {/* Special Featured Item */}
-              <div className="pt-4 mt-4 border-t border-gray-600 col-span-2">
-                <div
-                  className="flex items-center gap-4 bg-dark rounded-md px-4 py-3 cursor-not-allowed opacity-75"
-                  title="Coming Soon!"
-                >
-                  <div className="p-2 bg-gradient-to-r from-red-400 to-purple-400 rounded-lg">
-                    <LuGoal className="w-4 h-4 text-white" />
-                  </div>
-                  <div>
-                    <span className="font-medium text-gray-400">
-                      The Flight Arena
-                    </span>
-                    <p className="text-xs text-gray-500">Premium</p>
-                  </div>
-                </div>
-              </div>
             </nav>
           </div>
         </div>
