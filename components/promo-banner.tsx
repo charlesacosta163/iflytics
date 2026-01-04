@@ -56,7 +56,7 @@ export default function PromoBanner() {
 
           <div className="promo-seq">
             <span className="font-semibold tracking-wide text-sm sm:text-base">
-              🎄 Holiday Sale — code expires <span className="underline decoration-2">January&nbsp;3</span>! ❄️
+              🎄 Holiday Sale — code expires <span className="underline decoration-2">January&nbsp;15</span>! ❄️
             </span>
             <span className="mx-3 opacity-70">|</span>
             <span className="text-xs sm:text-sm">
