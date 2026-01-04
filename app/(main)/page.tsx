@@ -87,7 +87,7 @@ export default function Home() {
 
           {/* Enhanced Form Section */}
           <div className="flex-1 flex flex-col gap-4 lg:gap-6 items-center animate-slide-in-right delay-300 w-full relative">
-            <Badge className="absolute -top-2 left-1/2 -translate-x-1/2 z-50 bg-gradient-to-r from-[#ff879b] to-[#ffc49c] dark:from-[#1e90ff] dark:to-[#99badd] text-light font-bold tracking-tight">December 15th - Jan 3rd: 50% OFF! &nbsp;CODE: <Badge className="bg-blue-500 dark:bg-pink-600 dark:text-light px-2 py-0.5 rounded-md font-bold">IFHOLIDAY50</Badge></Badge>
+            <Badge className="absolute -top-2 left-1/2 -translate-x-1/2 z-50 bg-gradient-to-r from-[#ff879b] to-[#ffc49c] dark:from-[#1e90ff] dark:to-[#99badd] text-light font-bold tracking-tight">December 15th - Jan 15th: 50% OFF! &nbsp;CODE: <Badge className="bg-blue-500 dark:bg-pink-600 dark:text-light px-2 py-0.5 rounded-md font-bold">IFHOLIDAY50</Badge></Badge>
             {/* Form with Enhanced Styling */}
             <div className="relative group w-full max-w-[400px]">
               {/* <div className="absolute -inset-1 bg-gradient-to-r from-gray-400 via-blue-400 to-gray-400 rounded-[24px] blur opacity-15 group-hover:opacity-30 transition-all duration-1000 animate-gradient-x bg-[length:200%_auto]"></div> */}
@@ -575,7 +575,7 @@ export default function Home() {
             </p>
             <p className="text-purple-600 dark:text-purple-300 text-2xl font-bold tracking-tight animate-fade-in-up delay-200 mt-4 italic underline flex gap-2 items-center justify-center animate-bounce">
               <FaStar className="text-purple-600 dark:text-purple-400" />
-              Holiday Discounts Ongoing Until January 3rd!
+              Holiday Discounts Ongoing Until January 15th!
             </p>
           </div>
 
@@ -623,7 +623,7 @@ export default function Home() {
             {/* Premium Tier */}
             <div className="group animate-slide-in-up delay-200">
               <div className="relative bg-[#ffe1ce] dark:bg-gray-800/50 p-8 rounded-2xl border-2 border-amber-200 dark:border-amber-700 hover:scale-105 transition-all duration-500 shadow-lg hover:shadow-2xl h-full flex flex-col">
-              <Badge className="absolute -top-2 left-1/2 -translate-x-1/2 z-50 bg-gradient-to-r from-[#ff879b] to-[#ffc49c] dark:from-[#1e90ff] dark:to-[#99badd] text-light font-bold tracking-tight">December 15th - Jan 3rd: 50% OFF! &nbsp;CODE: <Badge className="bg-blue-500 dark:bg-pink-600 dark:text-light px-2 py-0.5 rounded-md font-bold">IFHOLIDAY50</Badge></Badge> 
+              <Badge className="absolute -top-2 left-1/2 -translate-x-1/2 z-50 bg-gradient-to-r from-[#ff879b] to-[#ffc49c] dark:from-[#1e90ff] dark:to-[#99badd] text-light font-bold tracking-tight">December 15th - Jan 15th: 50% OFF! &nbsp;CODE: <Badge className="bg-blue-500 dark:bg-pink-600 dark:text-light px-2 py-0.5 rounded-md font-bold">IFHOLIDAY50</Badge></Badge> 
                 <div className="text-center mb-8">
                   <h3 className="text-2xl font-bold text-yellow-600 dark:text-yellow-400 mb-2">Premium</h3>
                   <div className="text-4xl font-black text-yellow-600 dark:text-yellow-400 mb-2">$1.99</div>
@@ -679,7 +679,7 @@ export default function Home() {
             {/* Lifetime Plan */}
             <div className="group animate-slide-in-up delay-100">
               <div className="relative bg-[#ffe1ce] dark:bg-gray-800/50 p-8 rounded-2xl border-2 border-purple-200 dark:border-purple-700 hover:scale-105 transition-all duration-500 shadow-lg hover:shadow-2xl h-full flex flex-col">
-              <Badge className="absolute -top-2 left-1/2 -translate-x-1/2 z-50 bg-gradient-to-r from-[#ff879b] to-[#ffc49c] dark:from-[#1e90ff] dark:to-[#99badd] text-light font-bold tracking-tight">December 15th - Jan 3rd: 50% OFF! &nbsp;CODE: <Badge className="bg-blue-500 dark:bg-pink-600 dark:text-light px-2 py-0.5 rounded-md font-bold">IFHOLIDAY50</Badge></Badge> 
+              <Badge className="absolute -top-2 left-1/2 -translate-x-1/2 z-50 bg-gradient-to-r from-[#ff879b] to-[#ffc49c] dark:from-[#1e90ff] dark:to-[#99badd] text-light font-bold tracking-tight">December 15th - Jan 15th: 50% OFF! &nbsp;CODE: <Badge className="bg-blue-500 dark:bg-pink-600 dark:text-light px-2 py-0.5 rounded-md font-bold">IFHOLIDAY50</Badge></Badge> 
                 <div className="text-center mb-8">
                   <h3 className="text-2xl font-bold text-purple-600 dark:text-purple-400 mb-2">Lifetime</h3>
                   <div className="text-4xl font-black text-purple-600 dark:text-purple-400 mb-2">$49.99 </div>

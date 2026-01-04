@@ -41,7 +41,7 @@ export default function PromoBanner() {
           {/* Duplicate sequence twice for seamless loop */}
           <div className="promo-seq">
             <span className="font-semibold tracking-wide text-sm sm:text-base">
-              🎄 Holiday Sale — code expires <span className="underline decoration-2">January&nbsp;3</span>! ❄️
+              🎄 Holiday Sale — code expires <span className="underline decoration-2">January&nbsp;15</span>! ❄️
             </span>
             <span className="mx-3 opacity-70">|</span>
             <span className="text-xs sm:text-sm">
@@ -50,7 +50,7 @@ export default function PromoBanner() {
             </span>
             <span className="mx-3 opacity-70">|</span>
             <span className="text-xs sm:text-sm">
-              ⭐ Valid <span className="font-semibold">December 15 - January 3</span> ⭐
+              ⭐ Valid <span className="font-semibold">December 15 - January 15</span> ⭐
             </span>
           </div>
 
@@ -65,7 +65,7 @@ export default function PromoBanner() {
             </span>
             <span className="mx-3 opacity-70">|</span>
             <span className="text-xs sm:text-sm">
-              ⭐ Valid <span className="font-semibold">December 15 - January 3</span> ⭐
+              ⭐ Valid <span className="font-semibold">December 15 - January 15</span> ⭐
             </span>
           </div>
         </div>
