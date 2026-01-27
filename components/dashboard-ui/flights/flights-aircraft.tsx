@@ -10,10 +10,9 @@ import AircraftUsageTable from '../aircraft-tables/aircraft-usage-table'
 import AircraftBrandsCard from '../aircraft-tables/aircraft-brands-card'
 import { FaRegSadCry } from 'react-icons/fa'
 import { LuPizza } from 'react-icons/lu'
-import { VscCopilotWarning } from 'react-icons/vsc'
 import AirlineAnalysisCard from '../aircraft-tables/airline-analysis-card'
 
-// Mock data - replace with your actual data fetching
+// Mock data - 
 // const mockAircraftData = [
 //   {
 //     id: '1',

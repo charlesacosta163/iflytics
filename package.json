@@ -1,6 +1,6 @@
 {
   "name": "iflytics",
-  "version": "1.5.1-postpunk",
+  "version": "1.5.2-postpunk",
   "private": true,
   "scripts": {
     "dev": "next dev",

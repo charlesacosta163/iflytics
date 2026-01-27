@@ -130,7 +130,7 @@ const Navbar = () => {
             <Pathname />
           </span>
 
-          <div className="hidden lg:flex items-center gap-2 bg-pink-50 dark:bg-pink-900/20 border-2 border-pink-200 dark:border-blue-800/30 rounded-[15px] px-4 py-2 hover:shadow-md transition-all duration-200">
+          <div className="hidden lg:flex items-center gap-2 bg-pink-50 dark:bg-blue-900/20 border-2 border-pink-200 dark:border-blue-800/30 rounded-[15px] px-4 py-2 hover:shadow-md transition-all duration-200">
             <div className="p-1.5 bg-pink-500 dark:bg-blue-600 rounded-full">
               <LuUser className="w-4 h-4 text-white" />
             </div>

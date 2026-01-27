@@ -443,7 +443,7 @@ export default async function DashboardPage() {
                   Join the IFlytics Discord to get the latest news and updates.
                 </div>
                   {/* NEEDS TO BE UPDATED WEEKLY */}
-                <Link href="https://discord.gg/9vd2Qu9c" target="_blank" className="bg-[#404EED] hover:bg-[#404EED]/80 text-white rounded-full px-4 py-2 flex items-center gap-2 text-center text-sm font-bold z-[1] hover:scale-105 transition-all duration-200 self-center">
+                <Link href="https://discord.gg/xyAxzqPv" target="_blank" className="bg-[#404EED] hover:bg-[#404EED]/80 text-white rounded-full px-4 py-2 flex items-center gap-2 text-center text-sm font-bold z-[1] hover:scale-105 transition-all duration-200 self-center">
                   <TbBrandDiscord className="text-2xl" /> Join
                 </Link>
               </div>

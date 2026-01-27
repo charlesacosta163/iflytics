@@ -168,7 +168,7 @@ const FlightsPage = async ({searchParams}: { searchParams: Promise<{ [key: strin
       </div>
 
       {/* Tabs */}
-      <Tabs defaultValue="routes" className="w-full">
+      <Tabs defaultValue="overview" className="w-full">
       <TabsList className={cn(
         "w-full p-1.5 mb-3 md:mb-4",
         "bg-gray-200 dark:bg-gray-700",

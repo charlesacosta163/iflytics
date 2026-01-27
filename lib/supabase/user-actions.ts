@@ -196,7 +196,6 @@ export async function getLeaderboardData() {
       .from('if-stats-leaderboard')
       .select('*', { count: 'exact' })
       .order('xp', { ascending: false })
-      .limit(50) // Top 50 users
     
     // console.log("Query result:", { data, error, count })
     

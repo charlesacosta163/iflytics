@@ -1,7 +1,6 @@
 import Image from "next/image";
 import { TbSearch } from "react-icons/tb";
 import { redirect } from "next/navigation";
-import iflyticsLogo from '@/public/infinilyticslogo.svg'
 import iflyticsLogoLight from '@/public/iflyticslight.svg'
 import { IoStatsChartSharp } from "react-icons/io5";
 import { LuHistory, LuCalendarClock, LuChartPie } from "react-icons/lu";
@@ -14,9 +13,6 @@ import { BsDatabaseCheck } from "react-icons/bs";
 import { TbPlaneInflight, TbUsersGroup, TbLiveView, TbBrandFunimation, TbMapPin } from "react-icons/tb";
 import { RiCopilotFill } from "react-icons/ri";
 import { LiaGlobeAmericasSolid } from "react-icons/lia";
-import { GrTrophy } from "react-icons/gr";
-import { PiArrowFatLineUp } from "react-icons/pi";
-import { SlBadge } from "react-icons/sl";
 import TestimonialCarousel from "@/components/testimonial-carousel";
 import {
   Accordion,
@@ -25,7 +21,6 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { faqData } from "@/lib/data";
-import { InlineThemeSwitcher } from "@/components/inline-theme-switcher";
 import { Badge } from "@/components/ui/badge";
 
 export default function Home() {
@@ -87,7 +82,7 @@ export default function Home() {
 
           {/* Enhanced Form Section */}
           <div className="flex-1 flex flex-col gap-4 lg:gap-6 items-center animate-slide-in-right delay-300 w-full relative">
-            <Badge className="absolute -top-2 left-1/2 -translate-x-1/2 z-50 bg-gradient-to-r from-[#ff879b] to-[#ffc49c] dark:from-[#1e90ff] dark:to-[#99badd] text-light font-bold tracking-tight">December 15th - Jan 15th: 50% OFF! &nbsp;CODE: <Badge className="bg-blue-500 dark:bg-pink-600 dark:text-light px-2 py-0.5 rounded-md font-bold">IFHOLIDAY50</Badge></Badge>
+            <Badge className="absolute -top-2 left-1/2 -translate-x-1/2 z-50 bg-gradient-to-r from-[#ff879b] to-[#ffc49c] dark:from-[#1e90ff] dark:to-[#99badd] text-light font-bold tracking-tight">Stay Tuned For Future Discounts!</Badge>
             {/* Form with Enhanced Styling */}
             <div className="relative group w-full max-w-[400px]">
               {/* <div className="absolute -inset-1 bg-gradient-to-r from-gray-400 via-blue-400 to-gray-400 rounded-[24px] blur opacity-15 group-hover:opacity-30 transition-all duration-1000 animate-gradient-x bg-[length:200%_auto]"></div> */}
@@ -496,8 +491,8 @@ export default function Home() {
           {/* Stats Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
-              { number: "75K+", label: "Flights Tracked", gradient: "from-blue-400 to-blue-600", icon: <TbPlaneInflight className="text-blue-400"/>, delay: "delay-100" },
-              { number: "340+", label: "Active Users", gradient: "from-green-400 to-green-600", icon: <RiCopilotFill className="text-green-400"/>, delay: "delay-200" },
+              { number: "100K+", label: "Flights Tracked", gradient: "from-blue-400 to-blue-600", icon: <TbPlaneInflight className="text-blue-400"/>, delay: "delay-100" },
+              { number: "365+", label: "Active Users", gradient: "from-green-400 to-green-600", icon: <RiCopilotFill className="text-green-400"/>, delay: "delay-200" },
               { number: "24/7", label: "Live Updates", gradient: "from-orange-400 to-orange-600", icon: <LuCalendarClock className="text-orange-400"/>, delay: "delay-400" }
             ].map((stat, index) => (
               <div key={index} className={`group text-center p-8 bg-gradient-to-br from-gray/30 to-gray/50 backdrop-blur-xl rounded-2xl border border-gray-600/30 hover:border-gray-400/50 transition-all duration-500 hover:scale-105 animate-slide-in-up ${stat.delay} relative overflow-hidden flex flex-col items-center justify-center`}>
@@ -573,10 +568,7 @@ export default function Home() {
             <p className="text-gray-600 dark:text-gray-300 text-xl font-medium animate-fade-in-up delay-200">
               Unlock powerful features to enhance your flight tracking experience
             </p>
-            <p className="text-purple-600 dark:text-purple-300 text-2xl font-bold tracking-tight animate-fade-in-up delay-200 mt-4 italic underline flex gap-2 items-center justify-center animate-bounce">
-              <FaStar className="text-purple-600 dark:text-purple-400" />
-              Holiday Discounts Ongoing Until January 15th!
-            </p>
+          
           </div>
 
           {/* Pricing Cards */}
@@ -623,7 +615,7 @@ export default function Home() {
             {/* Premium Tier */}
             <div className="group animate-slide-in-up delay-200">
               <div className="relative bg-[#ffe1ce] dark:bg-gray-800/50 p-8 rounded-2xl border-2 border-amber-200 dark:border-amber-700 hover:scale-105 transition-all duration-500 shadow-lg hover:shadow-2xl h-full flex flex-col">
-              <Badge className="absolute -top-2 left-1/2 -translate-x-1/2 z-50 bg-gradient-to-r from-[#ff879b] to-[#ffc49c] dark:from-[#1e90ff] dark:to-[#99badd] text-light font-bold tracking-tight">December 15th - Jan 15th: 50% OFF! &nbsp;CODE: <Badge className="bg-blue-500 dark:bg-pink-600 dark:text-light px-2 py-0.5 rounded-md font-bold">IFHOLIDAY50</Badge></Badge> 
+    
                 <div className="text-center mb-8">
                   <h3 className="text-2xl font-bold text-yellow-600 dark:text-yellow-400 mb-2">Premium</h3>
                   <div className="text-4xl font-black text-yellow-600 dark:text-yellow-400 mb-2">$1.99</div>
@@ -679,7 +671,7 @@ export default function Home() {
             {/* Lifetime Plan */}
             <div className="group animate-slide-in-up delay-100">
               <div className="relative bg-[#ffe1ce] dark:bg-gray-800/50 p-8 rounded-2xl border-2 border-purple-200 dark:border-purple-700 hover:scale-105 transition-all duration-500 shadow-lg hover:shadow-2xl h-full flex flex-col">
-              <Badge className="absolute -top-2 left-1/2 -translate-x-1/2 z-50 bg-gradient-to-r from-[#ff879b] to-[#ffc49c] dark:from-[#1e90ff] dark:to-[#99badd] text-light font-bold tracking-tight">December 15th - Jan 15th: 50% OFF! &nbsp;CODE: <Badge className="bg-blue-500 dark:bg-pink-600 dark:text-light px-2 py-0.5 rounded-md font-bold">IFHOLIDAY50</Badge></Badge> 
+            
                 <div className="text-center mb-8">
                   <h3 className="text-2xl font-bold text-purple-600 dark:text-purple-400 mb-2">Lifetime</h3>
                   <div className="text-4xl font-black text-purple-600 dark:text-purple-400 mb-2">$49.99 </div>
