@@ -169,7 +169,7 @@ const MonthlyStatsComparisonCard = ({ previousMonthStats, thisMonthStats }: Mont
               Your Monthly Performance
             </CardTitle>
             <CardDescription className="text-sm md:text-base text-gray-600 dark:text-gray-400 font-medium">
-              Compare your performance for {months.find((month: { index: number }) => month.index === new Date().getMonth() + 1)?.name} { new Date().getFullYear()} vs {months.find((month: { index: number }) => month.index === new Date().getMonth())?.name} { new Date().getFullYear()}
+              Compare your performance for {months.find((month: { index: number }) => month.index === new Date().getMonth() + 1)?.name} { new Date().getFullYear()} vs previous month
             </CardDescription>
           </div>
         </div>
