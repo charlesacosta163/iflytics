@@ -104,7 +104,7 @@ const MonthlyStatsComparisonCard = ({ previousMonthStats, thisMonthStats }: Mont
             "p-3",
             "text-center"
           )}>
-            <p className="text-xs text-gray-500 dark:text-gray-400 mb-1 font-medium">{months.find((month: { index: number }) => month.index === new Date().getMonth())?.name} { new Date().getFullYear()}</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400 mb-1 font-medium">Last Month</p>
             <p className="text-lg md:text-xl font-bold text-gray-700 dark:text-gray-300">
               {formatter(previousValue)}
             </p>
