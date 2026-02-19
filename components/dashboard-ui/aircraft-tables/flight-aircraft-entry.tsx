@@ -200,11 +200,11 @@ const FlightAircraftEntry = ({ index, aircraft, flightsAmountRaw, allFlightsWith
                               <div className="flex gap-2 items-center flex-wrap">
                                 <Badge variant="secondary" className={cn(
                                   "text-white text-xs rounded-full font-bold border-none",
-                                  flight.server.toLowerCase().includes('casual') 
+                                  flight.server?.toLowerCase().includes('casual') 
                                     ? 'bg-green-500 dark:bg-green-600' 
-                                    : flight.server.toLowerCase().includes('training') 
+                                    : flight.server?.toLowerCase().includes('training') 
                                       ? 'bg-blue-500 dark:bg-blue-600' 
-                                      : flight.server.toLowerCase().includes('expert') 
+                                      : flight.server?.toLowerCase().includes('expert') 
                                         ? 'bg-red-500 dark:bg-red-600' 
                                         : 'bg-gray-500 dark:bg-gray-600'
                                 )}>

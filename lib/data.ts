@@ -4780,6 +4780,78 @@ export const customUserImages = [
     "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/avery/288/1563010_2.png"
   )}&w=64&h=64&fit=cover&mask=circle`,
 },
+{
+  id: 400,
+  role: "user",
+  username: "chal1enger",
+  image: `https://images.weserv.nl/?url=${encodeURIComponent(
+    "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/chal1enger/288/1216658_2.png"
+  )}&w=64&h=64&fit=cover&mask=circle`,
+},
+{
+  id: 401,
+  role: "user",
+  username: "citrusaviatrix",
+  image: `https://images.weserv.nl/?url=${encodeURIComponent(
+    "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/citrusaviatrix/288/1371331_2.png"
+  )}&w=64&h=64&fit=cover&mask=circle`,
+},
+{
+  id: 402,
+  role: "user",
+  username: "muyun",
+  image: `https://images.weserv.nl/?url=${encodeURIComponent(
+    "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/muyun/288/1628794_2.png"
+  )}&w=64&h=64&fit=cover&mask=circle`,
+},
+{
+  id: 403,
+  role: "user",
+  username: "Skyler_Thiele",
+  image: `https://images.weserv.nl/?url=${encodeURIComponent(
+    "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/skyler_thiele/288/1624874_2.png"
+  )}&w=64&h=64&fit=cover&mask=circle`,
+},
+{
+  id: 404,
+  role: "user",
+  username: "Pilot-Sarim-niazi",
+  image: `https://images.weserv.nl/?url=${encodeURIComponent(
+    "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/pilot-sarim-niazi/288/1604259_2.png"
+  )}&w=64&h=64&fit=cover&mask=circle`,
+},
+{
+  id: 405,
+  role: "user",
+  username: "wllj",
+  image: `https://images.weserv.nl/?url=${encodeURIComponent(
+    "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/wllj/288/1475920_2.png"
+  )}&w=64&h=64&fit=cover&mask=circle`,
+},
+{
+  id: 406,
+  role: "user",
+  username: "Kodifree2505",
+  image: `https://images.weserv.nl/?url=${encodeURIComponent(
+    "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/kodifree2505/288/1613236_2.png"
+  )}&w=64&h=64&fit=cover&mask=circle`,
+},
+{
+  id: 407,
+  role: "user",
+  username: "Adi7414",
+  image: `https://images.weserv.nl/?url=${encodeURIComponent(
+    "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/adi7414/288/1629587_2.png"
+  )}&w=64&h=64&fit=cover&mask=circle`,
+},
+{
+  id: 408,
+  role: "user",
+  username: "CaptTimmy",
+  image: `https://images.weserv.nl/?url=${encodeURIComponent(
+    "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/capttimmy/288/1417174_2.png"
+  )}&w=64&h=64&fit=cover&mask=circle`,
+},
 ]
 
 // Corny compliments for leaderboard stats
