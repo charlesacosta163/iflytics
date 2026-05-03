@@ -48,7 +48,6 @@ const NavbarMap = () => {
     }
   };
 
-  // Add a white background with a blur effect
   return (
     <header className="p-2 w-full flex justify-center gap-2 bg-transparent absolute top-0 left-0 right-0 !z-[1000]">
       <nav className="flex justify-between items-center w-full max-w-[1000px] rounded-full sm:py-2 py-1 px-3 sm:px-5 bg-white/50 dark:bg-gray-700/50 backdrop-blur-sm shadow-lg">
@@ -84,7 +83,7 @@ const NavbarMap = () => {
               <span>User</span>
             </Link>
             <Link 
-              href={`/#pricing`}
+              href={`https://iflytics.app/#pricing`}
               className="group flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-all duration-200"
             >
               <GrMoney className="w-4 h-4 group-hover:rotate-12 transition-transform duration-200" />
@@ -92,7 +91,7 @@ const NavbarMap = () => {
             </Link>
 
             <Link
-              href={`/#faq`}
+              href={`https://iflytics.app/#faq`}
               className="group flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-all duration-200"
             >
               <LuMessageCircleQuestion className="w-4 h-4 group-hover:rotate-12 transition-transform duration-200" />

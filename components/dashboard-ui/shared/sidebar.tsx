@@ -9,7 +9,7 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 
 import { TiPlaneOutline } from "react-icons/ti";
-import { FaUser, FaUsers } from "react-icons/fa";
+import { FaGlobeAsia, FaUser, FaUsers } from "react-icons/fa";
 
 import { FaHome } from "react-icons/fa";
 import { Badge } from "@/components/ui/badge";
@@ -23,6 +23,10 @@ import { getAppVersion, getRandomCaption } from "@/lib/foo.js";
 import Banner from "../banner";
 import { MdOutlineLeaderboard } from "react-icons/md";
 
+import lightModeFlight from '@/public/lightmapphoto.jpg'
+import cloudySunsetPhoto from '@/public/cloudysunset.jpg'
+import { HiOutlineExternalLink } from "react-icons/hi";
+
 const Sidebar = () => {
   const pathname = usePathname();
   const [randomCaption, setRandomCaption] = useState("");
@@ -32,10 +36,10 @@ const Sidebar = () => {
   }, []);
 
   return (
-    <section className="hidden lg:block max-w-[280px] w-full bg-white dark:bg-gray-900 rounded-r-[40px] text-gray-900 dark:text-gray-100">
+    <section className="hidden lg:block max-w-[280px] w-full border-r-2 border-gray-200 dark:border-gray-800 text-gray-900 dark:text-gray-100">
       <div className="flex flex-col h-full">
 
-        <header className="px-6 py-4 border-b border-gray-200 dark:border-gray-800 relative">
+        <header className="px-6 py-4 relative">
             <span className="text-xs font-medium absolute -bottom-2.5 left-1/2 -translate-x-1/2 bg-gradient-to-r from-[#ff6982] to-[#ffd2b3] dark:from-[#0080ff] dark:to-[#00e0ff] text-white px-2 py-0.5 rounded-full">
               {getAppVersion()}
             </span>
@@ -63,10 +67,7 @@ const Sidebar = () => {
         </header>
         
 
-        <section id="menus" className="flex-1 flex flex-col gap-1 p-4">
-            <div className="mb-2">
-              <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider px-3">Main</h3>
-            </div>
+        <section id="menus" className="flex-1 flex flex-col gap-1 p-4 mt-2">
             
             <div className="grid grid-cols-2 gap-2">
   <Link href="/dashboard" className={cn("flex flex-col gap-1 text-gray-700 dark:text-gray-300 font-medium items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white rounded-[20px] py-3 transition-all duration-200 group", pathname === "/dashboard" && "bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 font-semibold border-2 border-blue-200 dark:border-blue-400")}>
@@ -101,24 +102,40 @@ const Sidebar = () => {
           
             <Banner />
             
+
+            <Link
+    target='_blank'
+    href="https://iflytics.app/map/dark"
+    className='px-4 pb-4 pt-8 rounded-[20px] flex justify-center items-end hover:scale-105 transition-all duration-300 border-2 border-gray-100 dark:border-gray-700 mt-2 bg-cover bg-center relative overflow-hidden'
+    style={{ backgroundImage: `url(${lightModeFlight.src})`, backgroundPosition: '100% 70%' }}
+>
+             
+            
+            <section className="flex items-center gap-1 text-xl font-bold tracking-tighter text-blue-600">
+              <FaGlobeAsia /> Flight Tracker
+            </section>
+            <HiOutlineExternalLink className='absolute top-2 right-2 text-gray-600 z-10' />
+
+    </Link>
+
+    <Link
+    target='_blank'
+    href="https://iflytics.app"
+    className='px-4 pb-4 pt-8 rounded-[20px] flex justify-center items-end hover:scale-105 transition-all duration-300 border-2 border-gray-100 dark:border-gray-700 mt-2 bg-cover bg-center relative overflow-hidden'
+    style={{ backgroundImage: `url(${cloudySunsetPhoto.src})`, backgroundPosition: '100% 50%' }}
+>
+             
+            
+            <section className="flex items-center gap-1 text-xl font-bold tracking-tighter bg-white/10 text-orange-500 backdrop-blur-sm rounded-full px-4 py-1">
+              <BsIncognito /> Guest Mode
+            </section>
+            <HiOutlineExternalLink className='absolute top-2 right-2 text-gray-600 z-10' />
+
+    </Link>
+            
         </section>
 
-        <div className="mt-auto p-4 border-t border-gray-200 dark:border-gray-800">
-          <div className="mb-2">
-            <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider px-3">Quick Actions</h3>
-          </div>
-          
-          <div className="flex gap-2 mb-4">
-            <Link href="/map/dark" className="flex gap-2 text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30 font-medium items-center rounded-lg px-3 py-2 transition-all duration-200 justify-center text-sm w-full group">
-              <LiaGlobeAmericasSolid className="w-4 h-4 group-hover:scale-110 transition-transform duration-200" />
-              Map
-            </Link>
-            <Link href="/" className="flex gap-2 text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/20 hover:bg-amber-100 dark:hover:bg-amber-900/30 font-medium items-center rounded-lg px-3 py-2 transition-all duration-200 justify-center text-sm w-full group">
-              <BsIncognito className="w-4 h-4 group-hover:scale-110 transition-transform duration-200" />
-              Guest
-            </Link>
-          </div>
-          
+        <div className="mt-auto p-4">
           <LogoutButton className="w-full font-medium hover:text-red-600 dark:hover:text-red-400 cursor-pointer transition-all duration-200 rounded-full px-3 py-2.5"/>
         </div>
 

@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation"
 import { createClient } from "./server"
 
+
 // Infinite Flight Info Actions
 import { getUserId, getUserStats } from "../actions"
 import { supabaseAdmin } from "./webhook-client"
@@ -283,4 +284,29 @@ export async function syncUserToIFStatsLeaderboard() {
   } catch (err) {
     console.error("Error syncing user to IFStats leaderboard:", err)
   }
+}
+
+export async function getUsersSubscribedToPlans() {
+    try {
+        const user = await getUser()
+    
+        if (!user) 
+            redirect("/auth/login")
+
+        const { data, error } = await supabaseAdmin.from('subscriptions').select('*').eq('status', 'active')
+
+        // console.log(data)
+
+        if (error) {
+            console.error("Error getting users subscribed to plans:", error)
+            return { error: "Error getting users subscribed to plans", data: null }
+        }
+
+        return { data: data, error: null }
+
+    } catch (error) {
+        console.error("Error getting users subscribed to plans:", error)
+        return { error: "Error getting users subscribed to plans" }
+    }
+    
 }

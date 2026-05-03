@@ -73,7 +73,7 @@ const Navbar = () => {
   return (
     <div id="navbar" className="relative">
       {/* Main Navbar */}
-      <div className="flex justify-between items-center px-4 py-2 sticky top-0 bg-transparent z-50 border-b-2 border-gray-200 dark:border-gray-800">
+      <div className="flex justify-between items-center px-4 py-2 sticky top-0 bg-transparent z-50">
         <div className="flex items-center gap-3">
           {/* Animated Hamburger Button */}
           <button

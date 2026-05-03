@@ -82,7 +82,7 @@ const ATCHistoryPage = async ({ params, searchParams }: PageProps) => {
     return (
       <div className="p-4 flex flex-col gap-4">
          <div className="flex items-center justify-between gap-2">
-                <h2 className='text-5xl font-black dark:text-light bg-gradient-to-r from-gray-600 to-dark bg-clip-text text-transparent py-0.5 flex gap-4 items-center'>ATC <Badge className="bg-orange-500 text-light text-lg font-bold" >BETA</Badge></h2>
+                <h2 className='text-5xl font-black dark:text-light bg-gradient-to-r from-gray-600 to-dark bg-clip-text text-transparent py-0.5 flex gap-4 items-center'>ATC <Badge className="bg-[#FFA089] text-light text-lg font-bold" >PRIME</Badge></h2>
                 <div className="text-sm text-muted-foreground">
                     <span className="sm:block hidden">Showing page {pageIndex} of {totalPages} ({totalCount} total sessions)</span>
                     <span className="sm:hidden">Page {pageIndex} of {totalPages}</span>

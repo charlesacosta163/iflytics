@@ -139,7 +139,7 @@ const UserATCSessionCard: React.FC<UserATCSessionCardProps> = (props) => {
       {s.violationsTotal > 0 && (
         <span className="flex gap-2 items-center text-xs sm:text-sm text-red-500">
           <span className="w-2 h-2 rounded-full bg-red-500" />
-          {s.violationsTotal ?? 0} Violations Issued
+          {s.violationsTotal ?? 0} Violation(s) Issued
         </span>
       )}
     </div>

@@ -133,7 +133,7 @@ export function aggregateAtcSessionsWithBuckets(rows: any[]): any[] {
       end: endISO,
       durationMin: sessionDurationMin,
       opsTotal: list.reduce((s: number, r: any) => s + (r.operations || 0), 0),
-      violationsTotal: list.reduce((s: number, r: any) => s + (r.violationsIssued || 0), 0),
+      violationsTotal: list.reduce((s: number, r: any) => (r.violationsIssued || 0), 0), // s aggregates
       traffic: {
         overall: {
           bucket: overall.bucket,
