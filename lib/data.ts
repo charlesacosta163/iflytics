@@ -5515,7 +5515,15 @@ export const customUserImages = [
   image: `https://images.weserv.nl/?url=${encodeURIComponent(
     "https://avatars.discourse-cdn.com/v4/letter/a/c5a1d2/288.png"
   )}&w=64&h=64&fit=cover&mask=circle`,
-}
+},
+{
+  id: 492,
+  role: "user",
+  username: "_30YearsOfEdelweiss",
+  image: `https://images.weserv.nl/?url=${encodeURIComponent(
+    "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/_30yearsofedelweiss/288/1673024_2.png"
+  )}&w=64&h=64&fit=cover&mask=circle`,
+},
 ]
 // Corny compliments for leaderboard stats
 export const statCompliments = {
