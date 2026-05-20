@@ -64,7 +64,7 @@ const FlightsPage = async ({
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {flights.length > 0 ? flights.map(async (flight: any) => {
-                    const aircraft = await getAircraftAndLivery(flight.aircraftId, flight.liveryId)
+                    const aircraft = await getAircraftAndLivery(flight.liveryId)
                     return <FlightEntryCard key={flight.id} flight={flight} aircraft={aircraft}/>
                 }) : <div className='text-center text-gray-700 font-bold text-2xl'>No flights found</div>}
             </div>

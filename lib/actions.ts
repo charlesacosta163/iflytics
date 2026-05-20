@@ -154,15 +154,18 @@ export async function getUserMostRecentFlight(): Promise<any> {
     }
 }
 
-export async function getAircraftAndLivery(aircraftId: string, liveryId: string) {
+export async function getAircraftAndLivery(liveryId: string) {
 
     try {
+        // aircraftId is not needed for this endpoint (update 5/20/2026)
+        // IF Liveries Endpoint
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/aircraft/liveries`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${API_KEY}`
             }, 
+            next: { revalidate: 86400 } // Revalidate 24 hours
         });
 
         if (!response.ok) {
@@ -175,10 +178,13 @@ export async function getAircraftAndLivery(aircraftId: string, liveryId: string)
             throw new Error('Invalid response format');
         }
 
+        const results = data.result;
+
         // Find the matching aircraft livery and callsign
-        const matchingLivery = data.result.find((livery: any) => 
-            livery.aircraftID === aircraftId && livery.id === liveryId
+        const matchingLivery = results.find((livery: any) => 
+            livery.id === liveryId
         );
+
 
         return matchingLivery || {
             aircraftName: "Unknown Aircraft",

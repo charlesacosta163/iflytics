@@ -1,6 +1,6 @@
 {
   "name": "iflytics",
-  "version": "1.5.3-postpunk",
+  "version": "1.6.1-tweepop",
   "private": true,
   "scripts": {
     "dev": "next dev",
