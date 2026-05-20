@@ -62,7 +62,7 @@ const UserPopupInfo = ({
           Promise.all([
             getUserFlightInfo(popupInfo.userId, popupInfo.flightId),
             getUserFlightPlan(popupInfo.flightId),
-            getAircraftAndLivery(popupInfo.aircraftId, popupInfo.liveryId),
+            getAircraftAndLivery(popupInfo.liveryId),
           ]),
           timeoutPromise,
         ])) as [any, any, any];

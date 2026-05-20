@@ -82,7 +82,6 @@ const FlightPage = async ({
 
   // Fetch aircraft and livery data
   const aircraftData = await getAircraftAndLivery(
-    flight.aircraftId,
     flight.liveryId
   );
 

@@ -1,12 +1,8 @@
 import React from 'react'
 import { getAircraftAndLivery, getUserFlights } from '@/lib/actions'
 import { Metadata } from 'next'
-import Link from 'next/link'
-import ProfileHeader from '@/components/profile-header'
 import FlightEntryCard from '@/components/flight-entry'
 import PaginationBtn from '@/components/pagination-btn'
-import { LuFileSearch2 } from 'react-icons/lu'
-import { Badge } from '@/components/ui/badge'
 import FlightPageLookupButton from '@/components/flight-page-lookup-btn'
 
 type PageProps = {

@@ -1,11 +1,9 @@
 import { Flight, FlightRoute } from "../types";
-import { getAircraft, getAirport } from "../actions";
 import { getAirportLocally } from "../sync-actions";
 import { aircraftImages } from "../data";
 import { unstable_cache as cache, unstable_cache } from "next/cache";
 import { getAircraftCached } from "./flightdata";
 import { isoCountryCodes } from "../data";
-import { airports } from '../airports-lib';
 
 /*
 getAircraftAndLivery(aircraftId: string, liveryId: string)

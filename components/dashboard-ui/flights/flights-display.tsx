@@ -1,7 +1,5 @@
 import React from "react";
-import FlightDisplayCard from "../flight-display-card";
 import { Flight } from "@/lib/types";
-import { getAircraftAndLivery } from "@/lib/actions";
 import { Card } from "@/components/ui/card";
 import { IoLocationOutline, IoSparklesOutline } from "react-icons/io5";
 import { FaInfoCircle, FaRegCalendarAlt, FaRegClock } from "react-icons/fa";
