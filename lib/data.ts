@@ -5395,6 +5395,126 @@ export const customUserImages = [
   image: `https://images.weserv.nl/?url=${encodeURIComponent(
     "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/echpochmark/288/1628150_2.png"
   )}&w=64&h=64&fit=cover&mask=circle`,
+},
+{
+  id: 477,
+  role: "user",
+  username: "Pevii",
+  image: `https://images.weserv.nl/?url=${encodeURIComponent(
+    "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/pevii/288/1635183_2.png"
+  )}&w=64&h=64&fit=cover&mask=circle`,
+},
+{
+  id: 478,
+  role: "user",
+  username: "MD-11F",
+  image: `https://images.weserv.nl/?url=${encodeURIComponent(
+    "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/md-11f/288/1603530_2.png"
+  )}&w=64&h=64&fit=cover&mask=circle`,
+},
+{
+  id: 479,
+  role: "user",
+  username: "captainbeav",
+  image: `https://images.weserv.nl/?url=${encodeURIComponent(
+    "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/captainbeav/288/1491162_2.png"
+  )}&w=64&h=64&fit=cover&mask=circle`,
+},
+{
+  id: 480,
+  role: "user",
+  username: "jackanimationsyt",
+  image: `https://images.weserv.nl/?url=${encodeURIComponent(
+    "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/jackanimationsyt/288/1617757_2.png"
+  )}&w=64&h=64&fit=cover&mask=circle`,
+},
+{
+  id: 481,
+  role: "user",
+  username: "GEnx",
+  image: `https://images.weserv.nl/?url=${encodeURIComponent(
+    "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/genx/288/1659495_2.png"
+  )}&w=64&h=64&fit=cover&mask=circle`,
+},
+{
+  id: 482,
+  role: "user",
+  username: "ravikumar",
+  image: `https://images.weserv.nl/?url=${encodeURIComponent(
+    "https://avatars.discourse-cdn.com/v4/letter/r/96bed5/288.png"
+  )}&w=64&h=64&fit=cover&mask=circle`,
+},
+{
+  id: 483,
+  role: "user",
+  username: "rikowo",
+  image: `https://images.weserv.nl/?url=${encodeURIComponent(
+    "https://avatars.discourse-cdn.com/v4/letter/r/96bed5/288.png"
+  )}&w=64&h=64&fit=cover&mask=circle`,
+},
+{
+  id: 484,
+  role: "user",
+  username: "EdgeTrier",
+  image: `https://images.weserv.nl/?url=${encodeURIComponent(
+    "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/edgetrier/288/751664_2.png"
+  )}&w=64&h=64&fit=cover&mask=circle`,
+},
+{
+  id: 485,
+  role: "user",
+  username: "Aarav15482",
+  image: `https://images.weserv.nl/?url=${encodeURIComponent(
+    "https://avatars.discourse-cdn.com/v4/letter/a/e79b87/288.png"
+  )}&w=64&h=64&fit=cover&mask=circle`,
+},
+{
+  id: 486,
+  role: "user",
+  username: "RF_Connor",
+  image: `https://images.weserv.nl/?url=${encodeURIComponent(
+    "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/rf_connor/288/1614305_2.png"
+  )}&w=64&h=64&fit=cover&mask=circle`,
+},
+{
+  id: 487,
+  role: "user",
+  username: "Jade763stja",
+  image: `https://images.weserv.nl/?url=${encodeURIComponent(
+    "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/jade763stja/288/1531044_2.png"
+  )}&w=64&h=64&fit=cover&mask=circle`,
+},
+{
+  id: 488,
+  role: "user",
+  username: "Oli_H",
+  image: `https://images.weserv.nl/?url=${encodeURIComponent(
+    "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/oli_h/288/1658715_2.png"
+  )}&w=64&h=64&fit=cover&mask=circle`,
+},
+{
+  id: 489,
+  role: "user",
+  username: "AIRBUS-SE",
+  image: `https://images.weserv.nl/?url=${encodeURIComponent(
+    "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/airbus-se/288/1648687_2.png"
+  )}&w=64&h=64&fit=cover&mask=circle`,
+},
+{
+  id: 490,
+  role: "user",
+  username: "Capt_Irfan",
+  image: `https://images.weserv.nl/?url=${encodeURIComponent(
+    "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/capt_irfan/288/1660108_2.png"
+  )}&w=64&h=64&fit=cover&mask=circle`,
+},
+{
+  id: 491,
+  role: "user",
+  username: "Uncle_kofi",
+  image: `https://images.weserv.nl/?url=${encodeURIComponent(
+    "https://avatars.discourse-cdn.com/v4/letter/a/c5a1d2/288.png"
+  )}&w=64&h=64&fit=cover&mask=circle`,
 }
 ]
 // Corny compliments for leaderboard stats
