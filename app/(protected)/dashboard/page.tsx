@@ -101,7 +101,6 @@ export default async function DashboardPage() {
   }
 
   const { aircraftName, liveryName } = await getAircraftAndLivery(
-    recentFlight.aircraftId,
     recentFlight.liveryId
   ) ;
   // Grade 5 - Amber
