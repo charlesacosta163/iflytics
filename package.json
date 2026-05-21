@@ -1,6 +1,6 @@
 {
   "name": "iflytics",
-  "version": "1.6.1-tweepop",
+  "version": "1.7.0-synthpunk",
   "private": true,
   "scripts": {
     "dev": "next dev",

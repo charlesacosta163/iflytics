@@ -26,6 +26,8 @@ import { MdOutlineLeaderboard } from "react-icons/md";
 import lightModeFlight from '@/public/lightmapphoto.jpg'
 import cloudySunsetPhoto from '@/public/cloudysunset.jpg'
 import { HiOutlineExternalLink } from "react-icons/hi";
+import { TbBrandAppleArcade } from "react-icons/tb";
+import { SiGamebanana } from "react-icons/si";
 
 const Sidebar = () => {
   const pathname = usePathname();
@@ -90,12 +92,17 @@ const Sidebar = () => {
     <span className="text-xs text-center">Community</span>
   </Link>
 
-  <Link href="/dashboard/leaderboard" className={cn("relative col-span-2 border-2 border-pink-200 dark:border-blue-400 flex gap-2 text-gray-700 dark:text-gray-300 font-medium items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white rounded-[20px] py-3 transition-all duration-200 group", pathname === "/dashboard/leaderboard" && "bg-pink-50 dark:bg-blue-900/20 text-pink-600 dark:text-blue-400 font-semibold")}>
+  <Link href="/dashboard/leaderboard" className={cn("relative col-span-2 flex gap-2 text-gray-700 dark:text-gray-300 font-medium items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white rounded-[20px] py-3 transition-all duration-200 group", pathname === "/dashboard/leaderboard" && "bg-pink-50 dark:bg-blue-900/20 text-pink-600 dark:text-blue-400 font-semibold")}>
     <MdOutlineLeaderboard className="w-4 h-4 group-hover:scale-110 transition-transform duration-200" />
     <span className="text-sm text-center">IFlytics Leaderboard</span>
     <MdOutlineLeaderboard className="w-4 h-4 group-hover:scale-110 transition-transform duration-200" />
+  </Link>
+  <Link style={{ backgroundImage: `url(/starfall-gif.gif)` }} href="/dashboard/games" className={cn("relative col-span-2 border-2 border-orange-200 dark:border-yellow-400 flex gap-2 text-gray-300 font-black tracking-tight items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-100/20 hover:text-gray-100 dark:hover:text-white rounded-[20px] py-3 transition-all duration-200 group", pathname === "/dashboard/games" && "bg-pink-50 dark:bg-blue-900/20 text-orange-200 dark:text-yellow-400 font-semibold")}>
+    <SiGamebanana className="w-4 h-4 group-hover:scale-110 transition-transform duration-200" />
+    <span className="text-sm text-center">The Arcade</span>
+    <TbBrandAppleArcade className="w-4 h-4 group-hover:scale-110 transition-transform duration-200" />
 
-    <Badge className="absolute -top-3 -left-3 bg-gradient-to-r from-pink-500 to-blue-500 text-white text-xs font-bold">NEW</Badge>
+    <Badge className="absolute -top-3 -left-3 bg-gradient-to-r from-orange-500 to-yellow-500 text-white text-xs font-bold">NEW</Badge>
   </Link>
 </div>
 

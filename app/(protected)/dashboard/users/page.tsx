@@ -30,7 +30,7 @@ const UsersPage = async () => {
           <TabsTrigger value="map"> <RiMapLine className='inline'/> Map <Badge className='text-xs font-bold text-white bg-orange-500'>BETA</Badge></TabsTrigger>
         </TabsList>
         <TabsContent value="community">
-          <CommunityUsers users={users} />
+          <CommunityUsers users={users.reverse()} />
         </TabsContent>
         <TabsContent value="timeline">
           <TimelineUsers users={users} />

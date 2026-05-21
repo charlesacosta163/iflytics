@@ -26,6 +26,8 @@ import Pathname from "./pathname";
 import { getUserSubscription } from "@/lib/subscription/subscription";
 import { AccessLevel, Subscription } from "@/lib/subscription/helpers";
 import { MdOutlineLeaderboard } from "react-icons/md";
+import { TbBrandAppleArcade } from "react-icons/tb";
+import { SiGamebanana } from "react-icons/si";
 import { cn } from "@/lib/utils";
 
 
@@ -351,6 +353,19 @@ const Navbar = () => {
                   <BsIncognito className="w-4 h-4 text-white" />
                 </div>
                 <span className="font-semibold text-sm text-orange-700 dark:text-orange-400 tracking-tight">Guest</span>
+              </Link>
+
+              <Link
+                href="/dashboard/games"
+                className="relative col-span-2 group flex items-center justify-center gap-2 p-4 rounded-[15px] border-2 border-yellow-400 dark:border-yellow-400 overflow-hidden transition-all duration-200 hover:scale-[1.01] active:scale-[0.98]"
+                style={{ backgroundImage: 'url(/starfall-gif.gif)', backgroundSize: 'cover', backgroundPosition: 'center' }}
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <div className="absolute inset-0 bg-black/40 group-hover:bg-black/30 transition-colors duration-200 rounded-[13px]" />
+                <SiGamebanana className="relative z-10 w-4 h-4 text-white group-hover:scale-110 transition-transform duration-200" />
+                <span className="relative z-10 font-black text-sm text-white tracking-tight">The Arcade</span>
+                <TbBrandAppleArcade className="relative z-10 w-4 h-4 text-white group-hover:scale-110 transition-transform duration-200" />
+                
               </Link>
 
             </nav>

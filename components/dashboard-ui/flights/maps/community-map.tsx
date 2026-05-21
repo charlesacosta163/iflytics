@@ -248,7 +248,7 @@ export default function CommunityMap({
                             </span>
                         </div>
 
-                        <Link href={`/dashboard/users/${popupInfo.id}`} className="text-primary hover:text-primary/80 transition-colors flex font-bold justify-center items-center gap-1 bg-blue-500 hover:bg-blue-600 px-3 py-2 rounded-lg"><FaEye /> View Profile</Link>
+                        <Link href={`/dashboard/users/${popupInfo.id}`} className="text-primary text-white transition-colors flex font-bold justify-center items-center gap-1 hover:text-white bg-blue-500 hover:bg-blue-600 px-3 py-2 rounded-lg"><FaEye /> View Profile</Link>
                     </CardContent>
                 </Card>
             )}

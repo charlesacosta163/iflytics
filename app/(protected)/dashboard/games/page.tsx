@@ -40,7 +40,7 @@ const GAMES = [
     route: '/dashboard/games/flappy',
     image: '/images/games/flappygame.png',
     difficulty: 'Hard' as Difficulty,
-    desktopOnly: true,
+    desktopOnly: false,
   },
   {
     title: 'Memory Match',
