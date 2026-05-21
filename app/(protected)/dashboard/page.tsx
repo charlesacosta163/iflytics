@@ -385,7 +385,35 @@ export default async function DashboardPage() {
             </CardContent>
           </Card>
 
+          {/* IFlytics Arcade Promo */}
+          <div className="col-span-full relative overflow-hidden rounded-[25px] border-4 border-yellow-400/50 dark:border-yellow-500/40">
+            <div
+              className="absolute inset-0"
+              style={{ backgroundImage: 'url(/starfall-gif.gif)', backgroundSize: 'cover', backgroundPosition: 'center' }}
+            />
+            <div className="absolute inset-0 bg-black/55" />
+            <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-4 p-6">
+              <div className="flex flex-col gap-1 text-white">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="text-2xl md:text-3xl font-black tracking-tight">IFlytics Arcade 🕹️</span>
+                  <Badge className="bg-gradient-to-r from-orange-500 to-yellow-500 text-white text-xs font-bold border-none">NEW</Badge>
+                </div>
+                <p className="text-white/65 text-sm md:text-base max-w-lg">
+                  Take a break from the stats — play mini-games featuring real IFlytics community pilots as sprites.
+                </p>
+              </div>
+              <Link
+                href="/dashboard/games"
+                className="shrink-0 bg-yellow-400 hover:bg-yellow-300 text-black font-black rounded-full px-6 py-2.5 text-sm transition-all duration-200 hover:scale-105 flex items-center gap-2"
+              >
+                Open Arcade →
+              </Link>
+            </div>
+          </div>
+          
           <MonthlyStatsComparisonCard previousMonthStats={previousMonthStats} thisMonthStats={thisMonthStats}/>
+
+
           { /* Grade Progression Table - Per the Infinite Flight Grade Table*/}
           <GradeProgressionCard userData={userData} flights={flights}/>
 
