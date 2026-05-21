@@ -432,8 +432,7 @@ export default function FlappyPage() {
     return () => window.removeEventListener('keydown', onKey)
   }, [flap, resetGame])
 
-  const handleTap = useCallback((e?: React.TouchEvent | React.MouseEvent) => {
-    e?.preventDefault()
+  const handleTap = useCallback(() => {
     if (stateRef.current === 'dead') {
       resetGame()
       stateRef.current = 'idle'
@@ -448,10 +447,20 @@ export default function FlappyPage() {
         ← Arcade
       </Link>
 
-      <div className="flex flex-col items-center gap-4 w-full">
+      {/* Mobile block */}
+      <div className="md:hidden flex flex-col items-center text-center gap-4 py-20 px-6">
+        <div className="text-6xl">🖥️</div>
+        <h2 className="text-2xl font-black tracking-tight">Desktop Only</h2>
+        <p className="text-muted-foreground text-sm max-w-xs">
+          IFlytics Flappy requires a keyboard or mouse. Please open on a desktop.
+        </p>
+      </div>
+
+      {/* Desktop game */}
+      <div className="hidden md:flex flex-col items-center gap-4 w-full">
         <div className="text-center">
           <h1 className="text-3xl font-black tracking-tight">Flappy User ✈️</h1>
-          <p className="text-muted-foreground text-sm mt-1">Tap / Space / Click to flap</p>
+          <p className="text-muted-foreground text-sm mt-1">Space / W / Click to flap</p>
         </div>
 
         <div className="flex items-center gap-10 text-sm font-bold">
@@ -465,17 +474,13 @@ export default function FlappyPage() {
           </div>
         </div>
 
-        <div className="w-full max-w-[480px]">
-          <canvas
-            ref={canvasRef}
-            width={W}
-            height={H}
-            onClick={handleTap}
-            onTouchStart={handleTap}
-            className="rounded-2xl border-2 border-border shadow-2xl cursor-pointer select-none"
-            style={{ width: '100%', height: 'auto', touchAction: 'none' }}
-          />
-        </div>
+        <canvas
+          ref={canvasRef}
+          width={W}
+          height={H}
+          onClick={handleTap}
+          className="rounded-2xl border-2 border-border shadow-2xl cursor-pointer select-none"
+        />
 
         {gameState === 'dead' && (
           <button
