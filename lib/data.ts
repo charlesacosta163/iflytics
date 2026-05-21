@@ -1682,7 +1682,7 @@ export const customUserImages = [
   {
     // IFLYTICS USER
     id: 38,
-    role: "user",
+    role: "dev",
     username: "charlesacosta163",
     image: `https://images.weserv.nl/?url=https%3A%2F%2Fsea1.discourse-cdn.com%2Finfiniteflight%2Fuser_avatar%2Fcommunity.infiniteflight.com%2Fcharlesacosta163%2F288%2F509744_2.png&w=64&h=64&fit=cover&mask=circle`,
   },
@@ -5524,6 +5524,14 @@ export const customUserImages = [
     "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/_30yearsofedelweiss/288/1673024_2.png"
   )}&w=64&h=64&fit=cover&mask=circle`,
 },
+{
+  id: 493,
+  role: "user",
+  username: "AlexanderTunjang",
+  image: `https://images.weserv.nl/?url=${encodeURIComponent(
+    "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/alexandertunjang/288/1449318_2.png"
+  )}&w=64&h=64&fit=cover&mask=circle`,
+}
 ]
 // Corny compliments for leaderboard stats
 export const statCompliments = {
