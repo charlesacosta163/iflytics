@@ -1,7 +1,9 @@
 "use client"
 
 import React, { useEffect, useRef, useState, useCallback } from 'react'
+import Link from 'next/link'
 import { customUserImages } from '@/lib/data'
+import { VscSnake } from 'react-icons/vsc'
 
 const CELL_SIZE = 40
 const COLS = 16
@@ -70,11 +72,13 @@ function drawAvatar(
   ctx.arc(cx, cy, r, 0, 2 * Math.PI)
   ctx.clip()
 
+  // Always fill background first (ctx.fill() has no path after clip)
+  ctx.fillStyle = '#4a5568'
+  ctx.fillRect(x, y, size, size)
+
   if (img && img.complete && img.naturalWidth > 0) {
     ctx.drawImage(img, x + 2, y + 2, size - 4, size - 4)
   } else {
-    ctx.fillStyle = '#4a5568'
-    ctx.fill()
     ctx.fillStyle = '#fff'
     ctx.font = `bold ${size * 0.4}px sans-serif`
     ctx.textAlign = 'center'
@@ -369,19 +373,22 @@ export default function SnakePage() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-[80vh] gap-6 p-4">
+      <Link href="/dashboard/games" className="self-start flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors">
+        ← Arcade
+      </Link>
       {/* Mobile block */}
       <div className="md:hidden flex flex-col items-center justify-center text-center gap-4 py-20 px-6">
         <div className="text-6xl">🖥️</div>
         <h2 className="text-2xl font-black tracking-tight">Desktop Only</h2>
         <p className="text-muted-foreground text-sm max-w-xs">
-          IFlytics secret requires a keyboard to play. Please open this page on a desktop or laptop.
+          IFlytics Snake requires a keyboard to play. Please open this page on a desktop or laptop.
         </p>
       </div>
 
       {/* Desktop game */}
       <div className="hidden md:flex flex-col items-center gap-6 w-full">
         <div className="text-center">
-          <h1 className="text-3xl font-black tracking-tight">IFlytics secret</h1>
+          <h1 className="text-3xl font-black tracking-tight">IFlytics Snake <VscSnake className="w-4 h-4 inline-block mr-2" /></h1>
           <p className="text-muted-foreground text-sm mt-1">Use arrow keys or WASD • R to restart</p>
           <p className="text-muted-foreground text-xs mt-0.5">
             <span className="text-blue-400 font-bold">User +10</span>
