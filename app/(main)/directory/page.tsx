@@ -32,7 +32,7 @@ const DirectoryPage = async ({
   searchParams: Promise<{ airport?: string }>;
 }) => {
   // Safe aircraft fetching with error handling
-  let aircraft = null;
+  let aircraft: any = null;
   try {
     aircraft = await getAllAircraft();
   } catch (error) {
@@ -237,13 +237,13 @@ const DirectoryPage = async ({
           <div className="flex gap-2 items-center mt-4 md:mt-6 mb-4 md:mb-6">
             <FaPlane className="w-5 h-5 md:w-6 md:h-6 text-gray-700 dark:text-gray-300" />
             <h2 className="text-gray-800 dark:text-gray-200 text-lg md:text-xl font-bold tracking-tight">
-              All Aircraft ({aircraft.result.length})
+              All Aircraft ({aircraft.length})
             </h2>
           </div>
 
-          {aircraft && aircraft.result && aircraft.result.length > 0 ? (
+          {aircraft && aircraft && aircraft.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
-              {aircraft.result.map((aircraft: any) => (
+              {aircraft.map((aircraft: any) => (
                 <Card
                   key={aircraft.id}
                   className={cn(
