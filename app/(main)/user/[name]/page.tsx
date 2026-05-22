@@ -94,13 +94,15 @@ const UserPage = async ({ params }: { params: Promise<{ name: string }> }) => {
           className={
             cn("text-light",
             result.grade === 5
-              ? "bg-yellow-500"
+              ? "bg-yellow-500 dark:bg-yellow-600"
                 : result.grade === 4
-                ? "bg-green-500"
+                ? "bg-green-500 dark:bg-green-600"
                 : result.grade === 3
-                ? "bg-purple-500"
-                : result.grade === 2
-                ? "bg-blue-500"
+                ? "bg-purple-500 dark:bg-purple-600"
+                  : result.grade === 2
+                ? "bg-blue-500 dark:bg-blue-600"
+                : result.grade === 1
+                ? "bg-gray-500 dark:bg-gray-600"
                 : "")}
         />
 
