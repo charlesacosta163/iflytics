@@ -24,6 +24,8 @@ const FlightEntryCard = ({
   flight: any;
   aircraft: any;
 }) => {
+
+
   return (
     <div className="flex flex-col">
       <Card className={cn(

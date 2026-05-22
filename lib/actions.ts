@@ -156,7 +156,6 @@ export async function getUserMostRecentFlight(): Promise<any> {
 }
 
 export async function getAircraftAndLivery(liveryId: string) {
-
     try {
         // aircraftId is not needed for this endpoint (update 5/20/2026)
         // IF Liveries Endpoint
@@ -174,6 +173,7 @@ export async function getAircraftAndLivery(liveryId: string) {
         }
 
         const data = await response.json();
+
         
         if (!data || !data.result) {
             throw new Error('Invalid response format');
@@ -181,11 +181,12 @@ export async function getAircraftAndLivery(liveryId: string) {
 
         const results = data.result;
 
+
         // Find the matching aircraft livery and callsign
         const matchingLivery = results.find((livery: any) => 
             livery.id === liveryId
         );
-
+    
 
         return matchingLivery || {
             aircraftName: "Unknown Aircraft",
