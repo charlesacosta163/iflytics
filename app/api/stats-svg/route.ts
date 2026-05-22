@@ -13,6 +13,10 @@ export async function GET(req: NextRequest) {
   // Custom color parameters
   const customCardColor = searchParams.get('card_color');
   const customTextColor = searchParams.get('text_color');
+  const customBorderColor = searchParams.get('border_color');
+  const customShadowColor = searchParams.get('shadow_color');
+  const shadowOpacityRaw = parseFloat(searchParams.get('shadow_opacity') ?? '1');
+  const shadowOpacity = isNaN(shadowOpacityRaw) ? 1 : Math.min(1, Math.max(0, shadowOpacityRaw));
 
   // Helper function to validate and normalize hex color
   const normalizeHex = (hex: string | null): string | null => {
@@ -68,6 +72,18 @@ export async function GET(req: NextRequest) {
   // Determine text color (custom hex takes priority, fallback to white)
   const selectedTextColor = normalizeHex(customTextColor) || 'white';
 
+  // Determine border (only rendered if a valid color is provided)
+  const selectedBorderColor = normalizeHex(customBorderColor);
+  const borderAttr = selectedBorderColor
+    ? `stroke="${selectedBorderColor}" stroke-width="6"`
+    : '';
+
+  // Determine 3D shadow (offset block rect behind the card)
+  const selectedShadowColor = normalizeHex(customShadowColor);
+  const shadow3d = selectedShadowColor
+    ? `<rect x="8" y="8" width="500" height="320" rx="15" fill="${selectedShadowColor}" opacity="${shadowOpacity}"/>`
+    : '';
+
   // Format flight time from minutes to hours and minutes
   const formatFlightTime = (minutes: number) => {
     const hours = Math.floor(minutes / 60);
@@ -91,15 +107,18 @@ export async function GET(req: NextRequest) {
 
 
   const svg = `
-  <svg width="500" height="320" xmlns="http://www.w3.org/2000/svg">
+  <svg width="${selectedShadowColor ? 514 : 500}" height="${selectedShadowColor ? 334 : 320}" xmlns="http://www.w3.org/2000/svg">
     <defs>
       <filter id="shadow">
         <feDropShadow dx="0" dy="4" stdDeviation="4" flood-opacity="0.25"/>
       </filter>
     </defs>
+
+    <!-- 3D Shadow Layer (renders behind card) -->
+    ${shadow3d}
     
     <!-- Card Background -->
-    <rect width="500" height="320" rx="15" fill="${selectedCardColor}" filter="shadow"/>
+    <rect width="500" height="320" rx="20" fill="${selectedCardColor}" filter="${selectedShadowColor ? '' : 'shadow'}" ${borderAttr}/>
     
     <!-- Header -->
     <g transform="translate(30, 40)">

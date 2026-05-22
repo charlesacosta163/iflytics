@@ -17,6 +17,11 @@ const ProfileCardPicker: React.FC<ProfileCardPickerProps> = ({ username = 'Guest
   const [selectedFont, setSelectedFont] = useState('inter')
   const [customCardColor, setCustomCardColor] = useState('')
   const [customTextColor, setCustomTextColor] = useState('')
+  const [customBorderColor, setCustomBorderColor] = useState('')
+  const [borderEnabled, setBorderEnabled] = useState(false)
+  const [shadowEnabled, setShadowEnabled] = useState(false)
+  const [customShadowColor, setCustomShadowColor] = useState('#000000')
+  const [shadowOpacity, setShadowOpacity] = useState(1)
   const [svgUrl, setSvgUrl] = useState('')
   const [copied, setCopied] = useState(false)
 
@@ -63,6 +68,13 @@ const ProfileCardPicker: React.FC<ProfileCardPickerProps> = ({ username = 'Guest
     if (customTextColor) {
       params.append('text_color', customTextColor)
     }
+    if (borderEnabled && customBorderColor) {
+      params.append('border_color', customBorderColor)
+    }
+    if (shadowEnabled && customShadowColor) {
+      params.append('shadow_color', customShadowColor)
+      params.append('shadow_opacity', String(shadowOpacity))
+    }
 
     return `http://iflytics.app/api/stats-svg?${params.toString()}`
   }
@@ -70,7 +82,7 @@ const ProfileCardPicker: React.FC<ProfileCardPickerProps> = ({ username = 'Guest
   // Update SVG when settings change
   useEffect(() => {
     setSvgUrl(generateSvgUrl())
-  }, [selectedTheme, selectedFont, customCardColor, customTextColor, username])
+  }, [selectedTheme, selectedFont, customCardColor, customTextColor, customBorderColor, borderEnabled, shadowEnabled, customShadowColor, shadowOpacity, username])
 
   return (
     <div className="space-y-6">
@@ -82,7 +94,7 @@ const ProfileCardPicker: React.FC<ProfileCardPickerProps> = ({ username = 'Guest
             <img 
               src={svgUrl} 
               alt="Profile Card Preview" 
-              className="rounded-lg shadow-lg"
+              className="rounded-[20px] shadow-lg"
               style={{ maxWidth: '100%', height: 'auto' }}
             />
           ) : <Skeleton className="w-full h-[300px] rounded-lg" />}
@@ -193,6 +205,90 @@ const ProfileCardPicker: React.FC<ProfileCardPickerProps> = ({ username = 'Guest
                   Leave empty for white text
                 </p>
               </div>
+            </div>
+
+            {/* Border */}
+            <div className="space-y-2">
+              <div className="flex items-center gap-2">
+                <input
+                  id="borderToggle"
+                  type="checkbox"
+                  checked={borderEnabled}
+                  onChange={(e) => setBorderEnabled(e.target.checked)}
+                  className="w-4 h-4 accent-primary cursor-pointer"
+                />
+                <Label htmlFor="borderToggle" className="cursor-pointer">Add Border</Label>
+              </div>
+
+              {borderEnabled && (
+                <div className="flex gap-2 items-center pl-6">
+                  <Input
+                    type="color"
+                    value={customBorderColor || '#ffffff'}
+                    onChange={(e) => setCustomBorderColor(e.target.value)}
+                    className="w-12 h-10 p-1 border rounded-md"
+                  />
+                  <Input
+                    type="text"
+                    placeholder="#ffffff"
+                    value={customBorderColor}
+                    onChange={(e) => setCustomBorderColor(e.target.value)}
+                    className="font-mono flex-1"
+                  />
+                  <p className="text-xs text-muted-foreground whitespace-nowrap">Border color</p>
+                </div>
+              )}
+            </div>
+
+            {/* 3D Shadow */}
+            <div className="space-y-2">
+              <div className="flex items-center gap-2">
+                <input
+                  id="shadowToggle"
+                  type="checkbox"
+                  checked={shadowEnabled}
+                  onChange={(e) => setShadowEnabled(e.target.checked)}
+                  className="w-4 h-4 accent-primary cursor-pointer"
+                />
+                <Label htmlFor="shadowToggle" className="cursor-pointer">3D Shadow Effect</Label>
+              </div>
+
+              {shadowEnabled && (
+                <div className="flex flex-col gap-3 pl-6">
+                  <div className="flex gap-2 items-center">
+                    <Input
+                      type="color"
+                      value={customShadowColor}
+                      onChange={(e) => setCustomShadowColor(e.target.value)}
+                      className="w-12 h-10 p-1 border rounded-md"
+                    />
+                    <Input
+                      type="text"
+                      placeholder="#000000"
+                      value={customShadowColor}
+                      onChange={(e) => setCustomShadowColor(e.target.value)}
+                      className="font-mono flex-1"
+                    />
+                    <p className="text-xs text-muted-foreground whitespace-nowrap">Shadow color</p>
+                  </div>
+
+                  <div className="flex items-center gap-3">
+                    <Label className="text-xs text-muted-foreground whitespace-nowrap">Opacity</Label>
+                    <input
+                      type="range"
+                      min={0.05}
+                      max={1}
+                      step={0.05}
+                      value={shadowOpacity}
+                      onChange={(e) => setShadowOpacity(parseFloat(e.target.value))}
+                      className="flex-1 accent-primary cursor-pointer"
+                    />
+                    <span className="text-xs font-mono text-muted-foreground w-8 text-right">
+                      {Math.round(shadowOpacity * 100)}%
+                    </span>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 

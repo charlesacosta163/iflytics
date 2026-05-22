@@ -5563,6 +5563,14 @@ export const customUserImages = [
   image: `https://images.weserv.nl/?url=${encodeURIComponent(
     "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/kwaku_frimpong/288/1615642_2.png"
   )}&w=64&h=64&fit=cover&mask=circle`,
+},
+{
+  id: 498,
+  role: "user",
+  username: "Grant_Kuipers",
+  image: `https://images.weserv.nl/?url=${encodeURIComponent(
+    "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/grant_kuipers/288/1643330_2.png"
+  )}&w=64&h=64&fit=cover&mask=circle`,
 }
 ]
 // Corny compliments for leaderboard stats
