@@ -72,16 +72,17 @@ export async function GET(req: NextRequest) {
   // Determine text color (custom hex takes priority, fallback to white)
   const selectedTextColor = normalizeHex(customTextColor) || 'white';
 
-  // Determine border (only rendered if a valid color is provided)
+  // Determine border — drawn as a separate inset rect on top of the card
+  // Inset by half stroke-width (4px) so the stroke is fully inside the canvas
   const selectedBorderColor = normalizeHex(customBorderColor);
-  const borderAttr = selectedBorderColor
-    ? `stroke="${selectedBorderColor}" stroke-width="6"`
+  const borderRect = selectedBorderColor
+    ? `<rect x="4" y="4" width="492" height="312" rx="20" fill="none" stroke="${selectedBorderColor}" stroke-width="8"/>`
     : '';
 
   // Determine 3D shadow (offset block rect behind the card)
   const selectedShadowColor = normalizeHex(customShadowColor);
   const shadow3d = selectedShadowColor
-    ? `<rect x="8" y="8" width="500" height="320" rx="15" fill="${selectedShadowColor}" opacity="${shadowOpacity}"/>`
+    ? `<rect x="8" y="8" width="500" height="320" rx="20" fill="${selectedShadowColor}" opacity="${shadowOpacity}"/>`
     : '';
 
   // Format flight time from minutes to hours and minutes
@@ -118,7 +119,10 @@ export async function GET(req: NextRequest) {
     ${shadow3d}
     
     <!-- Card Background -->
-    <rect width="500" height="320" rx="20" fill="${selectedCardColor}" filter="${selectedShadowColor ? '' : 'shadow'}" ${borderAttr}/>
+    <rect width="500" height="320" rx="25" fill="${selectedCardColor}" filter="${selectedShadowColor ? '' : 'shadow'}"/>
+
+    <!-- Border (inset so stroke is fully visible with no clipping) -->
+    ${borderRect}
     
     <!-- Header -->
     <g transform="translate(30, 40)">
