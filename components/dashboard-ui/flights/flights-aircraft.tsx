@@ -129,10 +129,11 @@ const FlightsAircraft = async ({ flights, user, role }: { flights: Flight[], use
 
     const uniqueAircraftIds = [...new Set(routesWithDistances.map((route) => route.aircraftId))];
     const allAircraft = await getAllAircraft();
+    const allAircraftList: any[] = allAircraft ?? [];
 
     // Initialize aircraft stats
     const aircraftStats: any = uniqueAircraftIds.reduce((acc, aircraftId) => {
-      const aircraftInfo = allAircraft.result.find((a: any) => a.id === aircraftId);
+      const aircraftInfo = allAircraftList.find((a: any) => a.id === aircraftId);
       acc[aircraftId] = {
         aircraftId,
         name: aircraftInfo?.name || "Unknown Aircraft",
@@ -180,7 +181,7 @@ const FlightsAircraft = async ({ flights, user, role }: { flights: Flight[], use
     }
 
     const aircraft = await getAllAircraft();
-    const aircraftData = aircraft.result.find((aircraft: any) => aircraft.id === mostUsedAircraft.aircraftId);
+    const aircraftData = aircraft?.find((aircraft: any) => aircraft.id === mostUsedAircraft.aircraftId);
 
     return aircraftData || { id: 0, name: "Unknown Aircraft", image: "/images/aircraft/placeholder.png" };
   };

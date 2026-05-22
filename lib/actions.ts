@@ -1,5 +1,6 @@
 'use server'
 
+import aircraftData from "@/lib/cache/aircraft.json";
 import { revalidateTag } from "next/cache"
 import { aircraftIcaoCodes } from "./data"
 import { getUser } from "./supabase/user-actions"
@@ -200,18 +201,9 @@ export async function getAircraftAndLivery(liveryId: string) {
 }
 
 export async function getAllAircraft() {
-     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/aircraft`, {
-        method: "GET",
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${API_KEY}`
-        },
-        next: { revalidate: 86400 } // Revalidate 24 hours
-     })
+    const aircraftLibrary = aircraftData.result;
 
-     const data = await response.json()
-
-     return data || null
+     return aircraftLibrary || null
 }
 
 export async function getAircraft(aircraftId: string) {
@@ -679,7 +671,6 @@ export async function getUselessFactToday() {
 export async function aircraftIdToIcao(aircraftId: string) {
 
     let aircraftArray = await getAllAircraft();
-    aircraftArray = aircraftArray.result;
     // Logic: Match Id to name in aircraftArray
     // Then use name to find icao in aircraftIcaoCodes
     const aircraftObj = aircraftArray.find((aircraft: any) => aircraft.id === aircraftId);

@@ -12,7 +12,7 @@ import { cn } from '@/lib/utils'
 const AirlineAnalysisCard = async ({ routesWithDistances }: { routesWithDistances: any[] }) => {
 
     const allAircraft = await getAllAircraft()
-    const aircraftArray = allAircraft.result
+    const aircraftArray = allAircraft ?? []
 
   function airlineAnalysisData() {
     // Data using for analysis: Determine how many flights are done by each airline + aircraft used for that airline

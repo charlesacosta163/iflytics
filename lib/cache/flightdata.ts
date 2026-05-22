@@ -1,4 +1,4 @@
-
+import aircraftData from "@/lib/cache/aircraft.json";
 
 // Convert to use Next.js built-in fetch caching
 export const getAggregatedFlights = async (ifcUserId: string, maxPages: number = 51) => {
@@ -44,24 +44,7 @@ export const getAggregatedFlights = async (ifcUserId: string, maxPages: number =
 export const getAircraftCached = async (aircraftId: string) => {
   try {
     
-    // Use Next.js fetch caching instead of unstable_cache
-    const response = await fetch(
-      `https://api.infiniteflight.com/public/v2/aircraft`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${process.env.API_KEY}`
-        },
-        next: {
-          revalidate: 86400, // 24 hours - aircraft data rarely changes
-          tags: [`aircraft-${aircraftId}`] // Aircraft-specific cache tag
-        }
-      }
-    );
-
-    const data = await response.json();
-    const aircraftLibrary = data.result;
+    const aircraftLibrary = aircraftData.result;
 
     // console.log(aircraftLibrary)
 

@@ -209,7 +209,7 @@ const FlightsRoutes = async ({ flights, user , subscription, role}: { flights: F
 
         <ExportFlightsCSVBtn
           routesWithDistances={routesWithDistances}
-          aircraftArray={aircraftArray.result}
+          aircraftArray={aircraftArray}
           subscription={subscription as Subscription}
         />
       </div>
