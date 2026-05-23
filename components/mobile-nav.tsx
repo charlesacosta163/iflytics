@@ -3,125 +3,96 @@
 import React, { useState } from 'react'
 import Link from 'next/link'
 import { FaBook, FaSearch, FaSignInAlt } from 'react-icons/fa'
-import { Menu, X } from "lucide-react";
+import { LiaGlobeAmericasSolid } from 'react-icons/lia'
+import { LuMessageCircleQuestion } from 'react-icons/lu'
+import { GrMoney } from 'react-icons/gr'
+import { PiNewspaperLight } from 'react-icons/pi'
+import { Menu, X } from 'lucide-react'
+import { InlineThemeSwitcher } from './inline-theme-switcher'
 
 interface MobileNavProps {
-  isLoggedIn: boolean;
-  isLoading: boolean;
-  onAuthClick: () => void;
+  isLoggedIn: boolean
+  isLoading: boolean
+  onAuthClick: () => void
 }
+
+const LINKS = [
+  { href: '/',          label: 'Search User', icon: <FaSearch className="w-4 h-4 text-gray-500" /> },
+  { href: '/map/dark',  label: 'Live Map',    icon: <LiaGlobeAmericasSolid className="w-4 h-4 text-blue-500" />, badge: true },
+  { href: '/directory', label: 'Directory',   icon: <FaBook className="w-4 h-4 text-gray-500" /> },
+  { href: '/blog',      label: 'Blog',        icon: <PiNewspaperLight className="w-4 h-4 text-gray-500" /> },
+  { href: '/#pricing',  label: 'Pricing',     icon: <GrMoney className="w-4 h-4 text-gray-500" /> },
+  { href: '/#faq',      label: 'FAQs',        icon: <LuMessageCircleQuestion className="w-4 h-4 text-gray-500" /> },
+]
 
 const MobileNav = ({ isLoggedIn, isLoading, onAuthClick }: MobileNavProps) => {
   const [isOpen, setIsOpen] = useState(false)
 
-  const toggleMenu = () => setIsOpen(!isOpen)
-
-  const closeMenu = () => setIsOpen(false)
-
   return (
     <div className="relative">
-      {/* Hamburger Button */}
+      {/* Hamburger */}
       <button
-        onClick={toggleMenu}
-        className="md:hidden p-2 rounded-lg dark:text-light text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-200 hover:scale-105 active:scale-95 !z-[10000]"
+        onClick={() => setIsOpen(v => !v)}
+        className="md:hidden p-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200 z-[10000]"
         aria-label="Toggle menu"
       >
         <div className="relative w-6 h-6">
-          <Menu
-            className={`absolute inset-0 transition-all duration-300 ${
-              isOpen ? 'opacity-0 rotate-180 scale-50' : 'opacity-100 rotate-0 scale-100'
-            }`}
-          />
-          <X
-            className={`absolute inset-0 transition-all duration-300 ${
-              isOpen ? 'opacity-100 rotate-0 scale-100' : 'opacity-0 -rotate-180 scale-50'
-            }`}
-          />
+          <Menu className={`absolute inset-0 transition-all duration-300 ${isOpen ? 'opacity-0 rotate-180 scale-50' : 'opacity-100'}`} />
+          <X    className={`absolute inset-0 transition-all duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 -rotate-180 scale-50'}`} />
         </div>
       </button>
 
-      {/* Mobile Dropdown Menu */}
+      {/* Dropdown */}
       <div
-        className={`md:hidden absolute top-12 right-0 w-64 dark:bg-gray bg-[#FAF0E6] rounded-lg shadow-2xl transition-all duration-300 ease-out transform origin-top-right !z-[9999] ${
-          isOpen
-            ? 'opacity-100 scale-100 translate-y-0'
-            : 'opacity-0 scale-95 -translate-y-2 pointer-events-none'
+        className={`md:hidden absolute top-12 right-0 w-60 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-2xl overflow-hidden z-[9999] transition-all duration-200 origin-top-right ${
+          isOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'
         }`}
       >
-        {/* Dropdown Arrow */}
-        <div className="absolute -top-2 right-4 w-4 h-4 transform rotate-45"></div>
-        
-        {/* Navigation Header */}
-        <div className="p-4">
-          <h3 className="font-bold tracking-tight dark:text-gray-200 text-gray-600 text-lg">
-            Where we going?
-          </h3>
+        <div className="p-3 border-b border-gray-100 dark:border-gray-800">
+          <p className="text-xs font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500">Navigate</p>
         </div>
 
-        {/* Menu Content */}
-        <div className="px-4 pb-4">
-
-          {/* Navigation Links */}
-          <nav className="space-y-2">
+        <nav className="p-2 space-y-0.5">
+          {LINKS.map(({ href, label, icon, badge }) => (
             <Link
-              href="/directory"
-              className="group flex items-center gap-3 p-3 rounded-lg hover:bg-light transition-all duration-200 hover:translate-x-1"
-              onClick={closeMenu}
+              key={href}
+              href={href}
+              onClick={() => setIsOpen(false)}
+              className="relative flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white transition-colors duration-150"
             >
-              <div className="p-2 bg-gray-100 rounded-lg group-hover:bg-gray-200 transition-colors duration-200">
-                <FaBook className="w-4 h-4 text-gray-600" />
-              </div>
-              <span className="font-medium dark:text-gray-200 text-gray-700 group-hover:text-gray-700 dark:group-hover:text-gray-700">Directory</span>
+              {icon}
+              {label}
+              {badge && <span className="ml-auto w-2 h-2 bg-blue-500 rounded-full animate-pulse" />}
             </Link>
+          ))}
+        </nav>
 
-            <Link
-              href="/"
-              className="group flex items-center gap-3 p-3 rounded-lg hover:bg-light transition-all duration-200 hover:translate-x-1"
-              onClick={closeMenu}
+        <div className="px-3 py-2.5 border-t border-gray-100 dark:border-gray-800 flex items-center justify-between">
+          <span className="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-widest">Theme</span>
+          <InlineThemeSwitcher />
+        </div>
+
+        <div className="p-2 border-t border-gray-100 dark:border-gray-800">
+          {!isLoading ? (
+            <button
+              onClick={() => { onAuthClick(); setIsOpen(false) }}
+              className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 border border-gray-300 dark:border-gray-600 transition-colors duration-150"
             >
-              <div className="p-2 bg-gray-100 rounded-lg group-hover:bg-gray-200 transition-colors duration-200">
-                <FaSearch className="w-4 h-4 text-gray-600" />
-              </div>
-              <span className="font-medium dark:text-gray-200 text-gray-700 group-hover:text-gray-700 dark:group-hover:text-gray-700">Search</span>
-            </Link>
-
-            {/* Divider */}
-            <div className="my-3 border-t border-gray-300"></div>
-
-            {/* Auth Button */}
-            {!isLoading ? (
-              <button
-                onClick={() => {
-                  onAuthClick()
-                  closeMenu()
-                }}
-                className="group w-full flex items-center gap-3 px-3 py-2 hover:bg-gray-100 dark:hover:bg-light transition-all duration-200 hover:translate-x-1 border-2 border-gray-600 dark:border-gray-200 rounded-full"
-              >
-                <div className="p-2 bg-gray-100 rounded-lg transition-colors duration-200">
-                  <FaSignInAlt className="w-4 h-4 text-gray" />
-                </div>
-                <span className="font-semibold dark:text-gray-200 text-gray">
-                  {isLoggedIn ? 'Dashboard' : 'Login'}
-                </span>
-              </button>
-            ) : (
-              <div className="w-full flex items-center gap-3 p-3 rounded-lg border border-gray-200 opacity-75">
-                <div className="p-2 bg-gray-100 rounded-lg">
-                  <FaSignInAlt className="w-4 h-4 text-gray-400" />
-                </div>
-                <span className="font-medium text-gray-400">Loading...</span>
-              </div>
-            )}
-          </nav>
+              <FaSignInAlt className="w-4 h-4" />
+              {isLoggedIn ? 'Dashboard' : 'Login'}
+            </button>
+          ) : (
+            <div className="flex items-center gap-3 px-3 py-2.5 text-sm text-gray-400">
+              <FaSignInAlt className="w-4 h-4" />
+              Loading...
+            </div>
+          )}
         </div>
       </div>
 
-      {/* Backdrop for mobile */}
+      {/* Backdrop */}
       {isOpen && (
-        <div
-          className="md:hidden fixed inset-0 bg-opacity-25 z-[9998]"
-          onClick={closeMenu}
-        />
+        <div className="md:hidden fixed inset-0 z-[9998]" onClick={() => setIsOpen(false)} />
       )}
     </div>
   )
