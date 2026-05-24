@@ -322,7 +322,7 @@ const Navbar = () => {
               </Link>
 
               <Link
-                href="/map/dark"
+                href="/map/earth"
                 className={cn(
                   "group flex items-center gap-3 p-4 rounded-[15px]",
                   "bg-blue-50 dark:bg-blue-900/20",

@@ -2,8 +2,6 @@
 import { createClient } from '../supabase/server'
 import { getUser } from '../supabase/user-actions'
 
-import { calculatePoints, getPerformanceLevel, difficultySettings, Difficulty } from "@/lib/cache/game-config";
-
 // ------------------- GAME ACTIONS------------------------- //
 
 export async function getAllGames() {

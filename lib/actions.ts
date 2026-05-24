@@ -1,6 +1,6 @@
 'use server'
 
-import aircraftData from "@/lib/cache/aircraft.json";
+// import aircraftData from "@/lib/cache/aircraft.json";
 import { revalidateTag } from "next/cache"
 import { aircraftIcaoCodes } from "./data"
 import { getUser } from "./supabase/user-actions"
@@ -202,13 +202,29 @@ export async function getAircraftAndLivery(liveryId: string) {
 }
 
 export async function getAllAircraft() {
-    const aircraftLibrary = aircraftData.result;
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/aircraft/liveries`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${API_KEY}`
+        },
+        next: { revalidate: 86400 } // Revalidate 24 hours
+    })
+
+    const data = await response.json()
+    const results = data.result
+    const dataToAircraft = results.map((e:any) => ({ id: e.aircraftID, name: e.aircraftName }));
+
+    // De-duplicate data
+    const aircraftLibrary = Array.from(
+        new Map(dataToAircraft.map((item: any) => [item.id, item])).values()
+    );
 
      return aircraftLibrary || null
 }
 
 export async function getAircraft(aircraftId: string) {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/aircraft/${aircraftId}`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/aircraft/liveries`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
@@ -219,10 +235,41 @@ export async function getAircraft(aircraftId: string) {
 
     const data = await response.json()
 
+    const aircraftInfo = data.result.map((e:any) => ({ id: e.aircraftID, name: e.aircraftName }));
+
+const uniqueAircraftInfos = Array.from(
+    new Map(aircraftInfo.map((item: any) => [item.aircraftID, item])).values()
+);
+
+const foundAircraft = uniqueAircraftInfos.find((aircraft: any) => aircraft.id === aircraftId)
+
     // console.log(data)
 
-    return data || null
+    return foundAircraft || null
 }
+
+export async function getAircraftViaLiveryId(liveryId: string) {
+
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/aircraft/liveries`, {
+        method: 'GET',
+        headers: {
+            "Content-Type": 'application/json',
+            "Authorization": `Bearer ${API_KEY}`
+        },
+        next: { revalidate: 86400 } // Revalidate 24 hours
+    })
+    
+    const data = await response.json()
+
+    const aircraftData = data.result.find((e: any) => e.id === liveryId)
+
+    return {
+        aircraftId: aircraftData.aircraftID,
+        aircraftName: aircraftData.aircraftName
+    }
+
+}
+
 
 export async function getAirport(airportIcao: string) {
     try {
@@ -674,7 +721,7 @@ export async function aircraftIdToIcao(aircraftId: string) {
     let aircraftArray = await getAllAircraft();
     // Logic: Match Id to name in aircraftArray
     // Then use name to find icao in aircraftIcaoCodes
-    const aircraftObj = aircraftArray.find((aircraft: any) => aircraft.id === aircraftId);
+    const aircraftObj: any = aircraftArray.find((aircraft: any) => aircraft.id === aircraftId);
     if (!aircraftObj) return "";
 
     // Use string.includes to find the aircraft name in the aircraftIcaoCodes array

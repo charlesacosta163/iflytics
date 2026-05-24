@@ -17,7 +17,7 @@ import { FaWpexplorer } from "react-icons/fa6";
 
 const NAV_LINKS = [
   { href: "/",                        label: "Search User", icon: <FaSearch className="w-3.5 h-3.5" /> },
-  { href: "/map/dark",                label: "Live Map",    icon: <LiaGlobeAmericasSolid className="w-3.5 h-3.5" />, badge: true },
+  { href: "/map/earth",                label: "Live Map",    icon: <LiaGlobeAmericasSolid className="w-3.5 h-3.5" />, badge: true },
   { href: "/directory",               label: "Directory",   icon: <FaBook className="w-3.5 h-3.5" /> },
   { href: "/blog",                    label: "Blog",        icon: <PiNewspaperLight className="w-3.5 h-3.5" /> },
   { href: "https://iflytics.app/#pricing", label: "Pricing", icon: <GrMoney className="w-3.5 h-3.5" /> },

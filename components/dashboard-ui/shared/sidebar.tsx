@@ -112,7 +112,7 @@ const Sidebar = () => {
 
             <Link
     target='_blank'
-    href="https://iflytics.app/map/dark"
+    href="https://iflytics.app/map/earth"
     className='px-4 pb-4 pt-8 rounded-[20px] flex justify-center items-end hover:scale-105 transition-all duration-300 border-2 border-gray-100 dark:border-gray-700 mt-2 bg-cover bg-center relative overflow-hidden'
     style={{ backgroundImage: `url(${lightModeFlight.src})`, backgroundPosition: '100% 70%' }}
 >

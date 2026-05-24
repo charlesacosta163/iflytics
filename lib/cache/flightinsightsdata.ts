@@ -170,11 +170,11 @@ export async function getAllPlayerAircraftUsageData(flights: Flight[]) {
           batch.map(async (aircraftId) => {
             try {
               // Use cached aircraft data
-              const aircraft = await getAircraftCached(aircraftId);
+              const aircraft: any = await getAircraftCached(aircraftId);
 
               return {
                 name:
-                  aircraft?.name || `Unknown Aircraft`,
+                  aircraft?.name  || `Unknown Aircraft`,
                 count: aircraftUsageCount[aircraftId],
                 id: aircraftId, // Store the ID for debugging
               };

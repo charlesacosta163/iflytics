@@ -172,6 +172,7 @@ const FlightsAircraft = async ({ flights, user, role }: { flights: Flight[], use
     };
   };
 
+
   const mostUsedAircraftData = async () => {
     const { mostUsedAircraft } = await aircraftAnalysisData();
     
@@ -187,8 +188,9 @@ const FlightsAircraft = async ({ flights, user, role }: { flights: Flight[], use
   };
 
   const analysisData = await aircraftAnalysisData();
-  const aircraftData = await mostUsedAircraftData();
+  const aircraftData: any = await mostUsedAircraftData();
   // console.log(analysisData, aircraftData)
+
 
   return (
     <div className="space-y-4 md:space-y-6">

@@ -142,7 +142,8 @@ export const aircraftImages = [
   { key: "c-130j", image: "c130j.png"},
   { key: "c-130h", image: "c130h.png"},
   { key: "sofia", image: "b747sofia.png"},
-  { key: "747-sca", image: "b747sca.png"}
+  { key: "747-sca", image: "b747sca.png"},
+  { key: "piper pa28", image: 'piper-pa28.png'}
 ];
 
 export const emojiCharacterRandomizer = [
@@ -5571,6 +5572,30 @@ export const customUserImages = [
   image: `https://images.weserv.nl/?url=${encodeURIComponent(
     "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/grant_kuipers/288/1643330_2.png"
   )}&w=64&h=64&fit=cover&mask=circle`,
+},
+{
+  id: 499,
+  role: "user",
+  username: "Tanish_Kumar_parhi",
+  image: `https://images.weserv.nl/?url=${encodeURIComponent(
+    "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/tanish_kumar_parhi/288/1619650_2.png"
+  )}&w=64&h=64&fit=cover&mask=circle`,
+},
+{
+  id: 500,
+  role: "user",
+  username: "John370",
+  image: `https://images.weserv.nl/?url=${encodeURIComponent(
+    "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/john370/288/1169344_2.png"
+  )}&w=64&h=64&fit=cover&mask=circle`,
+},
+{
+  id: 501,
+  role: "user",
+  username: "mr_cater67",
+  image: `https://images.weserv.nl/?url=${encodeURIComponent(
+    "https://avatars.discourse-cdn.com/v4/letter/m/43a26b/288.png"
+  )}&w=64&h=64&fit=cover&mask=circle`,
 }
 ]
 // Corny compliments for leaderboard stats
@@ -5732,15 +5757,11 @@ export const aircraftIcaoCodes = [
   { icao: "C172", gameName: "Cessna 172", name: "Cessna 172" },
   { icao: "C182", gameName: "Cessna 182", name: "Cessna 182" },
   { icao: "C208", gameName: "Cessna 208 Caravan", name: "Cessna 208 Caravan" },
-  { icao: "PA28", gameName: "Piper Cherokee", name: "Piper Cherokee" },
-  { icao: "PA44", gameName: "Piper Seminole", name: "Piper Seminole" },
-  { icao: "BE20", gameName: "Beechcraft King Air 200", name: "Beechcraft King Air 200" },
-  { icao: "BE9L", gameName: "Beechcraft King Air 350", name: "Beechcraft King Air 350" },
+  { icao: "P28A", gameName: "Piper PA28 Archer", name: "Piper PA28 Archer" },
   { icao: "TBM9", gameName: "TBM 930", name: "TBM 930" },
 
   // Cargo Aircraft
   { icao: "MD11", gameName: "McDonnell Douglas MD-11", name: "McDonnell Douglas MD-11" },
-  { icao: "A306", gameName: "Airbus A300-600ST Beluga", name: "Airbus A300-600ST Beluga" },
   { icao: "B74F", gameName: "Boeing 747-400F", name: "Boeing 747-400F" },
   { icao: "B77F", gameName: "Boeing 777F", name: "Boeing 777F" },
 

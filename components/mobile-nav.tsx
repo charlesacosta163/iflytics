@@ -18,7 +18,7 @@ interface MobileNavProps {
 
 const LINKS = [
   { href: '/',          label: 'Search User', icon: <FaSearch className="w-4 h-4 text-gray-500" /> },
-  { href: '/map/dark',  label: 'Live Map',    icon: <LiaGlobeAmericasSolid className="w-4 h-4 text-blue-500" />, badge: true },
+  { href: '/map/earth',  label: 'Live Map',    icon: <LiaGlobeAmericasSolid className="w-4 h-4 text-blue-500" />, badge: true },
   { href: '/directory', label: 'Directory',   icon: <FaBook className="w-4 h-4 text-gray-500" /> },
   { href: '/blog',      label: 'Blog',        icon: <PiNewspaperLight className="w-4 h-4 text-gray-500" /> },
   { href: '/#pricing',  label: 'Pricing',     icon: <GrMoney className="w-4 h-4 text-gray-500" /> },

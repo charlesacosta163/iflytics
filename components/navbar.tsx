@@ -17,7 +17,7 @@ import { InlineThemeSwitcher } from "./inline-theme-switcher";
 
 const NAV_LINKS = [
   { href: "/",          label: "Search User",  icon: <FaSearch className="w-3.5 h-3.5" /> },
-  { href: "/map/dark",  label: "Live Map",     icon: <LiaGlobeAmericasSolid className="w-3.5 h-3.5" />, badge: true },
+  { href: "/map/earth",  label: "Live Map",     icon: <LiaGlobeAmericasSolid className="w-3.5 h-3.5" />, badge: true },
   { href: "/directory", label: "Directory",    icon: <FaBook className="w-3.5 h-3.5" /> },
   { href: "/blog",      label: "Blog",         icon: <PiNewspaperLight className="w-3.5 h-3.5" /> },
   { href: "/#pricing",  label: "Pricing",      icon: <GrMoney className="w-3.5 h-3.5" /> },
@@ -139,7 +139,7 @@ const Navbar = () => {
             <div className="md:hidden flex items-center gap-3">
               {/* Mobile Map Button */}
               <Link
-                href="/map/dark"
+                href="/map/earth"
                 className="relative group flex items-center justify-center w-10 h-10 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md transition-all duration-200"
               >
                 <LiaGlobeAmericasSolid className="w-5 h-5 group-hover:rotate-12 transition-transform duration-200" />

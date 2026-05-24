@@ -1,0 +1,165 @@
+"use client";
+
+import React, { useMemo, Suspense } from "react";
+import useSWR from "swr";
+import FullScreenMap from "@/components/dashboard-ui/flights/maps/full-screen-map";
+import {
+  getFlightsFromServer,
+} from "@/lib/actions";
+import { customUserImages } from "@/lib/data";
+import { aviationCompliments, alternator, unknownUserCompliments } from "@/lib/data";
+import { ChevronUp } from "lucide-react";
+import { useRouter, useSearchParams, usePathname } from 'next/navigation';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { LuServer } from "react-icons/lu";
+
+const servers = ["expert", "training", "casual"];
+
+const MapPageContent = () => {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  
+  // Get current server from query params, default to "Expert"
+  let currentServer = searchParams.get('s') || 'expert';
+  
+
+  if (!servers.includes(currentServer)) {
+    currentServer = 'expert';
+  }
+
+  const fetcher = (key: string) => {
+    const server = key.split('-')[1]; // Extract server from cache key
+    return getFlightsFromServer(server);
+  };
+
+  const {
+    data: flights = [],
+    error,
+    isLoading,
+  } = useSWR(`flights-${currentServer}`, fetcher, {
+    refreshInterval: 30000,
+    revalidateOnFocus: true,
+    revalidateOnReconnect: true,
+  });
+
+  // Add this helper function before the component
+  const getConsistentEmojiForUser = (username: string) => {
+    // Handle null/undefined usernames
+    if (!username) {
+      return "🧟"; // Return first emoji as fallback
+    }
+
+    // Simple hash function to convert username to a consistent number
+    let hash = 0;
+    for (let i = 0; i < username.length; i++) {
+      const char = username.charCodeAt(i);
+      hash = (hash << 5) - hash + char;
+      hash = hash & hash; // Convert to 32-bit integer
+    }
+    // Use absolute value and modulo to get consistent index
+    return alternator[Math.abs(hash) % alternator.length];
+  };
+
+  // Roles:
+  // Flyer: Not registered in IFlytics
+  // User: Registered in IFlytics
+  // Staff: Staff Member in Infinite Flight
+
+  const findUserRole = (username: string) => {
+    return (
+      customUserImages.find((image) => image.username === username)?.role ||
+      "flyer"
+    );
+  };
+
+  // Memoize quirkyFlights to prevent constant recreation
+  const quirkyFlights = useMemo(() => {
+    return flights.map((flight: any) => ({
+      ...flight,
+      role: findUserRole(flight.username),
+      emoji: getConsistentEmojiForUser(flight.username),
+      compliment: flight.username 
+        ? aviationCompliments[Math.abs(flight.username.split('').reduce((a: any, b: any) => a + b.charCodeAt(0), 0)) % aviationCompliments.length]
+        : unknownUserCompliments[Math.floor(Math.random() * unknownUserCompliments.length)], // Random for unknown users
+      customImage: customUserImages.find((image) => image.username === flight.username)?.image,
+    }));
+  }, [flights]); // Only recreate when flights data actually changes
+
+  // Handle server selection change
+  const handleServerChange = (value: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('s', value);
+    router.push(`${pathname}?${params.toString()}`);
+  };
+
+  if (error) {
+    return (
+      <div className="h-[calc(100vh-120px)] w-full flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-500 mb-2">Failed to load flight data</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="px-4 py-2 bg-blue-500 text-white rounded-lg"
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="h-screen w-full relative">
+      {/* Loading overlay */}
+      {isLoading && flights.length === 0 && (
+        <div className="absolute inset-0 bg-black/20 flex items-center justify-center z-50">
+          <div className="bg-white dark:bg-gray-700 dark:text-light px-4 py-2 rounded-lg shadow-lg">
+            Loading flights...
+          </div>
+        </div>
+      )}
+
+      {/* Live indicator */}
+      <div className="absolute bottom-4 left-4 z-40 flex flex-col">
+        <Select value={currentServer} onValueChange={handleServerChange}>
+        <SelectTrigger className="!bg-white text-xs text-dark self-start rounded-t-lg !rounded-b-none border-none h-auto cursor-pointer flex items-center gap-1">
+           <LuServer /> <span>Change Server</span>
+          </SelectTrigger>
+          <SelectContent>
+              <SelectItem value="expert">Expert Server</SelectItem>
+            <SelectItem value="training">Training Server</SelectItem>
+            <SelectItem value="casual">Casual Server</SelectItem>
+          </SelectContent>
+        </Select>
+        <div className="flex items-center gap-2 w-[250px] bg-[#FFEFD5]/50 dark:bg-gray-700/50 dark:text-light backdrop-blur-sm px-3 py-2 rounded-lg rounded-tl-none">
+          <div
+            className={`w-2 h-2 rounded-full ${
+              isLoading ? "bg-yellow-400" : "bg-green-400"
+            } animate-pulse`}
+          ></div>
+          <span className="text-sm font-medium">
+            {isLoading ? "Updating..." : `${currentServer.charAt(0).toUpperCase() + currentServer.slice(1)} Server`} • {flights.length}{" "}
+            flights
+          </span>
+        </div>
+      </div>
+
+      <FullScreenMap flights={quirkyFlights} styleUrl="" server={currentServer} />
+    </div>
+  );
+};
+
+const MapPage = () => {
+  return (
+    <Suspense fallback={<div className="h-screen w-full flex items-center justify-center">
+      <div className="bg-white dark:bg-gray-700 dark:text-light px-4 py-2 rounded-lg shadow-lg">
+        Loading map...
+      </div>
+    </div>}>
+      <MapPageContent />
+    </Suspense>
+  );
+};
+
+export default MapPage;

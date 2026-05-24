@@ -1,4 +1,6 @@
-import aircraftData from "@/lib/cache/aircraft.json";
+// import aircraftData from "@/lib/cache/aircraft.json";
+
+import { getAllAircraft } from "../actions";
 
 // Convert to use Next.js built-in fetch caching
 export const getAggregatedFlights = async (ifcUserId: string, maxPages: number = 51) => {
@@ -44,7 +46,7 @@ export const getAggregatedFlights = async (ifcUserId: string, maxPages: number =
 export const getAircraftCached = async (aircraftId: string) => {
   try {
     
-    const aircraftLibrary = aircraftData.result;
+    const aircraftLibrary = await getAllAircraft()
 
     // console.log(aircraftLibrary)
 

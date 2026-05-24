@@ -25,6 +25,7 @@ import { ifvarbAirlines } from "@/lib/data";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { MdTrendingUp } from "react-icons/md";
+import { IoEarthOutline } from "react-icons/io5";
 
 
 // Add the map themes configuration
@@ -37,6 +38,10 @@ const mapThemes = {
     name: "Dark",
     icon: <LuMoon className="w-6 h-6" />,
   },
+  "/map/earth": {
+    name: "Earth",
+    icon: <IoEarthOutline className="w-6 h-6" />,
+  }
 };
 
 const FullScreenMap = ({
@@ -45,7 +50,7 @@ const FullScreenMap = ({
   server,
 }: {
   flights: any[];
-  styleUrl: string;
+  styleUrl?: string;
   server: string;
 }) => {
 
@@ -477,7 +482,23 @@ const FullScreenMap = ({
 
     const map = new Map({
       container: mapContainerRef.current,
-      style: styleUrl,
+      style: styleUrl ? styleUrl : {
+        "version": 8,
+        "sources": {
+            "satellite": {
+                "type": "raster",
+                "tiles": [
+                    "https://tiles.maps.eox.at/wmts/1.0.0/s2cloudless-2020_3857/default/g/{z}/{y}/{x}.jpg"
+                ],
+                "tileSize": 256
+            }
+        },
+        "layers": [{
+            "id": "satellite",
+            "type": "raster",
+            "source": "satellite"
+        }]
+    },
       center: [0, 0],
       zoom: 1,
       attributionControl: true as any,
@@ -2185,7 +2206,7 @@ const MapThemeButton = () => {
             "w-12 h-12 backdrop-blur-sm rounded-xl shadow-lg transition-all duration-300 flex flex-col items-center justify-center group relative hover:scale-105",
             pathname === "/map"
               ? "bg-light text-gray-700 hover:bg-gray-100"
-              : "bg-gray-700 text-light hover:bg-gray-600"
+              : pathname === "/map" ? "bg-gray-700 text-light hover:bg-gray-600": "bg-green-600 text-light hover:bg-green-500"
           )}
         >
           <span className="text-lg group-hover:scale-110 transition-transform duration-300">
