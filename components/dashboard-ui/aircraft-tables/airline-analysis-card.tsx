@@ -37,7 +37,7 @@ const AirlineAnalysisCard = async ({ routesWithDistances }: { routesWithDistance
         }
 
         // Get aircraft name from aircraftId
-        const aircraftObj = aircraftArray.find((aircraft: any) => aircraft.id === route.aircraftId)
+        const aircraftObj: any = aircraftArray.find((aircraft: any) => aircraft.id === route.aircraftId)
         const aircraftName = aircraftObj ? aircraftObj.name : 'Unknown Aircraft'
 
         // Check if airline already exists in array
