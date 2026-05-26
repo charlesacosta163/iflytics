@@ -255,18 +255,20 @@ const DirectoryPage = async ({
                     "p-4 md:p-5",
                     "rounded-[20px] md:rounded-[25px]",
                     "border-2 border-gray-200 dark:border-gray-700",
-                    "hover:scale-[1.02] transition-transform duration-200"
+                    "hover:scale-[1.02] transition-transform duration-200 overflow-hidden group"
                   )}
                 >
-                  <Image
-                    src={`/images/aircraft/${matchAircraftNameToImage(
-                      aircraft.name
-                    )}`}
-                    alt={aircraft.name}
-                    width={200}
-                    height={200}
-                    className="w-[150px] md:w-[200px] h-auto"
-                  />
+                  <div className="relative w-[150px] md:w-[200px] h-[90px] md:h-[120px] shrink-0">
+                    <Image
+                      src={`/images/aircraft/${matchAircraftNameToImage(
+                        aircraft.name
+                      )}`}
+                      alt={aircraft.name}
+                      width={200}
+                      height={200}
+                      className="aircraft-fly-away absolute inset-0 w-full h-auto object-contain origin-center"
+                    />
+                  </div>
                   <span className="text-lg md:text-2xl font-black tracking-tight text-gray-800 dark:text-white text-center md:text-right">
                     {aircraft.name}
                   </span>
