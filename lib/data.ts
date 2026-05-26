@@ -88,6 +88,7 @@ export const aircraftImages = [
   { key: "a320", image: "a319.png" },
   { key: "a321", image: "a321.png" },
   { key: "a330", image: "a330.png" },
+  { key: "a330-200", image: "a330.png" },
   { key: "a330f", image: "a330f.png" },
   { key: "a330neo", image: "a330neo.png" },
   { key: "a340", image: "a340.png" },
@@ -5612,7 +5613,23 @@ export const customUserImages = [
   image: `https://images.weserv.nl/?url=${encodeURIComponent(
     "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/adhan/288/1532689_2.png"
   )}&w=64&h=64&fit=cover&mask=circle`,
-},  
+}, 
+{
+  id: 504,
+  role: "user",
+  username: "Capt-AHK",
+  image: `https://images.weserv.nl/?url=${encodeURIComponent(
+    "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/capt-ahk/288/1351939_2.png"
+  )}&w=64&h=64&fit=cover&mask=circle`,
+},
+{
+  id: 505,
+  role: "user",
+  username: "Andrew16",
+  image: `https://images.weserv.nl/?url=${encodeURIComponent(
+    "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/andrew16/288/1438161_2.png"
+  )}&w=64&h=64&fit=cover&mask=circle`,
+},
 ]
 // Corny compliments for leaderboard stats
 export const statCompliments = {

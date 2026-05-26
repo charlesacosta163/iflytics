@@ -269,9 +269,13 @@ export async function getMostVisitedOriginAndDestinationAirports(
   };
 }
 
-export function matchAircraftNameToImage(aircraftName: string) {
+export function matchAircraftNameToImage(aircraftName?: string | null) {
   // Image name sample: a220.png
   // Aircraft name sample: Airbus A319
+
+  if (!aircraftName) {
+    return "placeholder.png";
+  }
 
   const image = aircraftImages.find((image) =>
     aircraftName.toLowerCase().includes(image.key.toLowerCase())

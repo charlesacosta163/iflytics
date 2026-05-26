@@ -47,7 +47,22 @@ const UPDATE_NOTES: Entry[] = [
         ],
       },
     ],
-    subVersions: [],
+    subVersions: [{
+      id: "v1-7-1",
+      version: "v1.7.1-synthpunk",
+      date: "May 25, 2026",
+      title: "IFlytics New Map Theme: Earth",
+      images: [],
+      sections: [
+        {
+          label: "New Map Theme: Earth",
+          items: [
+            "Added a new map theme: Earth.",
+            "Satellite-imagery of flight tracker",
+          ],
+        },
+      ],
+    }],
   },
   {
     id: "v1-6-0",

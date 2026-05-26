@@ -35,6 +35,8 @@ const DirectoryPage = async ({
   let aircraft: any = null;
   try {
     aircraft = await getAllAircraft();
+
+    console.log(aircraft)
   } catch (error) {
     console.error("Failed to fetch aircraft:", error);
     aircraft = { result: [] }; // Fallback to empty array
