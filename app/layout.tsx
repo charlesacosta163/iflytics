@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Bricolage_Grotesque } from "next/font/google";
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/next"
+import { GoogleTagManager } from "@next/third-parties/google";
 import { ThemeProvider } from "next-themes";
 import { redirect } from "next/navigation";
 
@@ -89,6 +90,8 @@ export default function RootLayout({
 
   return (
     <html lang="en" suppressHydrationWarning>
+      <GoogleTagManager gtmId="GTM-TBJFTHS9" />
+
       <head>
         <link rel="icon" type="image/x-icon" href="/favicon.ico" />
         <link rel="shortcut icon" href="/favicon.ico?v=2" />
