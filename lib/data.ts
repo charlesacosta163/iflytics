@@ -5654,6 +5654,22 @@ export const customUserImages = [
     "https://avatars.discourse-cdn.com/v4/letter/k/f475e1/288.png"
   )}&w=64&h=64&fit=cover&mask=circle`,
 },
+{
+  id: 509,
+  role: "user",
+  username: "lorne.littlejohn2003",
+  image: `https://images.weserv.nl/?url=${encodeURIComponent(
+    "https://avatars.discourse-cdn.com/v4/letter/l/ce73a5/288.png"
+  )}&w=64&h=64&fit=cover&mask=circle`,
+},
+{
+  id: 510,
+  role: "user",
+  username: "Zyad.S",
+  image: `https://images.weserv.nl/?url=${encodeURIComponent(
+    "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/zyad.s/288/1652683_2.png"
+  )}&w=64&h=64&fit=cover&mask=circle`,
+}
 ]
 // Corny compliments for leaderboard stats
 export const statCompliments = {

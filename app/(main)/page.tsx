@@ -2,6 +2,7 @@ import Image from "next/image";
 import { TbSearch } from "react-icons/tb";
 import { redirect } from "next/navigation";
 import iflyticsLogoLight from '@/public/iflyticslight.svg'
+import iflyticsLogo from '@/public/infinilyticslogo.svg'
 import { IoStatsChartSharp } from "react-icons/io5";
 import { LuHistory, LuCalendarClock, LuChartPie } from "react-icons/lu";
 import { SearchUserButton } from "@/components/searchuser-btn";
@@ -43,7 +44,7 @@ export default function Home() {
               <div className="text-center lg:text-left animate-fade-in-up">
                 <h1 className="text-4xl lg:text-5xl font-black tracking-tighter mb-4 lg:mb-6 relative text-gray-700 dark:text-gray-100 leading-tight text-balance">
                   Transform Your Flight Data Into 
-                  <span className="block bg-gradient-to-r from-[#ff6982] to-[#ffd2b3] dark:from-[#0080ff] dark:to-light bg-clip-text text-transparent animate-gradient-x bg-[length:200%_auto] lg:border-b-6  [border-image:linear-gradient(to_right,#ff6982,#ffd2b3)_1] dark:[border-image:linear-gradient(to_right,#0080ff,#00e0ff)_1]">
+                  <span className="block bg-gradient-to-r from-[#ff6982] to-[#ffd2b3] dark:from-[#fdc673] dark:to-[#fffdec] bg-clip-text text-transparent animate-gradient-x bg-[length:200%_auto]">
   Powerful Insights
 </span>
 
@@ -55,20 +56,21 @@ export default function Home() {
 
               {/* Logo and Brand - Supporting Role */}
               <div className="hidden lg:flex items-center gap-3 animate-fade-in-up delay-300
-  bg-gradient-to-r from-[#ff6982] to-[#ffd2b3] dark:from-[#0080ff] dark:to-[#00e0ff]
-  animate-gradient-x bg-[length:200%_auto] p-4 rounded-[30px]">
+  bg-transparent text-gray-700 dark:text-gray-100
+  animate-gradient-x bg-[length:200%_auto]">
   <div className="group">
     {/* dark logo */}
     <Image src={iflyticsLogoLight} alt="IFlytics Logo" width={60} height={60}
-      className="w-[60px] h-[60px] group-hover:scale-105 transition-transform duration-300 block opacity-75" />
-   
+      className="hidden dark:block w-[60px] h-[60px] group-hover:scale-105 transition-transform duration-300 opacity-75" />
+    <Image src={iflyticsLogo} alt="IFlytics Logo" width={60} height={60}
+      className="dark:hidden w-[60px] h-[60px] group-hover:scale-105 transition-transform duration-300 opacity-75" />
   </div>
 
   <div>
-    <h2 className="text-2xl font-black tracking-tight text-light">
+    <h2 className="text-2xl font-black tracking-tightt">
       IFlytics
     </h2>
-    <p className="text-sm text-light font-medium">
+    <p className="text-smfont-medium">
       For Infinite Flight
     </p>
   </div>
@@ -82,7 +84,7 @@ export default function Home() {
 
           {/* Dual CTA Section */}
           <div className="flex-1 flex flex-col gap-4 items-center animate-slide-in-right delay-300 w-full relative">
-            <Badge className="bg-gradient-to-r from-[#ff879b] to-[#ffc49c] dark:from-[#1e90ff] dark:to-[#99badd] text-light font-bold tracking-tight self-center">
+            <Badge className="bg-gradient-to-r from-[#ff879b] to-[#ffc49c] dark:from-[#fdc673] dark:to-[#fffdec] dark:text-black text-white font-bold tracking-tight self-center">
               Stay Tuned For Future Discounts!
             </Badge>
 
@@ -414,7 +416,7 @@ export default function Home() {
         <div className="container mx-auto px-4 max-w-[720px]">
           <div className="text-center mb-12">
             <h2 className="text-3xl lg:text-4xl font-black text-white mb-2">
-              Frequently Asked <span className="text-blue-400">Questions</span>
+              Frequently Asked <span className="text-yellow-200">Questions</span>
             </h2>
           </div>
           <Accordion type="single" collapsible className="space-y-3">

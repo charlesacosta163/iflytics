@@ -28,12 +28,12 @@ const Pathname = () => {
           height={32}
           className="hidden dark:block"
         />
-        <span className="bg-gradient-to-r from-[#ff879b] to-[#ffc49c] dark:from-[#0080ff] dark:via-light dark:to-light bg-clip-text text-transparent animate-gradient-x bg-[length:200%_auto] pr-0.5">
+        <span className="bg-gradient-to-r from-[#ff879b] to-[#ffc49c] dark:from-[#ffd494] dark:to-[#fffce7] bg-clip-text text-transparent animate-gradient-x bg-[length:200%_auto] pr-0.5">
           IFlytics
         </span>
       </Link>
 
-      <span className="text-[10px] w-[100px] text-center font-semibold text-white bg-gradient-to-r from-[#ff879b] to-[#ffc49c] dark:from-[#1e90ff] dark:to-[#99badd] rounded-full absolute -bottom-4 left-5 px-2 py-0.10 shadow-lg z-100">
+      <span className="text-[10px] w-[100px] text-center font-semibold dark:text-black text-white bg-gradient-to-r from-[#ff879b] to-[#ffc49c] dark:from-[#ffd494] dark:to-[#fffce7] rounded-full absolute -bottom-4 left-5 px-2 py-0.10 shadow-lg z-100">
         {getAppVersion()}
       </span>
     </div>
