@@ -23,7 +23,7 @@ import FlightsOverview from "@/components/dashboard-ui/flights/flights-overview"
 import { getAirportCoordinates } from "@/lib/actions";
 import FlightsDisplay from "@/components/dashboard-ui/flights/flights-display";
 import FlightsRoutes from "@/components/dashboard-ui/flights/flights-routes";
-import { FaClock, FaGlobe, FaHistory, FaLock, FaMapMarkedAlt, FaPlane, FaRoute } from "react-icons/fa";
+import { FaClock, FaGlobe, FaHistory, FaLock, FaMapMarkedAlt, FaPlane, FaRoute, FaWrench } from "react-icons/fa";
 import { FaChartLine } from "react-icons/fa";
 import { Metadata } from 'next'
 import Link from "next/link";
@@ -38,6 +38,7 @@ import { Badge } from "@/components/ui/badge";
 import GroupedSubscriptionButtons from "@/components/dashboard-ui/grouped-sub-btns";
 import PromoReminders from "@/components/dashboard-ui/stripe/promo-reminders";
 import { cn } from "@/lib/utils";
+import { PiAirTrafficControlFill } from "react-icons/pi";
 
 
 export const metadata: Metadata = {
@@ -46,7 +47,7 @@ export const metadata: Metadata = {
   keywords: "infinite flight, flight tracking, analytics, flight, aviation, pilot, stats, data, expert server, flight simulator, dashboard, flight history, airbus, boeing, leaderboard, map tracker, route analysis, aircraft analysis",
 }
 
-const FlightsPage = async ({searchParams}: { searchParams: Promise<{ [key: string]: string | string[] | undefined }>}) => {
+const FlightsPage = async ({ searchParams }: { searchParams: Promise<{ [key: string]: string | string[] | undefined }> }) => {
   const user = await getUser();
   const data = user.user_metadata;
 
@@ -61,10 +62,10 @@ const FlightsPage = async ({searchParams}: { searchParams: Promise<{ [key: strin
 
   // Default timeframe handling
   const DEFAULT_TIMEFRAME = "day-30";
-  
+
   // Handle cases where timeframe is missing or invalid
   let timeframe = (await searchParams)?.timeframe || DEFAULT_TIMEFRAME;
-  
+
   // Handle array case and ensure we have a string
   if (Array.isArray(timeframe)) {
     timeframe = timeframe[0] || DEFAULT_TIMEFRAME;
@@ -91,12 +92,12 @@ const FlightsPage = async ({searchParams}: { searchParams: Promise<{ [key: strin
       })
     )
   );
-    
+
   if (frameType === "day") {
     if (!["1", "7", "30", "90"].includes(value)) {
       redirect(`/dashboard/flights?timeframe=${DEFAULT_TIMEFRAME}`);
     }
-    allFlights = await getFlightsTimeFrame(data.ifcUserId, parseInt(value));  
+    allFlights = await getFlightsTimeFrame(data.ifcUserId, parseInt(value));
   }
   // Validate flight timeframe
   else if (frameType === "flight") {
@@ -104,7 +105,7 @@ const FlightsPage = async ({searchParams}: { searchParams: Promise<{ [key: strin
     if (!hasPremiumAccess(subscription as Subscription)) {
       redirect(`/dashboard/flights?timeframe=${DEFAULT_TIMEFRAME}`);
     }
-    
+
     const flightCount = parseInt(value);
     if (isNaN(flightCount) || flightCount <= 0 || flightCount > 800) {
       redirect(`/dashboard/flights?timeframe=${DEFAULT_TIMEFRAME}`);
@@ -116,7 +117,7 @@ const FlightsPage = async ({searchParams}: { searchParams: Promise<{ [key: strin
     if (!hasPremiumAccess(subscription as Subscription)) {
       redirect(`/dashboard/flights?timeframe=${DEFAULT_TIMEFRAME}`);
     }
-    
+
     if (!uniqueMonths.includes(value)) {
       redirect(`/dashboard/flights?timeframe=${DEFAULT_TIMEFRAME}`);
     }
@@ -135,8 +136,8 @@ const FlightsPage = async ({searchParams}: { searchParams: Promise<{ [key: strin
   const mostVisitedOriginAndDestinationAirports =
     await getMostVisitedOriginAndDestinationAirports(allFlights);
   const aircraftUsageData = await getAllPlayerAircraftUsageData(allFlights);
- 
-  return (  
+
+  return (
     <div className="space-y-8 pb-8">
       {/* Header Section */}
       <div className={cn(
@@ -168,142 +169,190 @@ const FlightsPage = async ({searchParams}: { searchParams: Promise<{ [key: strin
       </div>
 
       {/* Tabs */}
-      <Tabs defaultValue="overview" className="w-full">
-      <TabsList className={cn(
-        "w-full p-1.5 mb-3 md:mb-4",
-        "bg-gray-200 dark:bg-gray-700",
-        "rounded-[15px] md:rounded-[20px]"
-      )}>
-        <TabsTrigger 
-          value="overview" 
-          className={cn(
-            "flex flex-col sm:flex-row gap-1 sm:gap-2 items-center justify-center",
-            "px-2 sm:px-4 py-2",
-            "rounded-[12px] md:rounded-[15px]",
-            "font-bold text-xs sm:text-sm",
-            "transition-all duration-200",
-            "data-[state=active]:bg-white data-[state=active]:dark:bg-gray-600",
-            "data-[state=active]:text-gray-800 data-[state=active]:dark:text-white",
-            "data-[state=active]:shadow-sm",
-            "data-[state=inactive]:bg-transparent",
-            "data-[state=inactive]:text-gray-600 data-[state=inactive]:dark:text-gray-300",
-            "hover:bg-gray-100 dark:hover:bg-gray-600/50"
-          )}
-        >
-          <FaChartLine className="w-4 h-4 sm:w-5 sm:h-5" />
-          <span className="hidden sm:inline">Overview</span>
-        </TabsTrigger>
-        
-        <TabsTrigger 
-          value="flights" 
-          className={cn(
-            "flex flex-col sm:flex-row gap-1 sm:gap-2 items-center justify-center",
-            "px-2 sm:px-4 py-2",
-            "rounded-[12px] md:rounded-[15px]",
-            "font-bold text-xs sm:text-sm",
-            "transition-all duration-200",
-            "data-[state=active]:bg-white data-[state=active]:dark:bg-gray-600",
-            "data-[state=active]:text-gray-800 data-[state=active]:dark:text-white",
-            "data-[state=active]:shadow-sm",
-            "data-[state=inactive]:bg-transparent",
-            "data-[state=inactive]:text-gray-600 data-[state=inactive]:dark:text-gray-300",
-            "hover:bg-gray-100 dark:hover:bg-gray-600/50"
-          )}
-        >
-          <FaHistory className="w-4 h-4 sm:w-5 sm:h-5" />
-          <span className="hidden sm:inline">Flight History</span>
-        </TabsTrigger>
-        
-        <TabsTrigger 
-          value="routes" 
-          className={cn(
-            "flex flex-col sm:flex-row gap-1 sm:gap-2 items-center justify-center",
-            "px-2 sm:px-4 py-2",
-            "rounded-[12px] md:rounded-[15px]",
-            "font-bold text-xs sm:text-sm",
-            "transition-all duration-200",
-            "data-[state=active]:bg-white data-[state=active]:dark:bg-gray-600",
-            "data-[state=active]:text-gray-800 data-[state=active]:dark:text-white",
-            "data-[state=active]:shadow-sm",
-            "data-[state=inactive]:bg-transparent",
-            "data-[state=inactive]:text-gray-600 data-[state=inactive]:dark:text-gray-300",
-            "hover:bg-gray-100 dark:hover:bg-gray-600/50",
-            !hasPremiumAccess(subscription as Subscription) && "data-[state=inactive]:text-yellow-600 dark:data-[state=inactive]:text-yellow-400"
-          )}
-        >
-          {
-            hasPremiumAccess(subscription as Subscription) ? (
-              <>
-                <FaRoute className="w-4 h-4 sm:w-5 sm:h-5" />
-                <span className="hidden sm:inline">Routes</span>
-              </>
-            ) : (
-              <>
-                <FaLock className="w-4 h-4 sm:w-5 sm:h-5" />
-                <span className="hidden sm:inline">Routes</span>
-              </>
-            )
-          }
-        </TabsTrigger>
-        
-        <TabsTrigger 
-          value="aircraft" 
-          className={cn(
-            "flex flex-col sm:flex-row gap-1 sm:gap-2 items-center justify-center",
-            "px-2 sm:px-4 py-2",
-            "rounded-[12px] md:rounded-[15px]",
-            "font-bold text-xs sm:text-sm",
-            "transition-all duration-200",
-            "data-[state=active]:bg-white data-[state=active]:dark:bg-gray-600",
-            "data-[state=active]:text-gray-800 data-[state=active]:dark:text-white",
-            "data-[state=active]:shadow-sm",
-            "data-[state=inactive]:bg-transparent",
-            "data-[state=inactive]:text-gray-600 data-[state=inactive]:dark:text-gray-300",
-            "hover:bg-gray-100 dark:hover:bg-gray-600/50",
-            !hasPremiumAccess(subscription as Subscription) && "data-[state=inactive]:text-yellow-600 dark:data-[state=inactive]:text-yellow-400"
-          )}
-        >
-          {
-            hasPremiumAccess(subscription as Subscription) ? (
-              <>
-                <FaPlane className="w-4 h-4 sm:w-5 sm:h-5" />
-                <span className="hidden sm:inline">Aircraft</span>
-              </>
-            ) : (
-              <>
-                <FaLock className="w-4 h-4 sm:w-5 sm:h-5" />
-                <span className="hidden sm:inline">Aircraft</span>
-              </>
-            )
-          }
-        </TabsTrigger>
-  
-      </TabsList>
-      
-      <TabsContent value="overview" className="space-y-8">
-        <FlightsOverview 
-          flightOverviewStats={flightOverviewStats}
-          recentFlightInsights={recentFlightInsights}
-          flightAverages={flightAverages}
-          mostVisitedOriginAndDestinationAirports={mostVisitedOriginAndDestinationAirports}
-          flightActivity={flightActivity}
-          aircraftUsageData={aircraftUsageData}
-          timeframe={timeframe as string}
-        />
-      </TabsContent>
+      <Tabs defaultValue="overview" className="">
+        <TabsList className={cn(
+          "flex justify-start w-auto p-1.5 mb-3 md:mb-4 overflow-x-scroll overflow-y-hidden gap-3",
+          "bg-transparent",
+          "rounded-[15px] md:rounded-[20px]"
+        )}>
+          <TabsTrigger
+            value="overview"
+            className={cn(
+              "flex sm:flex-row gap-1 sm:gap-2 items-center justify-center",
+              "px-2 sm:px-4 py-3",
+              "rounded-[12px] md:rounded-[15px]",
+              "font-bold text-xs sm:text-sm",
+              "transition-all duration-200",
+              "data-[state=active]:bg-white data-[state=active]:dark:bg-gray-600",
+              "data-[state=active]:text-gray-800 data-[state=active]:dark:text-white",
+              "data-[state=active]:shadow-sm",
+              "data-[state=inactive]:bg-gray-100 data-[state=inactive]:dark:bg-gray-900",
+              "data-[state=inactive]:text-gray-600 data-[state=inactive]:dark:text-gray-300",
+              "hover:bg-gray-200 dark:hover:bg-gray-700",
+              "shadow-md"
+            )}
+          >
+            <FaChartLine className="w-4 h-4 sm:w-5 sm:h-5" />
+            <span className="inline">Overview</span>
+          </TabsTrigger>
 
-      {/* Flights Display */}
-      <TabsContent value="flights" className="space-y-6">
-        <FlightsDisplay flights={allFlights} />
-      </TabsContent>
-      
-      <TabsContent value="routes" className="space-y-6">
-        {hasPremiumAccess(subscription as Subscription) ? (
-          <FlightsRoutes flights={allFlights} user={user} subscription={subscription as Subscription} role={subscription.role}/>
-        ) : (
-          <div className="rounded-lg h-screen w-full flex flex-col items-center justify-center bg-cover bg-center relative overflow-hidden" style={{ backgroundImage: `url(/routeanalysis.png)` }}>
-            
-            <div className="absolute top-0 left-0 w-full h-full bg-black/80 p-8 flex flex-col gap-4 overflow-y-auto">
+          <TabsTrigger
+            value="flights"
+            className={cn(
+              "flex sm:flex-row gap-1 sm:gap-2 items-center justify-center",
+              "px-2 sm:px-4 py-3",
+              "rounded-[12px] md:rounded-[15px]",
+              "font-bold text-xs sm:text-sm",
+              "transition-all duration-200",
+              "data-[state=active]:bg-white data-[state=active]:dark:bg-gray-600",
+              "data-[state=active]:text-gray-800 data-[state=active]:dark:text-white",
+              "data-[state=active]:shadow-sm",
+              "data-[state=inactive]:bg-gray-100 data-[state=inactive]:dark:bg-gray-900",
+              "data-[state=inactive]:text-gray-600 data-[state=inactive]:dark:text-gray-300",
+              "hover:bg-gray-200 dark:hover:bg-gray-700",
+              "shadow-md"
+            )}
+          >
+            <FaHistory className="w-4 h-4 sm:w-5 sm:h-5" />
+            <span className="inline">Flight History</span>
+          </TabsTrigger>
+
+          <TabsTrigger
+            value="routes"
+            className={cn(
+              "flex sm:flex-row gap-1 sm:gap-2 items-center justify-center",
+              "px-2 sm:px-4 py-3",
+              "rounded-[12px] md:rounded-[15px]",
+              "font-bold text-xs sm:text-sm",
+              "transition-all duration-200",
+              "data-[state=active]:bg-white data-[state=active]:dark:bg-gray-600",
+              "data-[state=active]:text-gray-800 data-[state=active]:dark:text-white",
+              "data-[state=active]:shadow-sm",
+              "data-[state=inactive]:bg-gray-100 data-[state=inactive]:dark:bg-gray-900",
+              "data-[state=inactive]:text-gray-600 data-[state=inactive]:dark:text-gray-300",
+              "hover:bg-gray-200 dark:hover:bg-gray-700",
+              !hasPremiumAccess(subscription as Subscription) && "data-[state=inactive]:text-yellow-600 dark:data-[state=inactive]:text-yellow-400",
+              "shadow-md"
+            )}
+          >
+            {
+              hasPremiumAccess(subscription as Subscription) ? (
+                <>
+                  <FaRoute className="w-4 h-4 sm:w-5 sm:h-5" />
+                  <span className="inline">Routes</span>
+                </>
+              ) : (
+                <>
+                  <FaLock className="w-4 h-4 sm:w-5 sm:h-5" />
+                  <span className="inline">Routes</span>
+                </>
+              )
+            }
+          </TabsTrigger>
+
+          <TabsTrigger
+            value="aircraft"
+            className={cn(
+              "flex sm:flex-row gap-1 sm:gap-2 items-center justify-center",
+              "px-2 sm:px-4 py-3",
+              "rounded-[12px] md:rounded-[15px]",
+              "font-bold text-xs sm:text-sm",
+              "transition-all duration-200",
+              "data-[state=active]:bg-white data-[state=active]:dark:bg-gray-600",
+              "data-[state=active]:text-gray-800 data-[state=active]:dark:text-white",
+              "data-[state=active]:shadow-sm",
+              "data-[state=inactive]:bg-gray-100 data-[state=inactive]:dark:bg-gray-900",
+              "data-[state=inactive]:text-gray-600 data-[state=inactive]:dark:text-gray-300",
+              "hover:bg-gray-200 dark:hover:bg-gray-700",
+              !hasPremiumAccess(subscription as Subscription) && "data-[state=inactive]:text-yellow-600 dark:data-[state=inactive]:text-yellow-400",
+              "shadow-md"
+            )}
+          >
+            {
+              hasPremiumAccess(subscription as Subscription) ? (
+                <>
+                  <FaPlane className="w-4 h-4 sm:w-5 sm:h-5" />
+                  <span className="inline">Aircraft</span>
+                </>
+              ) : (
+                <>
+                  <FaLock className="w-4 h-4 sm:w-5 sm:h-5" />
+                  <span className="inline">Aircraft</span>
+                </>
+              )
+            }
+          </TabsTrigger>
+
+          <TabsTrigger
+            value="livery"
+            className={cn(
+              "flex sm:flex-row gap-1 sm:gap-2 items-center justify-center",
+              "px-2 sm:px-4 py-3",
+              "rounded-[12px] md:rounded-[15px]",
+              "font-bold text-xs sm:text-sm",
+              "transition-all duration-200",
+              "data-[state=active]:bg-white data-[state=active]:dark:bg-gray-600",
+              "data-[state=active]:text-gray-800 data-[state=active]:dark:text-white",
+              "data-[state=active]:shadow-sm",
+              "data-[state=inactive]:bg-gray-100 data-[state=inactive]:dark:bg-gray-900",
+              "data-[state=inactive]:text-gray-600 data-[state=inactive]:dark:text-gray-300",
+              "hover:bg-gray-200 dark:hover:bg-gray-700",
+              "opacity-50",
+              "shadow-md"
+            )}
+          >
+            <MdOutlineAirlines className="w-4 h-4 sm:w-5 sm:h-5" />
+            <span className="inline">Livery</span>
+          </TabsTrigger>
+
+          <TabsTrigger
+            value="atc"
+            className={cn(
+              "flex sm:flex-row gap-1 sm:gap-2 items-center justify-center",
+              "px-2 sm:px-4 py-3",
+              "rounded-[12px] md:rounded-[15px]",
+              "font-bold text-xs sm:text-sm",
+              "transition-all duration-200",
+              "data-[state=active]:bg-white data-[state=active]:dark:bg-gray-600",
+              "data-[state=active]:text-gray-800 data-[state=active]:dark:text-white",
+              "data-[state=active]:shadow-sm",
+              "data-[state=inactive]:bg-gray-100 data-[state=inactive]:dark:bg-gray-900",
+              "data-[state=inactive]:text-gray-600 data-[state=inactive]:dark:text-gray-300",
+              "hover:bg-gray-200 dark:hover:bg-gray-700",
+              "opacity-50",
+              "shadow-md"
+            )}
+          >
+            <PiAirTrafficControlFill className="w-4 h-4 sm:w-5 sm:h-5" />
+            <span className="inline">ATC History</span>
+          </TabsTrigger>
+
+        </TabsList>
+
+        <TabsContent value="overview" className="space-y-8">
+          <FlightsOverview
+            flightOverviewStats={flightOverviewStats}
+            recentFlightInsights={recentFlightInsights}
+            flightAverages={flightAverages}
+            mostVisitedOriginAndDestinationAirports={mostVisitedOriginAndDestinationAirports}
+            flightActivity={flightActivity}
+            aircraftUsageData={aircraftUsageData}
+            timeframe={timeframe as string}
+          />
+        </TabsContent>
+
+        {/* Flights Display */}
+        <TabsContent value="flights" className="space-y-6">
+          <FlightsDisplay flights={allFlights} />
+        </TabsContent>
+
+        <TabsContent value="routes" className="space-y-6">
+          {hasPremiumAccess(subscription as Subscription) ? (
+            <FlightsRoutes flights={allFlights} user={user} subscription={subscription as Subscription} role={subscription.role} />
+          ) : (
+            <div className="rounded-lg h-screen w-full flex flex-col items-center justify-center bg-cover bg-center relative overflow-hidden" style={{ backgroundImage: `url(/routeanalysis.png)` }}>
+
+              <div className="absolute top-0 left-0 w-full h-full bg-black/80 p-8 flex flex-col gap-4 overflow-y-auto">
 
                 <header>
                   <h1 className="text-4xl lg:text-6xl font-bold tracking-tight bg-gradient-to-r from-[#ff879b] to-[#ffe4d2] dark:from-[#0080ff] dark:via-light dark:to-light bg-clip-text text-transparent ">Route Analysis</h1>
@@ -313,9 +362,9 @@ const FlightsPage = async ({searchParams}: { searchParams: Promise<{ [key: strin
 
                   <blockquote className="text-gray-300 mt-4 text-sm font-bold">Requires <Badge className="bg-yellow-500 text-dark">Premium</Badge> or <Badge className="bg-green-600 text-light">Lifetime</Badge> Subscription</blockquote>
 
-                    <GroupedSubscriptionButtons />
-                    <br />
-                    <PromoReminders />
+                  <GroupedSubscriptionButtons />
+                  <br />
+                  <PromoReminders />
                 </header>
 
                 <h2 className="text-2xl font-bold text-light">Features:</h2>
@@ -331,20 +380,20 @@ const FlightsPage = async ({searchParams}: { searchParams: Promise<{ [key: strin
                     </div>
                   ))}
                 </div>
-                
-              
+
+
+              </div>
             </div>
-          </div>
-        )}
-      </TabsContent>
+          )}
+        </TabsContent>
 
         <TabsContent value="aircraft" className="space-y-6">
           {hasPremiumAccess(subscription as Subscription) ? (
             <FlightsAircraft flights={allFlights} user={user} role={subscription.role} />
           ) : (
             <div className="rounded-lg h-screen w-full flex flex-col items-center justify-center bg-cover bg-center relative overflow-hidden" style={{ backgroundImage: `url(/aircraftanalysis.png)` }}>
-            
-            <div className="absolute top-0 left-0 w-full h-full bg-black/80 p-8 flex flex-col gap-4 overflow-y-auto">
+
+              <div className="absolute top-0 left-0 w-full h-full bg-black/80 p-8 flex flex-col gap-4 overflow-y-auto">
 
                 <header>
                   <h1 className="text-4xl lg:text-6xl font-bold tracking-tight bg-gradient-to-r dark:from-[#ff879b] dark:to-[#ffe4d2] from-[#0080ff] via-light to-light bg-clip-text text-transparent ">Aircraft Analysis</h1>
@@ -372,13 +421,27 @@ const FlightsPage = async ({searchParams}: { searchParams: Promise<{ [key: strin
                     </div>
                   ))}
                 </div>
-                
-              
+
+
+              </div>
             </div>
-          </div>
           )}
         </TabsContent>
-    </Tabs>
+
+        <TabsContent value="livery" className="space-y-6 flex flex-col items-center justify-center font-bold w-full h-full">
+          <div className="flex flex-col gap-4 items-center justify-center text-2xl">
+            <FaWrench />
+            <span>Coming in v1.8.0 (PREMIUM/LIFETIME Feature)</span>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="atc" className="space-y-6 flex flex-col items-center justify-center font-bold w-full h-full">
+          <div className="flex flex-col gap-4 items-center justify-center text-2xl">
+            <FaWrench />
+            <span>Coming in v1.8.0</span>
+          </div>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };
@@ -471,7 +534,7 @@ const aircraftAnalysisFeatures = [
     description: "Track total distance covered by each aircraft in nautical miles, miles, and kilometers.",
   },
   {
-    icon: <MdOutlineAirlines   />,
+    icon: <MdOutlineAirlines />,
     title: "Airline Analysis",
     description: "See all your top airlines with total flights, accounts CALLSIGN USED FOR THE FLIGHT.",
   },
