@@ -102,7 +102,7 @@ export default function Home() {
 
                 <form action={async (formData: FormData) => {
                   'use server'
-                  redirect(`/user/${formData.get("name") as string}`)
+                  redirect(`/user/${formData.get("name") as string}?searched=true`)
                 }} className="flex flex-col gap-2">
                   <div className="relative">
                     <input

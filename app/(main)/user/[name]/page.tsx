@@ -2,8 +2,6 @@ import React from "react";
 import { getUserFlights, getUserStats, matchATCRankToTitle } from "@/lib/actions";
 import { cn, convertMinutesToHours, numberWithCommas } from "@/lib/utils";
 import InfoCard from "@/components/info-card";
-import ProfileHeader from "@/components/profile-header";
-import UserNavigation from "@/components/user-navigation";
 
 import { PiArrowFatLineUpBold } from "react-icons/pi";
 import { BiSolidPlaneLand } from "react-icons/bi";
@@ -21,6 +19,7 @@ import { Card } from "@/components/ui/card";
 
 // Dynamic Metadata
 import { Metadata } from 'next'
+import IFCUsernameSearchTracker from "@/components/dashboard-ui/misc/ga4/ifc-username-search-tracker";
 
 export async function generateMetadata({ params }: { params: Promise<{ name: string }> }): Promise<Metadata> {
   const { name } = await params;
@@ -82,6 +81,8 @@ const UserPage = async ({ params }: { params: Promise<{ name: string }> }) => {
 
   return (
     <div className="p-4 flex flex-col gap-4">
+
+      <IFCUsernameSearchTracker />
 
       <h2 className="text-5xl font-black dark:text-light bg-gradient-to-r from-gray-600 to-dark py-0.5 bg-clip-text text-transparent">
         General

@@ -39,18 +39,18 @@ const UserNavigation = ({ username }: UserNavigationProps) => {
   return (
     <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full lg:w-[500px]">
       <TabsList className={cn(
-        "grid w-full grid-cols-3",
-        "bg-gray-200 dark:bg-gray-700",
-        "",
+        "flex gap-3",
+        "bg-transparent",
         "rounded-[20px] md:rounded-[25px]"
       )}>
         <TabsTrigger 
           value="general" 
           className={cn(
-            "text-gray-700 dark:text-gray-300",
+            "text-gray-700 dark:text-gray-300 px-4 py-1 hover:bg-gray-300 dark:hover:bg-gray-600 cursor-pointer",
             "data-[state=active]:text-gray-800 data-[state=active]:dark:text-white",
+            "data-[state=inactive]:bg-gray-100 data-[state=inactive]:dark:bg-gray-900",
             "rounded-[15px] md:rounded-[20px]",
-            "transition-all", 
+            "transition-all shadow-lg", 
             "data-[state=active]:bg-white data-[state=active]:dark:bg-gray-600",
             "data-[state=active]:font-bold",
             "hover:bg-gray-300 dark:hover:bg-gray-600",
@@ -58,16 +58,17 @@ const UserNavigation = ({ username }: UserNavigationProps) => {
             "text-sm md:text-base"
           )}
         >
-          <LuBookUser className='w-4 h-4 md:w-5 md:h-5 hidden lg:block' />
+          <LuBookUser className='w-4 h-4 md:w-5 md:h-5' />
           General
         </TabsTrigger>
         <TabsTrigger 
           value="flights" 
           className={cn(
-            "text-gray-700 dark:text-gray-300",
+            "text-gray-700 dark:text-gray-300 px-4 py-1 hover:bg-gray-300 dark:hover:bg-gray-600 cursor-pointer",
             "data-[state=active]:text-gray-800 data-[state=active]:dark:text-white",
+            "data-[state=inactive]:bg-gray-100 data-[state=inactive]:dark:bg-gray-900",
             "rounded-[15px] md:rounded-[20px]",
-            "transition-all", 
+            "transition-all shadow-lg", 
             "data-[state=active]:bg-white data-[state=active]:dark:bg-gray-600",
             "data-[state=active]:font-bold",
             "hover:bg-gray-300 dark:hover:bg-gray-600",
@@ -75,16 +76,17 @@ const UserNavigation = ({ username }: UserNavigationProps) => {
             "text-sm md:text-base"
           )}
         > 
-          <LuPlane className='w-4 h-4 md:w-5 md:h-5 hidden lg:block'/>
+          <LuPlane className='w-4 h-4 md:w-5 md:h-5'/>
           Flights
         </TabsTrigger>
         <TabsTrigger 
           value="atc" 
           className={cn(
-            "text-gray-700 dark:text-gray-300",
+            "text-gray-700 dark:text-gray-300 px-4 py-1 hover:bg-gray-300 dark:hover:bg-gray-600 cursor-pointer",
             "data-[state=active]:text-gray-800 data-[state=active]:dark:text-white",
+            "data-[state=inactive]:bg-gray-100 data-[state=inactive]:dark:bg-gray-900",
             "rounded-[15px] md:rounded-[20px]",
-            "transition-all", 
+            "transition-all shadow-lg", 
             "data-[state=active]:bg-white data-[state=active]:dark:bg-gray-600",
             "data-[state=active]:font-bold",
             "hover:bg-gray-300 dark:hover:bg-gray-600",
@@ -92,9 +94,8 @@ const UserNavigation = ({ username }: UserNavigationProps) => {
             "text-sm md:text-base"
           )}
         >
-          <LuTowerControl className='w-4 h-4 md:w-5 md:h-5 hidden lg:block'/>
-          <span className="hidden sm:inline">ATC Sessions</span>
-          <span className="sm:hidden">ATC</span>
+          <LuTowerControl className='w-4 h-4 md:w-5 md:h-5'/>
+          <span className="inline">ATC</span>
         </TabsTrigger>
       </TabsList>
     </Tabs>
