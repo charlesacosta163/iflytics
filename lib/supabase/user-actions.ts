@@ -184,6 +184,16 @@ export async function updateIFCUsernameAndCreateProfile(ifcUsername: string, dis
         redirect('/setup/error?reason=profile_creation_failed')
     }
     
+    if (!profileError) {
+        // Track User Setup Success with Google Analytics 4 (gtag)
+        window.dataLayer = window.dataLayer || [];
+
+        window.dataLayer.push({
+            event: "sign_up",
+            method: "ifc_username",
+        });
+    }
+    
     redirect('/setup/success')
 }
 
