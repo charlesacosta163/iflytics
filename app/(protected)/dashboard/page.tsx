@@ -41,6 +41,7 @@ import GradeProgressionCard from "@/components/dashboard-ui/grade-progression-ca
 import { getPreviousMonthStats, getThisMonthStats } from "@/lib/monthly-stats-helpers";
 import MonthlyStatsComparisonCard from "@/components/dashboard-ui/monthly-stats-comparison-card";
 import { DivIcon } from "leaflet";
+import SignupTracker from "@/components/dashboard-ui/misc/ga4/signup-tracker";
 
 export const metadata: Metadata = {
   title: "Dashboard - IFlytics | Your Infinite Flight Statistics",
@@ -125,6 +126,8 @@ export default async function DashboardPage() {
     <div className="relative">
 
       <div className="relative z-10 space-y-4 md:space-y-6 pb-6">
+        <SignupTracker />
+
         {/* Header */}
         <div className={cn(
           "flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 md:gap-6",
