@@ -4,7 +4,7 @@ import "./globals.css";
 import { Analytics } from "@vercel/analytics/next"
 import { GoogleTagManager } from "@next/third-parties/google";
 import { ThemeProvider } from "next-themes";
-import { redirect } from "next/navigation";
+import  {TooltipProvider} from "@/components/ui/tooltip";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -100,7 +100,9 @@ export default function RootLayout({
         className={`${bricolageGrotesque.className} ${geistSans.variable} ${geistMono.variable} antialiased dark:bg-gray-950 bg-[#FAF0E6]`}
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          {children}
+          <TooltipProvider>
+            {children}
+          </TooltipProvider>
         </ThemeProvider>
           <Analytics />
       </body>

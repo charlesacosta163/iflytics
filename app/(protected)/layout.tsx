@@ -5,6 +5,9 @@ import ActivityTimeout from "@/components/activity-timeout";
 import { userHasIFCUsername } from "@/lib/supabase/user-actions";
 import { redirect } from "next/navigation";
 
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
+import AppSidebar from "@/components/dashboard-ui/shared/app-sidebar";
+
 export default async function RootLayout({
     children,
   }: Readonly<{
@@ -19,17 +22,24 @@ export default async function RootLayout({
   
     return (
       <div className="h-screen flex">
-        <Sidebar />
-        <main className="flex-1 flex flex-col overflow-y-auto">
-            <Navbar />
+        {/* <Sidebar /> */}
+        <SidebarProvider>
+          
+          <AppSidebar />
 
-            <div className="flex-1 p-4">
-                {children}
-                <ActivityTimeout />
-            </div>
+          <main className="flex-1 flex flex-col overflow-y-auto relative">
+              <Navbar />
+              <SidebarTrigger className="lg:block hidden absolute top-4 -left-2.5 z-[9999] bg-white dark:bg-gray-900 rounded-lg shadow-lg border-2 border-gray-200 dark:border-gray-700" />
 
-            <Footer />
-        </main>
+              <div className="flex-1 p-4">
+                  {children}
+                  <ActivityTimeout />
+              </div>
+
+              <Footer />
+          </main>
+
+        </SidebarProvider>
       </div>
     );
   }
