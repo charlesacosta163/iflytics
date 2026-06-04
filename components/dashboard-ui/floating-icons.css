@@ -1,0 +1,44 @@
+@keyframes floatVertical {
+  0% {
+    transform: translateX(0) translateY(0) rotate(0deg);
+    opacity: 0;
+  }
+  5% {
+    opacity: 0.3;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  95% {
+    opacity: 0.3;
+  }
+  100% {
+    transform: translateX(calc(var(--random-x, 0) * 1px)) translateY(calc(100vh + 200px)) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+.floating-icon {
+  animation: floatVertical linear infinite;
+  top: -200px;
+  --random-x: 0;
+}
+
+.floating-icon:nth-child(1) { --random-x: 30; }
+.floating-icon:nth-child(2) { --random-x: -40; }
+.floating-icon:nth-child(3) { --random-x: 50; }
+.floating-icon:nth-child(4) { --random-x: -30; }
+.floating-icon:nth-child(5) { --random-x: 40; }
+.floating-icon:nth-child(6) { --random-x: -50; }
+.floating-icon:nth-child(7) { --random-x: 35; }
+.floating-icon:nth-child(8) { --random-x: -35; }
+.floating-icon:nth-child(9) { --random-x: 45; }
+.floating-icon:nth-child(10) { --random-x: -45; }
+.floating-icon:nth-child(11) { --random-x: 25; }
+.floating-icon:nth-child(12) { --random-x: -25; }
+.floating-icon:nth-child(13) { --random-x: 55; }
+.floating-icon:nth-child(14) { --random-x: -55; }
+.floating-icon:nth-child(15) { --random-x: 20; }

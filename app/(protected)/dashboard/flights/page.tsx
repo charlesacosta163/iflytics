@@ -34,22 +34,26 @@ import { FaChartLine } from "react-icons/fa";
 import { Metadata } from 'next'
 import Link from "next/link";
 import FlightsAircraft from "@/components/dashboard-ui/flights/flights-aircraft";
-import { MdAirlineSeatFlat, MdOutlineAirlines, MdOutlineFlightTakeoff } from "react-icons/md";
+import { MdAirlineSeatFlat, MdOutlineAirlines, MdOutlineFlightTakeoff, MdOutlineHistoryEdu } from "react-icons/md";
 
 // Subscriptions
 import { getUserSubscription } from "@/lib/subscription/subscription";
 import { hasPremiumAccess, Subscription } from '@/lib/subscription/helpers';
 import { TbLock, TbBrain, TbFileTypeCsv } from "react-icons/tb";
-import { LuRoute, LuWandSparkles } from "react-icons/lu";
+import { LuPlane, LuRoute, LuWandSparkles } from "react-icons/lu";
 import { Badge } from "@/components/ui/badge";
 import GroupedSubscriptionButtons from "@/components/dashboard-ui/grouped-sub-btns";
 import PromoReminders from "@/components/dashboard-ui/stripe/promo-reminders";
 import { cn } from "@/lib/utils";
-import { PiAirTrafficControlFill } from "react-icons/pi";
+import { PiAirplaneInFlightBold, PiAirTrafficControlFill } from "react-icons/pi";
 import { Button } from "@/components/ui/button";
+import FloatingIcons from "@/components/dashboard-ui/floating-icons";
 import { RiMap2Line } from "react-icons/ri";
 import { HiOutlinePaperAirplane } from "react-icons/hi2";
 import { RxCookie } from "react-icons/rx";
+import { SiChinaeasternairlines } from "react-icons/si";
+import { GiCommercialAirplane } from "react-icons/gi";
+import { GrPaint } from "react-icons/gr";
 
 import Image from "next/image";
 import routeMapImage from '@/public/subscriptions/route-cards/route-map.png';
@@ -58,6 +62,13 @@ import routeStatsImage from '@/public/subscriptions/route-cards/route-stats.png'
 import routeContinentsImage from '@/public/subscriptions/route-cards/route-continents.png';
 import routeCsvImage from '@/public/subscriptions/route-cards/route-csv.png';
 import routeMyFr24Image from '@/public/subscriptions/route-cards/route-myfr24.png';
+
+import aircraftMostUsedImage from '@/public/subscriptions/aircraft-cards/aircraft-mostused.png';
+import aircraftPlaneHistoryImage from '@/public/subscriptions/aircraft-cards/aircraft-planehistory.png';
+import aircraftPlaneHistory2Image from '@/public/subscriptions/aircraft-cards/aircraft-planehistory2.png';
+import aircraftTopAirlinesImage from '@/public/subscriptions/aircraft-cards/aircraft-topairlines.png';
+import aircraftTopBrandRankImage from '@/public/subscriptions/aircraft-cards/aircraft-topbrandrank.png';
+
 
 
 export const metadata: Metadata = {
@@ -371,7 +382,9 @@ const FlightsPage = async ({ searchParams }: { searchParams: Promise<{ [key: str
           ) : (
             // <div className="rounded-lg h-screen w-full flex flex-col items-center justify-center bg-cover bg-center relative overflow-hidden" style={{ backgroundImage: `url(/routeanalysis.png)` }}>
 
-            <div className=" w-full flex flex-col items-center justify-center bg-white/60 dark:bg-gray-800/20 py-16 px-4 rounded-[50px]">
+            <div className="relative w-full flex flex-col items-center justify-center bg-white/60 dark:bg-gray-800/20 py-16 px-4 rounded-[50px]">
+                {/* Animated Floating Icons */}
+                <FloatingIcons />
 
               <header className="flex flex-col gap-4 items-center justify-center">
                 <h1 className="text-4xl lg:text-8xl font-bold tracking-tighter flex items-center gap-3">
@@ -380,7 +393,7 @@ const FlightsPage = async ({ searchParams }: { searchParams: Promise<{ [key: str
                     Route Analysis
                   </span>
                 </h1>
-                <p className="text-gray-800 dark:text-gray-300 text-lg font-semibold tracking-tight">
+                <p className="text-gray-800 dark:text-gray-300 text-lg font-semibold tracking-tight text-center">
                   A way to analyze your flight routes and your flight patterns in a detailed way.
                 </p>
 
@@ -390,7 +403,7 @@ const FlightsPage = async ({ searchParams }: { searchParams: Promise<{ [key: str
                   <br />
                   <PromoReminders /> */}
 
-                <Button> <a href="#route-analysis-features">See Features</a></Button>
+                <Button className="text-2xl font-bold tracking-tight !py-6 !px-12"> <a href="#route-analysis-features">See Features</a></Button>
               </header>
 
               {/* <h2 className="text-2xl font-bold text-light">Features:</h2> */}
@@ -561,27 +574,69 @@ const FlightsPage = async ({ searchParams }: { searchParams: Promise<{ [key: str
           {hasPremiumAccess(subscription as Subscription) ? (
             <FlightsAircraft flights={allFlights} user={user} role={subscription.role} />
           ) : (
-            <div className="rounded-lg h-screen w-full flex flex-col items-center justify-center bg-cover bg-center relative overflow-hidden" style={{ backgroundImage: `url(/aircraftanalysis.png)` }}>
+            // <div className="rounded-lg h-screen w-full flex flex-col items-center justify-center bg-cover bg-center relative overflow-hidden" style={{ backgroundImage: `url(/aircraftanalysis.png)` }}>
 
-              <div className="absolute top-0 left-0 w-full h-full bg-black/80 p-8 flex flex-col gap-4 overflow-y-auto">
+            //   <div className="absolute top-0 left-0 w-full h-full bg-black/80 p-8 flex flex-col gap-4 overflow-y-auto">
 
-                <header>
-                  <h1 className="text-4xl lg:text-6xl font-bold tracking-tight bg-gradient-to-r dark:from-[#ff879b] dark:to-[#ffe4d2] from-[#0080ff] via-light to-light bg-clip-text text-transparent ">Aircraft Analysis</h1>
-                  <p className="text-gray-300">
-                    View your aircraft usage and analyze your flight patterns in a detailed way.
-                  </p>
+            //     <header>
+            //       <h1 className="text-4xl lg:text-6xl font-bold tracking-tight bg-gradient-to-r dark:from-[#ff879b] dark:to-[#ffe4d2] from-[#0080ff] via-light to-light bg-clip-text text-transparent ">Aircraft Analysis</h1>
+            //       <p className="text-gray-300">
+            //         View your aircraft usage and analyze your flight patterns in a detailed way.
+            //       </p>
 
-                  <blockquote className="text-gray-300 mt-4 text-sm font-bold">Requires <Badge className="bg-yellow-500 text-dark">Premium</Badge> or <Badge className="bg-green-600 text-light">Lifetime</Badge> Subscription</blockquote>
+            //       <blockquote className="text-gray-300 mt-4 text-sm font-bold">Requires <Badge className="bg-yellow-500 text-dark">Premium</Badge> or <Badge className="bg-green-600 text-light">Lifetime</Badge> Subscription</blockquote>
+
+            //       <GroupedSubscriptionButtons />
+            //       <br />
+            //       <PromoReminders />
+            //     </header>
+
+            //     <h2 className="text-2xl font-bold text-light">Features:</h2>
+
+            //     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            //       {aircraftAnalysisFeatures.map((feature, index) => (
+            //         <div key={index} className="flex flex-col gap-2 bg-gray-700/60 p-4 rounded-lg">
+            //           <div className="flex items-center gap-2 text-light">
+            //             {feature.icon}
+            //             <h3 className="text-lg font-bold text-light">{feature.title}</h3>
+            //           </div>
+            //           <p className="text-gray-300">{feature.description}</p>
+            //         </div>
+            //       ))}
+            //     </div>
+
+
+            //   </div>
+            // </div>
+
+            <div className="relative w-full flex flex-col items-center justify-center bg-white/60 dark:bg-gray-800/20 py-16 px-4 rounded-[50px]">
+                {/* Animated Floating Icons */}
+                <FloatingIcons />
+                
+              <header className="flex flex-col gap-4 items-center justify-center">
+                <h1 className="text-4xl lg:text-8xl font-bold tracking-tighter flex items-center gap-3">
+                  <LuPlane className="dark:text-[#ff879b] text-[#0080ff] rotate-45" />
+                  <span className="bg-gradient-to-r dark:from-[#ff879b] dark:to-[#ffe4d2] from-[#0080ff] via-blue-200 to-blue-300 bg-clip-text text-transparent">
+                    Aircraft Analysis
+                  </span>
+                </h1>
+                <p className="text-gray-800 dark:text-gray-300 text-lg font-semibold tracking-tight text-center">
+                Discover the aircraft that define your flying style through advanced fleet analytics, airline insights, and aircraft usage trends.
+                </p>
+
+                {/* <blockquote className="text-gray-300 mt-4 text-sm font-bold">Requires <Badge className="bg-yellow-500 text-dark">Premium</Badge> or <Badge className="bg-green-600 text-light">Lifetime</Badge> Subscription</blockquote>
 
                   <GroupedSubscriptionButtons />
                   <br />
-                  <PromoReminders />
-                </header>
+                  <PromoReminders /> */}
 
-                <h2 className="text-2xl font-bold text-light">Features:</h2>
+                <Button className="text-2xl font-bold tracking-tight !py-6 !px-12"> <a href="#aircraft-analysis-features">See Features</a></Button>
+              </header>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  {aircraftAnalysisFeatures.map((feature, index) => (
+              {/* <h2 className="text-2xl font-bold text-light">Features:</h2> */}
+
+              {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {routeAnalysisFeatures.map((feature, index) => (
                     <div key={index} className="flex flex-col gap-2 bg-gray-700/60 p-4 rounded-lg">
                       <div className="flex items-center gap-2 text-light">
                         {feature.icon}
@@ -590,25 +645,229 @@ const FlightsPage = async ({ searchParams }: { searchParams: Promise<{ [key: str
                       <p className="text-gray-300">{feature.description}</p>
                     </div>
                   ))}
+                </div> */}
+
+              <section id='aircraft-analysis-features' className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 mt-8">
+
+                <div className="group hover:scale-105 transition-all duration-200 col-span-1 md:col-span-2 bg-[#FFFAF0] dark:bg-gradient-to-br dark:bg-black/10 p-6 md:p-8 rounded-[20px] overflow-hidden min-h-[300px] flex flex-col md:flex-row items-center justify-between gap-4">
+
+                  <header className="flex flex-col gap-2">
+                    <PiAirplaneInFlightBold className="text-3xl md:text-5xl text-gray-900 dark:text-gray-100" />
+
+                    <h2 className="text-2xl md:text-7xl font-bold tracking-tighter text-gray-900 dark:text-white">Fleet Intelligence</h2>
+
+                    <p className="text-gray-600 dark:text-gray-400 text-sm font-medium">Discover your most flown aircraft, flight-hour leaders, distance champions, and fleet usage patterns.</p>
+                  </header>
+
+
+                  <Image
+                    src={aircraftMostUsedImage}
+                    alt="Aircraft Most Used"
+                    width={500}
+                    height={500}
+                    className="border-4 md:border-6 border-white dark:border-gray-600 rounded-[20px] shadow-2xl group-hover:scale-105 transition-all duration-200 w-full md:w-auto mx-auto"
+                    quality={100}
+                  />
                 </div>
 
+                <div className="group hover:scale-105 transition-all duration-200 bg-[#FFF8DC] dark:bg-gradient-to-br dark:bg-[#16161d] p-6 md:p-8 rounded-[20px] overflow-hidden min-h-[250px] flex flex-col gap-4">
 
-              </div>
+                  <header className="flex flex-col gap-2">
+                    <MdOutlineHistoryEdu className="text-3xl md:text-4xl text-gray-900 dark:text-gray-100" />
+
+                    <h2 className="text-2xl md:text-3xl font-bold tracking-tighter text-gray-900 dark:text-white">Comprehensive Histories</h2>
+
+                    <p className="text-gray-600 dark:text-gray-400 text-sm font-medium">View every flight completed with a specific aircraft, including routes, flight time, distance, and activity history.</p>
+                  </header>
+
+                  <div className="relative w-full h-[350px] flex items-center justify-center group/stack">
+                    {/* Image 2 - Back */}
+                    <Image
+                      src={aircraftPlaneHistory2Image}
+                      alt="Aircraft Plane History 2"
+                      width={250}
+                      height={250}
+                      className="absolute border-4 md:border-6 dark:border-white border-gray-600 rounded-[20px] shadow-2xl w-[200px] md:w-[250px] transition-all duration-500 -rotate-6 group-hover/stack:rotate-12 group-hover/stack:translate-x-[-60px] group-hover/stack:translate-y-[-15px]"
+                      quality={100}
+                    />
+                    
+                    {/* Image 1 - Front */}
+                    <Image
+                      src={aircraftPlaneHistoryImage}
+                      alt="Aircraft Plane History 1"
+                      width={250}
+                      height={250}
+                      className="absolute border-4 md:border-6 border-white dark:border-gray-600 rounded-[20px] shadow-2xl w-[200px] md:w-[250px] transition-all duration-500 rotate-6 group-hover/stack:-rotate-12 group-hover/stack:translate-x-[60px] group-hover/stack:translate-y-[-15px] z-10"
+                      quality={100}
+                    />
+                  </div>
+                </div>
+
+                <div className="group hover:scale-105 transition-all duration-200 bg-[#FDFAED] dark:bg-[#081915] p-6 md:p-8 rounded-[20px] overflow-hidden min-h-[250px] flex flex-col gap-4">
+
+                  <header className="flex flex-col gap-2">
+                    <SiChinaeasternairlines className="text-3xl md:text-4xl text-gray-900 dark:text-gray-100" />
+
+                    <h2 className="text-2xl md:text-3xl font-bold tracking-tighter text-gray-900 dark:text-white">Discover Your Top Airlines</h2>
+
+                    <p className="text-gray-600 dark:text-gray-400 text-sm font-medium">Identify your most frequent airlines used by your callsign, analyze flight patterns, and uncover hidden connections in your fleet.</p>
+                  </header>
+
+                  <Image
+                    src={aircraftTopAirlinesImage}
+                    alt="Aircraft Top Airlines"
+                    width={200}
+                    height={200}
+                    className="border-4 md:border-6 border-white dark:border-gray-600 rounded-[20px] shadow-2xl group-hover:scale-105 transition-all duration-200 w-full md:w-auto mx-auto"
+                    quality={100}
+                  />
+                </div>
+
+                <div className="group hover:scale-105 transition-all duration-200 col-span-1 md:col-span-2 md:row-span-3 bg-[#fff5ee] dark:bg-gradient-to-br dark:bg-[#470b2e] p-6 md:p-8 rounded-[20px] flex flex-col md:flex-row justify-between items-center gap-6">
+
+                  <header className="flex flex-col gap-2 w-full md:w-[40%]">
+                    <GiCommercialAirplane className="text-3xl md:text-7xl text-gray-900 dark:text-gray-100" />
+
+                    <h2 className="text-2xl md:text-7xl font-bold tracking-tighter text-gray-900 dark:text-white">Manufacturer Loyalty</h2>
+
+                    <p className="text-gray-600 dark:text-gray-400 text-sm font-medium">Discover your favorite aircraft manufacturers and how they perform across your fleet.</p>
+
+                  </header>
+
+                  <Image
+                    src={aircraftTopBrandRankImage}
+                    alt="Aircraft Top Brand Rank"
+                    width={600}
+                    height={150}
+                    className="border-4 md:border-6 border-white dark:border-gray-600 rounded-[20px] shadow-2xl group-hover:scale-105 transition-all duration-200 w-full md:w-auto"
+                    quality={100}
+                  />
+                </div>
+
+                <div className="group hover:scale-105 transition-all duration-200 col-span-1 md:col-span-2 bg-gradient-to-br from-[#acdaff] to-blue-50 dark:bg-gradient-to-br dark:from-blue-950 dark:to-cyan-950 p-6 md:p-12 rounded-[20px] flex flex-col gap-6 md:gap-8 justify-between items-center w-full border-4 md:border-6 border-blue-200/50 dark:border-blue-600/60 overflow-hidden">
+
+                  <header className="flex flex-col items-center gap-2 text-center">
+
+                    <h2 className="text-2xl md:text-6xl font-bold tracking-tighter flex items-center gap-2 flex-wrap justify-center">
+                      <TbFileTypeCsv className="inline text-blue-600 dark:text-blue-400" />
+                      <span className="block sm:inline bg-gradient-to-r from-blue-600 via-cyan-500 to-blue-600 dark:from-blue-400 dark:via-cyan-300 dark:to-blue-400 bg-clip-text text-transparent">CSV Export Compatibility</span>
+                      <span className="block sm:inline bg-gradient-to-r from-blue-600 via-cyan-500 to-blue-600 dark:from-blue-400 dark:via-cyan-300 dark:to-blue-400 bg-clip-text text-transparent">(MyFlightRadar24 support)</span>
+                    </h2>
+
+                    <p className="text-gray-600 dark:text-gray-400 text-sm font-medium">Export your flight data in CSV format for external analysis with MyFlightRadar24 compatibility.</p>
+
+                    <Badge className="bg-green-600 dark:bg-green-700 text-light font-bold tracking-tight text-sm md:text-lg animate-pulse">LIFETIME PLAN EXCLUSIVE</Badge>
+
+
+
+                  </header>
+
+                  <div className="flex flex-col lg:flex-row gap-4 items-center justify-center w-full">
+
+                    <Image
+                      src={routeCsvImage}
+                      alt="CSV Export"
+                      width={500}
+                      height={200}
+                      className="border-4 md:border-6 border-white dark:border-gray-600 rounded-[20px] shadow-2xl group-hover:scale-105 transition-all duration-200 w-full md:w-auto"
+                      quality={100}
+                    />
+
+                    <Image
+                        src={routeMyFr24Image}
+                      alt="MyFlightRadar24"
+                      width={500}
+                      height={200}
+                      className="border-4 md:border-6 border-white dark:border-gray-600 rounded-[20px] shadow-2xl group-hover:scale-105 transition-all duration-200 w-full md:w-auto"
+                      quality={100}
+                    />
+                  </div>
+                </div>
+
+                {/* CTA Card */}
+                <GroupedSubscriptionButtons />
+
+              </section>
+
+
+
             </div>
+
+            
           )}
         </TabsContent>
 
-        <TabsContent value="livery" className="space-y-6 flex flex-col items-center justify-center font-bold w-full h-full">
-          <div className="flex flex-col gap-4 items-center justify-center text-2xl">
-            <FaWrench />
-            <span>Coming in v1.8.0 (PREMIUM/LIFETIME Feature)</span>
+        <TabsContent value="livery" className="space-y-6 w-full">
+          <div className="relative bg-white/50 dark:bg-black rounded-[50px] p-8 md:p-16 min-h-[600px] flex flex-col items-center justify-center">
+            
+            <header className="flex flex-col gap-4 items-center justify-center text-center">
+              <h1 className="text-4xl lg:text-8xl font-bold tracking-tighter flex items-center gap-3 flex-wrap justify-center">
+                <GrPaint className="text-amber-500 dark:text-amber-400" />
+                <span className="bg-gradient-to-r from-amber-500 to-amber-300 dark:from-amber-400 dark:to-amber-300 bg-clip-text text-transparent">
+                  Livery Analysis
+                </span>
+              </h1>
+              <p className="text-gray-800 dark:text-gray-300 text-lg font-semibold tracking-tight max-w-2xl text-center">
+                Track and analyze aircraft liveries and airline branding across your fleet.
+              </p>
+            </header>
+
+            <div className="mt-12 flex flex-col items-center gap-6">
+              <div className="text-6xl text-amber-500 animate-pulse">
+                <FaWrench />
+              </div>
+              
+              <Badge className="bg-amber-500 text-white text-lg px-6 py-2 animate-pulse">
+                COMING SOON
+              </Badge>
+              
+              <p className="text-gray-700 dark:text-gray-300 font-bold text-xl">
+                Available in v1.8.0
+              </p>
+              
+              <div className="bg-white/50 dark:bg-gray-800/50 rounded-[20px] p-6 max-w-md">
+                <p className="text-sm text-gray-600 dark:text-gray-400 text-center">
+                  This feature will be exclusive to <Badge className="bg-yellow-500 text-white font-bold tracking-tight text-md uppercase mr-1">Premium</Badge> and <Badge className="bg-green-600 text-white font-bold tracking-tight text-md uppercase mr-1">Lifetime</Badge> subscribers.
+                </p>
+              </div>
+            </div>
+
           </div>
         </TabsContent>
 
-        <TabsContent value="atc" className="space-y-6 flex flex-col items-center justify-center font-bold w-full h-full">
-          <div className="flex flex-col gap-4 items-center justify-center text-2xl">
-            <FaWrench />
-            <span>Coming in v1.8.0</span>
+        <TabsContent value="atc" className="space-y-6 w-full">
+          <div className="relative bg-white/50 dark:from-gray-900 dark:via-blue-950 dark:to-gray-900 rounded-[50px] p-8 md:p-16 min-h-[500px] flex flex-col items-center justify-center ">
+            
+            <header className="flex flex-col gap-4 items-center justify-center text-center">
+              <h1 className="text-4xl lg:text-8xl font-bold tracking-tighter flex items-center gap-3 flex-wrap justify-center">
+                <PiAirTrafficControlFill className="text-blue-600 dark:text-blue-400" />
+                <span className="bg-gradient-to-r from-blue-600 via-cyan-500 to-teal-600 dark:from-blue-400 dark:via-cyan-400 dark:to-teal-400 bg-clip-text text-transparent">
+                  ATC History
+                </span>
+              </h1>
+              <p className="text-gray-800 dark:text-gray-300 text-lg font-semibold tracking-tight max-w-2xl">
+                View your complete Air Traffic Control sessions history.
+              </p>
+            </header>
+
+            <div className="mt-12 flex flex-col items-center gap-6">
+              <div className="text-6xl text-blue-600 dark:text-blue-400 animate-pulse">
+                <FaWrench />
+              </div>
+              
+              <Badge className="bg-gradient-to-r from-blue-600 to-cyan-600 text-white text-lg px-6 py-2 animate-pulse">
+                COMING SOON
+              </Badge>
+              
+              <p className="text-gray-700 dark:text-gray-300 font-bold text-xl">
+                Available in v1.8.0
+              </p>
+              
+              <div className="bg-white/50 dark:bg-gray-800/50 rounded-[20px] p-6 max-w-md">
+                <Badge className="bg-blue-600 text-white font-bold tracking-tight text-md uppercase mr-2">Free</Badge> feature for all users.
+              </div>
+            </div>
+
           </div>
         </TabsContent>
       </Tabs>

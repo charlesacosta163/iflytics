@@ -5806,6 +5806,22 @@ export const customUserImages = [
     "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/wisdom/288/1674480_2.png"
   )}&w=64&h=64&fit=cover&mask=circle`,
 },
+{
+  id: 528,
+  role: "user",
+  username: "Pishi_Rocket",
+  image: `https://images.weserv.nl/?url=${encodeURIComponent(
+    "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/pishi_rocket/288/1626266_2.png"
+  )}&w=64&h=64&fit=cover&mask=circle`,
+},
+{
+  id: 529,
+  role: "user",
+  username: "Gregtan",
+  image: `https://images.weserv.nl/?url=${encodeURIComponent(
+    "https://sea1.discourse-cdn.com/infiniteflight/user_avatar/community.infiniteflight.com/gregtan/288/1622515_2.png"
+  )}&w=64&h=64&fit=cover&mask=circle`,
+},
 ]
 // Corny compliments for leaderboard stats
 export const statCompliments = {
