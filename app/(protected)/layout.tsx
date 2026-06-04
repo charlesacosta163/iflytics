@@ -25,11 +25,13 @@ export default async function RootLayout({
         {/* <Sidebar /> */}
         <SidebarProvider>
           
-          <AppSidebar />
+          <div className="hidden lg:block">
+            <AppSidebar />
+          </div>
 
           <main className="flex-1 flex flex-col overflow-y-auto relative">
               <Navbar />
-              <SidebarTrigger className="lg:block hidden absolute top-4 -left-2.5 z-[9999] bg-white dark:bg-gray-900 rounded-lg shadow-lg border-2 border-gray-200 dark:border-gray-700" />
+              <SidebarTrigger className="lg:block hidden absolute top-4 left-1 z-[9999] rounded-lg !shadow-none hover:!shadow-none hover:!bg-transparent cursor-pointer" />
 
               <div className="flex-1 p-4">
                   {children}

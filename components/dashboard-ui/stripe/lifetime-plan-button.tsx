@@ -32,21 +32,13 @@ export function LifetimeButton({ isPremiumUser, currentPeriodEnd }: LifetimeButt
     }
   };
 
-  const base =
-    'font-semibold px-4 py-2 rounded flex items-center gap-2 self-start transition-colors';
-  const active =
-    isPremiumUser
-      ? 'bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white'
-      : 'bg-green-600 hover:bg-green-700 text-white';
-  const disabledStyles = 'opacity-60 cursor-not-allowed';
-
   return (
     <button
       onClick={handleClick}
       disabled={loading}
       aria-busy={loading}
       aria-disabled={loading}
-      className={`${base} ${active} flex flex-col gap-1 ${loading ? disabledStyles : ''}`}
+      className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-bold px-6 py-3 rounded-full transition-all duration-200 hover:shadow-lg disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
     >
       {loading && (
         <span
@@ -59,9 +51,8 @@ export function LifetimeButton({ isPremiumUser, currentPeriodEnd }: LifetimeButt
           ? 'Redirecting...'
           : isPremiumUser
           ? 'Upgrade to Lifetime'
-          : 'Buy Lifetime Access'}
+          : 'Get Lifetime Access'}
       </span>
-      <span className="flex gap-1 items-center text-[0.5rem] self-start"><RiPriceTag3Line /> $49.99 forever</span>
     </button>
   );
 }

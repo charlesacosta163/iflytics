@@ -82,7 +82,7 @@ const FlightAircraftEntry = ({ index, aircraft, flightsAmountRaw, allFlightsWith
         <div className="flex flex-col gap-2 text-xs md:text-sm font-medium">
           <div className="flex justify-between gap-2 items-center text-gray-600 dark:text-gray-400">
             <span className="font-bold">Usage: {((aircraft.count / flightsAmountRaw) * 100).toFixed(1)}%</span>
-            <span className="text-right">Last: {new Date(aircraft.lastUsed).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
+            <span className="text-right">Last: {new Date(aircraft.lastUsed).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
           </div>
           <Progress value={Number(((aircraft.count / flightsAmountRaw) * 100).toFixed(1))} className="h-2" />
           

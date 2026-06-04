@@ -33,11 +33,10 @@ export function SubscribeButton() {
   return (
     <button
       onClick={handleClick}
-      className="bg-yellow-500 hover:bg-yellow-600 text-dark font-semibold px-4 py-2 rounded disabled:opacity-50 flex flex-col gap-1"
+      className="w-full bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white font-bold px-6 py-3 rounded-full disabled:opacity-50 transition-all duration-200 hover:shadow-lg disabled:cursor-not-allowed"
       disabled={loading}
     >
-      {loading ? 'Redirecting...' : 'Subscribe to Premium'}
-      <span className="flex gap-1 items-center text-[0.5rem]"><RiPriceTag3Line /> $1.99/mo</span>
+      {loading ? 'Redirecting...' : 'Get Started'}
     </button>
   );
 }

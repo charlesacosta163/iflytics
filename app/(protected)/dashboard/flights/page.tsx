@@ -13,6 +13,12 @@ import {
 } from "@/lib/cache/flightinsightsdata";
 
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
 import { VscCopilotWarning } from "react-icons/vsc";
 import { ImStatsDots } from "react-icons/im";
 import { getFlightsTimeFrame } from "@/lib/cache/flightdata";
@@ -23,7 +29,7 @@ import FlightsOverview from "@/components/dashboard-ui/flights/flights-overview"
 import { getAirportCoordinates } from "@/lib/actions";
 import FlightsDisplay from "@/components/dashboard-ui/flights/flights-display";
 import FlightsRoutes from "@/components/dashboard-ui/flights/flights-routes";
-import { FaClock, FaGlobe, FaHistory, FaLock, FaMapMarkedAlt, FaPlane, FaRoute, FaWrench } from "react-icons/fa";
+import { FaClock, FaGlobe, FaHistory, FaInfoCircle, FaLock, FaMapMarkedAlt, FaPlane, FaQuestionCircle, FaRoute, FaWrench } from "react-icons/fa";
 import { FaChartLine } from "react-icons/fa";
 import { Metadata } from 'next'
 import Link from "next/link";
@@ -33,12 +39,25 @@ import { MdAirlineSeatFlat, MdOutlineAirlines, MdOutlineFlightTakeoff } from "re
 // Subscriptions
 import { getUserSubscription } from "@/lib/subscription/subscription";
 import { hasPremiumAccess, Subscription } from '@/lib/subscription/helpers';
-import { TbLock } from "react-icons/tb";
+import { TbLock, TbBrain, TbFileTypeCsv } from "react-icons/tb";
+import { LuRoute, LuWandSparkles } from "react-icons/lu";
 import { Badge } from "@/components/ui/badge";
 import GroupedSubscriptionButtons from "@/components/dashboard-ui/grouped-sub-btns";
 import PromoReminders from "@/components/dashboard-ui/stripe/promo-reminders";
 import { cn } from "@/lib/utils";
 import { PiAirTrafficControlFill } from "react-icons/pi";
+import { Button } from "@/components/ui/button";
+import { RiMap2Line } from "react-icons/ri";
+import { HiOutlinePaperAirplane } from "react-icons/hi2";
+import { RxCookie } from "react-icons/rx";
+
+import Image from "next/image";
+import routeMapImage from '@/public/subscriptions/route-cards/route-map.png';
+import routeSummaryImage from '@/public/subscriptions/route-cards/route-summary.png';
+import routeStatsImage from '@/public/subscriptions/route-cards/route-stats.png';
+import routeContinentsImage from '@/public/subscriptions/route-cards/route-continents.png';
+import routeCsvImage from '@/public/subscriptions/route-cards/route-csv.png';
+import routeMyFr24Image from '@/public/subscriptions/route-cards/route-myfr24.png';
 
 
 export const metadata: Metadata = {
@@ -350,26 +369,33 @@ const FlightsPage = async ({ searchParams }: { searchParams: Promise<{ [key: str
           {hasPremiumAccess(subscription as Subscription) ? (
             <FlightsRoutes flights={allFlights} user={user} subscription={subscription as Subscription} role={subscription.role} />
           ) : (
-            <div className="rounded-lg h-screen w-full flex flex-col items-center justify-center bg-cover bg-center relative overflow-hidden" style={{ backgroundImage: `url(/routeanalysis.png)` }}>
+            // <div className="rounded-lg h-screen w-full flex flex-col items-center justify-center bg-cover bg-center relative overflow-hidden" style={{ backgroundImage: `url(/routeanalysis.png)` }}>
 
-              <div className="absolute top-0 left-0 w-full h-full bg-black/80 p-8 flex flex-col gap-4 overflow-y-auto">
+            <div className=" w-full flex flex-col items-center justify-center bg-white/60 dark:bg-gray-800/20 py-16 px-4 rounded-[50px]">
 
-                <header>
-                  <h1 className="text-4xl lg:text-6xl font-bold tracking-tight bg-gradient-to-r from-[#ff879b] to-[#ffe4d2] dark:from-[#0080ff] dark:via-light dark:to-light bg-clip-text text-transparent ">Route Analysis</h1>
-                  <p className="text-gray-300">
-                    View your flight routes and analyze your flight patterns in a detailed way.
-                  </p>
+              <header className="flex flex-col gap-4 items-center justify-center">
+                <h1 className="text-4xl lg:text-8xl font-bold tracking-tighter flex items-center gap-3">
+                  <LuRoute className="text-[#ff879b] dark:text-[#0080ff]" />
+                  <span className="bg-gradient-to-r from-[#ff879b] to-[#ffcba8] dark:from-[#0080ff] dark:via-light dark:to-light bg-clip-text text-transparent">
+                    Route Analysis
+                  </span>
+                </h1>
+                <p className="text-gray-800 dark:text-gray-300 text-lg font-semibold tracking-tight">
+                  A way to analyze your flight routes and your flight patterns in a detailed way.
+                </p>
 
-                  <blockquote className="text-gray-300 mt-4 text-sm font-bold">Requires <Badge className="bg-yellow-500 text-dark">Premium</Badge> or <Badge className="bg-green-600 text-light">Lifetime</Badge> Subscription</blockquote>
+                {/* <blockquote className="text-gray-300 mt-4 text-sm font-bold">Requires <Badge className="bg-yellow-500 text-dark">Premium</Badge> or <Badge className="bg-green-600 text-light">Lifetime</Badge> Subscription</blockquote>
 
                   <GroupedSubscriptionButtons />
                   <br />
-                  <PromoReminders />
-                </header>
+                  <PromoReminders /> */}
 
-                <h2 className="text-2xl font-bold text-light">Features:</h2>
+                <Button> <a href="#route-analysis-features">See Features</a></Button>
+              </header>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {/* <h2 className="text-2xl font-bold text-light">Features:</h2> */}
+
+              {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   {routeAnalysisFeatures.map((feature, index) => (
                     <div key={index} className="flex flex-col gap-2 bg-gray-700/60 p-4 rounded-lg">
                       <div className="flex items-center gap-2 text-light">
@@ -379,10 +405,154 @@ const FlightsPage = async ({ searchParams }: { searchParams: Promise<{ [key: str
                       <p className="text-gray-300">{feature.description}</p>
                     </div>
                   ))}
+                </div> */}
+
+              <section id='route-analysis-features' className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 mt-8">
+
+                <div className="group hover:scale-105 transition-all duration-200 md:row-span-2 bg-[#FFFAF0] dark:bg-gradient-to-br dark:bg-black/10 p-6 md:p-8 rounded-[20px] overflow-hidden min-h-[300px] flex flex-col items-center justify-center gap-4">
+
+                  <header className="flex flex-col gap-2">
+                    <RiMap2Line className="text-3xl md:text-5xl text-gray-900 dark:text-gray-100" />
+
+                    <h2 className="text-2xl md:text-7xl font-bold tracking-tighter text-gray-900 dark:text-white">Interactive Route Maps</h2>
+
+                    <p className="text-gray-600 dark:text-gray-400 text-sm font-medium">Visualize every route you've flown with detailed route overlays and airport insights.</p>
+                  </header>
+
+
+                  <Image
+                    src={routeMapImage}
+                    alt="Route Map"
+                    width={500}
+                    height={500}
+                    className="border-4 md:border-6 border-white dark:border-gray-600 rounded-[20px] shadow-2xl group-hover:scale-105 transition-all duration-200 w-full md:w-auto mx-auto"
+                    quality={100}
+                  />
                 </div>
 
+                <div className="group hover:scale-105 transition-all duration-200 bg-[#FFF8DC] dark:bg-gradient-to-br dark:bg-[#16161d] p-6 md:p-8 rounded-[20px] overflow-hidden min-h-[250px] flex flex-col gap-4">
 
-              </div>
+                  <header className="flex flex-col gap-2">
+                    <LuWandSparkles className="text-3xl md:text-4xl text-gray-900 dark:text-gray-100" />
+
+                    <h2 className="text-2xl md:text-3xl font-bold tracking-tighter text-gray-900 dark:text-white">Flight Pattern Summary</h2>
+
+                    <p className="text-gray-600 dark:text-gray-400 text-sm font-medium">Discover your most common routes, flight habits, and overall activity.</p>
+                  </header>
+
+                  <Image
+                    src={routeSummaryImage}
+                    alt="Route Summary"
+                    width={200}
+                    height={200}
+                    className="border-4 md:border-6 border-white dark:border-gray-600 rounded-[20px] shadow-2xl group-hover:scale-105 transition-all duration-200 w-full md:w-auto mx-auto"
+                    quality={100}
+                  />
+                </div>
+
+                <div className="group hover:scale-105 transition-all duration-200 bg-[#FDFAED] dark:bg-gradient-to-br dark:from-lime-950 dark:to-green-950 p-6 md:p-8 rounded-[20px] overflow-hidden min-h-[250px] flex flex-col gap-4">
+
+                  <header className="flex flex-col gap-2">
+                    <HiOutlinePaperAirplane className="text-3xl md:text-4xl text-gray-900 dark:text-gray-100" />
+
+                    <h2 className="text-2xl md:text-3xl font-bold tracking-tighter text-gray-900 dark:text-white">Distance & Mileage Insights</h2>
+
+                    <p className="text-gray-600 dark:text-gray-400 text-sm font-medium">Track total distance traveled, average route length, and record-breaking flights.</p>
+                  </header>
+
+                  <Image
+                    src={routeStatsImage}
+                    alt="Route Stats"
+                    width={160}
+                    height={150}
+                    className="border-4 md:border-6 border-white dark:border-gray-600 rounded-[20px] shadow-2xl group-hover:scale-105 transition-all duration-200 w-full md:w-auto mx-auto"
+                    quality={100}
+                  />
+                </div>
+
+                <div className="group hover:scale-105 transition-all duration-200 col-span-1 md:col-span-2 md:row-span-3 bg-[#fff5ee] dark:bg-gradient-to-br dark:bg-[#32174d] p-6 md:p-8 rounded-[20px] flex flex-col md:flex-row justify-between items-center gap-6">
+
+                  <header className="flex flex-col gap-2 w-full md:w-[40%]">
+                    <TbBrain className="text-3xl md:text-4xl text-gray-900 dark:text-gray-100" />
+
+                    <h2 className="text-2xl md:text-3xl font-bold tracking-tighter text-gray-900 dark:text-white">Route Intelligence</h2>
+
+                    <p className="text-gray-600 dark:text-gray-400 text-sm font-medium">Discover where you fly most, how far you travel, and the patterns that define your virtual aviation journey.</p>
+
+
+                    <Accordion
+                      type="single"
+                      collapsible
+                      defaultValue="shipping"
+                      className="max-w-lg bg-white/50 dark:bg-gray-800/50 rounded-[20px] py-2 px-4"
+                    >
+                      <AccordionItem value="shipping">
+                        <AccordionTrigger className="font-semibold text-gray-900 dark:text-white">What is a Valid Flight?</AccordionTrigger>
+                        <AccordionContent className="text-gray-600 dark:text-gray-400">
+                          A valid flight is a flight that has a valid departure and arrival airport, and a valid aircraft per flight entry.
+                        </AccordionContent>
+                      </AccordionItem>
+
+                    </Accordion>
+                  </header>
+
+                  <Image
+                    src={routeContinentsImage}
+                    alt="Route Stats"
+                    width={600}
+                    height={150}
+                    className="border-4 md:border-6 border-white dark:border-gray-600 rounded-[20px] shadow-2xl group-hover:scale-105 transition-all duration-200 w-full md:w-auto"
+                    quality={100}
+                  />
+                </div>
+
+                <div className="group hover:scale-105 transition-all duration-200 col-span-1 md:col-span-2 bg-gradient-to-br from-[#acdaff] to-blue-50 dark:bg-gradient-to-br dark:from-blue-950 dark:to-cyan-950 p-6 md:p-12 rounded-[20px] flex flex-col gap-6 md:gap-8 justify-between items-center w-full border-4 md:border-6 border-blue-200/50 dark:border-blue-600/60">
+
+                  <header className="flex flex-col items-center gap-2 text-center">
+
+                    <h2 className="text-2xl md:text-6xl font-bold tracking-tighter flex items-center gap-2 flex-wrap justify-center">
+                      <TbFileTypeCsv className="inline text-blue-600 dark:text-blue-400" />
+                      <span className="block sm:inline bg-gradient-to-r from-blue-600 via-cyan-500 to-blue-600 dark:from-blue-400 dark:via-cyan-300 dark:to-blue-400 bg-clip-text text-transparent">CSV Export Compatibility</span>
+                      <span className="block sm:inline bg-gradient-to-r from-blue-600 via-cyan-500 to-blue-600 dark:from-blue-400 dark:via-cyan-300 dark:to-blue-400 bg-clip-text text-transparent">(MyFlightRadar24 support)</span>
+                    </h2>
+
+                    <p className="text-gray-600 dark:text-gray-400 text-sm font-medium">Export your flight data in CSV format for external analysis with MyFlightRadar24 compatibility.</p>
+
+                    <Badge className="bg-green-600 dark:bg-green-700 text-light font-bold tracking-tight text-sm md:text-lg animate-pulse">LIFETIME PLAN EXCLUSIVE</Badge>
+
+
+
+                  </header>
+
+                  <div className="flex flex-col lg:flex-row gap-4 items-center justify-center w-full">
+
+                    <Image
+                      src={routeCsvImage}
+                      alt="CSV Export"
+                      width={500}
+                      height={200}
+                      className="border-4 md:border-6 border-white dark:border-gray-600 rounded-[20px] shadow-2xl group-hover:scale-105 transition-all duration-200 w-full md:w-auto"
+                      quality={100}
+                    />
+
+                    <Image
+                        src={routeMyFr24Image}
+                      alt="MyFlightRadar24"
+                      width={500}
+                      height={200}
+                      className="border-4 md:border-6 border-white dark:border-gray-600 rounded-[20px] shadow-2xl group-hover:scale-105 transition-all duration-200 w-full md:w-auto"
+                      quality={100}
+                    />
+                  </div>
+                </div>
+
+                {/* CTA Card */}
+                <GroupedSubscriptionButtons />
+
+              </section>
+
+
+
             </div>
           )}
         </TabsContent>

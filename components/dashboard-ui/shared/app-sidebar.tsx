@@ -82,15 +82,13 @@ const AppSidebar = () => {
       href: 'https://infinitetoolbox.vercel.app/',
       icon: FaToolbox,
       label: 'InfiniteToolbox',
-      borderGradient: 'from-[#8B4513] via-[#CD853F] to-[#DEB887]', // Brown to tan
-      textColorLight: 'text-[#8B4513]', // Dark brown for light mode
-      textColorDark: 'dark:text-[#DEB887]' // Light tan for dark mode
+      textColorLight: 'text-[#f0c474]',
+      textColorDark: 'dark:text-[#ffd6ba]'
     },
     {
       href: '/map/earth',
       icon: FaGlobeAsia,
       label: 'Flight Tracker',
-      borderGradient: 'from-blue-600 via-green-500 to-emerald-600', // Earth colors
       textColorLight: 'text-blue-700',
       textColorDark: 'dark:text-blue-400'
     },
@@ -98,7 +96,6 @@ const AppSidebar = () => {
       href: '/',
       icon: BsIncognito,
       label: 'Guest Mode',
-      borderGradient: 'from-orange-500 via-yellow-500 to-orange-500',
       textColorLight: 'text-orange-700',
       textColorDark: 'dark:text-orange-400'
     }
@@ -163,7 +160,7 @@ const AppSidebar = () => {
                   key={item.href}
                   href={item.href}
                   className={cn(
-                    "relative flex items-center gap-3 rounded-[15px] px-3 py-2.5 transition-all duration-200",
+                    "relative flex items-center gap-3 rounded-full px-3 py-2.5 transition-all duration-200",
                     "text-gray-700 dark:text-gray-300 font-medium text-sm",
                     "hover:bg-gray-100 dark:hover:bg-gray-800",
                     isActive && `${item.activeColors} font-semibold shadow-sm`,
@@ -196,11 +193,10 @@ const AppSidebar = () => {
               {externalLinks.map((link) => {
                 const Icon = link.icon
                 return (
-                  <div key={link.href} className={cn("p-[2px] rounded-[15px] bg-gradient-to-r", link.borderGradient)}>
                     <Link
                       href={link.href}
                       className={cn(
-                        "flex items-center gap-3 rounded-[13px] px-4 py-3 transition-all duration-200",
+                        "flex items-center gap-3 rounded-full px-4 py-3 transition-all duration-200",
                         "bg-white dark:bg-gray-800 font-semibold text-sm",
                         "hover:scale-[1.02] hover:shadow-md",
                         link.textColorLight,
@@ -211,7 +207,6 @@ const AppSidebar = () => {
                       <span>{link.label}</span>
                       <HiOutlineExternalLink className="ml-auto w-4 h-4" />
                     </Link>
-                  </div>
                 )
               })}
             </SidebarGroupContent>
@@ -225,12 +220,11 @@ const AppSidebar = () => {
               {externalLinks.map((link) => {
                 const Icon = link.icon
                 return (
-                  <div key={link.href} className={cn("hover:scale-105 transition-all duration-200 p-[2px] rounded-[15px] bg-gradient-to-br", link.borderGradient)}>
                     <Link
                       href={link.href}
                       className={cn(
-                        "flex items-center justify-center w-10 h-10 rounded-[13px] transition-all duration-200 hover:scale-110",
-                        "bg-white dark:bg-gray-800",
+                        "flex items-center justify-center w-10 h-10 rounded-full transition-all duration-200 hover:scale-110",
+                        "",
                         link.textColorLight,
                         link.textColorDark
                       )}
@@ -238,7 +232,6 @@ const AppSidebar = () => {
                     >
                       <Icon className="w-5 h-5" />
                     </Link>
-                  </div>
                 )
               })}
             </SidebarGroupContent>

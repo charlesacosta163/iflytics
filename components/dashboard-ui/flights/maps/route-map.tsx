@@ -874,36 +874,36 @@ export const RouteMap = ({ routes }: { routes: any[] }) => {
           />
           
           {/* Route Information Card */}
-          <div className="absolute top-5 left-5 bg-dark text-light rounded-xl overflow-hidden font-sans w-[300px] shadow-2xl z-[1001] border border-gray-600">
+          <div className="absolute top-5 left-5 bg-white dark:bg-gray-800 rounded-[20px] overflow-hidden font-sans w-[300px] shadow-2xl z-[1001] border-2 border-gray-200 dark:border-gray-700">
             {/* Header */}
-            <div className="p-6 pb-4 border-b-2 border-gray-600 bg-gray">
+            <div className="p-6 pb-4 border-b-2 border-gray-200 dark:border-gray-700 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
               <div className="flex justify-between items-start">
                 <div>
-                  <div className="text-gray-400 text-sm mb-1">
+                  <div className="text-gray-500 dark:text-gray-400 text-sm mb-1 font-medium">
                     Flight Route
                   </div>
-                  <div className="text-3xl font-bold text-white tracking-wider">
+                  <div className="text-3xl font-bold text-gray-800 dark:text-white tracking-wider">
                     {popupInfo.origin}
                   </div>
                 </div>
               </div>
               
-              <div className="text-blue-300 text-base mt-2 font-medium">
+              <div className="text-blue-600 dark:text-blue-400 text-base mt-2 font-semibold">
                 to {popupInfo.destination} • {popupInfo.distance} NM
               </div>
               
               {/* Route Category Badge */}
               <div className="mt-3 flex gap-2 items-center">
                 <span 
-                  className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold"
-                  style={{ backgroundColor: popupInfo.color + '20', color: popupInfo.color, border: `1px solid ${popupInfo.color}` }}
+                  className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold bg-opacity-10 dark:bg-opacity-20"
+                  style={{ backgroundColor: popupInfo.color + '20', color: popupInfo.color, border: `1.5px solid ${popupInfo.color}` }}
                 >
                   {popupInfo.category}
                 </span>
 
                 <Link href={`/dashboard/flights/${popupInfo.flightId}`}>
-                  <button className="bg-blue-500 hover:bg-blue-600 rounded-full text-xs py-1 px-4 flex items-center gap-1 border border-blue-500 font-medium transition-all duration-200 cursor-pointer">
-                    <FaInfoCircle className="w-4 h-4" />
+                  <button className="bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 rounded-full text-xs py-1.5 px-4 flex items-center gap-1.5 border-2 border-blue-500 dark:border-blue-600 font-semibold transition-all duration-200 cursor-pointer text-white shadow-sm hover:shadow-md">
+                    <FaInfoCircle className="w-3.5 h-3.5" />
                     <span className="text-xs">Details</span>
                   </button>
                 </Link>
@@ -911,54 +911,55 @@ export const RouteMap = ({ routes }: { routes: any[] }) => {
             </div>
 
             {/* Flight Details */}
-            <div className="p-6">
+            <div className="p-6 bg-white dark:bg-gray-800">
               <div className="grid grid-cols-2 gap-4 mb-4">
-                <div>
-                  <div className="text-gray-400 text-xs uppercase tracking-wide mb-1">
+                <div className="bg-gray-50 dark:bg-gray-900 rounded-[15px] p-3 border border-gray-200 dark:border-gray-700">
+                  <div className="text-gray-500 dark:text-gray-400 text-xs uppercase tracking-wide mb-1 font-medium">
                     Flight Time
                   </div>
-                  <div className="text-white font-semibold">
+                  <div className="text-gray-800 dark:text-white font-bold text-base">
                     {formatFlightTime(popupInfo.totalTime)}
                   </div>
                 </div>
                 
-                <div>
-                  <div className="text-gray-400 text-xs uppercase tracking-wide mb-1">
+                <div className="bg-gray-50 dark:bg-gray-900 rounded-[15px] p-3 border border-gray-200 dark:border-gray-700">
+                  <div className="text-gray-500 dark:text-gray-400 text-xs uppercase tracking-wide mb-1 font-medium">
                     Distance
                   </div>
-                  <div className="text-white font-semibold">
+                  <div className="text-gray-800 dark:text-white font-bold text-base">
                     {popupInfo.distance} NM
                   </div>
                 </div>
               </div>
 
-              <div className="mb-4">
-                <div className="text-gray-400 text-xs uppercase tracking-wide mb-1">
+              <div className="mb-4 bg-gray-50 dark:bg-gray-900 rounded-[15px] p-3 border border-gray-200 dark:border-gray-700">
+                <div className="text-gray-500 dark:text-gray-400 text-xs uppercase tracking-wide mb-1 font-medium">
                   Flight Date
                 </div>
-                <div className="text-white font-semibold">
+                <div className="text-gray-800 dark:text-white font-bold text-base">
                   {formatDate(popupInfo.created)}
                 </div>
               </div>
 
               {/* Aircraft Information */}
-              <div className="bg-gray rounded-lg p-4">
-                <div className="text-gray-400 text-xs uppercase tracking-wide mb-2">
+              <div className="bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20 rounded-[15px] p-4 border-2 border-blue-200 dark:border-blue-800">
+                <div className="text-blue-600 dark:text-blue-400 text-xs uppercase tracking-wide mb-2 font-semibold flex items-center gap-2">
+                  <FaRoute className="w-3 h-3" />
                   Aircraft
                 </div>
                 
                 {loadingAircraft ? (
-                  <div className="text-gray-400 text-sm">
+                  <div className="text-gray-500 dark:text-gray-400 text-sm font-medium">
                     Loading aircraft data...
                   </div>
                 ) : aircraftData ? (
                   <div>
-                    <div className="text-white font-bold text-lg mb-1">
+                    <div className="text-gray-800 dark:text-white font-bold text-lg mb-1">
                       {aircraftData.name}
                     </div>
                   </div>
                 ) : (
-                  <div className="text-gray-400 text-sm">
+                  <div className="text-gray-500 dark:text-gray-400 text-sm font-medium">
                     Aircraft data unavailable
                   </div>
                 )}
@@ -971,7 +972,7 @@ export const RouteMap = ({ routes }: { routes: any[] }) => {
                 setPopupInfo(null);
                 setAircraftData(null);
               }}
-              className="absolute top-4 right-4 bg-gray-600 hover:bg-gray-500 border-none rounded-full w-8 h-8 text-white text-lg cursor-pointer flex items-center justify-center transition-colors"
+              className="absolute top-4 right-4 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 border-2 border-gray-200 dark:border-gray-600 rounded-full w-8 h-8 text-gray-700 dark:text-white text-lg cursor-pointer flex items-center justify-center transition-all duration-200 shadow-sm hover:shadow-md"
             >
               <X className="w-4 h-4" />
             </button>
