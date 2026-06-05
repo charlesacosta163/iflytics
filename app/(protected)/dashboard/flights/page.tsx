@@ -19,7 +19,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
-import { VscCopilotWarning } from "react-icons/vsc";
 import { ImStatsDots } from "react-icons/im";
 import { getFlightsTimeFrame } from "@/lib/cache/flightdata";
 
@@ -35,6 +34,7 @@ import { Metadata } from 'next'
 import Link from "next/link";
 import FlightsAircraft from "@/components/dashboard-ui/flights/flights-aircraft";
 import { MdAirlineSeatFlat, MdOutlineAirlines, MdOutlineFlightTakeoff, MdOutlineHistoryEdu } from "react-icons/md";
+import { Safari } from "@/components/ui/safari";
 
 // Subscriptions
 import { getUserSubscription } from "@/lib/subscription/subscription";
@@ -62,12 +62,14 @@ import routeStatsImage from '@/public/subscriptions/route-cards/route-stats.png'
 import routeContinentsImage from '@/public/subscriptions/route-cards/route-continents.png';
 import routeCsvImage from '@/public/subscriptions/route-cards/route-csv.png';
 import routeMyFr24Image from '@/public/subscriptions/route-cards/route-myfr24.png';
+import routeVideoGif from '@/public/subscriptions/route-cards/route-vid1.gif';
 
 import aircraftMostUsedImage from '@/public/subscriptions/aircraft-cards/aircraft-mostused.png';
 import aircraftPlaneHistoryImage from '@/public/subscriptions/aircraft-cards/aircraft-planehistory.png';
 import aircraftPlaneHistory2Image from '@/public/subscriptions/aircraft-cards/aircraft-planehistory2.png';
 import aircraftTopAirlinesImage from '@/public/subscriptions/aircraft-cards/aircraft-topairlines.png';
 import aircraftTopBrandRankImage from '@/public/subscriptions/aircraft-cards/aircraft-topbrandrank.png';
+import aircraftVideoGif from '@/public/subscriptions/aircraft-cards/aircraft-vid1.gif';
 
 
 
@@ -385,6 +387,7 @@ const FlightsPage = async ({ searchParams }: { searchParams: Promise<{ [key: str
             <div className="relative w-full flex flex-col items-center justify-center bg-white/60 dark:bg-gray-800/20 py-16 px-4 rounded-[50px]">
                 {/* Animated Floating Icons */}
                 <FloatingIcons />
+               
 
               <header className="flex flex-col gap-4 items-center justify-center">
                 <h1 className="text-4xl lg:text-8xl font-bold tracking-tighter flex items-center gap-3">
@@ -403,7 +406,9 @@ const FlightsPage = async ({ searchParams }: { searchParams: Promise<{ [key: str
                   <br />
                   <PromoReminders /> */}
 
-                <Button className="text-2xl font-bold tracking-tight !py-6 !px-12"> <a href="#route-analysis-features">See Features</a></Button>
+                <Button className="md:text-2xl text-lg font-bold tracking-tight !py-6 !px-12"> <a href="#route-analysis-features">See Features</a></Button>
+
+                <Safari imageSrc={routeVideoGif.src} url="https://iflytics.app" className="max-w-[800px] w-full"/>
               </header>
 
               {/* <h2 className="text-2xl font-bold text-light">Features:</h2> */}
@@ -488,7 +493,7 @@ const FlightsPage = async ({ searchParams }: { searchParams: Promise<{ [key: str
                   <header className="flex flex-col gap-2 w-full md:w-[40%]">
                     <TbBrain className="text-3xl md:text-4xl text-gray-900 dark:text-gray-100" />
 
-                    <h2 className="text-2xl md:text-3xl font-bold tracking-tighter text-gray-900 dark:text-white">Route Intelligence</h2>
+                    <h2 className="text-2xl md:text-7xl font-bold tracking-tighter text-gray-900 dark:text-white">Route Intelligence</h2>
 
                     <p className="text-gray-600 dark:text-gray-400 text-sm font-medium">Discover where you fly most, how far you travel, and the patterns that define your virtual aviation journey.</p>
 
@@ -612,8 +617,9 @@ const FlightsPage = async ({ searchParams }: { searchParams: Promise<{ [key: str
             <div className="relative w-full flex flex-col items-center justify-center bg-white/60 dark:bg-gray-800/20 py-16 px-4 rounded-[50px]">
                 {/* Animated Floating Icons */}
                 <FloatingIcons />
-                
-              <header className="flex flex-col gap-4 items-center justify-center">
+               
+
+              <header className="flex flex-col gap-4 items-center justify-center w-full">
                 <h1 className="text-4xl lg:text-8xl font-bold tracking-tighter flex items-center gap-3">
                   <LuPlane className="dark:text-[#ff879b] text-[#0080ff] rotate-45" />
                   <span className="bg-gradient-to-r dark:from-[#ff879b] dark:to-[#ffe4d2] from-[#0080ff] via-blue-200 to-blue-300 bg-clip-text text-transparent">
@@ -630,7 +636,9 @@ const FlightsPage = async ({ searchParams }: { searchParams: Promise<{ [key: str
                   <br />
                   <PromoReminders /> */}
 
-                <Button className="text-2xl font-bold tracking-tight !py-6 !px-12"> <a href="#aircraft-analysis-features">See Features</a></Button>
+                <Button className="md:text-2xl text-lg font-bold tracking-tight !py-6 !px-12"> <a href="#aircraft-analysis-features">See Features</a></Button>
+
+                <Safari imageSrc={aircraftVideoGif.src} url="https://iflytics.app" className="max-w-[800px] w-full"/>
               </header>
 
               {/* <h2 className="text-2xl font-bold text-light">Features:</h2> */}
@@ -836,7 +844,7 @@ const FlightsPage = async ({ searchParams }: { searchParams: Promise<{ [key: str
         </TabsContent>
 
         <TabsContent value="atc" className="space-y-6 w-full">
-          <div className="relative bg-white/50 dark:from-gray-900 dark:via-blue-950 dark:to-gray-900 rounded-[50px] p-8 md:p-16 min-h-[500px] flex flex-col items-center justify-center ">
+          <div className="relative bg-white/50 dark:bg-black rounded-[50px] p-8 md:p-16 min-h-[500px] flex flex-col items-center justify-center ">
             
             <header className="flex flex-col gap-4 items-center justify-center text-center">
               <h1 className="text-4xl lg:text-8xl font-bold tracking-tighter flex items-center gap-3 flex-wrap justify-center">
