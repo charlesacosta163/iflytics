@@ -48,11 +48,16 @@ export function getFlightOverviewStatsPerTimeFrame(flights: Flight[]) {
   );
   const totalXp = flights.reduce((acc, flight) => acc + flight.xp, 0);
 
+  const totalDayTime = flights.reduce((acc, flight) => acc + flight.dayTime, 0);
+  const totalNightTime = flights.reduce((acc, flight) => acc + flight.nightTime, 0);
+
   return {
     totalFlights,
     totalTime,
     totalLandings,
     totalXp,
+    totalDayTime,
+    totalNightTime,
   };
 }
 

@@ -369,6 +369,7 @@ const FlightsPage = async ({ searchParams }: { searchParams: Promise<{ [key: str
             mostVisitedOriginAndDestinationAirports={mostVisitedOriginAndDestinationAirports}
             flightActivity={flightActivity}
             aircraftUsageData={aircraftUsageData}
+            flights={allFlights}
             timeframe={timeframe as string}
           />
         </TabsContent>
