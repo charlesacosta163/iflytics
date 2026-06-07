@@ -1,6 +1,5 @@
-import { Card } from '@/components/ui/card'
-import { aircraftBrands } from '@/lib/data'
-import { Badge } from '@/components/ui/badge'
+import { aircraftBrands, aircraftBrandsCompliments } from "@/lib/data"
+import { Badge } from "@/components/ui/badge"
 import {
   Dialog,
   DialogContent,
@@ -8,326 +7,403 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { LuTicketsPlane } from 'react-icons/lu';
-import { convertMinutesToHours, cn } from '@/lib/utils'
-import { PiStarFill } from 'react-icons/pi';
-import { aircraftBrandsCompliments } from '@/lib/data'
-import { FaQuestionCircle } from 'react-icons/fa';
+import { convertMinutesToHours, cn } from "@/lib/utils"
+import { PiStarFill } from "react-icons/pi"
 import Image from "next/image"
 import { matchAircraftNameToImage } from "@/lib/cache/flightinsightsdata"
+import { GiPathDistance } from "react-icons/gi"
+import { LuFactory, LuList, LuPlane, LuTimer, LuTrendingUp } from "react-icons/lu"
 
-const getBrandForAircraft = (aircraftName: string): string => {
-  for (const [brand, identifiers] of Object.entries(aircraftBrands)) {
-    if (identifiers.some(identifier => 
-      aircraftName.toLowerCase().includes(identifier.toLowerCase())
-    )) {
-      return brand;
-    }
-  }
-  return "Other";
-};
+const labelIconClass = "shrink-0 w-[11px] h-[11px]"
 
-const AircraftBrandsCard = ({allAircraft}: {allAircraft: any}) => {
-  
-  const aircraftBrandsCount = allAircraft.reduce((acc: any[], aircraft: any) => {
-    const matchedBrand = Object.entries(aircraftBrands).find(([brand, identifiers]) => {
-      return identifiers.some(identifier => 
+type BrandEntry = {
+  brand: string
+  count: number
+  totalDistance: number
+  totalTime: number
+  aircraftList: string[]
+}
+
+type AircraftStat = {
+  name: string
+  count: number
+  totalDistance?: number
+  totalTime?: number
+}
+
+const Stat = ({
+  label,
+  value,
+  sub,
+  icon,
+}: {
+  label: string
+  value: string | number
+  sub?: string
+  icon?: React.ReactNode
+}) => (
+  <div className="min-w-0">
+    <p className="flex items-center gap-1 text-[11px] leading-none text-gray-500 dark:text-gray-400">
+      {icon}
+      <span>{label}</span>
+    </p>
+    <p className="text-base md:text-lg font-semibold text-gray-900 dark:text-gray-100 tabular-nums tracking-tight mt-1">
+      {value}
+    </p>
+    {sub && (
+      <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-0.5 truncate">
+        {sub}
+      </p>
+    )}
+  </div>
+)
+
+const shortenDistance = (distance: number) => {
+  if (distance < 1000) return `${Math.round(distance)} NM`
+  return `${(distance / 1000).toFixed(1)}k NM`
+}
+
+const AircraftBrandsCard = ({ allAircraft }: { allAircraft: AircraftStat[] }) => {
+  const aircraftByName = Object.fromEntries(
+    allAircraft.map((aircraft) => [aircraft.name, aircraft])
+  )
+
+  const aircraftBrandsCount = allAircraft.reduce<BrandEntry[]>((acc, aircraft) => {
+    const matchedBrand = Object.entries(aircraftBrands).find(([, identifiers]) =>
+      identifiers.some((identifier) =>
         aircraft.name.toLowerCase().includes(identifier.toLowerCase())
-      );
-    });
+      )
+    )
 
-    if (matchedBrand) {
-      const [brandName] = matchedBrand;
-      const existingBrand = acc.find(item => item.brand === brandName);
-      
-      if (existingBrand) {
-        existingBrand.count += aircraft.count;
-        existingBrand.totalDistance += aircraft.totalDistance || 0;
-        existingBrand.totalTime += aircraft.totalTime || 0;
-        existingBrand.aircraftList.push(aircraft.name); // Add back aircraft list
-      } else {
-        acc.push({ 
-          brand: brandName, 
-          count: aircraft.count,
-          totalDistance: aircraft.totalDistance || 0,
-          totalTime: aircraft.totalTime || 0,
-          aircraftList: [aircraft.name] // Add back aircraft list
-        });
-      }
+    const brandName = matchedBrand ? matchedBrand[0] : "Other"
+    const existingBrand = acc.find((item) => item.brand === brandName)
+
+    if (existingBrand) {
+      existingBrand.count += aircraft.count
+      existingBrand.totalDistance += aircraft.totalDistance || 0
+      existingBrand.totalTime += aircraft.totalTime || 0
+      existingBrand.aircraftList.push(aircraft.name)
     } else {
-      const otherBrand = acc.find(item => item.brand === "Other");
-      if (otherBrand) {
-        otherBrand.count += aircraft.count;
-        otherBrand.totalDistance += aircraft.totalDistance || 0;
-        otherBrand.totalTime += aircraft.totalTime || 0;
-        otherBrand.aircraftList.push(aircraft.name); // Add back aircraft list
-      } else {
-        acc.push({ 
-          brand: "Other", 
-          count: aircraft.count,
-          totalDistance: aircraft.totalDistance || 0,
-          totalTime: aircraft.totalTime || 0,
-          aircraftList: [aircraft.name] // Add back aircraft list
-        });
-      }
+      acc.push({
+        brand: brandName,
+        count: aircraft.count,
+        totalDistance: aircraft.totalDistance || 0,
+        totalTime: aircraft.totalTime || 0,
+        aircraftList: [aircraft.name],
+      })
     }
-    
-    return acc;
-  }, []);
 
-  // Sort by count (highest first) and get top brand
-  const sortedBrands = aircraftBrandsCount.sort((a: any, b: any) => b.count - a.count);
-  const topBrand = sortedBrands[0];
-  
-  // Get random compliment for the top brand
+    return acc
+  }, [])
+
+  const sortedBrands = [...aircraftBrandsCount].sort((a, b) => b.count - a.count)
+  const topBrand = sortedBrands[0]
+
+  const totalFlights = allAircraft.reduce((sum, aircraft) => sum + aircraft.count, 0)
+  const uniqueBrands = sortedBrands.length
+  const topShare =
+    topBrand && totalFlights > 0
+      ? ((topBrand.count / totalFlights) * 100).toFixed(1)
+      : "0"
+  const top3Flights = sortedBrands
+    .slice(0, 3)
+    .reduce((sum, brand) => sum + brand.count, 0)
+  const top3Share =
+    totalFlights > 0
+      ? ((top3Flights / totalFlights) * 100).toFixed(1)
+      : "0"
+  const uniqueAircraftTypes = allAircraft.length
+  const maxBrandFlights = topBrand?.count ?? 1
+
   const getRandomCompliment = (brand: string) => {
-    const compliments = aircraftBrandsCompliments[brand as keyof typeof aircraftBrandsCompliments] || aircraftBrandsCompliments["Other"];
-    return compliments[Math.floor(Math.random() * compliments.length)];
-  };
+    const compliments =
+      aircraftBrandsCompliments[
+        brand as keyof typeof aircraftBrandsCompliments
+      ] || aircraftBrandsCompliments.Other
+    return compliments[Math.floor(Math.random() * compliments.length)]
+  }
 
-  // Helper function to format distance
-  const formatDistance = (distance: number) => {
-    if (distance < 1000) {
-      return `${distance.toFixed(0)} nm`;
-    } else {
-      return `${(distance / 1000).toFixed(1)}k nm`;
-    }
-  };
-    
   return (
-    <div className="flex flex-col md:flex-row gap-3 md:gap-4 w-full">
-      {/* Aircraft Brands Statistics Card */}
-      <Card className={cn(
-        "p-4 md:p-6 flex-1",
-        "bg-gray-50 dark:bg-gray-800",
-        "border-2 border-gray-200 dark:border-gray-700",
-        "rounded-[20px] md:rounded-[25px]"
-      )}>
-        <div className="space-y-4">
-          <header className={cn(
-            "text-center pb-3 md:pb-4 mb-2",
-            "border-b-2 border-gray-200 dark:border-gray-700"
-          )}>
-            <h3 className="text-lg md:text-xl font-bold tracking-tight text-gray-800 dark:text-gray-100">Aircraft Brands</h3>
-            <p className="text-xs md:text-sm text-gray-500 dark:text-gray-400 font-medium">Your flight distribution by manufacturer</p>
-          </header>
-          
-          <div className="space-y-2 md:space-y-3">
-            {sortedBrands.map((brandData: any, index: number) => {
-              const percentage = ((brandData.count / allAircraft.reduce((sum: number, aircraft: any) => sum + aircraft.count, 0)) * 100).toFixed(1);
-              
-              return (
-                <div key={brandData.brand} className={cn(
-                  "flex items-center justify-between",
-                  "p-3 md:p-4",
-                  "rounded-[15px] md:rounded-[20px]",
-                  "bg-white dark:bg-gray-700",
-                  "hover:bg-gray-100 dark:hover:bg-gray-600",
-                  "transition-all duration-200",
-                  "border-2 border-gray-200 dark:border-gray-600",
-                  "hover:shadow-md"
-                )}>
-                  <div className="flex items-center gap-2 md:gap-3">
-                    
-                    {/* Dialog for Aircraft List */}
-                    <Dialog>
-                      <DialogTrigger className={cn(
-                        'flex items-center gap-1.5 md:gap-2',
-                        'bg-blue-600 hover:bg-blue-700',
-                        'dark:bg-blue-500 dark:hover:bg-blue-600',
-                        'transition-colors',
-                        'text-white',
-                        'rounded-[10px]',
-                        'p-2',
-                        'text-xs md:text-sm font-bold'
-                      )}>
-                        <FaQuestionCircle className="w-3 h-3 md:w-4 md:h-4" /> <span className="sm:block hidden">More</span>
-                      </DialogTrigger>
-                      <DialogContent className={cn(
-                        "max-w-md",
-                        "bg-white dark:bg-gray-800",
-                        "border-2 border-gray-200 dark:border-gray-700",
-                        "rounded-[20px]"
-                      )}>
-                        <DialogHeader>
-                          <DialogTitle className="flex items-center gap-2">
-                            <span className="text-base md:text-lg font-bold text-gray-800 dark:text-gray-100">{brandData.brand}</span>
-                            <Badge variant="secondary" className={cn(
-                              "text-xs rounded-full font-bold border-none",
-                              "bg-blue-100 dark:bg-blue-900/30",
-                              "text-blue-700 dark:text-blue-300"
-                            )}>
-                              {brandData.aircraftList.length} aircraft
-                            </Badge>
-                          </DialogTitle>
-                        </DialogHeader>
-                        
-                        <div className="space-y-3 md:space-y-4">
-                          <div className="text-xs md:text-sm text-gray-600 dark:text-gray-400 font-medium">
-                            Aircraft you've flown from this manufacturer:
-                          </div>
-                          
-                          <div className="grid grid-cols-1 gap-2 md:gap-3 max-h-64 overflow-y-auto">
-                            {brandData.aircraftList.map((aircraftName: string, aircraftIndex: number) => (
-                              <div key={aircraftIndex} className={cn(
-                                "flex items-center gap-3 p-3",
-                                "bg-gray-50 dark:bg-gray-700",
-                                "border-2 border-gray-200 dark:border-gray-600",
-                                "rounded-[12px]",
-                                "hover:shadow-sm transition-shadow duration-200"
-                              )}>
-                                <div className="flex-1 min-w-0">
-                                  <div className="font-bold text-xs md:text-sm leading-tight text-gray-800 dark:text-gray-100">
-                                    {aircraftName}
-                                  </div>
-                                  <Badge variant="outline" className={cn(
-                                    "text-xs mt-1 rounded-full border-none font-bold",
-                                    "bg-blue-100 dark:bg-blue-900/30",
-                                    "text-blue-700 dark:text-blue-300"
-                                  )}>
-                                    {allAircraft.find((a: any) => a.name === aircraftName)?.count || 0} {allAircraft.find((a: any) => a.name === aircraftName)?.count === 1 ? 'flight' : 'flights'}
-                                  </Badge>
-                                </div>
-                                <div className="flex-shrink-0">
-                                  <Image 
-                                    src={`/images/aircraft/${matchAircraftNameToImage(aircraftName) || "placeholder.png"}`} 
-                                    alt={aircraftName} 
-                                    width={60} 
-                                    height={40}
-                                    className="rounded-[8px]"
-                                  />
-                                </div>
-                              </div>
-                            ))}
-                          </div>
+    <section
+      className={cn(
+        "bg-white/50 dark:bg-gray-800/50",
+        "rounded-[20px] md:rounded-[25px]",
+        "p-4 md:p-5"
+      )}
+    >
+      <header className="mb-4">
+        <h3 className="flex items-center gap-1.5 text-lg font-semibold tracking-tighter text-gray-900 dark:text-gray-100">
+          <LuFactory className={labelIconClass} />
+          Aircraft brands
+        </h3>
+        <p className="text-[11px] text-gray-500 dark:text-gray-400 mt-0.5">
+          Flight distribution by manufacturer
+        </p>
+      </header>
 
-                          <div className={cn(
-                            "pt-2 border-t-2",
-                            "border-gray-200 dark:border-gray-700",
-                            "text-xs md:text-sm",
-                            "text-gray-700 dark:text-gray-300 font-medium"
-                          )}>
-                            Total flights with {brandData.brand}: <b className="text-gray-900 dark:text-gray-100">{brandData.count}</b>
-                          </div>
+      {sortedBrands.length > 0 ? (
+        <>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+            <Stat
+              label="Manufacturers"
+              value={uniqueBrands}
+              sub={`${totalFlights} total flights`}
+              icon={<LuFactory className={labelIconClass} />}
+            />
+            <Stat
+              label="Top brand"
+              value={topBrand?.brand ?? "—"}
+              sub={
+                topBrand
+                  ? `${topBrand.count} flights · ${topShare}%`
+                  : undefined
+              }
+              icon={<LuTrendingUp className={labelIconClass} />}
+            />
+            <Stat
+              label="Top 3 share"
+              value={`${top3Share}%`}
+              sub="Of all brand-tagged flights"
+              icon={<LuList className={labelIconClass} />}
+            />
+            <Stat
+              label="Aircraft types"
+              value={uniqueAircraftTypes}
+              sub="Across all manufacturers"
+              icon={<LuPlane className={labelIconClass} />}
+            />
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-5 mt-5">
+            <div className="lg:col-span-2 space-y-3">
+              <p className="text-[11px] text-gray-500 dark:text-gray-400">
+                All manufacturers ({sortedBrands.length})
+              </p>
+
+              {sortedBrands.map((brandData, index) => {
+                const sharePct =
+                  totalFlights > 0
+                    ? Number(
+                        ((brandData.count / totalFlights) * 100).toFixed(1)
+                      )
+                    : 0
+                const barPct =
+                  maxBrandFlights > 0
+                    ? Math.round((brandData.count / maxBrandFlights) * 100)
+                    : 0
+
+                return (
+                  <div
+                    key={brandData.brand}
+                    className={cn(
+                      "flex flex-col gap-2.5 p-3 md:p-4",
+                      "rounded-[20px] md:rounded-[25px]",
+                      "bg-white/70 dark:bg-gray-800/70",
+                    )}
+                  >
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="flex items-center gap-2 min-w-0">
+                        <span className="text-[11px] font-semibold text-gray-400 dark:text-gray-500 w-4 shrink-0 tabular-nums">
+                          {index + 1}
+                        </span>
+                        <div className="min-w-0">
+                          <h4 className="text-sm md:text-base font-semibold text-gray-900 dark:text-gray-100 truncate">
+                            {brandData.brand}
+                          </h4>
+                          <p className="text-[11px] text-gray-500 dark:text-gray-400 mt-0.5">
+                            {brandData.aircraftList.length} aircraft type
+                            {brandData.aircraftList.length !== 1 ? "s" : ""}
+                          </p>
                         </div>
-                      </DialogContent>
-                    </Dialog>
+                      </div>
+                      <div className="text-right shrink-0">
+                        <p className="text-base font-semibold text-gray-900 dark:text-gray-100 tabular-nums leading-none">
+                          {brandData.count}
+                        </p>
+                        <p className="text-[10px] text-gray-400 dark:text-gray-500 mt-0.5 tabular-nums">
+                          {sharePct}%
+                        </p>
+                      </div>
+                    </div>
 
-                    <div className="flex items-center gap-1.5 md:gap-2">
-                      <span className="text-xs md:text-sm font-bold text-gray-500 dark:text-gray-400">#{index + 1}</span>
-                      <span className="font-bold text-sm md:text-base text-gray-800 dark:text-gray-100 tracking-tight">{brandData.brand}</span>
+                    <div className="h-1 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
+                      <div
+                        className="h-full bg-sky-500 dark:bg-sky-400 rounded-full"
+                        style={{ width: `${barPct}%` }}
+                      />
+                    </div>
+
+                    <div className="flex items-center justify-between gap-2">
+                      <p className="text-[11px] text-gray-500 dark:text-gray-400 truncate">
+                        {shortenDistance(brandData.totalDistance)} ·{" "}
+                        {convertMinutesToHours(Math.round(brandData.totalTime))}
+                      </p>
+
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <button
+                            type="button"
+                            className="text-[11px] font-medium text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors shrink-0"
+                          >
+                            View aircraft
+                          </button>
+                        </DialogTrigger>
+                        <DialogContent
+                          className={cn(
+                            "max-w-md max-h-[80vh] overflow-hidden flex flex-col z-[10001]",
+                            "bg-white dark:bg-gray-800",
+                            "border border-gray-200 dark:border-gray-700",
+                            "rounded-xl md:rounded-2xl"
+                          )}
+                        >
+                          <DialogHeader>
+                            <DialogTitle className="flex items-center gap-2 text-base font-semibold text-gray-900 dark:text-gray-100">
+                              <span className="truncate">{brandData.brand}</span>
+                              <Badge
+                                variant="secondary"
+                                className={cn(
+                                  "text-[10px] rounded-md shrink-0",
+                                  "bg-gray-100 dark:bg-gray-700",
+                                  "text-gray-600 dark:text-gray-300",
+                                  "border-none font-medium"
+                                )}
+                              >
+                                {brandData.aircraftList.length} aircraft
+                              </Badge>
+                            </DialogTitle>
+                          </DialogHeader>
+
+                          <div className="space-y-3 overflow-y-auto flex-1 -mx-1 px-1">
+                            <p className="text-[11px] text-gray-500 dark:text-gray-400">
+                              Aircraft flown from this manufacturer
+                            </p>
+
+                            <div className="space-y-2 max-h-64 overflow-y-auto">
+                              {brandData.aircraftList.map(
+                                (aircraftName, aircraftIndex) => {
+                                  const aircraftStats = aircraftByName[aircraftName]
+                                  const flightCount = aircraftStats?.count || 0
+                                  const distanceFlown = aircraftStats?.totalDistance || 0
+
+                                  return (
+                                  <div
+                                    key={aircraftIndex}
+                                    className={cn(
+                                      "flex items-center gap-3 p-3",
+                                      "rounded-lg",
+                                      "border border-gray-200 dark:border-gray-700",
+                                      "bg-white/50 dark:bg-gray-800/50"
+                                    )}
+                                  >
+                                    <div className="flex-1 min-w-0">
+                                      <p className="font-medium text-xs md:text-sm text-gray-900 dark:text-gray-100 truncate">
+                                        {aircraftName}
+                                      </p>
+                                      <p className="text-[11px] text-gray-500 dark:text-gray-400 mt-0.5 tabular-nums">
+                                        {flightCount}{" "}
+                                        {flightCount === 1 ? "flight" : "flights"}
+                                      </p>
+                                      <p className="flex items-center gap-1 text-[11px] text-gray-500 dark:text-gray-400 mt-0.5 tabular-nums">
+                                        <GiPathDistance className={labelIconClass} />
+                                        {shortenDistance(distanceFlown)} flown
+                                      </p>
+                                    </div>
+                                    <Image
+                                      src={`/images/aircraft/${matchAircraftNameToImage(aircraftName) || "placeholder.png"}`}
+                                      alt={aircraftName}
+                                      width={60}
+                                      height={40}
+                                      className="rounded-md border border-gray-200 dark:border-gray-700 shrink-0"
+                                    />
+                                  </div>
+                                  )
+                                }
+                              )}
+                            </div>
+
+                            <p className="text-[11px] text-gray-500 dark:text-gray-400 pt-2 border-t border-gray-200 dark:border-gray-700">
+                              Total flights with {brandData.brand}:{" "}
+                              <span className="font-semibold text-gray-800 dark:text-gray-200 tabular-nums">
+                                {brandData.count}
+                              </span>
+                            </p>
+                          </div>
+                        </DialogContent>
+                      </Dialog>
                     </div>
                   </div>
-                  
-                  <div className="flex items-center gap-2">
-                    <Badge variant="secondary" className={cn(
-                      "text-xs font-bold rounded-full",
-                      "bg-amber-100 dark:bg-amber-900/30",
-                      "text-amber-700 dark:text-amber-300"
-                    )}>
-                      {percentage}%
-                    </Badge>
-                    <span className="text-xs md:text-sm font-bold text-gray-600 dark:text-gray-300">
-                      {brandData.count}
-                    </span>
-                  </div>
+                )
+              })}
+            </div>
+
+            {topBrand && (
+              <div
+                className={cn(
+                  "flex flex-col gap-4 p-4",
+                  "rounded-xl",
+                  "border border-dashed border-gray-200 dark:border-gray-600",
+                  "bg-gray-50/50 dark:bg-gray-900/30",
+                  "h-fit"
+                )}
+              >
+                <div>
+                  <p className="flex items-center gap-1.5 text-[11px] text-gray-500 dark:text-gray-400">
+                    <PiStarFill className="w-3 h-3 text-amber-500" />
+                    Pilot&apos;s recognition
+                  </p>
+                  <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-0.5">
+                    Based on your most flown brand
+                  </p>
                 </div>
-              );
-            })}
-          </div>
-        </div>
-      </Card>
 
-      {/* Compliment Card */}
-      <Card className={cn(
-        "p-4 md:p-6 flex-1 md:self-start relative overflow-hidden",
-        "bg-gradient-to-br from-blue-500 to-indigo-600",
-        "dark:from-blue-600 dark:to-indigo-700",
-        "border-2 border-blue-400 dark:border-blue-700",
-        "rounded-[20px] md:rounded-[25px]",
-        "text-white"
-      )}>
-        {/* Background Airplane Icon */}
-        <LuTicketsPlane className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 w-112 h-112 text-white opacity-10" />
-
-        <div className="space-y-4 text-center relative z-10">
-          <header className={cn(
-            "pb-3 md:pb-4 mb-2",
-            "border-b-2 border-white/30"
-          )}>
-            <h3 className="text-lg md:text-xl font-bold tracking-tight">Pilot's Recognition</h3>
-            <p className="text-xs md:text-sm font-semibold">Based on your most flown brand</p>
-          </header>
-          
-          {topBrand && (
-            <div className="space-y-3 md:space-y-4">
-              <div className={cn(
-                "flex items-center justify-between",
-                "p-3 md:p-4",
-                "bg-white dark:bg-white/95",
-                "rounded-[15px] md:rounded-[20px]",
-                "border-2 border-white/50"
-              )}>
-                <div className="flex flex-col gap-1 md:gap-2">
-                  <Badge className={cn(
-                    "mb-2 text-sm md:text-base font-black tracking-tight",
-                    "bg-indigo-600 hover:bg-indigo-700",
-                    "rounded-full px-3 md:px-4 py-1",
-                    "flex items-center gap-1.5 md:gap-2",
-                    "text-white w-fit"
-                  )}>
-                    <PiStarFill className="text-base md:text-lg" /> Top Brand
-                  </Badge>
-                  <span className={cn(
-                    "text-3xl md:text-5xl font-black",
-                    "text-transparent self-start",
-                    "bg-clip-text bg-gradient-to-r from-blue-500 to-indigo-700",
-                    "tracking-tight"
-                  )}>
+                <div>
+                  <p className="text-xl md:text-2xl font-semibold tracking-tight text-gray-900 dark:text-gray-100">
                     {topBrand.brand}
-                  </span>
-
-                  <div className="flex flex-wrap gap-1.5 md:gap-2 mt-1 md:mt-2">
-                    <Badge variant="secondary" className={cn(
-                      "text-xs md:text-sm font-bold rounded-full border-none",
-                      "bg-gradient-to-br from-blue-500 to-indigo-700",
-                      "text-white"
-                    )}>
-                      {formatDistance(topBrand.totalDistance)}
-                    </Badge>
-                    <Badge variant="secondary" className={cn(
-                      "text-xs md:text-sm font-bold rounded-full border-none",
-                      "bg-gradient-to-br from-indigo-500 to-blue-700",
-                      "text-white"
-                    )}>
-                      {convertMinutesToHours(Math.round(topBrand.totalTime))}
-                    </Badge>
-                  </div>
+                  </p>
+                  <p className="text-[11px] text-gray-500 dark:text-gray-400 mt-1 tabular-nums">
+                    {topBrand.count} flights · {topShare}% of your log
+                  </p>
                 </div>
-                <span className="flex flex-col items-center justify-center text-xs md:text-sm font-bold text-blue-600">
-                  <span className="text-2xl md:text-3xl font-black text-blue-700">
-                    {topBrand.count}
-                  </span> flights
-                </span>
-              </div>
-              
-              <div className={cn(
-                "p-3 md:p-4",
-                "bg-gradient-to-br from-indigo-700 to-blue-800",
-                "dark:from-indigo-800 dark:to-blue-900",
-                "rounded-[15px] md:rounded-[20px]",
-                "text-white font-bold",
-                "border-2 border-indigo-500/30"
-              )}>
-                <p className="text-sm md:text-base leading-relaxed text-center">
+
+                <div className="grid grid-cols-2 gap-3">
+                  <Stat
+                    label="Distance"
+                    value={shortenDistance(topBrand.totalDistance)}
+                    icon={<GiPathDistance className={labelIconClass} />}
+                  />
+                  <Stat
+                    label="Flight time"
+                    value={convertMinutesToHours(
+                      Math.round(topBrand.totalTime)
+                    )}
+                    icon={<LuTimer className={labelIconClass} />}
+                  />
+                </div>
+
+                <p className="text-[11px] leading-relaxed text-gray-500 dark:text-gray-400 italic border-t border-gray-200 dark:border-gray-700 pt-3">
                   {getRandomCompliment(topBrand.brand)}
                 </p>
               </div>
-            </div>
+            )}
+          </div>
+        </>
+      ) : (
+        <div
+          className={cn(
+            "text-center py-10",
+            "border border-dashed border-gray-200 dark:border-gray-600",
+            "rounded-lg"
           )}
+        >
+          <p className="text-sm text-gray-500 dark:text-gray-400 font-medium">
+            No brand data available
+          </p>
+          <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-1">
+            Fly more aircraft to see manufacturer breakdown
+          </p>
         </div>
-      </Card>
-    </div>
+      )}
+    </section>
   )
 }
 

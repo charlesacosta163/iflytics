@@ -1,10 +1,10 @@
 "use client";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useMemo } from "react";
 import { Map } from "maplibre-gl";
 import * as turf from "@turf/turf";
 import * as maplibregl from "maplibre-gl";
 import { getAircraft } from "@/lib/actions";
-import { X } from "lucide-react";
+import { Search, X } from "lucide-react";
 import Link from "next/link";
 import { TiZoomInOutline, TiZoomOutOutline } from "react-icons/ti";
 import { Button } from "@/components/ui/button";
@@ -18,6 +18,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableCaption } from "@/components/ui/table";
+import { Input } from "@/components/ui/input";
 import { convertMinutesToHours, cn } from "@/lib/utils";
 import { LuNotebookTabs } from "react-icons/lu";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -32,7 +33,8 @@ export const RouteMap = ({ routes }: { routes: any[] }) => {
   const [isFullScreen, setIsFullScreen] = useState(false);
   const mapRef = useRef<Map | null>(null);
   const [selectedYear, setSelectedYear] = useState<string>("all");
-  
+  const [routeSearchQuery, setRouteSearchQuery] = useState("");
+
   // Function to get route color based on flight time (IATA standards)
   const getRouteColor = (totalTime: number) => {
     if (totalTime <= 180) { // ≤3 hours
@@ -56,6 +58,25 @@ export const RouteMap = ({ routes }: { routes: any[] }) => {
       return "Unknown";
     }
   };
+
+  const filteredDialogRoutes = useMemo(() => {
+    const query = routeSearchQuery.trim().toLowerCase();
+    if (!query) return routes;
+
+    return routes.filter((route) => {
+      const origin = (route.origin || "").toLowerCase();
+      const destination = (route.destination || "").toLowerCase();
+      const pair = `${origin}-${destination}`;
+      const haul = getRouteCategory(route.totalTime || 0).toLowerCase();
+
+      return (
+        origin.includes(query) ||
+        destination.includes(query) ||
+        pair.includes(query) ||
+        haul.includes(query)
+      );
+    });
+  }, [routes, routeSearchQuery]);
 
   // Zoom functions
   const zoomIn = () => {
@@ -593,7 +614,7 @@ export const RouteMap = ({ routes }: { routes: any[] }) => {
       </div>
 
       <div className="absolute bottom-4 right-4 z-[1000] flex flex-col space-y-2">
-      <Dialog>
+      <Dialog onOpenChange={(open) => { if (!open) setRouteSearchQuery(""); }}>
 
 <DialogTrigger className="!text-lg tracking-tight py-1 px-4 font-semibold  rounded-[15px] hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-300 cursor-pointer self-start flex items-center gap-2 border-2 border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-300">
   <LuNotebookTabs className="w-4 h-4" />
@@ -648,12 +669,35 @@ export const RouteMap = ({ routes }: { routes: any[] }) => {
         </div>
       </div>
     </div>
+
+    <div className={cn(
+      "flex items-center gap-2 mt-4",
+      "p-3",
+      "bg-gray-50 dark:bg-gray-700",
+      "border-2 border-gray-200 dark:border-gray-600",
+      "rounded-[12px] md:rounded-[15px]"
+    )}>
+      <Search className="w-4 h-4 text-gray-500 dark:text-gray-400 shrink-0" />
+      <Input
+        placeholder="Search by airport, route, or haul type..."
+        value={routeSearchQuery}
+        onChange={(e) => setRouteSearchQuery(e.target.value)}
+        className={cn(
+          "flex-1 h-8 border-none bg-transparent p-0 text-sm font-medium",
+          "text-gray-800 dark:text-gray-100",
+          "focus-visible:ring-0 focus-visible:ring-offset-0",
+          "placeholder:text-gray-500 dark:placeholder:text-gray-400"
+        )}
+      />
+    </div>
   </DialogHeader>
 
   <div className="mt-4">
     <Table>
       <TableCaption className="text-xs md:text-sm font-bold text-gray-600 dark:text-gray-400">
-        Total of {routes.length} unique routes flown
+        {routeSearchQuery.trim()
+          ? `Showing ${filteredDialogRoutes.length} of ${routes.length} unique routes`
+          : `Total of ${routes.length} unique routes flown`}
       </TableCaption>
       <TableHeader>
         <TableRow className={cn(
@@ -672,7 +716,16 @@ export const RouteMap = ({ routes }: { routes: any[] }) => {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {routes.map((route, index) => {
+        {filteredDialogRoutes.length === 0 ? (
+          <TableRow className="hover:bg-transparent">
+            <TableCell
+              colSpan={5}
+              className="text-center py-8 text-gray-500 dark:text-gray-400 font-medium"
+            >
+              No routes match your search
+            </TableCell>
+          </TableRow>
+        ) : filteredDialogRoutes.map((route, index) => {
           // Calculate route type based on time
           const getRouteType = (totalTime: number) => {
             if (totalTime <= 180)
@@ -778,7 +831,7 @@ export const RouteMap = ({ routes }: { routes: any[] }) => {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 text-sm">
         <div className="text-center">
           <div className="text-xl md:text-2xl font-black text-blue-600 dark:text-blue-400">
-            {routes.length}
+            {filteredDialogRoutes.length}
           </div>
           <div className="text-xs md:text-sm text-gray-600 dark:text-gray-300 font-bold">Total Routes</div>
         </div>
@@ -787,7 +840,7 @@ export const RouteMap = ({ routes }: { routes: any[] }) => {
             <div className="w-3 h-3 bg-green-500 rounded-full"></div>
             <div className="text-xl md:text-2xl font-black text-green-600 dark:text-green-400">
               {
-                routes.filter(
+                filteredDialogRoutes.filter(
                   (r) => (r.totalTime || 0) <= 180
                 ).length
               }
@@ -800,7 +853,7 @@ export const RouteMap = ({ routes }: { routes: any[] }) => {
             <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
             <div className="text-xl md:text-2xl font-black text-yellow-600 dark:text-yellow-400">
               {
-                routes.filter(
+                filteredDialogRoutes.filter(
                   (r) =>
                     (r.totalTime || 0) > 180 &&
                     (r.totalTime || 0) <= 360
@@ -815,7 +868,7 @@ export const RouteMap = ({ routes }: { routes: any[] }) => {
             <div className="w-3 h-3 bg-red-500 rounded-full"></div>
             <div className="text-xl md:text-2xl font-black text-red-600 dark:text-red-400">
               {
-                routes.filter(
+                filteredDialogRoutes.filter(
                   (r) => (r.totalTime || 0) > 360
                 ).length
               }
@@ -832,7 +885,7 @@ export const RouteMap = ({ routes }: { routes: any[] }) => {
       )}>
         <div className="text-center">
           <div className="text-2xl md:text-3xl font-black text-purple-600 dark:text-purple-400">
-            {routes
+            {filteredDialogRoutes
               .reduce(
                 (total, route) => total + (route.distance || 0),
                 0
@@ -845,7 +898,7 @@ export const RouteMap = ({ routes }: { routes: any[] }) => {
           </div>
           <div className="text-xs md:text-sm text-gray-500 dark:text-gray-400 mt-1 font-bold">
             {Math.round(
-              routes.reduce(
+              filteredDialogRoutes.reduce(
                 (total, route) => total + (route.distance || 0),
                 0
               ) * 1.852

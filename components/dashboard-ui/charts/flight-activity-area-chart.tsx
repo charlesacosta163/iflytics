@@ -689,14 +689,14 @@ export default function FlightActivityAreaChart({
           </div>
           <div className="min-w-0">
             <CardTitle className="text-base md:text-lg font-bold tracking-tight text-yellow-900 dark:text-yellow-100">
-              Flight Time Per Day
-            </CardTitle>
+                Flight Time Per Day
+              </CardTitle>
             <CardDescription className="text-xs md:text-sm text-yellow-700 dark:text-yellow-300">
-              Your flight time day by day {formatTimeframeText(timeframe)}
-            </CardDescription>
+                Your flight time day by day {formatTimeframeText(timeframe)}
+              </CardDescription>
           </div>
         </div>
-      </CardHeader>
+            </CardHeader>
 
       <CardContent className="space-y-3 md:space-y-4 px-4 md:px-6 pb-4 md:pb-6">
         {stats && (
@@ -908,10 +908,10 @@ export default function FlightActivityAreaChart({
             config={chartConfig}
             className="h-[220px] sm:h-[250px] md:h-[280px] w-full"
           >
-            <AreaChart
-              accessibilityLayer
-              data={flightActivityData}
-              margin={{
+          <AreaChart
+            accessibilityLayer
+            data={flightActivityData}
+            margin={{
                 left: 0,
                 right: 8,
                 top: 12,
@@ -932,39 +932,39 @@ export default function FlightActivityAreaChart({
                 className="text-gray-200 dark:text-gray-700"
               />
 
-              <XAxis
-                dataKey="date"
-                tickLine={false}
-                axisLine={false}
-                tickMargin={8}
+            <XAxis
+              dataKey="date"
+              tickLine={false}
+              axisLine={false}
+              tickMargin={8}
                 minTickGap={32}
                 tickFormatter={formatChartDate}
-                tick={{
+              tick={{
                   fontSize: 11,
                   fontWeight: 600,
                   fill: "#64748b",
                 }}
               />
 
-              <YAxis
-                tickLine={false}
-                axisLine={false}
-                tickMargin={8}
+            <YAxis 
+              tickLine={false}
+              axisLine={false}
+              tickMargin={8}
                 width={40}
-                tickFormatter={(value) => `${Math.round(value / 60)}h`}
-                tick={{
+              tickFormatter={(value) => `${Math.round(value / 60)}h`}
+              tick={{
                   fontSize: 11,
                   fontWeight: 600,
                   fill: "#64748b",
                 }}
               />
 
-              <ChartTooltip
+            <ChartTooltip
                 cursor={{ stroke: "#3b82f6", strokeWidth: 1, strokeDasharray: "4 4" }}
-                content={({ active, payload, label }) => {
+              content={({ active, payload, label }) => {
                   if (!active || !payload?.length) return null
-
-                  return (
+                
+                return (
                     <div className="rounded-[12px] border-2 border-blue-200 dark:border-blue-800 bg-white dark:bg-gray-900 px-3 py-2 shadow-md">
                       <p className="text-xs font-bold text-blue-900 dark:text-blue-100">
                         {formatTooltipDate(label)}
@@ -973,19 +973,19 @@ export default function FlightActivityAreaChart({
                         Flight Time:{" "}
                         <span className="font-bold text-blue-600 dark:text-blue-400">
                           {convertMinutesToHours(payload[0].value as number)}
-                        </span>
+                      </span>
                       </p>
                     </div>
                   )
-                }}
-              />
+              }}
+            />
 
-              <Area
-                dataKey="totalTime"
+            <Area
+              dataKey="totalTime"
                 type="monotone"
                 fill="url(#flightTimeGradient)"
                 stroke="#3b82f6"
-                strokeWidth={2}
+              strokeWidth={2}
                 dot={false}
                 activeDot={{
                   r: 5,
@@ -993,8 +993,8 @@ export default function FlightActivityAreaChart({
                   stroke: "#ffffff",
                   strokeWidth: 2,
                 }}
-              />
-            </AreaChart>
+            />
+          </AreaChart>
           </ChartContainer>
         </div>
       </CardContent>

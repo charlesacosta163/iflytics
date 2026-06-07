@@ -1,6 +1,6 @@
 {
   "name": "iflytics",
-  "version": "1.7.1-synthpunk",
+  "version": "1.7.2-synthpunk",
   "private": true,
   "scripts": {
     "dev": "next dev",

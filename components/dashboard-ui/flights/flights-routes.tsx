@@ -5,25 +5,27 @@ import {
   calculateTotalDistance,
   getAllFlightRoutes,
   getFlightTimeCategorizerData,
-  getTop5Countries,
+  getTopCountries,
   getUniqueRoutes,
 } from "@/lib/cache/flightinsightsdata";
-import { FaRoute } from "react-icons/fa";
+import { FaRoute, FaGlobeAmericas } from "react-icons/fa";
 import { GiPathDistance } from "react-icons/gi";
 import { RiCopilotFill } from "react-icons/ri";
+import {
+  LuMapPin,
+  LuRepeat,
+  LuArrowUpRight,
+  LuArrowDownRight,
+  LuPlaneTakeoff,
+  LuRuler,
+  LuChartPie,
+} from "react-icons/lu";
 import { cn } from "@/lib/utils";
 
 import { customUserImages } from "@/lib/data";
 
 import { RouteMap } from "./maps/route-map";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
+import { TopCountriesCard } from "../top-countries-card";
 import { FlightTimeCategorizerBarChart } from "../charts/flight-time-categorizer-barchart";
 import { RevalidateRoutesButton } from "@/components/revalidate-routes-btn";
 
@@ -34,8 +36,65 @@ import ExportFlightsCSVBtn from "../export-flights-csv-btn";
 import { getAllAircraft } from "@/lib/actions";
 import { hasLifetimeAccess, Subscription } from "@/lib/subscription/helpers";
 import { MostFlownRoutesBarChart } from "../charts/most-flown-routes-bar";
+import { ValidFlightsPsa } from "../misc/valid-flights-psa";
 
 let maintenanceMode = false;
+
+const labelIconClass = "shrink-0 w-[11px] h-[11px]"
+
+const Stat = ({
+  label,
+  value,
+  sub,
+  icon,
+}: {
+  label: string
+  value: string | number
+  sub?: string
+  icon?: React.ReactNode
+}) => (
+  <div className="min-w-0">
+    <p className="flex items-center gap-1 text-[11px] leading-none text-gray-500 dark:text-gray-400">
+      {icon}
+      <span>{label}</span>
+    </p>
+    <p className="text-base md:text-lg font-semibold text-gray-900 dark:text-gray-100 tabular-nums tracking-tight">
+      {value}
+    </p>
+    {sub && (
+      <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-0.5">{sub}</p>
+    )}
+  </div>
+)
+
+const RouteLine = ({
+  label,
+  origin,
+  destination,
+  distance,
+  icon,
+}: {
+  label: string
+  origin: string
+  destination: string
+  distance: number
+  icon?: React.ReactNode
+}) => (
+  <div className="min-w-0">
+    <p className="flex items-center gap-1 text-[11px] leading-none text-gray-500 dark:text-gray-400 mb-1">
+      {icon}
+      <span>{label}</span>
+    </p>
+    <p className="text-sm text-gray-900 dark:text-gray-100">
+      <span className="font-medium">{origin || "N/A"}</span>
+      <span className="text-gray-400 mx-1.5">→</span>
+      <span className="font-medium">{destination || "N/A"}</span>
+      <span className="text-gray-500 dark:text-gray-400 ml-2 tabular-nums">
+        {distance.toLocaleString()} NM
+      </span>
+    </p>
+  </div>
+)
 
 const FlightsRoutes = async ({ flights, user , subscription, role}: { flights: Flight[], user: any, subscription: Subscription, role: string}) => {
   // console.log(`🔄 FlightsRoutes called at ${new Date().toISOString()}`); --> Debugging
@@ -96,7 +155,7 @@ const FlightsRoutes = async ({ flights, user , subscription, role}: { flights: F
     await calculateTotalDistance(validFlights);
 
   // Use ALL Flights Data
-  const top5Countries = getTop5Countries(routesWithDistances);
+  const topCountries = getTopCountries(routesWithDistances);
 
   const flightTimeCategorizerData = getFlightTimeCategorizerData(validFlights);
 
@@ -125,24 +184,6 @@ const FlightsRoutes = async ({ flights, user , subscription, role}: { flights: F
   }
 
   function getFlightContinentsFlewToData () {
-    // Sample Flight Route data:
-    // {
-    //   flightId: '931999ef-911f-4a42-8f65-f7ec060dd1b8',
-    //   created: '2025-07-21T02:41:02.727818Z',
-    //   callsign: 'Air Canada 123',
-    //   aircraftId: '64568366-b72c-47bd-8bf6-6fdb81b683f9',
-    //   server: 'Expert',
-    //   origin: 'KLAX',
-    //   originIsoCountry: 'US',
-    //   originContinent: 'NA',
-    //   originCoordinates: { latitude: 33.942501, longitude: -118.407997 },
-    //   destination: 'PHKO',
-    //   destinationIsoCountry: 'US',
-    //   destinationContinent: 'NA',
-    //   destinationCoordinates: { latitude: 19.738783, longitude: -156.045603 },
-    //   distance: 2173,
-    //   totalTime: 295.57333
-    // }
 
     const pastelFillColors = ["#87abff", "#ff8799", "#FDFD96", "#C3B1E1", "#77DD77", "#FFB347", "#FFD1DC", "#E4C692", "#92E1C0", "#D49CD0"]
     // Return array of unique continents flown to [{label: "EU", amount: 10},...]
@@ -191,18 +232,52 @@ const FlightsRoutes = async ({ flights, user , subscription, role}: { flights: F
     return acc;
   }, [])
 
+  const totalRouteFlights = validFlights.length
+  const avgDistancePerFlight = Math.round(totalDistanceTraveled / totalRouteFlights || 0)
+  const repeatRouteRate = uniqueRoutes.length > 0
+    ? (totalRouteFlights / uniqueRoutes.length).toFixed(1)
+    : "0"
+
+  const shortestRoute = routesWithDistances.length > 0
+    ? routesWithDistances.reduce((min, r) => (r.distance < min.distance ? r : min), routesWithDistances[0])
+    : { origin: "", destination: "", distance: 0 }
+
+  const mostFlownRoute = flownRoutesData.length > 0
+    ? [...flownRoutesData].sort((a, b) => b.count - a.count)[0]
+    : null
+
+  const uniqueCountries = new Set(
+    routesWithDistances.flatMap((r) => [r.originIsoCountry, r.destinationIsoCountry].filter(Boolean))
+  ).size
+
+  const uniqueAirports = new Set(
+    validFlights.flatMap((f) => [f.originAirport, f.destinationAirport])
+  ).size
+
+  const continentsVisited = getFlightContinentsFlewToData().length
+
+  const crossContinentFlights = routesWithDistances.filter(
+    (r) => r.originContinent && r.destinationContinent && r.originContinent !== r.destinationContinent
+  ).length
+
+  const hubAirport = validFlights.reduce(
+    (acc, flight) => {
+      acc[flight.originAirport] = (acc[flight.originAirport] || 0) + 1
+      return acc
+    },
+    {} as Record<string, number>
+  )
+  const topHub = Object.entries(hubAirport).sort((a, b) => b[1] - a[1])[0]
+
+  const userImage = customUserImages.find(
+    (u: { username: string }) => u.username === userMetadata.ifcUsername
+  )?.image
+
   // console.log(routesWithDistancesWithAircraftIcao[0])
 
   // console.log(getFlightContinentsFlewToData())
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
-      {/* <div className="lg:col-span-3 border-2 border-yellow-200 dark:border-yellow-700 bg-yellow-50 dark:bg-yellow-900/50 p-6 rounded-lg flex items-center gap-2">
-        <VscCopilotWarning className="w-6 h-6 text-yellow-500" />
-        <p className="text-sm sm:text-lg font-medium dark:text-yellow-300 text-yellow-700">
-          Note: The route analysis and summary stats are a{" "}
-          <b>premium feature</b>. Currently <b className="underline">FREE ON OPEN BETA</b>.
-        </p>
-      </div> */}
 
       <div className="flex gap-3 md:gap-4 items-center">
         <RevalidateRoutesButton userId={user.id} />
@@ -214,144 +289,126 @@ const FlightsRoutes = async ({ flights, user , subscription, role}: { flights: F
         />
       </div>
 
-      <div className={cn(
-        "grid grid-cols-1 lg:col-span-3",
-        "bg-gray-50 dark:bg-gray-800",
-        "border-2 border-gray-200 dark:border-gray-700",
-        "rounded-[20px] md:rounded-[25px]",
-        "p-4 md:p-6"
-      )}>
-        <section className="grid grid-cols-1 lg:grid-cols-[1fr_2fr_2fr_2fr] gap-3 md:gap-4">
-          <div className={cn(
-            "bg-transparent rounded-[15px] p-3 md:p-4",
-            "text-gray-800 dark:text-white",
-            "flex flex-col gap-2 items-center justify-center h-full"
-          )}>
-            {customUserImages.find(
-              (user: any) => user.username === userMetadata.ifcUsername
-            )?.image ? (
+      <ValidFlightsPsa
+        totalFlights={flights.length}
+        validFlightsCount={validFlights.length}
+      />
+
+      <div
+        className={cn(
+          "lg:col-span-3",
+          "bg-cyan-50 dark:bg-cyan-800/40",
+          "rounded-[20px] md:rounded-[25px]",
+          "p-4 md:p-5"
+        )}
+      >
+        <div className="flex items-center justify-between gap-3 mb-5">
+          <div>
+            <h2 className="text-2xl tracking-tighter font-semibold text-gray-900 dark:text-gray-100">
+              Routes Summary
+            </h2>
+            <p className="text-xs text-gray-500 font-medium dark:text-gray-400 mt-0.5">
+              {totalRouteFlights} route flight{totalRouteFlights !== 1 ? "s" : ""} analyzed
+            </p>
+          </div>
+          <div className="flex items-center gap-2 shrink-0 text-xs text-gray-500 dark:text-gray-400">
+            {userImage ? (
               <img
-                src={
-                  customUserImages.find(
-                    (user: any) => user.username === userMetadata.ifcUsername
-                  )?.image
-                }
+                src={userImage}
                 alt={userMetadata.ifcUsername}
-                className="max-w-16 md:max-w-20 w-full max-h-16 md:max-h-20 h-full border-gray-400 dark:border-gray-600 border-2 rounded-full"
+                className="w-6 h-6 rounded-full object-cover"
               />
             ) : (
-              <RiCopilotFill className="w-10 h-10 md:w-12 md:h-12" />
+              <RiCopilotFill className="w-4 h-4" />
             )}
-            <p className="text-xs md:text-sm font-bold tracking-tight">@{userMetadata.ifcUsername}</p>
+            <span>@{userMetadata.ifcUsername}</span>
           </div>
+        </div>
 
-          <div className="flex justify-between items-center gap-3">
-            <div className="flex flex-col gap-1">
-              <h2 className="text-3xl md:text-4xl font-black tracking-tight text-gray-800 dark:text-gray-100">
-                {uniqueRoutes.length}{" "}
-                <span className="text-xs md:text-sm text-gray-500 dark:text-gray-400 font-bold">
-                  Unique Routes
-                </span>
-              </h2>
-              <p className="text-xs md:text-sm text-gray-600 dark:text-gray-400 font-medium">
-                <b className="text-base md:text-lg font-black text-gray-800 dark:text-gray-200">{totalDomesticRoutes}</b>{" "}
-                Domestic
-              </p>
-              <p className="text-xs md:text-sm text-gray-600 dark:text-gray-400 font-medium">
-                <b className="text-base md:text-lg font-black text-gray-800 dark:text-gray-200">{totalInternationalRoutes}</b>{" "}
-                International
-              </p>
-            </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-5">
+          <Stat
+            label="Unique routes"
+            value={uniqueRoutes.length}
+            sub={`${totalDomesticRoutes} domestic · ${totalInternationalRoutes} intl`}
+            icon={<FaRoute className={labelIconClass} />}
+          />
+          <Stat
+            label="Total distance"
+            value={maintenanceMode ? "—" : `${shortenNumber(totalDistanceTraveled)} NM`}
+            sub={maintenanceMode ? "Under maintenance" : `${shortenNumber(totalDistanceTraveled * 1.1508)} mi · ${shortenNumber(totalDistanceTraveled * 1.852)} km`}
+            icon={<GiPathDistance className={labelIconClass} />}
+          />
+          <Stat
+            label="Avg per flight"
+            value={`${avgDistancePerFlight} NM`}
+            icon={<LuRuler className={labelIconClass} />}
+          />
+          <Stat
+            label="Countries visited"
+            value={uniqueCountries}
+            sub={`${continentsVisited} continent${continentsVisited !== 1 ? "s" : ""}`}
+            icon={<FaGlobeAmericas className={labelIconClass} />}
+          />
+        </div>
 
-            <div className={cn(
-              "bg-blue-100 dark:bg-blue-900/30",
-              "text-blue-600 dark:text-blue-400",
-              "rounded-[12px] md:rounded-[15px]",
-              "p-3 md:p-4",
-              "flex flex-col gap-2 items-center justify-center h-full"
-            )}>
-              <FaRoute className="w-10 h-10 md:w-12 md:h-12" />
-            </div>
-          </div>
-          <div className="flex justify-between items-center gap-3">
-            <div className="flex flex-col gap-1">
-              <h2 className="text-3xl md:text-4xl font-black tracking-tight text-gray-800 dark:text-gray-100">
-                {maintenanceMode
-                  ? "Under Maintenance"
-                  : shortenNumber(totalDistanceTraveled)}{" "}
-                <span className="text-xs md:text-sm text-gray-500 dark:text-gray-400 font-bold">
-                  Nautical Miles
-                </span>
-              </h2>
-              <p className="text-xs md:text-sm text-gray-600 dark:text-gray-400 font-medium">
-                <b className="text-base md:text-lg font-black text-gray-800 dark:text-gray-200">
-                  {shortenNumber(totalDistanceTraveled * 1.1508)}
-                </b>{" "}
-                Miles
-              </p>
-              <p className="text-xs md:text-sm text-gray-600 dark:text-gray-400 font-medium">
-                <b className="text-base md:text-lg font-black text-gray-800 dark:text-gray-200">
-                  {shortenNumber(totalDistanceTraveled * 1.852)}
-                </b>{" "}
-                Kilometers
-              </p>
-            </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 mt-5 pt-5 border-t border-gray-200 dark:border-gray-700">
+          <RouteLine
+            label="Longest route"
+            origin={longestRouteInfo.origin}
+            destination={longestRouteInfo.destination}
+            distance={longestRouteInfo.distance}
+            icon={<LuArrowUpRight className={labelIconClass} />}
+          />
+          <RouteLine
+            label="Shortest route"
+            origin={shortestRoute.origin}
+            destination={shortestRoute.destination}
+            distance={shortestRoute.distance}
+            icon={<LuArrowDownRight className={labelIconClass} />}
+          />
+        </div>
 
-            <div className={cn(
-              "bg-green-100 dark:bg-green-900/30",
-              "text-green-600 dark:text-green-400",
-              "rounded-[12px] md:rounded-[15px]",
-              "p-3 md:p-4",
-              "flex flex-col gap-2 items-center justify-center h-full"
-            )}>
-              <GiPathDistance className="w-10 h-10 md:w-12 md:h-12" />
-            </div>
-          </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-5 mt-5 pt-5 border-t border-gray-200 dark:border-gray-700">
+          <Stat
+            label="Unique airports"
+            value={uniqueAirports}
+            icon={<LuMapPin className={labelIconClass} />}
+          />
+          <Stat
+            label="Cross-continent"
+            value={crossContinentFlights}
+            sub="International legs"
+            icon={<FaGlobeAmericas className={labelIconClass} />}
+          />
+          <Stat
+            label="Repeat rate"
+            value={`${repeatRouteRate}×`}
+            sub="Flights per unique route"
+            icon={<LuRepeat className={labelIconClass} />}
+          />
+          <Stat
+            label="Most flown"
+            value={mostFlownRoute ? mostFlownRoute.route.replace("-", " → ") : "N/A"}
+            sub={mostFlownRoute ? `${mostFlownRoute.count} time${mostFlownRoute.count !== 1 ? "s" : ""}` : undefined}
+            icon={<FaRoute className={labelIconClass} />}
+          />
+        </div>
 
-          <div className="flex gap-2 md:gap-3 flex-col">
-            <div className={cn(
-              "bg-white dark:bg-gray-700",
-              "border-2 border-gray-200 dark:border-gray-600",
-              "rounded-[12px] md:rounded-[15px]",
-              "px-3 md:px-4 py-2 md:py-3",
-              "flex gap-3 items-center justify-between h-full"
-            )}>
-              {/* Average Route Length */}
-              <span className="text-xs md:text-sm text-gray-600 dark:text-gray-400 font-bold">
-                Average Route
+        {topHub && (
+          <div className="flex items-baseline justify-between gap-3 mt-5 pt-5 border-t border-gray-200 dark:border-gray-700 text-sm">
+            <span className="flex items-center gap-1 font-semibold text-[16px] text-gray-500 dark:text-gray-400">
+              <LuPlaneTakeoff className={labelIconClass} />
+              Home hub
+            </span>
+            <span className="text-gray-900 dark:text-gray-100 text-lg">
+              <span className="font-medium">{topHub[0]}</span> |
+              <span className="text-gray-500 dark:text-gray-400 ml-2">
+                {topHub[1]} departure{topHub[1] !== 1 ? "s" : ""}
               </span>
-              <div className="text-xs md:text-sm text-gray-600 dark:text-gray-400 font-medium flex flex-col text-right">
-                <b className="text-xl md:text-2xl font-black text-gray-800 dark:text-gray-100">
-                  {Math.round(totalDistanceTraveled / uniqueRoutes.length || 0)}
-                </b>{" "}
-                <span className="text-xs font-bold">NM</span>
-              </div>
-            </div>
-            <div className={cn(
-              "bg-white dark:bg-gray-700",
-              "border-2 border-gray-200 dark:border-gray-600",
-              "rounded-[12px] md:rounded-[15px]",
-              "px-3 md:px-4 py-2 md:py-3",
-              "flex gap-3 items-center justify-between h-full"
-            )}>
-              {/* Longest Route */}
-              <span className="text-xs md:text-sm text-gray-600 dark:text-gray-400 font-bold">
-                Longest Route
-              </span>
-              <div className="flex flex-col gap-0.5 text-right">
-                <div className="text-xs md:text-sm font-black text-gray-800 dark:text-gray-100">
-                  <b>{longestRouteInfo.origin || "N/A"}</b> →{" "}
-                  <b>{longestRouteInfo.destination || "N/A"}</b>
-                </div>
-                <div className="text-xs text-gray-600 dark:text-gray-400 font-bold">
-                  {longestRouteInfo.distance || 0} NM
-                </div>
-              </div>
-            </div>
+            </span>
           </div>
-        </section>
+        )}
       </div>
-      {/* Summary Stats Cards (NEW 👆) */}
 
       {/* Route Map */}
       <div className={cn(
@@ -365,150 +422,53 @@ const FlightsRoutes = async ({ flights, user , subscription, role}: { flights: F
         <RouteMap routes={uniqueRoutes} />
       </div>
 
-      {/* Top 5 Countries List */}
-      <Card className={cn(
-        "bg-gradient-to-br from-purple-500 to-indigo-600",
-        "dark:from-purple-600 dark:to-indigo-700",
-        "border-2 border-purple-400 dark:border-purple-700",
-        "rounded-[20px] md:rounded-[25px]"
-      )}>
-        <CardHeader className="pb-3 md:pb-4">
-          <CardTitle className="text-lg md:text-xl font-bold tracking-tight text-white">
-            Top 5 Countries
-          </CardTitle>
-          <CardDescription className="text-xs md:text-sm text-white/90 font-semibold">
-            Countries you flew to the most
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="pb-4 md:pb-6">
-          <div className="space-y-4 md:space-y-6">
-            {maintenanceMode ? (
-              <div className="text-center py-8">
-                <div className="text-white/70 mb-2">
-                  <svg
-                    className="w-10 h-10 md:w-12 md:h-12 mx-auto"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={1.5}
-                      d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                  </svg>
-                </div>
-                <p className="text-white font-bold">Under Maintenance</p>
-                <p className="text-sm text-white/80 mt-1 font-medium">
-                  We're working on it!
-                </p>
-              </div>
-            ) : top5Countries.length > 0 ? (
-              top5Countries.map((country: [string, number], index) => {
-                // Calculate percentage based on the highest value for better visual distribution
-                const [countryName, count] = country;
-
-                const maxCount = Math.max(...top5Countries.map((c) => c[1]));
-                const percentage = Math.round((count / maxCount) * 100);
-
-                return (
-                  <div key={countryName} className="space-y-2 md:space-y-3">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2 md:gap-3">
-                        <div className={cn(
-                          "flex items-center justify-center",
-                          "w-7 h-7 md:w-8 md:h-8",
-                          "rounded-full",
-                          "bg-white dark:bg-white/95",
-                          "text-purple-600",
-                          "text-xs md:text-sm font-black"
-                        )}>
-                          {index + 1}
-                        </div>
-                        <div>
-                          <p className="font-bold text-sm md:text-base text-white tracking-tight">
-                            {countryName}
-                          </p>
-                          <p className="text-xs md:text-sm text-white/90 font-semibold">
-                            {count} flight{count !== 1 ? "s" : ""}
-                          </p>
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <p className="text-base md:text-lg font-black text-white">{count}</p>
-                        <p className="text-xs text-white/90 font-bold">
-                          {(
-                            (count /
-                              top5Countries.reduce((sum, c) => sum + c[1], 0)) *
-                            100
-                          ).toFixed(1)}
-                          %
-                        </p>
-                      </div>
-                    </div>
-                    <Progress
-                      // change progress bar color
-                      value={percentage}
-                      className="h-2 md:h-3 bg-white/30"
-                    />
-                  </div>
-                );
-              })
-            ) : (
-              <div className="text-center py-8">
-                <p className="text-white/70 font-bold">No countries found</p>
-              </div>
-            )}
-          </div>
-        </CardContent>
-      </Card>
+      <TopCountriesCard countries={topCountries} />
 
       <div className="lg:col-span-3">
         <MostFlownRoutesBarChart chartData={flownRoutesData} />
       </div>
 
-      <div className={cn(
-        "lg:col-span-3",
-        "bg-gray-50 dark:bg-gray-800",
-        "border-2 border-gray-200 dark:border-gray-700",
-        "rounded-[20px] md:rounded-[25px]",
-        "p-4 md:p-6"
-      )}>
-        <div className="mb-4 md:mb-6">
-          <div className="text-lg md:text-xl font-bold tracking-tight text-gray-800 dark:text-gray-100">
-            Flight Route Metrics
+      <div
+        className={cn(
+          "lg:col-span-3",
+          "bg-white/50 dark:bg-gray-800/50",
+          "rounded-[20px] md:rounded-[25px]",
+          "p-4 md:p-5"
+        )}
+      >
+        <div className="flex items-start justify-between gap-3 mb-4 md:mb-5">
+          <div>
+            <h3 className="flex items-center gap-1.5 text-lg tracking-tighter font-semibold text-gray-900 dark:text-gray-100">
+              <LuChartPie className="shrink-0 w-[11px] h-[11px] text-gray-500 dark:text-gray-400" />
+              Flight route metrics
+            </h3>
+            <p className="text-[11px] text-gray-500 dark:text-gray-400 mt-0.5">
+              Duration hauls, continents reached, and domestic vs international split
+            </p>
           </div>
-          <div className="text-xs md:text-sm text-gray-500 dark:text-gray-400 font-medium">
-            Your flight route metrics by flight duration, continents, and
-            domestic vs international flights
-          </div>
+          {validFlights.length > 0 && (
+            <span className="text-[11px] text-gray-400 dark:text-gray-500 tabular-nums shrink-0">
+              {validFlights.length} flights
+            </span>
+          )}
         </div>
 
-        { flights.length > 0 ? (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 md:gap-4">
-          <div className="bg-transparent w-full">
+        {validFlights.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
             <FlightHaulsPieChart chartData={getFlightHaulCategorizerData()} />
+            <FlightContinentsPieChart chartData={getFlightContinentsFlewToData()} />
+            <FlightDomesticIntlPieChart chartData={getDomesticInternationalAmountsData()} />
           </div>
-          <div className="bg-transparent w-full">
-            <FlightContinentsPieChart
-              chartData={getFlightContinentsFlewToData()}
-            />
-          </div>
-          <div className="bg-transparent w-full">
-            <FlightDomesticIntlPieChart
-              chartData={getDomesticInternationalAmountsData()}
-            />
-          </div>
-        </div>
         ) : (
-          <div className={cn(
-            "text-center py-8",
-            "bg-white dark:bg-gray-700",
-            "border-2 border-gray-200 dark:border-gray-600",
-            "rounded-[15px] md:rounded-[20px]"
-          )}>
-            <p className="text-gray-500 dark:text-gray-400 font-bold">No flight routes found</p>
+          <div
+            className={cn(
+              "text-center py-8",
+              "rounded-[20px] md:rounded-[25px]",
+            )}
+          >
+            <p className="text-sm text-gray-500 dark:text-gray-400 font-medium">
+              No flight routes found
+            </p>
           </div>
         )}
       </div>

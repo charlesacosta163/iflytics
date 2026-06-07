@@ -19,7 +19,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
-import { ImStatsDots } from "react-icons/im";
 import { getFlightsTimeFrame } from "@/lib/cache/flightdata";
 
 import SelectTimeframeButton from "@/components/dashboard-ui/select-timeframe-button";
@@ -40,11 +39,11 @@ import { Safari } from "@/components/ui/safari";
 import { getUserSubscription } from "@/lib/subscription/subscription";
 import { hasPremiumAccess, Subscription } from '@/lib/subscription/helpers';
 import { TbLock, TbBrain, TbFileTypeCsv } from "react-icons/tb";
-import { LuPlane, LuRoute, LuWandSparkles } from "react-icons/lu";
+import { LuChartBar, LuPlane, LuRoute, LuWandSparkles } from "react-icons/lu";
 import { Badge } from "@/components/ui/badge";
 import GroupedSubscriptionButtons from "@/components/dashboard-ui/grouped-sub-btns";
 import PromoReminders from "@/components/dashboard-ui/stripe/promo-reminders";
-import { cn } from "@/lib/utils";
+import { cn, formatTimeframeText } from "@/lib/utils";
 import { PiAirplaneInFlightBold, PiAirTrafficControlFill } from "react-icons/pi";
 import { Button } from "@/components/ui/button";
 import FloatingIcons from "@/components/dashboard-ui/floating-icons";
@@ -172,31 +171,29 @@ const FlightsPage = async ({ searchParams }: { searchParams: Promise<{ [key: str
   return (
     <div className="space-y-8 pb-8">
       {/* Header Section */}
-      <div className={cn(
-        "flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 md:gap-6",
-        "p-4 md:p-6",
-        "bg-gray-50 dark:bg-gray-800",
-        "border-2 border-gray-200 dark:border-gray-700",
-        "rounded-[20px] md:rounded-[25px]"
-      )}>
-        <div className="flex-1">
-          <div className="flex items-center gap-3">
-            <div className={cn(
-              "p-2 md:p-3 rounded-[12px]",
-              "bg-purple-100 dark:bg-purple-900/30"
-            )}>
-              <ImStatsDots className="w-5 h-5 md:w-6 md:h-6 text-purple-600 dark:text-purple-400" />
-            </div>
-            <h1 className="text-2xl md:text-3xl lg:text-4xl font-black tracking-tight text-gray-800 dark:text-gray-100">
-              Your Flight Activity
-            </h1>
-          </div>
-          <p className="text-sm md:text-base text-gray-600 dark:text-gray-400 font-medium ml-12 md:ml-[60px]">
-            Your flight statistics and insights
+      <div
+        className={cn(
+          "flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4",
+          "p-4 md:p-5",
+          "bg-white/50 dark:bg-gray-800/50",
+          "rounded-[20px] md:rounded-[25px]"
+        )}
+      >
+        <div className="min-w-0">
+          <h1 className="flex items-center gap-1.5 text-2xl tracking-tighter font-semibold text-gray-900 dark:text-gray-100">
+            <LuChartBar className="shrink-0 w-[11px] h-[11px] text-gray-500 dark:text-gray-400" />
+            Your flight activity
+          </h1>
+          <p className="text-[11px] text-gray-500 dark:text-gray-400 mt-0.5">
+            {allFlights.length} flight{allFlights.length !== 1 ? "s" : ""}{" "}
+            {formatTimeframeText(timeframe)}
           </p>
         </div>
-        <div className="">
-          <SelectTimeframeButton subscription={subscription as Subscription} months={uniqueMonths} />
+        <div className="shrink-0 self-start sm:self-center">
+          <SelectTimeframeButton
+            subscription={subscription as Subscription}
+            months={uniqueMonths}
+          />
         </div>
       </div>
 

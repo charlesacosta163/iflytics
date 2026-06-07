@@ -1,5 +1,4 @@
 import React from 'react'
-import { Plane, BarChart3 } from 'lucide-react'
 import { getAllFlightRoutes, matchAircraftNameToImage } from '@/lib/cache/flightinsightsdata'
 import Image from 'next/image'
 import { Flight } from '@/lib/types'
@@ -8,9 +7,39 @@ import { convertMinutesToHours, cn } from '@/lib/utils'
 import { getAllAircraft } from '@/lib/actions'
 import AircraftUsageTable from '../aircraft-tables/aircraft-usage-table'
 import AircraftBrandsCard from '../aircraft-tables/aircraft-brands-card'
-import { FaRegSadCry } from 'react-icons/fa'
-import { LuPizza } from 'react-icons/lu'
+import { FaRegSadCry, FaPlane } from 'react-icons/fa'
+import { GiPathDistance } from 'react-icons/gi'
+import { LuList, LuPlane, LuTimer, LuTrendingUp, LuCalendar } from 'react-icons/lu'
+import { RiCopilotFill } from 'react-icons/ri'
 import AirlineAnalysisCard from '../aircraft-tables/airline-analysis-card'
+import { customUserImages } from '@/lib/data'
+
+const labelIconClass = "shrink-0 w-[11px] h-[11px]"
+
+const Stat = ({
+  label,
+  value,
+  sub,
+  icon,
+}: {
+  label: string
+  value: string | number
+  sub?: string
+  icon?: React.ReactNode
+}) => (
+  <div className="min-w-0">
+    <p className="flex items-center gap-1 text-[11px] leading-none text-gray-500 dark:text-gray-400">
+      {icon}
+      <span>{label}</span>
+    </p>
+    <p className="text-base md:text-lg font-semibold text-gray-900 dark:text-gray-100 tabular-nums tracking-tight">
+      {value}
+    </p>
+    {sub && (
+      <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-0.5">{sub}</p>
+    )}
+  </div>
+)
 
 // Mock data - 
 // const mockAircraftData = [
@@ -189,134 +218,157 @@ const FlightsAircraft = async ({ flights, user, role }: { flights: Flight[], use
 
   const analysisData = await aircraftAnalysisData();
   const aircraftData: any = await mostUsedAircraftData();
-  // console.log(analysisData, aircraftData)
 
+  const totalAnalyzed = routesWithDistances.length
+  const uniqueCount = analysisData.uniqueAircraftIds.length
+  const avgPerAircraft =
+    uniqueCount > 0 ? (totalAnalyzed / uniqueCount).toFixed(1) : "0"
+  const mostUsed = analysisData.mostUsedAircraft
+  const mostUsedShare =
+    mostUsed && totalAnalyzed > 0
+      ? ((mostUsed.count / totalAnalyzed) * 100).toFixed(1)
+      : "0"
+
+  const userImage = customUserImages.find(
+    (u: { username: string }) => u.username === userMetadata.ifcUsername
+  )?.image
 
   return (
     <div className="space-y-4 md:space-y-6">
-      {/* Header Stats */}
-      {/* <div className="lg:col-span-3 border-2 border-yellow-200 dark:border-yellow-700 bg-yellow-50 dark:bg-yellow-900/50 p-6 rounded-lg flex items-center gap-2">
-        <VscCopilotWarning className="w-6 h-6 text-yellow-500" />
-        <p className="text-sm sm:text-lg font-medium dark:text-yellow-300 text-yellow-700">
-          Note: The aircraft analysis is a{" "}
-          <b>premium feature</b>. Currently <b className="underline">FREE ON OPEN BETA</b>.
-        </p>
-      </div> */}
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-3 md:gap-4">
-        <div className={cn(
-          "bg-blue-50 dark:bg-blue-900/20",
-          "text-gray-800 dark:text-white",
-          "border-2 border-blue-200 dark:border-blue-800/30",
-          "rounded-[20px] md:rounded-[25px]"
-        )}>
-          <section className="p-4 md:p-5 flex flex-col justify-between h-full gap-3">
-            <div className="flex items-center gap-2">
-              <Plane className="h-4 w-4 md:h-5 md:w-5 text-blue-500 dark:text-blue-400" />
-              <span className="text-base md:text-lg tracking-tight font-bold">Unique Aircraft Used</span>
-            </div>
-            <div className="text-4xl md:text-5xl font-black tracking-tight self-end">{analysisData.uniqueAircraftIds.length || "0"}</div>
-          </section>
-        </div>
-        
-        <div className={cn(
-          "bg-green-50 dark:bg-green-900/20",
-          "text-gray-800 dark:text-white",
-          "border-2 border-green-200 dark:border-green-800/30",
-          "rounded-[20px] md:rounded-[25px]"
-        )}>
-          <section className="p-4 md:p-5 flex flex-col justify-between h-full gap-3">
-            <div className="flex items-center gap-2">
-              <BarChart3 className="h-4 w-4 md:h-5 md:w-5 text-green-500 dark:text-green-400" />
-              <span className="text-base md:text-lg tracking-tight font-bold">Total Flights</span>
-            </div>
-            <div className="text-4xl md:text-5xl font-black tracking-tight self-end">{flights.length || "0"}</div>
-          </section>
-        </div>
-        
-        <div className={cn(
-          "md:col-span-2",
-          "bg-gradient-to-br from-purple-500 to-blue-500",
-          "dark:from-purple-600 dark:to-blue-600",
-          "flex flex-col gap-4 md:gap-6",
-          "p-4 md:p-5 pb-3 md:pb-4",
+      <div
+        className={cn(
+          "bg-yellow-50 dark:bg-blue-800/50",
           "rounded-[20px] md:rounded-[25px]",
-          "border-2 border-purple-400 dark:border-purple-700"
-        )}>
-          <header className='flex flex-col gap-1'>
-            <div className='text-xl md:text-2xl font-black tracking-tight text-white'>
-              Most Used Aircraft
-            </div>
-            <span className='text-xs md:text-sm text-white/90 font-semibold'>
-              {analysisData.mostUsedAircraft ? "The most used aircraft in your fleet" : "No flight data available"}
-            </span>
-          </header>
-          
-          {analysisData.mostUsedAircraft ? (
-            <div className='flex flex-col-reverse md:flex-row items-center justify-between gap-3 md:gap-4'>
-              <div className='flex flex-col gap-2 md:gap-3'>
-                <span className='text-2xl md:text-3xl font-black tracking-tight text-white'>
-                  {aircraftData.name || "Unknown Aircraft"}
-                </span>
-                <div className="flex flex-wrap gap-2">
-                  <span className={cn(
-                    "text-xs md:text-sm",
-                    "bg-green-500 dark:bg-green-600",
-                    "text-white",
-                    "font-bold px-3 py-1",
-                    "rounded-full"
-                  )}>
-                    Flights: {analysisData.mostUsedAircraft.count}
-                  </span>
-                  <span className={cn(
-                    "text-xs md:text-sm",
-                    "bg-blue-500 dark:bg-blue-600",
-                    "text-white",
-                    "font-bold px-3 py-1",
-                    "rounded-full"
-                  )}>
-                    Total Time: {convertMinutesToHours(Math.round(analysisData.mostUsedAircraft.totalTime))}
-                  </span>
-                  <span className={cn(
-                    "text-xs md:text-sm",
-                    "bg-purple-600 dark:bg-purple-700",
-                    "text-white",
-                    "font-bold px-3 py-1",
-                    "rounded-full"
-                  )}>
-                    Distance: {shortenNumber(analysisData.mostUsedAircraft.totalDistance)} nm
-                  </span>
-                  <span className={cn(
-                    "text-xs md:text-sm",
-                    "bg-indigo-600 dark:bg-indigo-700",
-                    "text-white",
-                    "font-bold px-3 py-1",
-                    "rounded-full"
-                  )}>
-                    Last Used: {analysisData.mostUsedAircraft.lastUsed ? new Date(analysisData.mostUsedAircraft.lastUsed).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : "N/A"}
-                  </span>
-                </div>
-              </div>
+          "p-4 md:p-5"
+        )}
+      >
+        <div className="flex items-center justify-between gap-3 mb-5">
+          <div>
+            <h2 className="text-2xl tracking-tighter font-semibold text-gray-900 dark:text-gray-100">
+              Aircraft Summary
+            </h2>
+            <p className="text-xs text-gray-500 font-medium dark:text-gray-400 mt-0.5">
+              {totalAnalyzed} flight{totalAnalyzed !== 1 ? "s" : ""} analyzed across your fleet
+            </p>
+          </div>
+          <div className="flex items-center gap-2 shrink-0 text-xs text-gray-500 dark:text-gray-400">
+            {userImage ? (
+              <img
+                src={userImage}
+                alt={userMetadata.ifcUsername}
+                className="w-6 h-6 rounded-full object-cover"
+              />
+            ) : (
+              <RiCopilotFill className="w-4 h-4" />
+            )}
+            <span>@{userMetadata.ifcUsername}</span>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-5">
+          <Stat
+            label="Unique aircraft"
+            value={uniqueCount}
+            sub={`${flights.length} total flight log entries`}
+            icon={<LuPlane className={labelIconClass} />}
+          />
+          <Stat
+            label="Total flights"
+            value={flights.length}
+            sub={`${totalAnalyzed} with route data`}
+            icon={<LuList className={labelIconClass} />}
+          />
+          <Stat
+            label="Avg per aircraft"
+            value={`${avgPerAircraft}×`}
+            sub="Flights per unique type"
+            icon={<FaPlane className={labelIconClass} />}
+          />
+          <Stat
+            label="Top aircraft share"
+            value={mostUsed ? `${mostUsedShare}%` : "—"}
+            sub={mostUsed ? aircraftData.name || "Unknown" : "No data yet"}
+            icon={<LuTrendingUp className={labelIconClass} />}
+          />
+        </div>
+
+        {mostUsed ? (
+          <div
+            className={cn(
+              "mt-5 pt-5 border-t border-gray-200 dark:border-gray-700",
+              "flex flex-col md:flex-row md:items-center gap-4 md:gap-6"
+            )}
+          >
+            <div className="flex-1 min-w-0 space-y-4">
               <div>
-                <Image 
-                  src={`/images/aircraft/${matchAircraftNameToImage(aircraftData.name) || "placeholder.png"}`} 
-                  alt="Most Used Aircraft" 
-                  width={150} 
-                  height={100}
-                  className="w-[120px] md:w-[150px] h-auto rounded-[12px]"
+                <p className="flex items-center gap-1 text-[11px] leading-none text-gray-500 dark:text-gray-400">
+                  <LuPlane className={labelIconClass} />
+                  <span>Most used aircraft</span>
+                </p>
+                <p className="text-lg md:text-xl font-semibold text-gray-900 dark:text-gray-100 tracking-tight mt-1">
+                  {aircraftData.name || "Unknown Aircraft"}
+                </p>
+              </div>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-4">
+                <Stat
+                  label="Flights"
+                  value={mostUsed.count}
+                  sub={`${mostUsedShare}% of analyzed flights`}
+                  icon={<LuList className={labelIconClass} />}
+                />
+                <Stat
+                  label="Total time"
+                  value={convertMinutesToHours(Math.round(mostUsed.totalTime))}
+                  icon={<LuTimer className={labelIconClass} />}
+                />
+                <Stat
+                  label="Distance"
+                  value={`${shortenNumber(mostUsed.totalDistance)} NM`}
+                  sub={`${shortenNumber(Math.round(mostUsed.totalDistance * 1.852))} km`}
+                  icon={<GiPathDistance className={labelIconClass} />}
+                />
+                <Stat
+                  label="Last used"
+                  value={
+                    mostUsed.lastUsed
+                      ? new Date(mostUsed.lastUsed).toLocaleDateString("en-US", {
+                          month: "short",
+                          day: "numeric",
+                          year: "numeric",
+                        })
+                      : "N/A"
+                  }
+                  icon={<LuCalendar className={labelIconClass} />}
                 />
               </div>
             </div>
-          ) : (
-            <div className='flex items-center justify-center h-24 md:h-32'>
-              <div className='text-center text-white/90'>
-                <LuPizza className="h-10 w-10 md:h-12 md:w-12 mx-auto mb-2 opacity-70" />
-                <p className="text-base md:text-lg font-bold">No flights recorded yet</p>
-                <p className="text-xs md:text-sm font-medium">Start flying to see your aircraft statistics!</p>
-              </div>
+            <div className="shrink-0 self-center md:self-auto">
+              <Image
+                src={`/images/aircraft/${matchAircraftNameToImage(aircraftData.name) || "placeholder.png"}`}
+                alt={aircraftData.name || "Most used aircraft"}
+                width={150}
+                height={100}
+                className="w-[120px] md:w-[140px] h-auto rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900"
+              />
             </div>
-          )}
-        </div>
+          </div>
+        ) : (
+          <div
+            className={cn(
+              "mt-5 pt-5 border-t border-gray-200 dark:border-gray-700",
+              "text-center py-8",
+              "border border-dashed border-gray-200 dark:border-gray-600 rounded-lg"
+            )}
+          >
+            <p className="text-sm text-gray-500 dark:text-gray-400 font-medium">
+              No flights recorded yet
+            </p>
+            <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-1">
+              Start flying to see your aircraft statistics
+            </p>
+          </div>
+        )}
       </div>
 
       {/* Conditional rendering for tables */}

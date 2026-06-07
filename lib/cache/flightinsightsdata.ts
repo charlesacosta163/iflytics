@@ -569,7 +569,7 @@ export function calculateDistanceBetweenAirports(
   }
 }
 // Utilize the 
-export function getTop5Countries(routes: FlightRoute[]) {
+export function getTopCountries(routes: FlightRoute[]) {
    // Count destinations by country
 
    const isoCodeToCountry = (isoCode: string) => {
@@ -586,7 +586,7 @@ export function getTop5Countries(routes: FlightRoute[]) {
 
    const sortedCountries = Object.entries(countryCounts).sort((a, b) => b[1] - a[1]);
 
-   return sortedCountries.slice(0, 5);
+   return sortedCountries
 
 }
 
