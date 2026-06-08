@@ -17,7 +17,7 @@ import { LuPlaneLanding, LuTowerControl } from "react-icons/lu";
 import { TfiMedall } from "react-icons/tfi";
 import { MdOutlineAirlines, MdOutlineLibraryBooks } from "react-icons/md";
 import { PiShootingStarBold } from "react-icons/pi";
-import { FaPlane, FaMapMarkerAlt, FaUsers, FaLightbulb, FaExternalLinkAlt } from "react-icons/fa";
+import { FaPlane, FaMapMarkerAlt, FaUsers, FaLightbulb, FaExternalLinkAlt, FaRegCalendarAlt } from "react-icons/fa";
 import { HiOutlineStatusOnline } from "react-icons/hi";
 import { TbPlaneInflight, TbClock, TbBuildingAirport, TbBuildingStadium, TbBrandDiscord } from "react-icons/tb";
 import { GoServer } from "react-icons/go";
@@ -42,6 +42,7 @@ import { getPreviousMonthStats, getThisMonthStats } from "@/lib/monthly-stats-he
 import MonthlyStatsComparisonCard from "@/components/dashboard-ui/monthly-stats-comparison-card";
 import { DivIcon } from "leaflet";
 import SignupTracker from "@/components/dashboard-ui/misc/ga4/signup-tracker";
+import { FaInstagram } from "react-icons/fa6";
 
 export const metadata: Metadata = {
   title: "Dashboard - IFlytics | Your Infinite Flight Statistics",
@@ -297,120 +298,185 @@ export default async function DashboardPage() {
             </CardContent>
           </Card>
 
-          {/* Recent Flight */}
-          <Card className="md:col-span-1 lg:col-span-2 bg-[#FEEBF6] dark:bg-indigo-950 text-dark dark:text-gray-100 rounded-[25px] border-4 border-indigo-200 dark:border-indigo-700">
-            <CardHeader className="px-4 md:px-6 flex flex-row justify-between items-start gap-3">
-              <div className="flex-1">
-                <CardTitle className="text-xl md:text-2xl font-bold tracking-tight dark:text-gray-100">
-                  Recent Flight
-                </CardTitle>
-                <CardDescription className="text-gray-600 dark:text-gray-400 font-medium text-sm md:text-base mt-2">
-                  <Badge className="bg-gray-600 dark:bg-gray-700 text-white font-medium">{formatDate(recentFlight.created)}</Badge>
-                </CardDescription>
-              </div>
-              { recentFlight.id && (
-              <Link
-                className="bg-blue-500/30 dark:bg-blue-600/40 hover:bg-blue-600/50 dark:hover:bg-blue-500/60 py-2 px-4 rounded-full flex items-center justify-center gap-2 duration-200 transition-all text-gray-800 dark:text-gray-100"
-                href={`/dashboard/flights/${recentFlight.id}`}
-              >
-                <TbPlaneInflight className="text-lg md:text-xl" />
-                <span className="text-xs md:text-sm font-semibold">Info</span>
-              </Link>
-              )}
-            </CardHeader>
+          {/* Instagram */}
+<Card
+  className={cn(
+    "md:col-span-1 lg:col-span-2 relative overflow-hidden",
+    "rounded-[25px] shadow-none",
+    "bg-gradient-to-br from-[#f9ce34] via-[#ee2a7b] to-[#6228d7]",
+    "text-white"
+  )}
+>
+  <FaInstagram className="absolute -right-6 -bottom-8 text-[14rem] md:text-[18rem] text-white opacity-10 pointer-events-none" />
 
-            <CardContent className="px-4 md:px-6 space-y-3 md:space-y-4">
-              {/* Flight Details Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
-                <div className="bg-white/50 dark:bg-gray-700/50 rounded-[20px] md:rounded-[25px] p-4 md:p-5 backdrop-blur-sm border dark:border-gray-600">
-                  <p className="text-xs md:text-sm text-gray-600 dark:text-gray-400 mb-1 font-medium">Callsign</p>
-                  <p className="text-lg md:text-xl font-bold tracking-tight text-gray-800 dark:text-gray-100">
-                    {recentFlight.callsign}
-                  </p>
-                </div>
+  <CardContent className="relative z-10 px-5 md:px-7 py-8 md:py-10 flex flex-col items-center justify-center gap-6 text-center min-h-[220px]">
+    <div className="flex flex-col items-center gap-4 max-w-xl">
+      <div className="flex items-center justify-center gap-2">
+        <Image src={iflyticsLogo} alt="IFlytics Logo" width={32} height={32} />
+        <Badge className="bg-white/20 hover:bg-white/20 text-white border-white/25 font-semibold text-sm">
+          @iflyticsapp
+        </Badge>
+      </div>
 
-                <div className="bg-white/50 dark:bg-gray-700/50 rounded-[20px] md:rounded-[25px] p-4 md:p-5 backdrop-blur-sm border dark:border-gray-600">
-                  <p className="text-xs md:text-sm text-gray-600 dark:text-gray-400 mb-1 font-medium">Route</p>
-                  <p className="text-lg md:text-xl font-bold tracking-tight text-gray-800 dark:text-gray-100">
-                    {recentFlight.originAirport || "????"} → {recentFlight.destinationAirport || "????"}
-                  </p>
-                </div>
+      <div>
+        <CardTitle className="text-3xl md:text-4xl lg:text-5xl font-black tracking-tight text-white leading-tight">
+          Follow IFlytics on Instagram
+        </CardTitle>
+        <CardDescription className="text-white/80 text-sm md:text-lg mt-3 font-medium max-w-lg mx-auto">
+          Feature previews, product updates, and highlights from the Infinite Flight community.
+        </CardDescription>
+      </div>
+    </div>
 
-                <div className="bg-white/50 dark:bg-gray-700/50 rounded-[20px] md:rounded-[25px] p-4 md:p-5 backdrop-blur-sm border dark:border-gray-600">
-                  <p className="text-xs md:text-sm text-gray-600 dark:text-gray-400 mb-1 font-medium">Duration</p>
-                  <p className="text-lg md:text-xl font-bold tracking-tight text-blue-500 dark:text-blue-400">
-                    {convertMinutesToHours(Math.round(recentFlight.totalTime)) || "???"}
-                  </p>
-                </div>
-              </div>
+    <Link
+      href="https://instagram.com/iflyticsapp"
+      target="_blank"
+      rel="noopener noreferrer"
+      className={cn(
+        "inline-flex items-center gap-2",
+        "bg-white text-[#ee2a7b] hover:bg-white/90",
+        "font-bold rounded-full px-6 py-2.5 text-sm md:text-base",
+        "transition-all duration-200 hover:scale-105 shadow-lg"
+      )}
+    >
+      <FaInstagram className="text-lg md:text-xl" />
+      Follow on Instagram
+      <FaExternalLinkAlt className="text-[10px] opacity-70" />
+    </Link>
+  </CardContent>
+</Card>
 
-              {/* Aircraft Display */}
-              <div className="bg-gradient-to-r from-blue-900 via-purple-900 to-blue-900 dark:from-blue-950 dark:via-purple-950 dark:to-blue-950 rounded-[25px] md:rounded-[30px] p-4 flex items-center justify-between gap-4 border-2 border-blue-800/50 dark:border-blue-700/30">
-                <div className="flex-1">
-                  <h3 className="text-white font-bold tracking-tight text-xl md:text-2xl lg:text-3xl">
-                    {aircraftName}
-                  </h3>
-                  <p className="text-gray-300 dark:text-gray-400 text-xs md:text-sm mt-1 font-medium">{liveryName}</p>
+          {/* Recent Flight + Arcade */}
+          <div className="col-span-full grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <Card className="bg-[#FEEBF6] dark:bg-indigo-950 text-dark dark:text-gray-100 rounded-[25px] border-4 border-indigo-200 dark:border-indigo-700 shadow-none h-full">
+              <CardHeader className="px-4 md:px-6 flex flex-row justify-between items-start gap-3">
+                <div className="flex-1 min-w-0">
+                  <CardTitle className="text-xl md:text-2xl font-bold tracking-tight dark:text-gray-100 flex items-center gap-2">
+                    <TbPlaneInflight className="text-indigo-500 dark:text-indigo-400 shrink-0" />
+                    Recent Flight
+                  </CardTitle>
+                  <CardDescription className="text-gray-600 dark:text-gray-400 font-medium text-sm md:text-base mt-2">
+                    <Badge className="bg-gray-600 dark:bg-gray-700 text-white font-medium">
+                      <FaRegCalendarAlt className="w-3 h-3 mr-1.5 inline" />
+                      {formatDate(recentFlight.created)}
+                    </Badge>
+                  </CardDescription>
                 </div>
-                <div className="flex-shrink-0">
-                  <Image
-                    src={`/images/aircraft/${matchAircraftNameToImage(aircraftName || "")}`}
-                    alt={aircraftName || "Aircraft"}
-                    width={120}
-                    height={90}
-                    className="rounded-lg object-contain w-[80px] h-[60px] md:w-[120px] md:h-[90px]"
-                  />
-                </div>
-              </div>
+                {recentFlight.id && (
+                  <Link
+                    className="bg-blue-500/30 dark:bg-blue-600/40 hover:bg-blue-600/50 dark:hover:bg-blue-500/60 py-2 px-4 rounded-full flex items-center justify-center gap-2 duration-200 transition-all text-gray-800 dark:text-gray-100 shrink-0"
+                    href={`/dashboard/flights/${recentFlight.id}`}
+                  >
+                    <TbPlaneInflight className="text-lg md:text-xl" />
+                    <span className="text-xs md:text-sm font-semibold">Info</span>
+                  </Link>
+                )}
+              </CardHeader>
 
-              {/* Stats Grid */}
-              <div className="grid grid-cols-2 gap-3 md:gap-4">
-                <div className="bg-[#A5B68D] dark:bg-green-900/40 rounded-[20px] md:rounded-[25px] p-4 md:p-5 backdrop-blur-md overflow-hidden relative border-2 border-green-700/30 dark:border-green-800/50">
-                  <div className="text-xl md:text-2xl font-bold tracking-tight text-white">
-                    {recentFlight.xp}
+              <CardContent className="px-4 md:px-6 space-y-3 md:space-y-4 pb-5 md:pb-6">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4">
+                  <div className="bg-white/50 dark:bg-gray-700/50 rounded-[20px] md:rounded-[25px] p-4 md:p-5 backdrop-blur-sm border dark:border-gray-600">
+                    <p className="text-xs md:text-sm text-gray-600 dark:text-gray-400 mb-1 font-medium">Callsign</p>
+                    <p className="text-lg md:text-xl font-bold tracking-tight text-gray-800 dark:text-gray-100 truncate">
+                      {recentFlight.callsign || "N/A"}
+                    </p>
                   </div>
-                  <div className="text-green-100 dark:text-green-300 text-xs md:text-sm font-medium">XP Earned</div>
-                  <div className="absolute top-2 right-2 opacity-10 dark:opacity-20">
-                    <PiShootingStarBold className="text-[5rem] md:text-[6rem]" />
+
+                  <div className="bg-white/50 dark:bg-gray-700/50 rounded-[20px] md:rounded-[25px] p-4 md:p-5 backdrop-blur-sm border dark:border-gray-600 sm:col-span-1">
+                    <p className="text-xs md:text-sm text-gray-600 dark:text-gray-400 mb-1 font-medium">Route</p>
+                    <p className="text-lg md:text-xl font-bold tracking-tight text-gray-800 dark:text-gray-100">
+                      {recentFlight.originAirport || "????"} → {recentFlight.destinationAirport || "????"}
+                    </p>
+                  </div>
+
+                  <div className="bg-white/50 dark:bg-gray-700/50 rounded-[20px] md:rounded-[25px] p-4 md:p-5 backdrop-blur-sm border dark:border-gray-600">
+                    <p className="text-xs md:text-sm text-gray-600 dark:text-gray-400 mb-1 font-medium">Duration</p>
+                    <p className="text-lg md:text-xl font-bold tracking-tight text-blue-500 dark:text-blue-400">
+                      {convertMinutesToHours(Math.round(recentFlight.totalTime)) || "???"}
+                    </p>
                   </div>
                 </div>
 
-                <div className="bg-[#687FE5] dark:bg-blue-900/40 rounded-[20px] md:rounded-[25px] p-4 md:p-5 backdrop-blur-md overflow-hidden relative border-2 border-blue-700/30 dark:border-blue-800/50">
-                  <div className="text-xl md:text-2xl font-bold tracking-tight text-white">
-                    {recentFlight.server}
+                <div className="bg-gradient-to-r from-blue-900 via-purple-900 to-blue-900 dark:from-blue-950 dark:via-purple-950 dark:to-blue-950 rounded-[25px] md:rounded-[30px] p-4 flex items-center justify-between gap-4 border-2 border-blue-800/50 dark:border-blue-700/30">
+                  <div className="flex-1 min-w-0">
+                    <h3 className="text-white font-bold tracking-tight text-xl md:text-2xl truncate">
+                      {aircraftName || "Unknown Aircraft"}
+                    </h3>
+                    <p className="text-gray-300 dark:text-gray-400 text-xs md:text-sm mt-1 font-medium truncate">
+                      {liveryName || "Standard livery"}
+                    </p>
                   </div>
-                  <div className="text-blue-100 dark:text-blue-300 text-xs md:text-sm font-medium">Server</div>
-                  <div className="absolute top-0 right-0 opacity-10 dark:opacity-20">
-                    <GoServer className="text-[7rem] md:text-[8rem]" />
+                  <div className="flex-shrink-0">
+                    <Image
+                      src={`/images/aircraft/${matchAircraftNameToImage(aircraftName || "")}`}
+                      alt={aircraftName || "Aircraft"}
+                      width={120}
+                      height={90}
+                      className="rounded-lg object-contain w-[80px] h-[60px] md:w-[110px] md:h-[80px]"
+                    />
                   </div>
                 </div>
-              </div>
-            </CardContent>
-          </Card>
 
-          {/* IFlytics Arcade Promo */}
-          <div className="col-span-full relative overflow-hidden rounded-[25px] border-4 border-yellow-400/50 dark:border-yellow-500/40">
+                <div className="grid grid-cols-2 gap-3 md:gap-4">
+                  <div className="bg-[#A5B68D] dark:bg-green-900/40 rounded-[20px] md:rounded-[25px] p-4 md:p-5 backdrop-blur-md overflow-hidden relative border-2 border-green-700/30 dark:border-green-800/50">
+                    <div className="text-xl md:text-2xl font-bold tracking-tight text-white tabular-nums">
+                      {recentFlight.xp?.toLocaleString() ?? 0}
+                    </div>
+                    <div className="text-green-100 dark:text-green-300 text-xs md:text-sm font-medium">XP Earned</div>
+                    <div className="absolute top-2 right-2 opacity-10 dark:opacity-20 pointer-events-none">
+                      <PiShootingStarBold className="text-[5rem] md:text-[6rem]" />
+                    </div>
+                  </div>
+
+                  <div className="bg-[#687FE5] dark:bg-blue-900/40 rounded-[20px] md:rounded-[25px] p-4 md:p-5 backdrop-blur-md overflow-hidden relative border-2 border-blue-700/30 dark:border-blue-800/50">
+                    <div className="text-xl md:text-2xl font-bold tracking-tight text-white truncate">
+                      {recentFlight.server?.replace(" Server", "") || "Unknown"}
+                    </div>
+                    <div className="text-blue-100 dark:text-blue-300 text-xs md:text-sm font-medium">Server</div>
+                    <div className="absolute top-0 right-0 opacity-10 dark:opacity-20 pointer-events-none">
+                      <GoServer className="text-[7rem] md:text-[8rem]" />
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
             <div
-              className="absolute inset-0"
-              style={{ backgroundImage: 'url(/starfall-gif.gif)', backgroundSize: 'cover', backgroundPosition: 'center' }}
-            />
-            <div className="absolute inset-0 bg-black/55" />
-            <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-4 p-6">
-              <div className="flex flex-col gap-1 text-white">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className="text-2xl md:text-3xl font-black tracking-tight">IFlytics Arcade 🕹️</span>
-                  <Badge className="bg-gradient-to-r from-orange-500 to-yellow-500 text-white text-xs font-bold border-none">NEW</Badge>
+              className={cn(
+                "relative overflow-hidden rounded-[25px] h-full min-h-[280px]",
+                "border-4 border-yellow-400/50 dark:border-yellow-500/40"
+              )}
+            >
+              <div
+                className="absolute inset-0"
+                style={{
+                  backgroundImage: "url(/starfall-gif.gif)",
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                }}
+              />
+              <div className="absolute inset-0 bg-black/55" />
+              <div className="relative z-10 flex flex-col items-center justify-center gap-5 p-6 h-full min-h-[280px] text-center">
+                <div className="flex flex-col items-center gap-3 text-white max-w-lg">
+                  <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3">
+                    <span className="text-3xl md:text-4xl lg:text-5xl font-black tracking-tight leading-tight">
+                      IFlytics Arcade 🕹️
+                    </span>
+                    <Badge className="bg-gradient-to-r from-orange-500 to-yellow-500 text-white text-xs font-bold border-none shrink-0">
+                      NEW
+                    </Badge>
+                  </div>
+                  <p className="text-white/65 text-sm md:text-base">
+                    Take a break from the stats — play mini-games featuring real IFlytics community pilots as sprites.
+                  </p>
                 </div>
-                <p className="text-white/65 text-sm md:text-base max-w-lg">
-                  Take a break from the stats — play mini-games featuring real IFlytics community pilots as sprites.
-                </p>
+                <Link
+                  href="/dashboard/games"
+                  className="shrink-0 bg-yellow-400 hover:bg-yellow-300 text-black font-black rounded-full px-6 py-2.5 text-sm transition-all duration-200 hover:scale-105 flex items-center gap-2"
+                >
+                  Open Arcade →
+                </Link>
               </div>
-              <Link
-                href="/dashboard/games"
-                className="shrink-0 bg-yellow-400 hover:bg-yellow-300 text-black font-black rounded-full px-6 py-2.5 text-sm transition-all duration-200 hover:scale-105 flex items-center gap-2"
-              >
-                Open Arcade →
-              </Link>
             </div>
           </div>
           

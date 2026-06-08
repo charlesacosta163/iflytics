@@ -14,7 +14,7 @@ import {
     useSidebar
   } from "@/components/ui/sidebar"
 import { cn } from '@/lib/utils'
-import { FaHome, FaUser, FaGlobeAsia, FaToolbox } from 'react-icons/fa'
+import { FaHome, FaUser, FaGlobeAsia, FaToolbox, FaInstagram } from 'react-icons/fa'
 import { TiPlaneOutline } from 'react-icons/ti'
 import { GoCopilot } from 'react-icons/go'
 import { MdOutlineLeaderboard } from 'react-icons/md'
@@ -24,6 +24,7 @@ import { BsIncognito } from 'react-icons/bs'
 import { HiOutlineExternalLink } from 'react-icons/hi'
 import { Badge } from '@/components/ui/badge'
 import { LogoutButton } from '@/components/logout-button'
+import { PremiumUpsellSidebar } from '@/components/dashboard-ui/premium-upsell-sidebar'
 import iflyticsLogo from '@/public/iflyticslight.svg'
 import { getAppVersion, getRandomCaption } from '@/lib/foo.js'
 
@@ -98,6 +99,13 @@ const AppSidebar = () => {
       label: 'Guest Mode',
       textColorLight: 'text-orange-700',
       textColorDark: 'dark:text-orange-400'
+    }, 
+    {
+      href: 'https://www.instagram.com/iflyticsapp',
+      icon: FaInstagram,
+      label: 'Instagram',
+      textColorLight: 'text-white bg-pink-500',
+      textColorDark: 'dark:text-pink-400'
     }
   ]
 
@@ -240,7 +248,8 @@ const AppSidebar = () => {
       </SidebarContent>
 
       {/* Footer */}
-      <SidebarFooter className={cn("p-2 bg-[#FFEFD5] dark:bg-gray-900", open && "p-4")}>
+      <SidebarFooter className={cn("p-2 bg-[#FFEFD5] dark:bg-gray-900 flex flex-col gap-2", open && "p-4")}>
+        <PremiumUpsellSidebar expanded={open} />
         {open ? (
           <LogoutButton className="w-full font-medium hover:text-red-600 dark:hover:text-red-400 cursor-pointer transition-all duration-200 rounded-full px-3 py-2.5 text-sm" />
         ) : (

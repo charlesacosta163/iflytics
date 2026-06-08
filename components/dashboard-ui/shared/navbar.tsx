@@ -8,14 +8,14 @@ import { Badge } from "@/components/ui/badge";
 
 import { TiPlaneOutline } from "react-icons/ti";
 import { GoCopilot } from "react-icons/go";
-import { FaHome, FaUser } from "react-icons/fa";
-import { LuGoal, LuUser } from "react-icons/lu";
+import { FaHome, FaUser, FaGlobeAsia, FaToolbox, FaInstagram } from "react-icons/fa";
+import { LuUser } from "react-icons/lu";
 
 import Link from "next/link";
 import Image from "next/image";
 import { BsIncognito } from "react-icons/bs";
-import { LiaGlobeAmericasSolid } from "react-icons/lia";
-import { useTheme } from "next-themes";
+import { HiOutlineExternalLink } from "react-icons/hi";
+import { PremiumUpsellSidebar } from "@/components/dashboard-ui/premium-upsell-sidebar";
 import { customUserImages } from "@/lib/data";
 
 import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
@@ -237,11 +237,10 @@ const Navbar = () => {
 
         {/* Sliding Menu */}
         <div
-          className={`absolute top-[73px] left-0 right-0 mx-3 bg-white dark:bg-gray-900 rounded-[25px] border-2 border-gray-200 dark:border-gray-700 shadow-2xl transition-all duration-300 ease-out ${
-            isMenuOpen
-              ? "translate-y-0 opacity-100"
-              : "-translate-y-4 opacity-0"
-          }`}
+          className={cn(
+            "absolute top-[73px] left-0 right-0 mx-3 bg-white dark:bg-gray-900 rounded-[25px] border-2 border-gray-200 dark:border-gray-700 shadow-2xl transition-all duration-300 ease-out max-h-[calc(100vh-90px)] overflow-y-auto",
+            isMenuOpen ? "translate-y-0 opacity-100" : "-translate-y-4 opacity-0"
+          )}
         >
           <div className="p-5">
             {/* Menu Header */}
@@ -251,7 +250,7 @@ const Navbar = () => {
               </h3>
             </div>
 
-            {/* Navigation Links */}
+            {/* Primary Navigation */}
             <nav className="grid grid-cols-2 gap-3">
               <Link
                 href="/dashboard"
@@ -264,7 +263,7 @@ const Navbar = () => {
                 )}
                 onClick={() => setIsMenuOpen(false)}
               >
-                <div className="p-2 bg-blue-500 dark:bg-blue-600 rounded-[10px] group-hover:scale-110 transition-transform duration-200">
+                <div className="p-2 bg-yellow-500 dark:bg-yellow-600 rounded-[10px] group-hover:scale-110 transition-transform duration-200">
                   <FaHome className="w-4 h-4 text-white" />
                 </div>
                 <span className="font-semibold text-sm text-gray-800 dark:text-gray-100 tracking-tight">Dashboard</span>
@@ -281,7 +280,7 @@ const Navbar = () => {
                 )}
                 onClick={() => setIsMenuOpen(false)}
               >
-                <div className="p-2 bg-purple-500 dark:bg-purple-600 rounded-[10px] group-hover:scale-110 transition-transform duration-200">
+                <div className="p-2 bg-green-500 dark:bg-green-600 rounded-[10px] group-hover:scale-110 transition-transform duration-200">
                   <TiPlaneOutline className="w-4 h-4 text-white" />
                 </div>
                 <span className="font-semibold text-sm text-gray-800 dark:text-gray-100 tracking-tight">Flights</span>
@@ -298,7 +297,7 @@ const Navbar = () => {
                 )}
                 onClick={() => setIsMenuOpen(false)}
               >
-                <div className="p-2 bg-green-500 dark:bg-green-600 rounded-[10px] group-hover:scale-110 transition-transform duration-200">
+                <div className="p-2 bg-pink-500 dark:bg-pink-600 rounded-[10px] group-hover:scale-110 transition-transform duration-200">
                   <FaUser className="w-4 h-4 text-white" />
                 </div>
                 <span className="font-semibold text-sm text-gray-800 dark:text-gray-100 tracking-tight">Profile</span>
@@ -315,60 +314,120 @@ const Navbar = () => {
                 )}
                 onClick={() => setIsMenuOpen(false)}
               >
-                <div className="p-2 bg-pink-500 dark:bg-pink-600 rounded-[10px] group-hover:scale-110 transition-transform duration-200">
+                <div className="p-2 bg-blue-500 dark:bg-blue-600 rounded-[10px] group-hover:scale-110 transition-transform duration-200">
                   <GoCopilot className="w-4 h-4 text-white" />
                 </div>
                 <span className="font-semibold text-sm text-gray-800 dark:text-gray-100 tracking-tight">Community</span>
               </Link>
 
               <Link
-                href="/map/earth"
+                href="/dashboard/leaderboard"
                 className={cn(
                   "group flex items-center gap-3 p-4 rounded-[15px]",
-                  "bg-blue-50 dark:bg-blue-900/20",
-                  "hover:bg-blue-100 dark:hover:bg-blue-900/30",
-                  "border-2 border-blue-300 dark:border-blue-700/50",
+                  "bg-gray-50 dark:bg-gray-800/50",
+                  "hover:bg-gray-100 dark:hover:bg-gray-800",
+                  "border-2 border-gray-200 dark:border-gray-700",
                   "transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
                 )}
                 onClick={() => setIsMenuOpen(false)}
               >
-                <div className="p-2 bg-blue-500 dark:bg-blue-600 rounded-[10px] group-hover:scale-110 transition-transform duration-200">
-                  <LiaGlobeAmericasSolid className="w-4 h-4 text-white" />
+                <div className="p-2 bg-purple-500 dark:bg-purple-600 rounded-[10px] group-hover:scale-110 transition-transform duration-200">
+                  <MdOutlineLeaderboard className="w-4 h-4 text-white" />
                 </div>
-                <span className="font-semibold text-sm text-blue-700 dark:text-blue-400 tracking-tight">Map</span>
-              </Link>
-
-              <Link
-                href="/"
-                className={cn(
-                  "group flex items-center gap-3 p-4 rounded-[15px]",
-                  "bg-orange-50 dark:bg-orange-900/20",
-                  "hover:bg-orange-100 dark:hover:bg-orange-900/30",
-                  "border-2 border-orange-300 dark:border-orange-700/50",
-                  "transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
-                )}
-                onClick={() => setIsMenuOpen(false)}
-              >
-                <div className="p-2 bg-orange-500 dark:bg-orange-600 rounded-[10px] group-hover:scale-110 transition-transform duration-200">
-                  <BsIncognito className="w-4 h-4 text-white" />
-                </div>
-                <span className="font-semibold text-sm text-orange-700 dark:text-orange-400 tracking-tight">Guest</span>
+                <span className="font-semibold text-sm text-gray-800 dark:text-gray-100 tracking-tight">Leaderboard</span>
               </Link>
 
               <Link
                 href="/dashboard/games"
-                className="relative col-span-2 group flex items-center justify-center gap-2 p-4 rounded-[15px] border-2 border-yellow-400 dark:border-yellow-400 overflow-hidden transition-all duration-200 hover:scale-[1.01] active:scale-[0.98]"
-                style={{ backgroundImage: 'url(/starfall-gif.gif)', backgroundSize: 'cover', backgroundPosition: 'center' }}
+                className="relative group flex items-center gap-3 p-4 rounded-[15px] border-2 border-yellow-400 dark:border-yellow-400 overflow-hidden transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+                style={{ backgroundImage: "url(/starfall-gif.gif)", backgroundSize: "cover", backgroundPosition: "center" }}
                 onClick={() => setIsMenuOpen(false)}
               >
                 <div className="absolute inset-0 bg-black/40 group-hover:bg-black/30 transition-colors duration-200 rounded-[13px]" />
-                <SiGamebanana className="relative z-10 w-4 h-4 text-white group-hover:scale-110 transition-transform duration-200" />
-                <span className="relative z-10 font-black text-sm text-white tracking-tight">The Arcade</span>
-                <TbBrandAppleArcade className="relative z-10 w-4 h-4 text-white group-hover:scale-110 transition-transform duration-200" />
+                <div className="relative z-10 p-2 bg-orange-500/80 rounded-[10px] group-hover:scale-110 transition-transform duration-200">
+                  <SiGamebanana className="w-4 h-4 text-white" />
+                </div>
+                <span className="relative z-10 font-semibold text-sm text-white tracking-tight">Arcade</span>
                 
               </Link>
-
             </nav>
+            {/* Premium Upsell */}
+            <div className="mt-5 pt-5 border-t-2 border-gray-200 dark:border-gray-700">
+              <PremiumUpsellSidebar expanded />
+            </div>
+
+            {/* External Links */}
+            <div className="mt-5 pt-5 border-t-2 border-gray-200 dark:border-gray-700">
+              <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-3">
+                More
+              </p>
+              <nav className="flex flex-col gap-2">
+                <Link
+                  href="https://infinitetoolbox.vercel.app/"
+                  className={cn(
+                    "group flex items-center gap-3 p-3 rounded-[15px]",
+                    "bg-white dark:bg-gray-800",
+                    "border-2 border-gray-200 dark:border-gray-700",
+                    "text-[#f0c474] dark:text-[#ffd6ba]",
+                    "transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+                  )}
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <FaToolbox className="w-5 h-5 shrink-0" />
+                  <span className="font-semibold text-sm tracking-tight">InfiniteToolbox</span>
+                  <HiOutlineExternalLink className="ml-auto w-4 h-4 opacity-60" />
+                </Link>
+
+                <Link
+                  href="/map/earth"
+                  className={cn(
+                    "group flex items-center gap-3 p-3 rounded-[15px]",
+                    "bg-white dark:bg-gray-800",
+                    "border-2 border-gray-200 dark:border-gray-700",
+                    "text-blue-700 dark:text-blue-400",
+                    "transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+                  )}
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <FaGlobeAsia className="w-5 h-5 shrink-0" />
+                  <span className="font-semibold text-sm tracking-tight">Flight Tracker</span>
+                  <HiOutlineExternalLink className="ml-auto w-4 h-4 opacity-60" />
+                </Link>
+
+                <Link
+                  href="/"
+                  className={cn(
+                    "group flex items-center gap-3 p-3 rounded-[15px]",
+                    "bg-white dark:bg-gray-800",
+                    "border-2 border-gray-200 dark:border-gray-700",
+                    "text-orange-700 dark:text-orange-400",
+                    "transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+                  )}
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <BsIncognito className="w-5 h-5 shrink-0" />
+                  <span className="font-semibold text-sm tracking-tight">Guest Mode</span>
+                  <HiOutlineExternalLink className="ml-auto w-4 h-4 opacity-60" />
+                </Link>
+
+                <Link
+                  href="https://www.instagram.com/iflyticsapp"
+                  className={cn(
+                    "group flex items-center gap-3 p-3 rounded-[15px]",
+                    "bg-gradient-to-r from-pink-500 to-purple-500",
+                    "border-2 border-pink-400/50 dark:border-pink-600/50",
+                    "text-white",
+                    "transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+                  )}
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <FaInstagram className="w-5 h-5 shrink-0" />
+                  <span className="font-semibold text-sm tracking-tight">Instagram</span>
+                  <HiOutlineExternalLink className="ml-auto w-4 h-4 opacity-80" />
+                </Link>
+              </nav>
+            </div>
+
           </div>
         </div>
       </div>
