@@ -320,7 +320,7 @@ export default async function DashboardPage() {
 
       <div>
         <CardTitle className="text-3xl md:text-4xl lg:text-5xl font-black tracking-tight text-white leading-tight">
-          Follow IFlytics on Instagram
+          IFlytics is on Instagram
         </CardTitle>
         <CardDescription className="text-white/80 text-sm md:text-lg mt-3 font-medium max-w-lg mx-auto">
           Feature previews, product updates, and highlights from the Infinite Flight community.

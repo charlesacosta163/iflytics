@@ -24,7 +24,7 @@ import { getFlightsTimeFrame } from "@/lib/cache/flightdata";
 import SelectTimeframeButton from "@/components/dashboard-ui/select-timeframe-button";
 import { redirect } from "next/navigation";
 import FlightsOverview from "@/components/dashboard-ui/flights/flights-overview";
-import { getAirportCoordinates } from "@/lib/actions";
+import { getAirportCoordinates, getAllAircraftLiveries } from "@/lib/actions";
 import FlightsDisplay from "@/components/dashboard-ui/flights/flights-display";
 import FlightsRoutes from "@/components/dashboard-ui/flights/flights-routes";
 import { FaClock, FaGlobe, FaHistory, FaInfoCircle, FaLock, FaMapMarkedAlt, FaPlane, FaQuestionCircle, FaRoute, FaWrench } from "react-icons/fa";
@@ -69,6 +69,8 @@ import aircraftPlaneHistory2Image from '@/public/subscriptions/aircraft-cards/ai
 import aircraftTopAirlinesImage from '@/public/subscriptions/aircraft-cards/aircraft-topairlines.png';
 import aircraftTopBrandRankImage from '@/public/subscriptions/aircraft-cards/aircraft-topbrandrank.png';
 import aircraftVideoGif from '@/public/subscriptions/aircraft-cards/aircraft-vid1.gif';
+import FlightsLivery from "@/components/dashboard-ui/flights/flights-livery";
+import LiveryAnalysisShowcase from "@/components/dashboard-ui/livery-analysis-showcase";
 
 
 
@@ -167,6 +169,8 @@ const FlightsPage = async ({ searchParams }: { searchParams: Promise<{ [key: str
   const mostVisitedOriginAndDestinationAirports =
     await getMostVisitedOriginAndDestinationAirports(allFlights);
   const aircraftUsageData = await getAllPlayerAircraftUsageData(allFlights);
+
+  const liveries = await getAllAircraftLiveries();
 
   return (
     <div className="space-y-8 pb-8">
@@ -326,12 +330,24 @@ const FlightsPage = async ({ searchParams }: { searchParams: Promise<{ [key: str
               "data-[state=inactive]:bg-gray-100 data-[state=inactive]:dark:bg-gray-900",
               "data-[state=inactive]:text-gray-600 data-[state=inactive]:dark:text-gray-300",
               "hover:bg-gray-200 dark:hover:bg-gray-700",
-              "opacity-50",
+              "shadow-md", 
+              !hasPremiumAccess(subscription as Subscription) && "data-[state=inactive]:text-yellow-600 dark:data-[state=inactive]:text-yellow-400",
               "shadow-md"
             )}
           >
-            <MdOutlineAirlines className="w-4 h-4 sm:w-5 sm:h-5" />
-            <span className="inline">Livery</span>
+            {
+              hasPremiumAccess(subscription as Subscription) ? (
+                <>
+                  <GrPaint className="w-4 h-4 sm:w-5 sm:h-5" />
+                  <span className="inline">Livery</span>
+                </>
+              ) : (
+                <>
+                  <FaLock className="w-4 h-4 sm:w-5 sm:h-5" />
+                  <span className="inline">Livery</span>
+                </>
+              )
+            }
           </TabsTrigger>
 
           <TabsTrigger
@@ -804,41 +820,11 @@ const FlightsPage = async ({ searchParams }: { searchParams: Promise<{ [key: str
         </TabsContent>
 
         <TabsContent value="livery" className="space-y-6 w-full">
-          <div className="relative bg-white/50 dark:bg-black rounded-[50px] p-8 md:p-16 min-h-[600px] flex flex-col items-center justify-center">
-            
-            <header className="flex flex-col gap-4 items-center justify-center text-center">
-              <h1 className="text-4xl lg:text-8xl font-bold tracking-tighter flex items-center gap-3 flex-wrap justify-center">
-                <GrPaint className="text-amber-500 dark:text-amber-400" />
-                <span className="bg-gradient-to-r from-amber-500 to-amber-300 dark:from-amber-400 dark:to-amber-300 bg-clip-text text-transparent">
-                  Livery Analysis
-                </span>
-              </h1>
-              <p className="text-gray-800 dark:text-gray-300 text-lg font-semibold tracking-tight max-w-2xl text-center">
-                Track and analyze aircraft liveries and airline branding across your fleet.
-              </p>
-            </header>
-
-            <div className="mt-12 flex flex-col items-center gap-6">
-              <div className="text-6xl text-amber-500 animate-pulse">
-                <FaWrench />
-              </div>
-              
-              <Badge className="bg-amber-500 text-white text-lg px-6 py-2 animate-pulse">
-                COMING SOON
-              </Badge>
-              
-              <p className="text-gray-700 dark:text-gray-300 font-bold text-xl">
-                Available in v1.8.0
-              </p>
-              
-              <div className="bg-white/50 dark:bg-gray-800/50 rounded-[20px] p-6 max-w-md">
-                <p className="text-sm text-gray-600 dark:text-gray-400 text-center">
-                  This feature will be exclusive to <Badge className="bg-yellow-500 text-white font-bold tracking-tight text-md uppercase mr-1">Premium</Badge> and <Badge className="bg-green-600 text-white font-bold tracking-tight text-md uppercase mr-1">Lifetime</Badge> subscribers.
-                </p>
-              </div>
-            </div>
-
-          </div>
+          {hasPremiumAccess(subscription as Subscription) ? (
+            <FlightsLivery flights={allFlights} user={user} liveries={liveries} role={subscription.role} />
+          ) : (
+            <LiveryAnalysisShowcase />
+          )}
         </TabsContent>
 
         <TabsContent value="atc" className="space-y-6 w-full">

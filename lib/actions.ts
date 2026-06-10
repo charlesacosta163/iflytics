@@ -271,6 +271,19 @@ export async function getAircraftViaLiveryId(liveryId: string) {
 
 }
 
+export async function getAllAircraftLiveries() {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/aircraft/liveries`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${API_KEY}`
+        },
+    })
+
+    const data = await response.json()
+
+    return data.result
+}
 
 export async function getAirport(airportIcao: string) {
     try {

@@ -177,32 +177,30 @@ export async function getAllPlayerAircraftUsageData(flights: Flight[]) {
               // Use cached aircraft data
               const aircraft: any = await getAircraftCached(aircraftId);
 
+              if (!aircraft?.name) return null;
+
               return {
-                name:
-                  aircraft?.name  || `Unknown Aircraft`,
+                name: aircraft.name,
                 count: aircraftUsageCount[aircraftId],
-                id: aircraftId, // Store the ID for debugging
+                id: aircraftId,
               };
             } catch (innerError) {
               console.error(
                 `Error processing aircraft ${aircraftId}:`,
                 innerError
               );
-              return {
-                name: `Aircraft ${aircraftId.substring(0, 6)}...`,
-                count: aircraftUsageCount[aircraftId],
-                id: aircraftId,
-                error: true,
-              };
+              return null;
             }
           })
         );
-        results.push(...batchResults);
+        results.push(...batchResults.filter(Boolean));
       }
       return results;
     };
 
-    const aircraftUsageData = await processBatch(uniqueAircraftIds);
+    const aircraftUsageData = (await processBatch(uniqueAircraftIds)).filter(
+      (item): item is { name: string; count: number; id: string } => item !== null
+    );
 
     // Sort by usage count (most used first)
     return aircraftUsageData.sort((a, b) => b.count - a.count);

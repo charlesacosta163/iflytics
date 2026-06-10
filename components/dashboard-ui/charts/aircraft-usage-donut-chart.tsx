@@ -41,12 +41,13 @@ export function AircraftUsageDonutChart({
   timeframe,
   className,
 }: {
-  aircraftUsageData: { name: string; count: number }[]
+  aircraftUsageData: { name: string; count: number; id?: string }[]
   timeframe: string
   className?: string
 }) {
   const chartData = React.useMemo(() => {
     return aircraftUsageData.map((aircraft, index) => ({
+      id: aircraft.id ?? `${aircraft.name}-${index}`,
       name: aircraft.name,
       count: aircraft.count,
       fill: CHART_COLORS[index % CHART_COLORS.length],
@@ -171,7 +172,7 @@ export function AircraftUsageDonutChart({
 
               return (
                 <div
-                  key={item.name}
+                  key={item.id}
                   className={cn(
                     "flex items-center gap-2",
                     "rounded-[20px]",
