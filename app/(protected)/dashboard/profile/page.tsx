@@ -1,8 +1,10 @@
 import React from 'react'
+import { Suspense } from 'react';
 import ProfileWrapper from '@/components/dashboard-ui/profile-wrapper'
 
 import { getUserProfile } from '@/lib/supabase/user-actions';
 import { getUserSubscription } from '@/lib/stripe/stripe-actions';
+import PurchaseTracker from '@/components/dashboard-ui/misc/ga4/purchase-tracker';
 
 const ProfilePage = async () => {
   const profile = await getUserProfile();
@@ -10,7 +12,12 @@ const ProfilePage = async () => {
 
   // console.log(subscription);
   return (
+    <>
+    <Suspense fallback={null}>
+      <PurchaseTracker />
+    </Suspense>
     <ProfileWrapper userProfile={profile} subscription={subscription} />
+    </>
   )
 }
 

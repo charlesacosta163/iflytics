@@ -1,9 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { RiPriceTag3Line } from 'react-icons/ri';
-
-import { getUser } from '@/lib/supabase/user-actions';
 
 export function SubscribeButton() {
   const [loading, setLoading] = useState(false);

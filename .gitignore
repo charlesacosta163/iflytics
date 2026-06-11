@@ -15,6 +15,10 @@
 # testing
 /coverage
 
+# cursor / agent skills
+.agents
+skills-lock.json
+
 # next.js
 /.next/
 /out/
