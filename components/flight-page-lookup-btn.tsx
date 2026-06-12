@@ -46,7 +46,7 @@ const FlightPageLookupButton = ({flightsTotal}: {flightsTotal: number}) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Badge className="absolute -top-6 right-0 cursor-pointer"><LuFileSearch2 /> Lookup</Badge>
+        <Badge className="cursor-pointer whitespace-nowrap"><LuFileSearch2 /> Lookup</Badge>
       </DialogTrigger>
       <DialogContent className='w-[300px]'>
         <DialogHeader>

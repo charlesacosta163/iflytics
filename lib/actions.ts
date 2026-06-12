@@ -813,3 +813,9 @@ export async function revalidateFlightRoutes(userId: string) {
     }
   }
 }
+
+export async function searchUserAction(formData: FormData) {
+  const name = (formData.get("name") as string)?.trim()
+  if (!name) return
+  redirect(`/user/${encodeURIComponent(name)}?searched=true`)
+}

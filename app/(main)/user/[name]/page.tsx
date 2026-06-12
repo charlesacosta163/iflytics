@@ -20,6 +20,7 @@ import { Card } from "@/components/ui/card";
 // Dynamic Metadata
 import { Metadata } from 'next'
 import IFCUsernameSearchTracker from "@/components/dashboard-ui/misc/ga4/ifc-username-search-tracker";
+import SearchAnotherUserDialog from "@/components/search-another-user-dialog";
 
 export async function generateMetadata({ params }: { params: Promise<{ name: string }> }): Promise<Metadata> {
   const { name } = await params;
@@ -84,9 +85,12 @@ const UserPage = async ({ params }: { params: Promise<{ name: string }> }) => {
 
       <IFCUsernameSearchTracker />
 
-      <h2 className="text-5xl font-black dark:text-light bg-gradient-to-r from-gray-600 to-dark py-0.5 bg-clip-text text-transparent">
-        General
-      </h2>
+      <div className="flex items-center justify-between gap-2">
+        <h2 className="text-5xl font-black dark:text-light bg-gradient-to-r from-gray-600 to-dark py-0.5 bg-clip-text text-transparent">
+          General
+        </h2>
+        <SearchAnotherUserDialog />
+      </div>
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4">
         <InfoCard
           value={result.grade}

@@ -7,6 +7,7 @@ import { IoStatsChartSharp } from "react-icons/io5";
 import { LuHistory, LuCalendarClock, LuChartPie } from "react-icons/lu";
 import { SearchUserButton } from "@/components/searchuser-btn";
 import Link from "next/link";
+import { searchUserAction } from "@/lib/actions";
 
 import { FaCheck, FaStar } from "react-icons/fa6";
 import { MdOutlineAccountCircle } from "react-icons/md";
@@ -100,10 +101,7 @@ export default function Home() {
                   <p className="text-gray-500 dark:text-gray-400 text-xs mt-1">Search any IFC username to view their stats.</p>
                 </div>
 
-                <form action={async (formData: FormData) => {
-                  'use server'
-                  redirect(`/user/${formData.get("name") as string}?searched=true`)
-                }} className="flex flex-col gap-2">
+                <form action={searchUserAction} className="flex flex-col gap-2">
                   <div className="relative">
                     <input
                       type="text"

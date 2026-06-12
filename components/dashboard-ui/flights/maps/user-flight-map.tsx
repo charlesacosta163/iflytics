@@ -52,8 +52,8 @@ const UserFlightMap = ({
         // Clear canvas
         ctx.clearRect(0, 0, spriteSize, spriteSize)
 
-        // Draw green circle background
-        ctx.fillStyle = "#10B981" // green-500
+        // Draw red circle for origin
+        ctx.fillStyle = "#EF4444" // red-500
         ctx.beginPath()
         ctx.arc(spriteSize / 2, spriteSize / 2, spriteSize / 2 - 2, 0, 2 * Math.PI)
         ctx.fill()
@@ -70,7 +70,7 @@ const UserFlightMap = ({
         ctx.font = "12px Arial"
         ctx.textAlign = "center"
         ctx.textBaseline = "middle"
-        ctx.fillText("🛫", spriteSize / 2, spriteSize / 2)
+        ctx.fillText("✈️", spriteSize / 2, spriteSize / 2)
       }
 
       return canvas
@@ -86,8 +86,8 @@ const UserFlightMap = ({
         // Clear canvas
         ctx.clearRect(0, 0, spriteSize, spriteSize)
 
-        // Draw red circle background
-        ctx.fillStyle = "#EF4444" // red-500
+        // Draw green circle for destination
+        ctx.fillStyle = "#10B981" // green-500
         ctx.beginPath()
         ctx.arc(spriteSize / 2, spriteSize / 2, spriteSize / 2 - 2, 0, 2 * Math.PI)
         ctx.fill()
@@ -104,7 +104,7 @@ const UserFlightMap = ({
         ctx.font = "12px Arial"
         ctx.textAlign = "center"
         ctx.textBaseline = "middle"
-        ctx.fillText("🛬", spriteSize / 2, spriteSize / 2)
+        ctx.fillText("✈️", spriteSize / 2, spriteSize / 2)
       }
 
       return canvas

@@ -8,9 +8,10 @@ import { FaRegPaperPlane } from "react-icons/fa";
 
 interface SearchUserButtonProps {
   className?: string
+  label?: string
 }
 
-export function SearchUserButton({ className }: SearchUserButtonProps) {
+export function SearchUserButton({ className, label = "View My Stats" }: SearchUserButtonProps) {
   const { pending } = useFormStatus()
 
   return (
@@ -27,7 +28,7 @@ export function SearchUserButton({ className }: SearchUserButtonProps) {
       ) : (
         <span className="flex items-center gap-2">
           <FaRegPaperPlane className="text-lg" />
-          View My Stats
+          {label}
         </span>
       )}
     </Button>

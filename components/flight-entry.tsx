@@ -16,13 +16,17 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 import { formatDate, convertMinutesToHours } from "@/lib/utils";
+import type { FlightRouteData } from "@/lib/flight-route-utils";
+import FlightRouteMapRenderer from "@/components/flight-route-map-renderer";
 
 const FlightEntryCard = ({
   flight,
   aircraft,
+  route,
 }: {
   flight: any;
   aircraft: any;
+  route?: FlightRouteData | null;
 }) => {
 
 
@@ -175,6 +179,15 @@ const FlightEntryCard = ({
                     </div>
                   </div>
                 </div>
+
+              {route && (
+                <div className="flex flex-col gap-2">
+                  <h3 className="font-bold text-base md:text-lg text-gray-700 dark:text-gray-300 tracking-tight">
+                    Route Map
+                  </h3>
+                  <FlightRouteMapRenderer route={route} />
+                </div>
+              )}
             </section>
           </AccordionContent>
         </AccordionItem>

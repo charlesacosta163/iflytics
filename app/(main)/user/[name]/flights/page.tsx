@@ -4,6 +4,9 @@ import { Metadata } from 'next'
 import FlightEntryCard from '@/components/flight-entry'
 import PaginationBtn from '@/components/pagination-btn'
 import FlightPageLookupButton from '@/components/flight-page-lookup-btn'
+import SearchAnotherUserDialog from '@/components/search-another-user-dialog'
+import FlightsOverviewMapRenderer from '@/components/flights-overview-map-renderer'
+import { buildFlightRoute, buildFlightRoutes } from '@/lib/flight-route-utils'
 
 type PageProps = {
     params: Promise<{name: string | string[] | undefined}>,
@@ -44,6 +47,22 @@ const FlightsPage = async ({
 
     const userFlights = await getUserFlights(name, page ? Number(page) : 1)
     const { data: { result: {data: flights, pageIndex, totalPages, totalCount, hasPreviousPage, hasNextPage}}} : any = userFlights
+    const flightRoutes = buildFlightRoutes(flights)
+
+    const flightCards = flights.length > 0
+        ? await Promise.all(flights.map(async (flight: any) => {
+            const aircraft = await getAircraftAndLivery(flight.liveryId)
+            const route = buildFlightRoute(flight)
+            return (
+                <FlightEntryCard
+                    key={flight.id}
+                    flight={flight}
+                    aircraft={aircraft}
+                    route={route}
+                />
+            )
+        }))
+        : null
 
     return (
         <div className='p-4 flex flex-col gap-4'>
@@ -54,15 +73,17 @@ const FlightsPage = async ({
                     <span className="sm:block hidden">Showing page {pageIndex} of {totalPages} ({totalCount} total flights)</span>
                     <span className="sm:hidden">Page {pageIndex} of {totalPages}</span>
 
-                    <FlightPageLookupButton flightsTotal={totalCount as number} />
+                    <div className="absolute -top-6 right-0 flex flex-wrap items-center justify-end gap-2 max-w-[min(100%,20rem)] sm:max-w-none">
+                        <SearchAnotherUserDialog />
+                        <FlightPageLookupButton flightsTotal={totalCount as number} />
+                    </div>
                 </div>
             </div>
 
+            <FlightsOverviewMapRenderer routes={flightRoutes} />
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {flights.length > 0 ? flights.map(async (flight: any) => {
-                    const aircraft = await getAircraftAndLivery(flight.liveryId)
-                    return <FlightEntryCard key={flight.id} flight={flight} aircraft={aircraft}/>
-                }) : <div className='text-center text-gray-700 font-bold text-2xl'>No flights found</div>}
+                {flightCards ?? <div className='text-center text-gray-700 font-bold text-2xl'>No flights found</div>}
             </div>
 
             <div className="flex justify-center mt-4">

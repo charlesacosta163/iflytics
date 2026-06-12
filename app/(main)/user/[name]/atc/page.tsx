@@ -6,6 +6,7 @@ import React from 'react'
 import Link from 'next/link'
 import { Badge } from '@/components/ui/badge'
 import { Metadata } from 'next'
+import SearchAnotherUserDialog from '@/components/search-another-user-dialog'
 
 export async function generateMetadata({ params }: { params: Promise<{ name: string }> }): Promise<Metadata> {
     const { name } = await params;
@@ -83,9 +84,13 @@ const ATCHistoryPage = async ({ params, searchParams }: PageProps) => {
       <div className="p-4 flex flex-col gap-4">
          <div className="flex items-center justify-between gap-2">
                 <h2 className='text-5xl font-black dark:text-light bg-gradient-to-r from-gray-600 to-dark bg-clip-text text-transparent py-0.5 flex gap-4 items-center'>ATC <Badge className="bg-[#FFA089] text-light text-lg font-bold" >PRIME</Badge></h2>
-                <div className="text-sm text-muted-foreground">
+                <div className="text-sm text-muted-foreground relative">
                     <span className="sm:block hidden">Showing page {pageIndex} of {totalPages} ({totalCount} total sessions)</span>
                     <span className="sm:hidden">Page {pageIndex} of {totalPages}</span>
+
+                    <div className="absolute -top-6 right-0 flex flex-wrap items-center justify-end gap-2 max-w-[min(100%,20rem)] sm:max-w-none">
+                        <SearchAnotherUserDialog />
+                    </div>
                 </div>
             </div>
   
