@@ -1008,7 +1008,7 @@ export const RouteMap = ({ routes }: { routes: any[] }) => {
                 ) : aircraftData ? (
                   <div>
                     <div className="text-gray-800 dark:text-white font-bold text-lg mb-1">
-                      {aircraftData.name}
+                      {aircraftData.aircraftName}
                     </div>
                   </div>
                 ) : (

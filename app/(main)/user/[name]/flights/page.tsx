@@ -71,9 +71,9 @@ const FlightsPage = async ({
                 <h2 className='text-5xl font-black dark:text-light bg-gradient-to-r from-gray-600 to-dark bg-clip-text text-transparent py-0.5'>Flights</h2>
                 <div className="text-sm text-muted-foreground relative">
                     <span className="sm:block hidden">Showing page {pageIndex} of {totalPages} ({totalCount} total flights)</span>
-                    <span className="sm:hidden">Page {pageIndex} of {totalPages}</span>
+                    <span className="sm:hidden justify-end">Page {pageIndex} of {totalPages}</span>
 
-                    <div className="absolute -top-6 right-0 flex flex-wrap items-center justify-end gap-2 max-w-[min(100%,20rem)] sm:max-w-none">
+                    <div className="flex flex-wrap items-center justify-end gap-2 max-w-[min(100%,20rem)] sm:max-w-none">
                         <SearchAnotherUserDialog />
                         <FlightPageLookupButton flightsTotal={totalCount as number} />
                     </div>

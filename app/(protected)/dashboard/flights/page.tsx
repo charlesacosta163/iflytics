@@ -170,6 +170,7 @@ const FlightsPage = async ({ searchParams }: { searchParams: Promise<{ [key: str
     await getMostVisitedOriginAndDestinationAirports(allFlights);
   const aircraftUsageData = await getAllPlayerAircraftUsageData(allFlights);
 
+
   const liveries = await getAllAircraftLiveries();
 
   return (

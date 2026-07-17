@@ -22,7 +22,7 @@ const SearchAnotherUserDialog = () => {
       <DialogTrigger asChild>
         <Badge className="cursor-pointer whitespace-nowrap">
           <LuUserSearch />
-          Search For Another User
+          Search
         </Badge>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[360px]">

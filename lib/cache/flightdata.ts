@@ -50,7 +50,7 @@ export const getAircraftCached = async (aircraftId: string) => {
 
     // console.log(aircraftLibrary)
 
-    const aircraftInfo = aircraftLibrary.find((aircraft: any) => aircraft.id === aircraftId);
+    const aircraftInfo = aircraftLibrary.find((aircraft: any) => aircraft.aircraftID === aircraftId);
 
     return aircraftInfo
 

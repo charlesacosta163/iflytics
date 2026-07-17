@@ -13,6 +13,7 @@ import { LuList, LuPlane, LuTimer, LuTrendingUp, LuCalendar } from 'react-icons/
 import { RiCopilotFill } from 'react-icons/ri'
 import AirlineAnalysisCard from '../aircraft-tables/airline-analysis-card'
 import { customUserImages } from '@/lib/data'
+import { ValidFlightsPsa } from '../misc/valid-flights-psa'
 
 const labelIconClass = "shrink-0 w-[11px] h-[11px]"
 
@@ -110,18 +111,21 @@ const FlightsAircraft = async ({ flights, user, role }: { flights: Flight[], use
  // ------------------------------ MOCK DATA ENDS HERE ------------------------------
 
   // Based on THIS Data for user flights
-  // const validFlights = flights.filter((flight) => {
-  //   return (
-  //     flight.totalTime > 5 && flight.originAirport && flight.destinationAirport
-  //   );
-  // });
+  // Criteria: Flight has a totalTime > 5, originAirport, destinationAirport must be non-empty
+  // (Same criteria used in flights-routes.tsx) so junk/"did not fly" entries (e.g. origin/destination
+  // of "????" with 0 distance and 0 totalTime) don't inflate aircraft usage counts.
+  const validFlights = flights.filter((flight) => {
+    return (
+      flight.totalTime > 5 && flight.originAirport && flight.destinationAirport && flight.originAirport !== flight.destinationAirport
+    );
+  });
 
   // Get the user ID for the cache key
   const userMetadata = user.user_metadata;
 
   // Get the flight routes with distances with the user ID for the cache key
   // const startTime = Date.now(); --> Debugging
-  const routesWithDistances = await getAllFlightRoutes(flights, user.id);
+  const routesWithDistances = await getAllFlightRoutes(validFlights, user.id);
   // const endTime = Date.now(); --> Debugging
 
  // console.log(routesWithDistances[0])
@@ -156,16 +160,19 @@ const FlightsAircraft = async ({ flights, user, role }: { flights: Flight[], use
       };
     }
 
+    // console.log(routesWithDistances)
+
     const uniqueAircraftIds = [...new Set(routesWithDistances.map((route) => route.aircraftId))];
     const allAircraft = await getAllAircraft();
     const allAircraftList: any[] = allAircraft ?? [];
 
     // Initialize aircraft stats
     const aircraftStats: any = uniqueAircraftIds.reduce((acc, aircraftId) => {
-      const aircraftInfo = allAircraftList.find((a: any) => a.id === aircraftId);
+      const aircraftInfo = allAircraftList.find((a: any) => a.aircraftID === aircraftId);
+
       acc[aircraftId] = {
         aircraftId,
-        name: aircraftInfo?.name || "Unknown Aircraft",
+        name: aircraftInfo?.aircraftName || "Unknown Aircraft",
         count: 0,
         totalDistance: 0,
         totalTime: 0,
@@ -202,22 +209,16 @@ const FlightsAircraft = async ({ flights, user, role }: { flights: Flight[], use
   };
 
 
-  const mostUsedAircraftData = async () => {
-    const { mostUsedAircraft } = await aircraftAnalysisData();
-    
-    // Return fallback if no aircraft data
-    if (!mostUsedAircraft) {
-      return { id: 0, name: "No Aircraft Data", image: "/images/aircraft/placeholder.png" };
-    }
-
-    const aircraft = await getAllAircraft();
-    const aircraftData = aircraft?.find((aircraft: any) => aircraft.id === mostUsedAircraft.aircraftId);
-
-    return aircraftData || { id: 0, name: "Unknown Aircraft", image: "/images/aircraft/placeholder.png" };
-  };
 
   const analysisData = await aircraftAnalysisData();
-  const aircraftData: any = await mostUsedAircraftData();
+
+
+  // `aircraftStats` (and therefore `mostUsedAircraft`) already carries the resolved
+  // aircraft name, so there's no need to re-fetch the aircraft list or re-run the
+  // analysis a second time just to look up the same name again.
+  const aircraftData = {
+    name: analysisData.mostUsedAircraft?.name || "No Aircraft Data",
+  };
 
   const totalAnalyzed = routesWithDistances.length
   const uniqueCount = analysisData.uniqueAircraftIds.length
@@ -276,7 +277,7 @@ const FlightsAircraft = async ({ flights, user, role }: { flights: Flight[], use
           <Stat
             label="Total flights"
             value={flights.length}
-            sub={`${totalAnalyzed} with route data`}
+            sub={`${totalAnalyzed} valid flight${totalAnalyzed !== 1 ? "s" : ""} analyzed`}
             icon={<LuList className={labelIconClass} />}
           />
           <Stat
@@ -371,10 +372,15 @@ const FlightsAircraft = async ({ flights, user, role }: { flights: Flight[], use
         )}
       </div>
 
+      <ValidFlightsPsa
+        totalFlights={flights.length}
+        validFlightsCount={validFlights.length}
+      />
+
       {/* Conditional rendering for tables */}
       {analysisData.aircraftStats.length > 0 ? (
         <>
-          <AircraftUsageTable analysisData={analysisData} flightsAmountRaw={flights.length} allFlightsWithDistances={routesWithDistances} />
+          <AircraftUsageTable analysisData={analysisData} flightsAmountRaw={totalAnalyzed} allFlightsWithDistances={routesWithDistances} />
 
           <AirlineAnalysisCard routesWithDistances={routesWithDistances} />
           

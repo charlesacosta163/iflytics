@@ -242,7 +242,7 @@ export async function getAircraft(aircraftId: string) {
 //     new Map(aircraftInfo.map((item: any) => [item.aircraftID, item])).values()
 // );
 
-const foundAircraft = aircraftData.find((aircraft: any) => aircraft.id === aircraftId)
+const foundAircraft = aircraftData.find((aircraft: any) => aircraft.aircraftID === aircraftId)
 
     // console.log(data)
 

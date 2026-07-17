@@ -177,10 +177,10 @@ export async function getAllPlayerAircraftUsageData(flights: Flight[]) {
               // Use cached aircraft data
               const aircraft: any = await getAircraftCached(aircraftId);
 
-              if (!aircraft?.name) return null;
+              if (!aircraft?.aircraftName) return null;
 
               return {
-                name: aircraft.name,
+                name: aircraft.aircraftName,
                 count: aircraftUsageCount[aircraftId],
                 id: aircraftId,
               };
