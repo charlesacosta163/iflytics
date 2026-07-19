@@ -298,55 +298,46 @@ export default async function DashboardPage() {
             </CardContent>
           </Card>
 
-          {/* Instagram */}
-<Card
-  className={cn(
-    "md:col-span-1 lg:col-span-2 relative overflow-hidden",
-    "rounded-[25px] shadow-none",
-    "bg-gradient-to-br from-[#f9ce34] via-[#ee2a7b] to-[#6228d7]",
-    "text-white"
-  )}
->
-  <FaInstagram className="absolute -right-6 -bottom-8 text-[14rem] md:text-[18rem] text-white opacity-10 pointer-events-none" />
+          {/* Arcade */}
+          <div
+            className={cn(
+              "md:col-span-1 lg:col-span-2 relative overflow-hidden rounded-[25px] h-full min-h-[280px]",
+              "border-4 border-yellow-400/50 dark:border-yellow-500/40"
+            )}
+          >
+            <div
+              className="absolute inset-0"
+              style={{
+                backgroundImage: "url(/starfall-gif.gif)",
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+              }}
+            />
+            <div className="absolute inset-0 bg-black/55" />
+            <div className="relative z-10 flex flex-col items-center justify-center gap-5 p-6 h-full min-h-[280px] text-center">
+              <div className="flex flex-col items-center gap-3 text-white max-w-lg">
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3">
+                  <span className="text-3xl md:text-4xl lg:text-5xl font-black tracking-tight leading-tight">
+                    IFlytics Arcade 🕹️
+                  </span>
+                  <Badge className="bg-gradient-to-r from-orange-500 to-yellow-500 text-white text-xs font-bold border-none shrink-0">
+                    NEW
+                  </Badge>
+                </div>
+                <p className="text-white/65 text-sm md:text-base">
+                  Take a break from the stats — play mini-games featuring real IFlytics community pilots as sprites.
+                </p>
+              </div>
+              <Link
+                href="/dashboard/games"
+                className="shrink-0 bg-yellow-400 hover:bg-yellow-300 text-black font-black rounded-full px-6 py-2.5 text-sm transition-all duration-200 hover:scale-105 flex items-center gap-2"
+              >
+                Open Arcade →
+              </Link>
+            </div>
+          </div>
 
-  <CardContent className="relative z-10 px-5 md:px-7 py-8 md:py-10 flex flex-col items-center justify-center gap-6 text-center min-h-[220px]">
-    <div className="flex flex-col items-center gap-4 max-w-xl">
-      <div className="flex items-center justify-center gap-2">
-        <Image src={iflyticsLogo} alt="IFlytics Logo" width={32} height={32} />
-        <Badge className="bg-white/20 hover:bg-white/20 text-white border-white/25 font-semibold text-sm">
-          @iflyticsapp
-        </Badge>
-      </div>
-
-      <div>
-        <CardTitle className="text-3xl md:text-4xl lg:text-5xl font-black tracking-tight text-white leading-tight">
-          IFlytics is on Instagram
-        </CardTitle>
-        <CardDescription className="text-white/80 text-sm md:text-lg mt-3 font-medium max-w-lg mx-auto">
-          Feature previews, product updates, and highlights from the Infinite Flight community.
-        </CardDescription>
-      </div>
-    </div>
-
-    <Link
-      href="https://instagram.com/iflyticsapp"
-      target="_blank"
-      rel="noopener noreferrer"
-      className={cn(
-        "inline-flex items-center gap-2",
-        "bg-white text-[#ee2a7b] hover:bg-white/90",
-        "font-bold rounded-full px-6 py-2.5 text-sm md:text-base",
-        "transition-all duration-200 hover:scale-105 shadow-lg"
-      )}
-    >
-      <FaInstagram className="text-lg md:text-xl" />
-      Follow on Instagram
-      <FaExternalLinkAlt className="text-[10px] opacity-70" />
-    </Link>
-  </CardContent>
-</Card>
-
-          {/* Recent Flight + Arcade */}
+          {/* Recent Flight + Instagram */}
           <div className="col-span-full grid grid-cols-1 lg:grid-cols-2 gap-4">
             <Card className="bg-[#FEEBF6] dark:bg-indigo-950 text-dark dark:text-gray-100 rounded-[25px] border-4 border-indigo-200 dark:border-indigo-700 shadow-none h-full">
               <CardHeader className="px-4 md:px-6 flex flex-row justify-between items-start gap-3">
@@ -441,43 +432,52 @@ export default async function DashboardPage() {
               </CardContent>
             </Card>
 
-            <div
+            <Card
               className={cn(
-                "relative overflow-hidden rounded-[25px] h-full min-h-[280px]",
-                "border-4 border-yellow-400/50 dark:border-yellow-500/40"
+                "relative overflow-hidden h-full",
+                "rounded-[25px] shadow-none",
+                "bg-gradient-to-br from-[#f9ce34] via-[#ee2a7b] to-[#6228d7]",
+                "text-white"
               )}
             >
-              <div
-                className="absolute inset-0"
-                style={{
-                  backgroundImage: "url(/starfall-gif.gif)",
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
-                }}
-              />
-              <div className="absolute inset-0 bg-black/55" />
-              <div className="relative z-10 flex flex-col items-center justify-center gap-5 p-6 h-full min-h-[280px] text-center">
-                <div className="flex flex-col items-center gap-3 text-white max-w-lg">
-                  <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3">
-                    <span className="text-3xl md:text-4xl lg:text-5xl font-black tracking-tight leading-tight">
-                      IFlytics Arcade 🕹️
-                    </span>
-                    <Badge className="bg-gradient-to-r from-orange-500 to-yellow-500 text-white text-xs font-bold border-none shrink-0">
-                      NEW
+              <FaInstagram className="absolute -right-6 -bottom-8 text-[14rem] md:text-[18rem] text-white opacity-10 pointer-events-none" />
+
+              <CardContent className="relative z-10 px-5 md:px-7 py-8 md:py-10 flex flex-col items-center justify-center gap-6 text-center h-full min-h-[220px]">
+                <div className="flex flex-col items-center gap-4 max-w-xl">
+                  <div className="flex items-center justify-center gap-2">
+                    <Image src={iflyticsLogo} alt="IFlytics Logo" width={32} height={32} />
+                    <Badge className="bg-white/20 hover:bg-white/20 text-white border-white/25 font-semibold text-sm">
+                      @iflyticsapp
                     </Badge>
                   </div>
-                  <p className="text-white/65 text-sm md:text-base">
-                    Take a break from the stats — play mini-games featuring real IFlytics community pilots as sprites.
-                  </p>
+
+                  <div>
+                    <CardTitle className="text-3xl md:text-4xl lg:text-5xl font-black tracking-tight text-white leading-tight">
+                      IFlytics is on Instagram
+                    </CardTitle>
+                    <CardDescription className="text-white/80 text-sm md:text-lg mt-3 font-medium max-w-lg mx-auto">
+                      Feature previews, product updates, and highlights from the Infinite Flight community.
+                    </CardDescription>
+                  </div>
                 </div>
+
                 <Link
-                  href="/dashboard/games"
-                  className="shrink-0 bg-yellow-400 hover:bg-yellow-300 text-black font-black rounded-full px-6 py-2.5 text-sm transition-all duration-200 hover:scale-105 flex items-center gap-2"
+                  href="https://instagram.com/iflyticsapp"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={cn(
+                    "inline-flex items-center gap-2",
+                    "bg-white text-[#ee2a7b] hover:bg-white/90",
+                    "font-bold rounded-full px-6 py-2.5 text-sm md:text-base",
+                    "transition-all duration-200 hover:scale-105 shadow-lg"
+                  )}
                 >
-                  Open Arcade →
+                  <FaInstagram className="text-lg md:text-xl" />
+                  Follow on Instagram
+                  <FaExternalLinkAlt className="text-[10px] opacity-70" />
                 </Link>
-              </div>
-            </div>
+              </CardContent>
+            </Card>
           </div>
           
           <MonthlyStatsComparisonCard previousMonthStats={previousMonthStats} thisMonthStats={thisMonthStats}/>

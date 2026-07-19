@@ -302,8 +302,8 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
-              { number: "250K+", label: "Flights Tracked", icon: <TbPlaneInflight className="text-blue-400 text-2xl" /> },
-              { number: "460+", label: "Registered Users", icon: <RiCopilotFill className="text-green-400 text-2xl" /> },
+              { number: "750K+", label: "Flights Tracked", icon: <TbPlaneInflight className="text-blue-400 text-2xl" /> },
+              { number: "600+", label: "Registered Users", icon: <RiCopilotFill className="text-green-400 text-2xl" /> },
               { number: "24/7", label: "Live Updates", icon: <LuCalendarClock className="text-orange-400 text-2xl" /> },
             ].map((stat, i) => (
               <div key={i} className="flex flex-col items-center justify-center p-8 rounded-2xl border border-gray-700/50 bg-gray-800/30 text-center gap-2">
