@@ -41,31 +41,31 @@ export default function PromoBanner() {
           {/* Duplicate sequence twice for seamless loop */}
           <div className="promo-seq">
             <span className="font-semibold tracking-wide text-sm sm:text-base">
-              🎄 Holiday Sale — code expires <span className="underline decoration-2">January&nbsp;15</span>! ❄️
+              1 Year Anniversary Sale - Use code IFLYTICSLIFE60 to get 60% off on your lifetime plan! Offer expires Oct 1st, 2026.
             </span>
             <span className="mx-3 opacity-70">|</span>
             <span className="text-xs sm:text-sm">
-              <span className="font-bold bg-white/20 px-2 py-0.5 rounded-md">IFHOLIDAY50</span>{" "}
-              → <span className="font-semibold">50% OFF</span> <em>LIFETIME & PREMIUM Plans</em>
+              <span className="font-bold bg-white/20 px-2 py-0.5 rounded-md">IFLYTICSLIFE60</span>{" "}
+              → <span className="font-semibold">60% OFF</span> <em>LIFETIME Plan</em>
             </span>
             <span className="mx-3 opacity-70">|</span>
             <span className="text-xs sm:text-sm">
-              ⭐ Valid <span className="font-semibold">December 15 - January 15</span> ⭐
+              ⭐ Valid <span className="font-semibold">Aug 15 - Oct 31st</span> ⭐
             </span>
           </div>
 
           <div className="promo-seq">
             <span className="font-semibold tracking-wide text-sm sm:text-base">
-              🎄 Holiday Sale — code expires <span className="underline decoration-2">January&nbsp;15</span>! ❄️
+              1 Year Anniversary Sale - Use code IFLYTICSPREM75 to get 75% off on your premium plan! Offer expires Oct 1st, 2026.
             </span>
             <span className="mx-3 opacity-70">|</span>
             <span className="text-xs sm:text-sm">
-              <span className="font-bold bg-white/20 px-2 py-0.5 rounded-md">IFHOLIDAY50</span>{" "}
-              → <span className="font-semibold">50% OFF</span> <em>LIFETIME & PREMIUM Plans</em>
+              <span className="font-bold bg-white/20 px-2 py-0.5 rounded-md">IFLYTICSPREM75</span>{" "}
+              → <span className="font-semibold">75% OFF</span> <em>PREMIUM Plan</em>
             </span>
             <span className="mx-3 opacity-70">|</span>
             <span className="text-xs sm:text-sm">
-              ⭐ Valid <span className="font-semibold">December 15 - January 15</span> ⭐
+                ⭐ Valid <span className="font-semibold">Aug 15 - Oct 31st</span> ⭐
             </span>
           </div>
         </div>

@@ -19,6 +19,10 @@ const GroupedSubscriptionButtons = () => {
           <FaCrown className="text-4xl text-yellow-600 dark:text-yellow-400 animate-pulse" />
         </div>
 
+        <div className="w-[300px] text-center text-wrap text-sm bg-blue-600 animate-pulse text-white p-4 rounded-[30px] shadow-lg">
+          <span className='text-lg font-bold'>Currently we are conducting our 1 year anniversary sale!</span> <br /><br /> Use code <Badge className="font-bold bg-green-600 text-white px-2 py-0.5 rounded-md">IFLYTICSLIFE60</Badge> to get 60% off on your lifetime plan! <br /> <br /> Use code <Badge className="font-bold bg-amber-600 text-white px-2 py-0.5 rounded-md">IFLYTICSPREM75</Badge> to get 75% off on your premium plan! <br /> <br /> Offer expires Oct 1st, 2026.
+        </div>
+
         <p className="text-gray-700 dark:text-gray-300 text-lg font-medium max-w-2xl">
           Get access to all the amazing features showcased above! Choose between flexible monthly billing or lifetime access.
         </p>

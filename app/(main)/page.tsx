@@ -85,9 +85,9 @@ export default function Home() {
 
           {/* Dual CTA Section */}
           <div className="flex-1 flex flex-col gap-4 items-center animate-slide-in-right delay-300 w-full relative">
-            <Badge className="bg-gradient-to-r from-[#ff879b] to-[#ffc49c] dark:from-[#fdc673] dark:to-[#fffdec] dark:text-black text-white font-bold tracking-tight self-center">
-              Stay Tuned For Future Discounts!
-            </Badge>
+            {/* <Badge className="bg-gradient-to-r from-[#ff879b] to-[#ffc49c] dark:from-[#fdc673] dark:to-[#fffdec] dark:text-black text-white font-bold tracking-tight self-center w-[300px] text-center text-wrap">
+              Use code IFLYTICSLIFE60 to get 60% off on your lifetime plan! Use code IFLYTICSPREM75 to get 75% off on your premium plan! Offer expires Oct 1st, 2026.
+            </Badge> */}
 
             <div className="grid grid-cols-1 gap-4 w-full max-w-[400px]">
 
