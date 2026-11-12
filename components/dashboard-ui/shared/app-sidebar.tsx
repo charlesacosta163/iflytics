@@ -198,10 +198,11 @@ const AppSidebar = () => {
         {open && (
           <SidebarGroup className="mt-auto">
             <SidebarGroupContent className="space-y-2">
-              {externalLinks.map((link) => {
+              {externalLinks.map((link, index) => {
                 const Icon = link.icon
                 return (
                     <Link
+                     key={index}
                       href={link.href}
                       className={cn(
                         "flex items-center gap-3 rounded-full px-4 py-3 transition-all duration-200",

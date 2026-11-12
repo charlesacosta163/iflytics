@@ -380,7 +380,7 @@ const ProfileWrapper = ({
                   )}
                 </div>
               )}
-              <PromoReminders />
+              {/* <PromoReminders /> */}
 
             </div>
           </TabsContent>
